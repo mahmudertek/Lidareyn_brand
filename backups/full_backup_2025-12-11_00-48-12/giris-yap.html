@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap / Üye Ol - Resels</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="auth.css">
+    <style>
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <!-- Mega Menu Omitted -->
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <div class="search-container" role="search">
+                    <input type="text" class="search-input" placeholder="Ürün ara..." aria-label="Ürün arama"
+                        autocomplete="off">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım"><i class="fa-regular fa-user"></i></button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"><i
+                        class="fa-regular fa-heart"></i></button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim"><i class="fa-solid fa-cart-shopping"></i><span
+                        class="cart-count">0</span></button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="auth-container" style="margin-top: 60px;">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tab-login" onclick="switchView('login')">Giriş Yap</button>
+                <button class="tab-btn" id="tab-register" onclick="switchView('register')">Üye Ol</button>
+            </div>
+
+            <div class="auth-content">
+                <!-- LOGIN VIEW -->
+                <div id="view-login" class="view-section active">
+                    <div class="auth-header">
+                        <h2>Merhaba,</h2>
+                        <p>Resels'e giriş yap veya hesap oluştur, indirimleri kaçırma!</p>
+                    </div>
+                    <form class="auth-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>E-Posta</label>
+                            <input type="email" name="email" required placeholder="E-posta adresiniz">
+                        </div>
+                        <div class="form-group">
+                            <label>Şifre</label>
+                            <div class="password-wrapper">
+                                <input type="password" name="password" id="login-password" required
+                                    placeholder="Şifreniz">
+                                <button type="button" class="toggle-password"
+                                    onclick="togglePassword('login-password')">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                            <a href="sifremi-unuttum.html" class="forgot-password-link">Şifremi Unuttum</a>
+                        </div>
+                        <button type="submit" class="auth-btn">GİRİŞ YAP</button>
+
+                        <div class="social-login">
+                            <button type="button" class="social-btn">
+                                <i class="fa-brands fa-facebook-f" style="color: #1877F2;"></i> Facebook
+                            </button>
+                            <button type="button" class="social-btn">
+                                <i class="fa-brands fa-google" style="color: #EA4335;"></i> Google
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- REGISTER VIEW -->
+                <div id="view-register" class="view-section">
+                    <form class="auth-form" onsubmit="handleRegister(event)">
+
+                        <div class="form-group">
+                            <label>E-Posta</label>
+                            <input type="email" name="email" required placeholder="E-posta adresiniz">
+                        </div>
+                        <div class="form-group">
+                            <label>Şifre</label>
+                            <div class="password-wrapper">
+                                <input type="password" name="password" id="register-password" required
+                                    placeholder="Şifreniz">
+                                <button type="button" class="toggle-password"
+                                    onclick="togglePassword('register-password')">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                            <span class="password-hint">Şifreniz en az 10 karakter olmalı. 1 büyük harf, 1 küçük harf ve
+                                rakam içermelidir.</span>
+                        </div>
+
+                        <!-- Gender Selection -->
+                        <div class="form-group">
+                            <span class="gender-label">Sana özel ürünler sunabilmemiz için ilgilendiğin ürün grubunu
+                                seçer misin?</span>
+                            <div class="gender-buttons">
+                                <button type="button" class="gender-btn"
+                                    onclick="selectGender(this, 'kadin')">Kadın</button>
+                                <button type="button" class="gender-btn"
+                                    onclick="selectGender(this, 'erkek')">Erkek</button>
+                            </div>
+                            <input type="hidden" name="gender" id="gender-input" value="">
+                        </div>
+
+                        <!-- Checkboxes -->
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" required>
+                                <span>Tarafıma avantajlı tekliflerin sunulabilmesi amacıyla kişisel verilerimin
+                                    işlenmesine ve paylaşılmasına <a href="#">açık rıza veriyorum</a>.</span>
+                            </label>
+                            <label class="custom-checkbox">
+                                <input type="checkbox">
+                                <span>Tarafıma elektronik ileti gönderilmesini kabul ediyorum.</span>
+                            </label>
+                            <label class="custom-checkbox">
+                                <input type="checkbox" required>
+                                <span>Kişisel verilerimin işlenmesine yönelik <a href="#">aydınlatma metnini</a> okudum
+                                    ve anladım.</span>
+                            </label>
+                        </div>
+
+                        <!-- Captcha Placeholder -->
+                        <div class="captcha-box">
+                            <div class="captcha-content">
+                                <div class="captcha-checkbox"></div>
+                                <span class="captcha-label">Ben robot değilim</span>
+                            </div>
+                            <div class="captcha-logo">
+                                <i class="fa-solid fa-shield-halved" style="font-size: 24px;"></i>
+                                <span>reCAPTCHA</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="auth-btn">ÜYE OL</button>
+                    </form>
+                </div>
+
+                <!-- VERIFY VIEW -->
+                <div id="view-verify" class="view-section">
+                    <div class="auth-header">
+                        <h2>Kodu Doğrula</h2>
+                        <p>E-posta adresinize (<strong>console/toast</strong>) gönderilen 4 haneli kodu girin.</p>
+                    </div>
+                    <form class="auth-form" onsubmit="handleVerify(event)">
+                        <div class="code-inputs">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 1)">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 2)">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 3)">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 4)">
+                        </div>
+                        <button type="submit" class="auth-btn">Doğrula ve Tamamla</button>
+                    </form>
+                    <div class="auth-footer">
+                        <a onclick="resendCode()">Kodu Tekrar Gönder</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        function switchView(viewName) {
+            // Update active content
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            const targetView = document.getElementById('view-' + viewName);
+            if (targetView) targetView.classList.add('active');
+
+            // Update active tab button if applicable
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const tabBtn = document.getElementById('tab-' + viewName);
+            if (tabBtn) {
+                tabBtn.classList.add('active');
+            } else {
+                // If switching to verify or something else, maybe keep register active or neither?
+                if (viewName === 'verify') {
+                    // Start Verify mode logic if needed, or just let it overlay
+                }
+            }
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const btn = input.nextElementSibling;
+            const icon = btn.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const form = e.target;
+            const email = form.email.value;
+            const password = form.password.value;
+            const name = email.split('@')[0]; // Ad istenmediği için email'den türetiyoruz
+            const gender = form.gender.value;
+
+            const result = Auth.register(email, password, name, gender);
+            if (result.success) {
+                switchView('verify');
+            } else {
+                alert(result.message);
+            }
+        }
+
+        function handleVerify(e) {
+            e.preventDefault();
+            const inputs = document.querySelectorAll('.code-digit');
+            let code = '';
+            inputs.forEach(input => code += input.value);
+
+            const result = Auth.verify(code);
+            if (result.success) {
+                alert('Tebrikler! Kaydınız başarıyla tamamlandı.');
+                window.location.href = 'profil.html';
+            } else {
+                alert(result.message);
+                inputs.forEach(i => i.value = '');
+                inputs[0].focus();
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const form = e.target;
+            const email = form.email.value;
+            const password = form.password.value;
+
+            const result = Auth.login(email, password);
+            if (result.success) {
+                window.location.href = 'profil.html';
+            } else {
+                alert(result.message);
+            }
+        }
+
+        function moveFocus(current, nextIndex) {
+            if (current.value.length === 1) {
+                const next = document.querySelectorAll('.code-digit')[nextIndex];
+                if (next) next.focus();
+            }
+        }
+
+        function resendCode() {
+            const tempUser = JSON.parse(sessionStorage.getItem('resels_temp_reg'));
+            if (tempUser) {
+                Auth.sendVerificationEmail(tempUser.email, tempUser.name, tempUser.code);
+                alert('Doğrulama kodu tekrar gönderildi. Lütfen gelen kutunuzu ve spam klasörünü kontrol edin.');
+            }
+        }
+
+        function selectGender(btn, gender) {
+            // Remove active from all gender buttons
+            const buttons = btn.parentElement.querySelectorAll('.gender-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            // Add active to clicked
+            btn.classList.add('active');
+
+            // Set hidden input
+            document.getElementById('gender-input').value = gender;
+        }
+
+        // Check URL for tab
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            if (tab === 'register') {
+                switchView('register');
+            }
+        });
+    </script>
+</body>
+
+</html>

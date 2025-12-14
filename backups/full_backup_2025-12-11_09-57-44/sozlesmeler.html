@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sözleşmeler ve Politikalar - Resels</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="agreements.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+
+            <div class="header-icons">
+                <div class="search-container" role="search">
+                    <input type="text" class="search-input" placeholder="Ürün ara..." aria-label="Ürün arama"
+                        autocomplete="off">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+            <button class="mobile-menu-toggle"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="page-container agreements-page">
+
+        <div class="agreements-layout">
+
+            <!-- Sidebar Navigation -->
+            <aside class="agreements-sidebar">
+                <h3>Bilgilendirme</h3>
+                <nav class="agreements-nav">
+                    <a href="#mesafeli-satis" class="nav-item active" data-target="mesafeli-satis">Mesafeli Satış
+                        Sözleşmesi</a>
+                    <a href="#iptal-iade" class="nav-item" data-target="iptal-iade">İptal ve İade Koşulları</a>
+                    <a href="#gizlilik" class="nav-item" data-target="gizlilik">Gizlilik ve Güvenlik</a>
+                    <a href="#kvkk" class="nav-item" data-target="kvkk">KVKK Aydınlatma Metni</a>
+                    <a href="#kargo" class="nav-item" data-target="kargo">Kargo ve Teslimat</a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="agreements-content">
+
+                <!-- Section: Mesafeli Satış -->
+                <section id="mesafeli-satis" class="content-section active">
+                    <h1>Mesafeli Satış Sözleşmesi</h1>
+                    <p class="update-date">Son Güncelleme: 10 Aralık 2024</p>
+
+                    <div class="text-content">
+                        <h3>1. TARAFLAR</h3>
+                        <p>İşbu Sözleşme aşağıdaki taraflar arasında aşağıda belirtilen hüküm ve şartlar çerçevesinde
+                            imzalanmıştır.</p>
+                        <p><strong>A. ALICI:</strong> (Sözleşmede bundan sonra "ALICI" olarak anılacaktır)</p>
+                        <p><strong>B. SATICI:</strong> (Sözleşmede bundan sonra "SATICI" olarak anılacaktır)<br>
+                            Ünvanı: Resels E-Ticaret A.Ş.<br>
+                            Adres: Levent Mah. Büyükdere Cad. No:199 Beşiktaş / İstanbul</p>
+
+                        <h3>2. KONU</h3>
+                        <p>İşbu sözleşme’nin konusu, ALICI’nın SATICI’ya ait internet sitesinden elektronik ortamda
+                            siparişini yaptığı aşağıda nitelikleri ve satış fiyatı belirtilen ürünün satışı ve teslimi
+                            ile ilgili olarak 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler
+                            Yönetmeliği hükümleri gereğince tarafların hak ve yükümlülüklerinin saptanmasıdır.</p>
+
+                        <h3>3. CAYMA HAKKI</h3>
+                        <p>ALICI; mal satışına ilişkin mesafeli sözleşmelerde, ürünün kendisine veya gösterdiği
+                            adresteki kişi/kuruluşa teslim tarihinden itibaren 14 (on dört) gün içerisinde, SATICI’ya
+                            bildirmek şartıyla hiçbir hukuki ve cezai sorumluluk üstlenmeksizin ve hiçbir gerekçe
+                            göstermeksizin malı reddederek sözleşmeden cayma hakkını kullanabilir.</p>
+                        <!-- More dummy text needed usually, kept short for demo -->
+                    </div>
+                </section>
+
+                <!-- Section: İptal İade -->
+                <section id="iptal-iade" class="content-section">
+                    <h1>İptal ve İade Koşulları</h1>
+                    <p class="update-date">Son Güncelleme: 10 Aralık 2024</p>
+
+                    <div class="text-content">
+                        <h3>Genel Koşullar</h3>
+                        <p>Satın aldığınız ürünü, ambalajı açılmamış, tahrip edilmemiş, bozulmamış ve ürünün tekrar
+                            satılabilirliği bozulmamış olması kaydıyla teslim tarihinden itibaren 14 günlük süre içinde
+                            iade edebilirsiniz.</p>
+
+                        <h3>İade Süreci</h3>
+                        <ol>
+                            <li>İade etmek istediğiniz ürün için "Hesabım > Siparişlerim" sayfasından iade talebi
+                                oluşturun.</li>
+                            <li>Size verilen kargo kodunu kullanarak ürünü anlaşmalı kargo firmamıza ücretsiz olarak
+                                teslim edin.</li>
+                            <li>Ürün tarafımıza ulaştıktan sonra gerekli kontroller yapılır ve 3 iş günü içerisinde
+                                ücret iadesi bankanıza iletilir.</li>
+                        </ol>
+
+                        <h3>İade Edilemeyecek Ürünler</h3>
+                        <p>Niteliği itibarıyla iade edilemeyecek ürünler, tek kullanımlık ürünler, kopyalanabilir
+                            yazılım ve programlar, hızlı bozulan veya son kullanım tarihi geçen ürünlerin iadesi mümkün
+                            değildir.</p>
+                    </div>
+                </section>
+
+                <!-- Section: Gizlilik -->
+                <section id="gizlilik" class="content-section">
+                    <h1>Gizlilik ve Güvenlik Politikası</h1>
+                    <div class="text-content">
+                        <p>Resels olarak, sitemizi ziyaret eden kullanıcılarımızın kişisel verilerinin korunmasına büyük
+                            önem veriyoruz. Bu kapsamda, 6698 Sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”)
+                            uyarınca “Veri Sorumlusu” sıfatıyla kişisel verilerinizi işliyoruz.</p>
+
+                        <h3>Kredi Kartı Güvenliği</h3>
+                        <p>Şirketimiz, alışveriş sitelerimizden alışveriş yapan kredi kartı sahiplerinin güvenliğini ilk
+                            planda tutmaktadır. Kredi kartı bilgileriniz hiçbir şekilde sistemimizde saklanmamaktadır.
+                        </p>
+
+                        <h3>Üçüncü Taraf Web Siteleri ve Uygulamalar</h3>
+                        <p>Mağazamız, web sitesi dâhilinde başka sitelere link verebilir. Firmamız, bu linkler
+                            vasıtasıyla erişilen sitelerin gizlilik uygulamaları ve içeriklerine yönelik herhangi bir
+                            sorumluluk taşımamaktadır.</p>
+                    </div>
+                </section>
+
+                <!-- Section: KVKK -->
+                <section id="kvkk" class="content-section">
+                    <h1>KVKK Aydınlatma Metni</h1>
+                    <div class="text-content">
+                        <p>6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) uyarınca, kimliğinizi belirli veya
+                            belirlenebilir kılan her türlü bilginiz “Kişisel Veri” olarak aşağıdaki kapsamda, Veri
+                            Sorumlusu sıfatıyla Resels A.Ş. tarafından işlenecektir.</p>
+
+                        <h3>İşlenen Kişisel Verileriniz</h3>
+                        <p>Kimlik bilgileriniz (ad, soyad), iletişim bilgileriniz (adres, e-posta, telefon), müşteri
+                            işlem bilgileriniz (sipariş geçmişi) ve işlem güvenliği bilgileriniz (IP adresi)
+                            işlenmektedir.</p>
+                    </div>
+                </section>
+
+                <!-- Section: Kargo -->
+                <section id="kargo" class="content-section">
+                    <h1>Kargo ve Teslimat</h1>
+                    <div class="text-content">
+                        <h3>Teslimat Süresi</h3>
+                        <p>Siparişleriniz, banka onayı alındıktan sonra 3 iş günü (Pazartesi-Cuma) içerisinde kargoya
+                            teslim edilir. Teslimat adresinin uzaklığına göre kargo şirketi 1-3 gün içerisinde
+                            siparişinizi size ulaştıracaktır.</p>
+
+                        <h3>Ücretsiz Kargo</h3>
+                        <p>500 TL ve üzeri alışverişlerinizde kargo ücretsizdir. 500 TL altındaki siparişlerde standart
+                            kargo ücreti 29.90 TL'dir.</p>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="iletisim.html">İletişim</a></li>
+
+                            <li><a href="magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="sozlesmeler.html#kvkk">KVKK / Gizlilik Politikası</a></li>
+                            <li><a href="sozlesmeler.html#mesafeli-satis">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="sozlesmeler.html#iptal-iade">İade & Değişim Koşulları</a></li>
+                            <li><a href="sozlesmeler.html#kargo">Kargo & Teslimat</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@resels.com">destek@resels.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-logic.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Simple tab switching logic for agreements
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.content-section');
+
+            function activateSection(targetId) {
+                // Update Nav
+                navItems.forEach(item => {
+                    item.classList.toggle('active', item.dataset.target === targetId);
+                });
+
+                // Update Content
+                sections.forEach(sec => {
+                    sec.style.display = sec.id === targetId ? 'block' : 'none';
+                    if (sec.id === targetId) sec.classList.add('fade-in');
+                });
+
+                // Scroll to top of content on mobile
+                if (window.innerWidth < 768) {
+                    document.querySelector('.agreements-content').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const target = item.dataset.target;
+                    activateSection(target);
+                    // Update URL hash
+                    history.pushState(null, null, '#' + target);
+                });
+            });
+
+            // Check URL Hash on load
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                activateSection(hash);
+            } else {
+                // Default first one
+                activateSection('mesafeli-satis');
+            }
+        });
+    </script>
+</body>
+
+</html>

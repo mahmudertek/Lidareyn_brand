@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İletişim - Resels</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="corporate.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                    </li>
+                    <li><a href="markalar.html" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+
+            <div class="header-icons">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Ürün ara...">
+                    <button class="icon-btn search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn"><i class="fa-regular fa-user"></i></button>
+                    <div class="user-dropdown">
+                        <a href="profil.html" class="dropdown-item"><i class="fa-solid fa-user-gear"></i> Hesabım</a>
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş / Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'"><i
+                        class="fa-regular fa-heart"></i></button>
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'"><i
+                        class="fa-solid fa-cart-shopping"></i><span class="cart-count">0</span></button>
+            </div>
+            <button class="mobile-menu-toggle"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="page-container corporate-page">
+
+        <div class="contact-header">
+            <h1>Bize Ulaşın</h1>
+            <p>Sorularınız, önerileriniz veya iş birlikleri için mesajınızı bekliyoruz.</p>
+        </div>
+
+        <div class="contact-layout">
+
+            <!-- Info Sidebar -->
+            <div class="contact-info">
+                <div class="info-card">
+                    <h3>İletişim Bilgileri</h3>
+                    <p>Müşteri hizmetlerimiz hafta içi 09:00 - 18:00 saatleri arasında hizmet vermektedir.</p>
+
+                    <div class="info-item">
+                        <div class="icon"><i class="fa-solid fa-location-dot"></i></div>
+                        <div>
+                            <strong>Adres:</strong>
+                            <p>Levent Mah. Büyükdere Cad. No:199<br>Beşiktaş / İstanbul</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="icon"><i class="fa-solid fa-phone"></i></div>
+                        <div>
+                            <strong>Telefon:</strong>
+                            <p><a href="tel:08501234567">0850 123 45 67</a></p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="icon"><i class="fa-solid fa-envelope"></i></div>
+                        <div>
+                            <strong>E-posta:</strong>
+                            <p><a href="mailto:destek@resels.com">destek@resels.com</a></p>
+                        </div>
+                    </div>
+
+                    <div class="social-links-contact">
+                        <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                        <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <!-- Google Maps Embed Replica (Image for now) -->
+                <div class="map-container">
+                    <img src="https://picsum.photos/seed/map/400/300" alt="Harita Konumu">
+                    <a href="#" class="map-overlay-btn"><i class="fa-solid fa-map-location-dot"></i> Haritada Gör</a>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="contact-form-wrapper">
+                <h3>İletişim Formu</h3>
+                <form id="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Adınız</label>
+                            <input type="text" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Soyadınız</label>
+                            <input type="text" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>E-posta Adresi</label>
+                        <input type="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Konu</label>
+                        <select>
+                            <option>Genel Bilgi</option>
+                            <option>Sipariş Durumu</option>
+                            <option>İade & Değişim</option>
+                            <option>Şikayet & Öneri</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Mesajınız</label>
+                        <textarea rows="5" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-send">GÖNDER</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                &copy; 2024 Resels. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-logic.js"></script>
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const btn = this.querySelector('.btn-send');
+            const originalText = btn.textContent;
+
+            btn.textContent = 'Gönderiliyor...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                alert('Mesajınız başarıyla bize ulaştı. En kısa sürede dönüş yapacağız.');
+                this.reset();
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

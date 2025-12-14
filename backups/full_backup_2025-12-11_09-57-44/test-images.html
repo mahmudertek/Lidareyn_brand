@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Test</title>
+</head>
+<body>
+    <h1>Image Loading Test</h1>
+    
+    <h2>Test 1: Direct Image</h2>
+    <img src="https://picsum.photos/seed/test1/300x200.jpg" alt="Test Image 1" style="border: 2px solid green;">
+    
+    <h2>Test 2: Hero Image</h2>
+    <img src="https://picsum.photos/seed/resels-hero1/1920x800.jpg" alt="Hero Test" style="border: 2px solid red; max-width: 500px;">
+    
+    <h2>Test 3: Category Image</h2>
+    <img src="https://picsum.photos/seed/nalbur-hardware/300x200.jpg" alt="Category Test" style="border: 2px solid blue;">
+    
+    <h2>Test 4: Broken Image Test</h2>
+    <img src="https://broken-url-that-does-not-exist.jpg" alt="Broken Test" style="border: 2px solid orange;" 
+         onerror="this.src='https://picsum.photos/seed/fallback/300x200.jpg'; this.alt='Fallback loaded';">
+    
+    <script>
+        // Test image loading
+        document.querySelectorAll('img').forEach((img, index) => {
+            img.addEventListener('load', () => {
+                console.log(`Image ${index + 1} loaded successfully`);
+            });
+            img.addEventListener('error', () => {
+                console.error(`Image ${index + 1} failed to load`);
+            });
+        });
+    </script>
+</body>
+</html>

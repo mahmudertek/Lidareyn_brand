@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesabım - Resels</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <!-- Mega menu structure handled by global script/css -->
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+            <div class="header-icons">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Ürün ara...">
+                    <button class="icon-btn search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <!-- User is logged in here -->
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn active-user"><i class="fa-solid fa-user"></i></button>
+                    <!-- Logged in state dropdown -->
+                    <div class="user-dropdown">
+                        <a href="profil.html" class="dropdown-item"><i class="fa-solid fa-user-gear"></i> Hesabım</a>
+                        <a href="profil.html?tab=orders" class="dropdown-item"><i class="fa-solid fa-box-open"></i>
+                            Siparişlerim</a>
+                        <a href="#" id="logout-btn" class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i>
+                            Çıkış Yap</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'"><i
+                        class="fa-regular fa-heart"></i></button>
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'"><i
+                        class="fa-solid fa-cart-shopping"></i><span class="cart-count">0</span></button>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container profile-page">
+        <div class="profile-layout">
+
+            <!-- Sidebar -->
+            <aside class="profile-sidebar">
+                <div class="user-summary">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3 id="profile-name">Ahmet Yılmaz</h3>
+                        <p id="profile-email">ahmet@example.com</p>
+                    </div>
+                </div>
+                <nav class="profile-nav">
+                    <a href="#orders" class="profile-link active" data-tab="orders">
+                        <i class="fa-solid fa-box"></i> Siparişlerim
+                    </a>
+                    <a href="#addresses" class="profile-link" data-tab="addresses">
+                        <i class="fa-solid fa-location-dot"></i> Adres Bilgilerim
+                    </a>
+                    <a href="#account" class="profile-link" data-tab="account">
+                        <i class="fa-solid fa-user-gear"></i> Üyelik Bilgilerim
+                    </a>
+                    <a href="#reviews" class="profile-link" data-tab="reviews">
+                        <i class="fa-solid fa-star"></i> Değerlendirmelerim
+                    </a>
+                    <a href="favoriler.html" class="profile-link">
+                        <i class="fa-solid fa-heart"></i> Favorilerim
+                    </a>
+                    <a href="#" class="profile-link logout-link">
+                        <i class="fa-solid fa-right-from-bracket"></i> Çıkış Yap
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="profile-content">
+
+                <!-- Orders Tab -->
+                <div id="orders-tab" class="profile-tab-content active">
+                    <h2 class="tab-title">Siparişlerim</h2>
+                    <div class="orders-list">
+                        <!-- Mock Order Item -->
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-date">10 Aralık 2024</span>
+                                    <span class="order-number">Sipariş No: #293847</span>
+                                </div>
+                                <div class="order-status processing">Hazırlanıyor</div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-images">
+                                    <img src="https://picsum.photos/seed/prod1/60/80" alt="Product">
+                                    <img src="https://picsum.photos/seed/prod2/60/80" alt="Product">
+                                </div>
+                                <div class="order-total">
+                                    <span>Toplam:</span>
+                                    <strong>1.250,00 TL</strong>
+                                </div>
+                            </div>
+                            <div class="order-footer">
+                                <a href="#" class="btn-text">Sipariş Detayı <i
+                                        class="fa-solid fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-date">15 Kasım 2024</span>
+                                    <span class="order-number">Sipariş No: #102938</span>
+                                </div>
+                                <div class="order-status delivered"><i class="fa-solid fa-check"></i> Teslim Edildi
+                                </div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-images">
+                                    <img src="https://picsum.photos/seed/prod3/60/80" alt="Product">
+                                </div>
+                                <div class="order-total">
+                                    <span>Toplam:</span>
+                                    <strong>450,90 TL</strong>
+                                </div>
+                            </div>
+                            <div class="order-footer">
+                                <a href="#" class="btn-text">Sipariş Detayı <i
+                                        class="fa-solid fa-chevron-right"></i></a>
+                                <button class="btn-sm btn-outline">Kolay İade</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Addresses Tab -->
+                <div id="addresses-tab" class="profile-tab-content">
+                    <div class="tab-header-row">
+                        <h2 class="tab-title">Adres Bilgilerim</h2>
+                        <button class="btn-primary-sm"><i class="fa-solid fa-plus"></i> Yeni Adres Ekle</button>
+                    </div>
+                    <div class="addresses-grid">
+                        <div class="address-card">
+                            <div class="address-header">
+                                <h4>Ev Adresim</h4>
+                                <div class="address-actions">
+                                    <button title="Düzenle"><i class="fa-solid fa-pen"></i></button>
+                                    <button title="Sil"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="address-body">
+                                <p><strong>Ahmet Yılmaz</strong></p>
+                                <p>Cumhuriyet Mah. Atatürk Cad. Lale Apt. No:15 D:4</p>
+                                <p>Kadıköy / İstanbul</p>
+                                <p>0532 123 45 67</p>
+                            </div>
+                        </div>
+                        <div class="address-card">
+                            <div class="address-header">
+                                <h4>İş Yeri</h4>
+                                <div class="address-actions">
+                                    <button title="Düzenle"><i class="fa-solid fa-pen"></i></button>
+                                    <button title="Sil"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </div>
+                            <div class="address-body">
+                                <p><strong>Ahmet Yılmaz (Resels A.Ş.)</strong></p>
+                                <p>Levent Mah. Büyükdere Cad. Plaza No:100 Kat:5</p>
+                                <p>Beşiktaş / İstanbul</p>
+                                <p>0532 123 45 67</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Info Tab -->
+                <div id="account-tab" class="profile-tab-content">
+                    <h2 class="tab-title">Üyelik Bilgilerim</h2>
+                    <form class="account-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ad</label>
+                                <input type="text" value="Ahmet" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Soyad</label>
+                                <input type="text" value="Yılmaz" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>E-posta</label>
+                            <input type="email" value="ahmet@example.com" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Cep Telefonu</label>
+                            <input type="tel" value="0532 123 45 67" class="form-input">
+                        </div>
+
+                        <h3 class="sub-title">Şifre Değiştir</h3>
+                        <div class="form-group">
+                            <label>Mevcut Şifre</label>
+                            <input type="password" class="form-input">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Yeni Şifre</label>
+                                <input type="password" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>Yeni Şifre (Tekrar)</label>
+                                <input type="password" class="form-input">
+                            </div>
+                        </div>
+                        <button class="btn-primary update-btn">Bilgileri Güncelle</button>
+                    </form>
+                </div>
+
+                <!-- Reviews Tab (Placeholder) -->
+                <div id="reviews-tab" class="profile-tab-content">
+                    <h2 class="tab-title">Değerlendirmelerim</h2>
+                    <div class="empty-state-sm">
+                        <i class="fa-regular fa-comment-dots"></i>
+                        <p>Henüz bir ürün değerlendirmesi yapmadınız.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                &copy; 2024 Resels. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-logic.js"></script>
+    <script src="auth.js"></script>
+    <script src="profile.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çok Satanlar - Resels</title>
+    <meta name="description" content="Resels'de en çok tercih edilen ürünleri inceleyin.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo"><a href="index.html">Resels</a></div>
+            <nav class="main-nav">
+                <ul class="nav-menu">
+                    <li><a href="index.html#kategoriler" class="nav-link">Tüm Kategoriler</a></li>
+                    <li><a href="markalar.html" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="cok-satanlar.html" class="nav-link active">Çok Satanlar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+            <div class="header-icons">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Ürün, kategori veya marka ara...">
+                    <button class="icon-btn search-btn" aria-label="Arama"><i
+                            class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım"><i class="fa-regular fa-user"></i></button>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"><i
+                        class="fa-regular fa-heart"></i></button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim"><i class="fa-solid fa-cart-shopping"></i><span
+                        class="cart-count">0</span></button>
+            </div>
+            <button class="mobile-menu-toggle" aria-label="Menü"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="index.html">Ana Sayfa</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Çok Satanlar</span>
+        </div>
+    </div>
+
+    <section class="category-hero">
+        <div class="container">
+            <div class="category-header">
+                <div class="category-icon"><i class="fa-solid fa-fire"></i></div>
+                <div class="category-info">
+                    <h1>Çok Satanlar</h1>
+                    <p>Müşterilerimizin en çok tercih ettiği popüler ürünler.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="container" style="padding: 40px 0; text-align: center;">
+            <p>Çok satan ürünler listeleniyor...</p>
+        </div>
+    </main>
+
+    <div class="sidebar-overlay"></div>
+    <div class="sidebar favorites-sidebar">
+        <div class="sidebar-header">
+            <h3>Favori Ürünlerim</h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-content" id="favorites-content"></div>
+    </div>
+    <div class="sidebar cart-sidebar">
+        <div class="sidebar-header">
+            <h3>Sepetim <span class="cart-badge">0</span></h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-content" id="cart-content"></div>
+        <div class="sidebar-footer">
+            <div class="cart-total"><span>Ara Toplam:</span><span class="total-amount">0.00 TL</span></div>
+            <button class="btn btn-primary btn-block">Sepete Git</button>
+            <button class="btn btn-secondary btn-block">Ödeme Yap</button>
+        </div>
+    </div>
+    <div class="user-dropdown">
+        <div class="user-dropdown-content">
+            <a href="#" class="dropdown-item">Giriş Yap</a>
+            <a href="#" class="dropdown-item">Üye Ol</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="categories-data.js"></script>
+</body>
+
+</html>

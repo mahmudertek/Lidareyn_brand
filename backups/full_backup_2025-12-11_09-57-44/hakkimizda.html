@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hakkımızda - Resels</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="corporate.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+
+            <div class="header-icons">
+                <div class="search-container" role="search">
+                    <input type="text" class="search-input" placeholder="Ürün ara..." aria-label="Ürün arama"
+                        autocomplete="off">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+            <button class="mobile-menu-toggle"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="page-container corporate-page">
+
+        <!-- Hero Section -->
+        <section class="corporate-hero">
+            <div class="hero-content">
+                <h1>Hikayemiz & Vizyonumuz</h1>
+                <p>Modern alışveriş deneyimini yeniden tanımlıyoruz.</p>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <section class="corporate-content">
+            <div class="split-layout">
+                <div class="text-block">
+                    <h2>Genç, Dinamik ve Yenilikçi.</h2>
+                    <p>Resels, alışveriş deneyimine yeni bir soluk getirmek ve en kaliteli ürünleri en ulaşılabilir
+                        fiyatlarla sunmak amacıyla kuruldu. Genç ve dinamik ruhumuzla, klasik ticaret kalıplarının
+                        ötesine geçiyor; hızlı, güvenilir ve modern bir hizmet anlayışını benimsiyoruz.</p>
+                    <p>Teknolojinin gücünü ve müşteri memnuniyetini merkeze alan yaklaşımımızla, sadece ürün satmıyor;
+                        size keyifli ve sorunsuz bir alışveriş yolculuğu vadediyoruz. Her geçen gün büyüyen ürün
+                        yelpazemiz ve sürekli gelişen altyapımızla, e-ticaret dünyasında fark yaratmak için buradayız.
+                    </p>
+                </div>
+                <div class="image-block">
+                    <img src="https://picsum.photos/seed/office/600/400" alt="Resels Ofis">
+                </div>
+            </div>
+
+            <!-- Values Grid -->
+            <div class="values-grid">
+                <div class="value-card">
+                    <i class="fa-solid fa-bolt"></i>
+                    <h3>Hızlı Teslimat</h3>
+                    <p>Siparişlerinizi en hızlı şekilde hazırlıyor ve özenle paketleyerek adresinize ulaştırıyoruz.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h3>Güvenli Alışveriş</h3>
+                    <p>256-bit SSL sertifikası ve güvenli ödeme altyapımızla bilgileriniz her zaman güvende.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fa-regular fa-face-smile"></i>
+                    <h3>Müşteri Odaklılık</h3>
+                    <p>Satış öncesi ve sonrası destek ekibimizle her türlü sorunuzda yanınızdayız.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="iletisim.html">İletişim</a></li>
+
+                            <li><a href="magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="sozlesmeler.html#kvkk">KVKK / Gizlilik Politikası</a></li>
+                            <li><a href="sozlesmeler.html#mesafeli-satis">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="sozlesmeler.html#iptal-iade">İade & Değişim Koşulları</a></li>
+                            <li><a href="sozlesmeler.html#kargo">Kargo & Teslimat</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@resels.com">destek@resels.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-logic.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

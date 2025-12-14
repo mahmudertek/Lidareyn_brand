@@ -1,0 +1,426 @@
+/* Auth Pages CSS */
+:root {
+    --primary-color: #000000;
+    --secondary-color: #333333;
+    --accent-color: #666666;
+    --light-bg: #f9f9f9;
+    --border-color: #e5e5e5;
+    --success-color: #4caf50;
+    --error-color: #f44336;
+}
+
+body {
+    background-color: var(--light-bg);
+}
+
+.auth-container {
+    min-height: calc(100vh - 80px);
+    /* Adjust based on header */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.auth-card {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 0;
+    /* Remove padding here, move to content */
+    border-radius: 8px;
+    /* Sharper corners as per image */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    /* Softer shadow */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Tabs */
+.auth-tabs {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 20px;
+    background: #e0e0e0 !important;
+    /* Force darker background */
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #444 !important;
+    /* Force readable text */
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-btn.active {
+    background: white;
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+    /* Black line */
+}
+
+.tab-btn:hover:not(.active) {
+    background: #f5f5f5;
+    color: var(--secondary-color);
+}
+
+.auth-content {
+    padding: 40px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.auth-header p {
+    color: var(--accent-color);
+    font-size: 14px;
+}
+
+.auth-form .form-group {
+    margin-bottom: 20px;
+}
+
+.auth-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+.auth-form input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.auth-btn:hover {
+    background: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--accent-color);
+}
+
+.auth-footer a {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+/* Password Field */
+.password-wrapper {
+    position: relative;
+    z-index: 1;
+    /* Establishes stacking context */
+}
+
+.password-wrapper input {
+    z-index: 1;
+    position: relative;
+    padding-right: 45px;
+    /* Ensure text doesn't go under the eye icon */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-color);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 5px;
+    /* Smaller hit area */
+    z-index: 10;
+    /* Above input */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Social Login */
+.social-login {
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    color: var(--secondary-color);
+    transition: all 0.2s;
+}
+
+.social-btn:hover {
+    background: #f9f9f9;
+    border-color: #ccc;
+}
+
+.forgot-password-link {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    margin-top: 5px;
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+
+/* Verification Code Input */
+.code-inputs {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.code-inputs input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 0;
+}
+
+/* Toast Notification for Simulated Email */
+.toast-simulation {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: #333;
+    color: white;
+    padding: 16px 24px;
+    border-radius: 50px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 9999;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 300px;
+}
+
+.toast-simulation.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast-icon {
+    background: #4caf50;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.toast-content h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.toast-content p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Mockup Specific Styles */
+.gender-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+    color: var(--primary-color);
+}
+
+.gender-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.gender-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--secondary-color);
+    transition: all 0.2s;
+    font-size: 14px;
+}
+
+.gender-btn:hover {
+    border-color: var(--primary-color);
+}
+
+.gender-btn.active {
+    border-color: #f27a1a;
+    /* Orange to match "trendyol-like" request slightly, or keep brand? Let's use brand black for now or user might complain. Keeping neutral-ish active state */
+    border-color: var(--primary-color);
+    background: #fcfcfc;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+/* Override for the "Orange" look if implied? No, stick to Karaköy Tüccarı black theme but same layout. */
+
+.password-hint {
+    font-size: 11px;
+    color: #666;
+    margin-top: 8px;
+    line-height: 1.4;
+    display: block;
+}
+
+.checkbox-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.custom-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 12px;
+    color: #333;
+    line-height: 1.4;
+    cursor: pointer;
+    position: relative;
+}
+
+.custom-checkbox input {
+    width: 18px;
+    height: 18px;
+    margin-top: 0;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    /* custom look rely on browser mostly but size up */
+}
+
+.custom-checkbox a {
+    text-decoration: underline;
+    font-weight: 600;
+    color: inherit;
+}
+
+.captcha-box {
+    border: 1px solid #d3d3d3;
+    background: #f9f9f9;
+    padding: 10px 15px;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 300px;
+    /* Limit width */
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 74px;
+}
+
+.captcha-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.captcha-checkbox {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #c1c1c1;
+    border-radius: 2px;
+    background: white;
+    cursor: pointer;
+}
+
+.captcha-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+}
+
+.captcha-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 9px;
+    color: #555;
+}
+
+.captcha-logo img {
+    width: 32px;
+    opacity: 0.7;
+}

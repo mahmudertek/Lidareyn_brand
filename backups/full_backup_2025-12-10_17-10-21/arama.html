@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arama Sonuçları - Resels</title>
+
+    <!-- Shared Head Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="search.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <!-- Mega Menu Structure Placeholder -->
+                        <div class="mega-menu">
+                            <ul class="mega-menu-list">
+                                <!-- Static or JS loaded -->
+                                <li class="default-active"><a href="#">
+                                        <div class="menu-item-left"><i class="fa-solid fa-person"></i><span>Erkek</span>
+                                        </div>
+                                    </a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="markalar.html" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+
+            <div class="header-icons">
+                <div class="search-container active">
+                    <!-- Search input is active here -->
+                    <input type="text" class="search-input" id="global-search-input" placeholder="Ürün ara..." value=""
+                        autofocus>
+                    <button class="icon-btn search-btn" id="global-search-btn"><i
+                            class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn"><i class="fa-solid fa-user"></i></button>
+                    <div class="user-dropdown">
+                        <a href="profil.html" class="dropdown-item"><i class="fa-solid fa-user-gear"></i> Hesabım</a>
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş / Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'"><i
+                        class="fa-regular fa-heart"></i></button>
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'"><i
+                        class="fa-solid fa-cart-shopping"></i><span class="cart-count">0</span></button>
+            </div>
+
+            <button class="mobile-menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="page-container search-page">
+
+        <div class="search-header-bar">
+            <h1><span id="search-query-display">"..."</span> için arama sonuçları</h1>
+            <span class="result-count" id="result-count">0 ürün bulundu</span>
+        </div>
+
+        <div class="search-layout">
+
+            <!-- Filters Sidebar -->
+            <aside class="search-sidebar">
+                <div class="sidebar-header-mobile">
+                    <h3>Filtrele</h3>
+                    <button id="close-filters"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="filter-group expanded">
+                    <h3 class="filter-title">Kategoriler <i class="fa-solid fa-chevron-down"></i></h3>
+                    <div class="filter-content" id="category-filters">
+                        <!-- Populated by JS -->
+                        <div class="skeleton-filter"></div>
+                        <div class="skeleton-filter"></div>
+                        <div class="skeleton-filter"></div>
+                    </div>
+                </div>
+
+                <!-- Brand Filter -->
+                <div class="filter-group expanded">
+                    <h3 class="filter-title">Marka <i class="fa-solid fa-chevron-down"></i></h3>
+                    <div class="filter-content" id="brand-filters">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Price Filter -->
+                <div class="filter-group expanded">
+                    <h3 class="filter-title">Fiyat Aralığı <i class="fa-solid fa-chevron-down"></i></h3>
+                    <div class="filter-content">
+                        <div class="price-inputs">
+                            <input type="number" id="min-price" placeholder="En Az">
+                            <span>-</span>
+                            <input type="number" id="max-price" placeholder="En Çok">
+                            <button id="price-filter-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Results Grid -->
+            <div class="search-results-area">
+
+                <div class="results-toolbar">
+                    <button class="mobile-filter-btn" id="open-filters-btn">
+                        <i class="fa-solid fa-filter"></i> Filtrele
+                    </button>
+
+                    <div class="sort-dropdown">
+                        <select id="sort-select">
+                            <option value="relevance">Önerilen Sıralama</option>
+                            <option value="price-asc">En Düşük Fiyat</option>
+                            <option value="price-desc">En Yüksek Fiyat</option>
+                            <option value="newest">En Yeniler</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="search-results-grid">
+                    <!-- Products will be injected here -->
+                    <!-- Empty State -->
+                    <div class="search-empty-state" style="display:none;">
+                        <i class="fa-solid fa-magnifying-glass-minus"></i>
+                        <h3>Sonuç Bulunamadı</h3>
+                        <p>Aradığınız kriterlere uygun ürün bulunamadı. Lütfen farklı anahtar kelimelerle tekrar
+                            deneyin.</p>
+                        <a href="index.html" class="btn-primary">Ana Sayfaya Dön</a>
+                    </div>
+                </div>
+
+                <!-- Pagination (Mock) -->
+                <div class="pagination" id="pagination-container" style="display:none;">
+                    <a href="#" class="page-link active">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link">3</a>
+                    <a href="#" class="page-link"><i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                &copy; 2024 Resels. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shared Data & Logic -->
+    <script src="categories-data.js"></script>
+    <script src="cart-logic.js"></script>
+    <script src="script.js"></script>
+    <script src="search.js"></script>
+
+</body>
+
+</html>

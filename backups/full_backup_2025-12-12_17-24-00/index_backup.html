@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karaköy Tüccarı - Premium E-Ticaret</title>
+    <meta name="description"
+        content="Karaköy Tüccarı - En kaliteli Ã¼rÃ¼nleri en uygun fiyatlarla satÄ±n alÄ±n. Elektronik, moda, ev & yaÅŸam ve daha fazlasÄ±.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="icon-fix.css">
+    <link rel="stylesheet" href="slider.css">
+    <section class="hero-slider">
+        <div class="slider-container">
+            <div class="slide active">
+                <img src="assets/hero-banner-1.png" alt="Karaköy Tüccarı Hero Banner 1">
+            </div>
+            <div class="slide">
+                <img src="assets/hero-banner-2.png" alt="Karaköy Tüccarı Hero Banner 2">
+            </div>
+            <div class="slide">
+                <img src="assets/hero-banner-3.png" alt="Karaköy Tüccarı Hero Banner 3">
+            </div>
+        </div>
+        <!-- Slider Navigation -->
+        <button class="slider-btn prev" onclick="changeSlide(-1)">â®</button>
+        <button class="slider-btn next" onclick="changeSlide(1)">â¯</button>
+        <!-- Slider Dots -->
+        <div class="slider-dots">
+            <span class="dot active" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Categories Section -->
+        <section class="categories-section" id="kategoriler">
+            <div class="container">
+                <h2 class="section-title">TÃ¼m Kategoriler</h2>
+                <div class="categories-grid">
+                    <!-- Nalbur & YapÄ± Malzemeleri -->
+                    <a href="kategoriler/nalbur-yapi-malzemeleri.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-hammer"></i>
+                        </div>
+                        <h3>Nalbur & YapÄ± Malzemeleri</h3>
+                        <p>El aletleri, vida, Ã§ivi, silikon ve tamir malzemeleri</p>
+                    </a>
+
+                    <!-- HÄ±rdavat & Teknik Malzemeler -->
+                    <a href="kategoriler/hirdavat-teknik-malzemeler.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <h3>HÄ±rdavat & Teknik Malzemeler</h3>
+                        <p>Elektrik, tesisat, boya ekipmanlarÄ± ve profesyonel aletler</p>
+                    </a>
+
+                    <!-- Ev GereÃ§leri & ZÃ¼ccaciye -->
+                    <a href="kategoriler/ev-gerecleri-zuccaciye.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-kitchen-set"></i>
+                        </div>
+                        <h3>Ev GereÃ§leri & ZÃ¼ccaciye</h3>
+                        <p>Mutfak, banyo ve saklama Ã§Ã¶zÃ¼mleri</p>
+                    </a>
+
+                    <!-- Evcil Hayvan ÃœrÃ¼nleri -->
+                    <a href="kategoriler/evcil-hayvan-urunleri.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-paw"></i>
+                        </div>
+                        <h3>Evcil Hayvan ÃœrÃ¼nleri</h3>
+                        <p>Mama kaplarÄ±, oyuncaklar, tasmalar ve bakÄ±m malzemeleri</p>
+                    </a>
+
+                    <!-- Ev & YaÅŸam -->
+                    <a href="kategoriler/ev-yasam.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-house"></i>
+                        </div>
+                        <h3>Ev & YaÅŸam</h3>
+                        <p>Dekoratif Ã¼rÃ¼nler, LED aydÄ±nlatma ve organizer</p>
+                    </a>
+
+                    <!-- Temizlik & Hijyen -->
+                    <a href="kategoriler/temizlik-hijyen.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-spray-can-sparkles"></i>
+                        </div>
+                        <h3>Temizlik & Hijyen</h3>
+                        <p>Mop, bez, sÃ¼nger ve doÄŸal temizlik malzemeleri</p>
+                    </a>
+
+                    <!-- KÄ±rtasiye & Ofis -->
+                    <a href="kategoriler/kirtasiye-ofis.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-pen"></i>
+                        </div>
+                        <h3>KÄ±rtasiye & Ofis Malzemeleri</h3>
+                        <p>Kalem, defter, dosyalama ve masaÃ¼stÃ¼ organizerleri</p>
+                    </a>
+
+                    <!-- Elektronik Aksesuar -->
+                    <a href="kategoriler/elektronik-aksesuar.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </div>
+                        <h3>Elektronik Aksesuar</h3>
+                        <p>Telefon kÄ±lÄ±flarÄ±, ÅŸarj kablolarÄ± ve Bluetooth hoparlÃ¶rler</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sidebars and Overlays -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Favorites Sidebar -->
+    <div class="sidebar favorites-sidebar">
+        <div class="sidebar-header">
+            <h3>Favori ÃœrÃ¼nlerim</h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-content" id="favorites-content">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="sidebar cart-sidebar">
+        <div class="sidebar-header">
+            <h3>Sepetim <span class="cart-badge">0</span></h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-content" id="cart-content">
+            <!-- Content injected by JS -->
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Ara Toplam:</span>
+                <span class="total-amount">0.00 TL</span>
+            </div>
+            <button class="btn btn-primary btn-block">Sepete Git</button>
+            <button class="btn btn-secondary btn-block">Ã–deme Yap</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takip.html">SipariÅŸ Takip</a></li>
+                            <li><a href="iletisim.html">Ä°letiÅŸim</a></li>
+                            <li><a href="kvkk.html">KVKK / Gizlilik PolitikasÄ±</a></li>
+                            <li><a href="mesafeli-satis.html">Mesafeli SatÄ±ÅŸ SÃ¶zleÅŸmesi</a></li>
+                            <li><a href="iade-degisim.html">Ä°ade & DeÄŸiÅŸim KoÅŸullarÄ±</a></li>
+                            <li><a href="kargo-teslimat.html">Kargo & Teslimat</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Kategoriler Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kategoriler</h3>
+                        <ul class="footer-links">
+                            <li><a href="kategoriler/nalbur-yapi-malzemeleri.html">Nalbur & YapÄ± Malzemeleri</a></li>
+                            <li><a href="kategoriler/hirdavat-teknik-malzemeler.html">HÄ±rdavat & Teknik Malzemeler</a>
+                            </li>
+                            <li><a href="kategoriler/ev-gerecleri-zuccaciye.html">Ev GereÃ§leri & ZÃ¼ccaciye</a></li>
+                            <li><a href="kategoriler/evcil-hayvan-urunleri.html">Evcil Hayvan ÃœrÃ¼nleri</a></li>
+                            <li><a href="kategoriler/ev-yasam.html">Ev & YaÅŸam</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- SÃ¶zleÅŸmeler Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">SÃ¶zleÅŸmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli SatÄ±ÅŸ SÃ¶zleÅŸmesi</a></li>
+                            <li><a href="gizlilik-guvenlik.html">Gizlilik ve GÃ¼venlik</a></li>
+                            <li><a href="odeme-teslimat.html">Ã–deme ve Teslimat</a></li>
+                            <li><a href="garanti-sartlari.html">Garanti ÅartlarÄ±</a></li>
+                            <li><a href="iade-iptal.html">Ä°ade ve Ä°ptal ÅartlarÄ±</a></li>
+                            <li><a href="havale-bildirim.html">Havale Bildirim Formu</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- YardÄ±m Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">YardÄ±m</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">SipariÅŸ Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Ãœyelik</a></li>
+                            <li><a href="uye-giris.html">Ãœye GiriÅŸ</a></li>
+                            <li><a href="sifremi-unuttum.html">Åifremi Unuttum</a></li>
+                            <li><a href="sss.html">SÄ±kÃ§a Sorulan Sorular</a></li>
+                            <li><a href="sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- MÃ¼ÅŸteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">MÃ¼ÅŸteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@karakoytuccari.com">destek@karakoytuccari.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Ã‡alÄ±ÅŸma Saatleri: Hafta iÃ§i 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- GÃ¼venli Ã–deme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">GÃ¼venli Ã–deme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">TÃ¼m Ã¶demeleriniz SSL sertifikasÄ± ile gÃ¼vence altÄ±ndadÄ±r.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Section -->
+            <div class="footer-bottom">
+                <p class="copyright">Â© 2024 Karaköy Tüccarı. TÃ¼m haklarÄ± saklÄ±dÄ±r.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="slider.js"></script>
+    </body>
+
+</html>

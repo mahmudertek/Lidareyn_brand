@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siparişiniz Alındı - Karaköy Tüccarı</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f7f7f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .success-card {
+            background: #fff;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .success-icon-wrapper {
+            width: 100px;
+            height: 100px;
+            background: #eaffee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            position: relative;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            color: #27ae60;
+            animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+
+        @keyframes scaleIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .order-number {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2rem;
+            letter-spacing: 1px;
+            border: 1px dashed #ccc;
+        }
+
+        .btn-home {
+            background: #000;
+            color: #fff;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Confetti Effect Simple CSS */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="success-card">
+        <div class="success-icon-wrapper">
+            <i class="fas fa-check success-icon"></i>
+        </div>
+        <h1>Teşekkürler!</h1>
+        <p>Siparişiniz başarıyla alındı. <br>Sipariş detaylarınız e-posta adresinize gönderildi.</p>
+
+        <div class="order-number">
+            Sipariş No: <span id="order-id">#TR-829301</span>
+        </div>
+
+        <a href="index.html" class="btn-home">Alışverişe Devam Et</a>
+    </div>
+
+    <script>
+        // Generate Random Order ID
+        document.getElementById('order-id').innerText = '#TR-' + Math.floor(Math.random() * 900000 + 100000);
+
+        // Simple Confetti
+        function createConfetti() {
+            const colors = ['#e74c3c', '#3498db', '#f1c40f', '#2ecc71', '#9b59b6'];
+
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = -10 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.opacity = Math.random();
+                document.body.appendChild(confetti);
+
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        window.onload = createConfetti;
+    </script>
+</body>
+
+</html>

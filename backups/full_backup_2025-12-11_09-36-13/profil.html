@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesabım - Resels</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <!-- Mega menu structure handled by global script/css -->
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+            <div class="header-icons">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Ürün ara...">
+                    <button class="icon-btn search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <!-- User is logged in here -->
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn active-user">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="icon-label">Hesabım</span>
+                    </button>
+                    <!-- Logged in state dropdown -->
+                    <div class="user-dropdown">
+                        <a href="profil.html" class="dropdown-item"><i class="fa-solid fa-user-gear"></i> Hesabım</a>
+                        <a href="profil.html?tab=orders" class="dropdown-item"><i class="fa-solid fa-box-open"></i>
+                            Siparişlerim</a>
+                        <a href="#" id="logout-btn" class="dropdown-item"><i class="fa-solid fa-right-from-bracket"></i>
+                            Çıkış Yap</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="icon-label">Sepetim</span>
+                    <span class="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container profile-page">
+        <div class="profile-layout">
+
+            <!-- Sidebar -->
+            <aside class="profile-sidebar">
+                <div class="user-summary">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3 id="profile-name">Ahmet Yılmaz</h3>
+                        <p id="profile-email">ahmet@example.com</p>
+                    </div>
+                </div>
+                <nav class="profile-nav">
+                    <a href="#account" class="profile-link active" data-tab="account">
+                        <i class="fa-solid fa-user"></i> Kullanıcı Bilgilerim
+                    </a>
+                    <a href="#addresses" class="profile-link" data-tab="addresses">
+                        <i class="fa-solid fa-location-dot"></i> Adres Bilgilerim
+                    </a>
+                    <a href="#cards" class="profile-link" data-tab="cards">
+                        <i class="fa-solid fa-credit-card"></i> Kayıtlı Kartlarım
+                    </a>
+                    <a href="#notifications" class="profile-link" data-tab="notifications">
+                        <i class="fa-solid fa-bell"></i> Duyuru Tercihlerim
+                    </a>
+                    <a href="#password" class="profile-link" data-tab="password">
+                        <i class="fa-solid fa-lock"></i> Şifre Değişikliği
+                    </a>
+
+                    <a href="iletisim.html" class="profile-link">
+                        <i class="fa-solid fa-circle-question"></i> Yardım
+                    </a>
+                    <a href="#history" class="profile-link" data-tab="history">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Önceden Gezdiklerim
+                    </a>
+                    <a href="#orders" class="profile-link" data-tab="orders">
+                        <i class="fa-solid fa-rotate-right"></i> Tekrar Satın Al
+                    </a>
+                    <a href="#orders" class="profile-link" data-tab="orders">
+                        <i class="fa-solid fa-box"></i> Tüm Siparişlerim
+                    </a>
+                    <a href="#reviews" class="profile-link" data-tab="reviews">
+                        <i class="fa-solid fa-star"></i> Değerlendirmelerim
+                    </a>
+                    <a href="#" class="profile-link logout-link">
+                        <i class="fa-solid fa-power-off"></i> Çıkış Yap
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="profile-content">
+
+                <!-- Orders Tab -->
+                <div id="orders-tab" class="profile-tab-content active">
+                    <h2 class="tab-title">Siparişlerim</h2>
+                    <div class="orders-list">
+                        <!-- Mock Order Item -->
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-date">10 Aralık 2024</span>
+                                    <span class="order-number">Sipariş No: #293847</span>
+                                </div>
+                                <div class="order-status processing">Hazırlanıyor</div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-images">
+                                    <img src="https://picsum.photos/seed/prod1/60/80" alt="Product">
+                                    <img src="https://picsum.photos/seed/prod2/60/80" alt="Product">
+                                </div>
+                                <div class="order-total">
+                                    <span>Toplam:</span>
+                                    <strong>1.250,00 TL</strong>
+                                </div>
+                            </div>
+                            <div class="order-footer">
+                                <a href="#" class="btn-text">Sipariş Detayı <i
+                                        class="fa-solid fa-chevron-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="order-card">
+                            <div class="order-header">
+                                <div>
+                                    <span class="order-date">15 Kasım 2024</span>
+                                    <span class="order-number">Sipariş No: #102938</span>
+                                </div>
+                                <div class="order-status delivered"><i class="fa-solid fa-check"></i> Teslim Edildi
+                                </div>
+                            </div>
+                            <div class="order-body">
+                                <div class="order-images">
+                                    <img src="https://picsum.photos/seed/prod3/60/80" alt="Product">
+                                </div>
+                                <div class="order-total">
+                                    <span>Toplam:</span>
+                                    <strong>450,90 TL</strong>
+                                </div>
+                            </div>
+                            <div class="order-footer">
+                                <a href="#" class="btn-text">Sipariş Detayı <i
+                                        class="fa-solid fa-chevron-right"></i></a>
+                                <button class="btn-sm btn-outline">Kolay İade</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Addresses Tab -->
+                <div id="addresses-tab" class="profile-tab-content">
+                    <div class="address-header-row">
+                        <h2 class="tab-title">Adres Bilgilerim</h2>
+                        <button class="btn-add-address" onclick="alert('Adres ekleme özelliği yakında!');">
+                            <i class="fa-solid fa-plus"></i> Yeni Adres Ekle
+                        </button>
+                    </div>
+                    <div class="address-content-box">
+                        <div class="address-empty-state">
+                            <div class="empty-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <h3>Kayıtlı adresiniz bulunamadı</h3>
+                            <p>Siparişleriniz için kullanabileceğiniz adres eklemek için ekranın üstünden "Yeni Adres
+                                Ekle" linkine tıklayarak adres oluşturabilirsiniz.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards Tab -->
+                <div id="cards-tab" class="profile-tab-content">
+                    <div class="cards-header-row">
+                        <h2 class="tab-title">Kayıtlı Kartlarım</h2>
+                        <div class="cards-security-badge">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <div class="security-text">
+                                <strong>Secure</strong>
+                                <span>GlobalSign</span>
+                            </div>
+                            <div class="safe-badge">
+                                <i class="fa-solid fa-check"></i> Kayıtlı Kartlarınız<br>Burada Güvende
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cards-content-box">
+                        <div class="cards-empty-state">
+                            <div class="empty-card-icon">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </div>
+                            <h3>Hesabınıza Kayıtlı Kart Bulunmamaktadır.</h3>
+                            <p>Kart kaydetme işlemi sadece alışveriş yaptıktan sonra karşınıza gelen onaylama ekranından
+                                yapılabilmektedir.</p>
+                        </div>
+                    </div>
+                    <div class="cards-info-footer">
+                        <div class="info-header">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Kayıtlı Kartlarınız <strong>Burada Güvende</strong></span>
+                        </div>
+                        <p>Kartınızı kaydederken kullanmış olduğunuz telefon numarasından, aşağıdaki durumlarda SMS
+                            onayı istiyoruz.</p>
+                        <ul>
+                            <li>Kartınızı kaydederken kullanmış olduğunuz adres dışında başka bir adres seçtiğinizde
+                            </li>
+                            <li>Kartınızı kaydederken kullanmış olduğunuz adres, e-posta veya telefon numarasında bir
+                                değişiklik yaptığınızda</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div id="notifications-tab" class="profile-tab-content">
+                    <div class="notifications-header-box">
+                        <h2 class="tab-title">Duyuru Tercihlerim</h2>
+                    </div>
+                    <div class="notifications-form-box">
+                        <form id="notifications-form">
+                            <div class="preference-item">
+                                <div class="pref-checkbox">
+                                    <input type="checkbox" id="pref-email" checked>
+                                </div>
+                                <div class="pref-content">
+                                    <label for="pref-email" class="pref-title">E-mail</label>
+                                    <p class="pref-desc">İlgimi çekebilecek kampanyalarla ve butik bültenleriyle ilgili
+                                        e-posta almak istiyorum.</p>
+                                </div>
+                            </div>
+                            <div class="preference-item">
+                                <div class="pref-checkbox">
+                                    <input type="checkbox" id="pref-sms">
+                                </div>
+                                <div class="pref-content">
+                                    <label for="pref-sms" class="pref-title">SMS</label>
+                                    <p class="pref-desc">İlgimi çekebilecek kampanyalarla ilgili SMS almak istiyorum.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="pref-actions">
+                                <button type="submit" class="btn-pref-update active">GÜNCELLE</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Password Tab -->
+                <div id="password-tab" class="profile-tab-content">
+                    <div class="password-header-box">
+                        <h2 class="tab-title">Şifre Değişikliği</h2>
+                    </div>
+                    <div class="password-form-box">
+                        <form id="change-password-form">
+                            <div class="form-group">
+                                <label>Mevcut Şifre</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" class="form-control" placeholder="">
+                                    <i class="fa-solid fa-eye password-toggle"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Yeni Şifre</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" class="form-control" placeholder="">
+                                    <i class="fa-solid fa-eye password-toggle"></i>
+                                </div>
+                                <div class="form-hint">Şifreniz en az 10 karakter olmalı. 1 büyük harf, 1 küçük harf ve
+                                    rakam içermelidir.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Yeni Şifre (Tekrar)</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" class="form-control" placeholder="">
+                                    <i class="fa-solid fa-eye password-toggle"></i>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-save-password">Kaydet</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Account Info Tab -->
+                <div id="account-tab" class="profile-tab-content active">
+                    <div class="account-grid" style="grid-template-columns: 1fr; max-width: 800px;">
+                        <!-- Left Column: Membership Info -->
+                        <div class="account-col">
+                            <h3 class="account-section-title">Üyelik Bilgilerim</h3>
+                            <form id="membership-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Ad</label>
+                                        <input type="text" class="form-control" name="first_name" value="Ahmet">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Soyad</label>
+                                        <input type="text" class="form-control" name="last_name" value="Yılmaz">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>E-Mail</label>
+                                    <input type="email" class="form-control" name="email" value="ahmet@example.com"
+                                        disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cep Telefonu</label>
+                                    <div class="phone-group">
+                                        <select class="form-control phone-prefix">
+                                            <option value="+90">+90</option>
+                                        </select>
+                                        <input type="tel" class="form-control" name="phone" value="532 123 45 67">
+                                        <button type="button" class="btn-update active"
+                                            style="font-size: 0.8rem; height: 44px; margin-top:0; width:auto;">Güncelle</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Doğum Tarihiniz</label>
+                                    <div class="date-group">
+                                        <select class="form-control date-select">
+                                            <option>Gün</option>
+                                            <option>10</option>
+                                        </select>
+                                        <select class="form-control date-select">
+                                            <option>Ay</option>
+                                            <option>Aralık</option>
+                                        </select>
+                                        <select class="form-control date-select">
+                                            <option>Yıl</option>
+                                            <option>1990</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="corporate-check">
+                                    <label for="corporate-check" class="checkbox-label">İş yeri alışverişlerim için
+                                        fırsatlardan haberdar olmak istiyorum.</label>
+                                </div>
+                                <button type="submit" class="btn-update">Güncelle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="reviews-tab" class="profile-tab-content">
+                    <h2 class="tab-title">Değerlendirmelerim</h2>
+                    <div class="empty-state-sm">
+                        <i class="fa-regular fa-comment-dots"></i>
+                        <p>Henüz bir ürün değerlendirmesi yapmadınız.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                &copy; 2024 Resels. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-logic.js"></script>
+    <script src="auth.js"></script>
+    <script src="profile.js"></script>
+</body>
+
+</html>

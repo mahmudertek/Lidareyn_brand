@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipariş Takibi - Resels</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="order-tracking.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <!-- Mega Menu handled by JS/CSS -->
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <div class="logo">
+                <a href="index.html">Resels</a>
+            </div>
+
+            <div class="header-icons">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Ürün ara...">
+                    <button class="icon-btn search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn"><i class="fa-regular fa-user"></i></button>
+                    <div class="user-dropdown">
+                        <a href="profil.html" class="dropdown-item"><i class="fa-solid fa-user-gear"></i> Hesabım</a>
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş / Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'"><i
+                        class="fa-regular fa-heart"></i></button>
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'"><i
+                        class="fa-solid fa-cart-shopping"></i><span class="cart-count">0</span></button>
+            </div>
+            <button class="mobile-menu-toggle"><i class="fa-solid fa-bars"></i></button>
+        </div>
+    </header>
+
+    <main class="page-container tracking-page">
+        <div class="tracking-container">
+
+            <div class="tracking-header">
+                <h1>Sipariş Takibi</h1>
+                <p>Sipariş numaranızı ve e-posta adresinizi girerek kargonuzun durumunu sorgulayabilirsiniz.</p>
+            </div>
+
+            <div class="tracking-form-card">
+                <form id="tracking-form">
+                    <div class="form-group">
+                        <label for="orderNo">Sipariş Numarası</label>
+                        <input type="text" id="orderNo" placeholder="Örn: 123456" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-posta Adresi</label>
+                        <input type="email" id="email" placeholder="Siparişte kullanılan e-posta" required>
+                    </div>
+                    <button type="submit" class="btn-track">SORGULA</button>
+                </form>
+            </div>
+
+            <!-- Result Section (Hidden initially) -->
+            <div id="tracking-result" class="tracking-result" style="display: none;">
+
+                <div class="order-info-header">
+                    <div class="info-group">
+                        <span class="label">Sipariş Numarası:</span>
+                        <span class="value" id="res-order-no">#123456</span>
+                    </div>
+                    <div class="info-group">
+                        <span class="label">Tahmini Teslimat:</span>
+                        <span class="value" id="res-date">12 Aralık 2024</span>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="tracker-steps">
+                    <div class="step completed">
+                        <div class="step-icon"><i class="fa-solid fa-receipt"></i></div>
+                        <div class="step-label">Sipariş Alındı</div>
+                        <div class="step-date">10.12.2024 - 14:30</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-icon"><i class="fa-solid fa-box-open"></i></div>
+                        <div class="step-label">Hazırlanıyor</div>
+                        <div class="step-date">10.12.2024 - 16:45</div>
+                    </div>
+                    <div class="step active"> <!-- Active means current stage -->
+                        <div class="step-icon"><i class="fa-solid fa-truck-fast"></i></div>
+                        <div class="step-label">Kargoya Verildi</div>
+                        <div class="step-date">Bugün</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon"><i class="fa-solid fa-house-chimney"></i></div>
+                        <div class="step-label">Teslim Edildi</div>
+                        <div class="step-date">-</div>
+                    </div>
+                </div>
+
+                <!-- Shipment Details -->
+                <div class="shipment-details">
+                    <h3>Kargo Hareketleri</h3>
+                    <ul class="timeline">
+                        <li class="timeline-item">
+                            <span class="time">10:30</span>
+                            <div class="desc">
+                                <strong>Transfer Merkezinde</strong>
+                                <p>Kargo transfer merkezine ulaştı. (İstanbul/Tuzla)</p>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="time">08:15</span>
+                            <div class="desc">
+                                <strong>Kurye Dağıtımda</strong>
+                                <p>Siparişiniz yola çıktı.</p>
+                            </div>
+                        </li>
+                        <li class="timeline-item">
+                            <span class="time">Dün</span>
+                            <div class="desc">
+                                <strong>Sipariş Onaylandı</strong>
+                                <p>Siparişiniz başarıyla alındı ve onaylandı.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Error Message (Hidden) -->
+            <div id="tracking-error" class="tracking-error" style="display: none;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <p>Belirtilen bilgilere ait bir sipariş bulunamadı. Lütfen bilgilerinizi kontrol edip tekrar deneyiniz.
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                &copy; 2024 Resels. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-logic.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="order-tracking.js"></script>
+</body>
+
+</html>
