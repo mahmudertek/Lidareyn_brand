@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icon Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="icon-fix.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header-container">
+            <div class="logo"><a href="#">Galata Çarşı</a></div>
+
+            <div class="header-icons">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Ürün ara...">
+                    <button class="icon-btn search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+                <button class="icon-btn user-btn"><i class="fa-regular fa-user"></i></button>
+                <button class="icon-btn favorites-btn"><i class="fa-regular fa-heart"></i></button>
+                <button class="icon-btn cart-btn"><i class="fa-solid fa-cart-shopping"></i><span
+                        class="cart-count">3</span></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sidebars -->
+    <div class="sidebar-overlay"></div>
+
+    <div class="favorites-sidebar">
+        <button class="close-sidebar">×</button>
+        <h2>Favorilerim</h2>
+        <div id="favorites-content"></div>
+    </div>
+
+    <div class="cart-sidebar">
+        <button class="close-sidebar">×</button>
+        <h2>Sepetim</h2>
+        <div id="cart-content"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Toplam:</span>
+                <span class="total-amount">0.00 TL</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Dropdown -->
+    <div class="user-dropdown">
+        <a href="#" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i> Giriş Yap</a>
+        <a href="#" class="dropdown-item"><i class="fa-solid fa-user-plus"></i> Üye Ol</a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

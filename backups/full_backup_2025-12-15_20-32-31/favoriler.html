@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Favorilerim - Galata Çarşı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="favorites-page.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+</head>
+
+<body>
+
+    <!-- Header (Index'ten alınan Tam Header) -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <!-- Mega Menu Start -->
+                        <div class="mega-menu">
+                            <ul class="mega-menu-list">
+                                <!-- Hırdavat vb. -->
+                                <li class="default-active">
+                                    <a href="kategoriler/elektrikli-el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-plug"></i>
+                                            <span>Elektrikli El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/olcme-ve-kontrol-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-ruler-combined"></i>
+                                            <span>Ölçme & Kontrol Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                                <!-- Otomobil -->
+                                <li>
+                                    <a href="#">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-car-side"></i>
+                                            <span>Otomobil & Motosiklet</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                                <!-- Diğer Kategoriler (Yer Tutucu - Script ile veya manuel eklenebilir) -->
+                                <li>
+                                    <a href="index.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                            <span>Tüm Kategorileri Gör</span>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Mega Menu End -->
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo -->
+            <div class="logo">
+                <a href="index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons -->
+            <div class="header-icons">
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Ürün ara...">
+                    <button class="icon-btn search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                </div>
+
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label">Hesabım</span>
+                    </button>
+                    <div class="user-dropdown">
+                        <a href="profil.html" class="dropdown-item"><i class="fa-regular fa-user"></i> Hesabım</a>
+                        <a href="profil.html#orders" class="dropdown-item"><i class="fa-solid fa-box-open"></i>
+                            Siparişlerim</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item text-danger" id="logout-btn"><i
+                                class="fa-solid fa-right-from-bracket"></i> Çıkış Yap</a>
+                    </div>
+                </div>
+
+                <button class="icon-btn favorites-btn" onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+
+                <button class="icon-btn cart-btn" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="favorites-container">
+
+        <!-- Page Header & Tabs -->
+        <div class="fav-header">
+            <div class="fav-tabs">
+                <button class="fav-tab active"><i class="fa-solid fa-heart"></i> Favorilerim</button>
+                <button class="fav-tab"><i class="fa-solid fa-bookmark"></i> Koleksiyonlarım</button>
+            </div>
+
+            <div class="fav-search-filter">
+                <div class="fav-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="fav-search-input" placeholder="Favorilerimde ara">
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="filter-chips">
+            <button class="filter-chip active">Tümü (<span id="fav-count-badge">0</span>)</button>
+            <button class="filter-chip"><i class="fa-solid fa-tag"></i> Fiyatı Düşenler</button>
+            <button class="filter-chip"><i class="fa-solid fa-ticket"></i> Kuponlu Ürünler</button>
+        </div>
+
+        <!-- Favorites Grid -->
+        <div id="favorites-grid" class="favorites-grid">
+            <!-- JavaScript ile doldurulacak -->
+            <div class="loading-spinner">
+                <i class="fa-solid fa-circle-notch fa-spin"></i> Yükleniyor...
+            </div>
+        </div>
+
+        <!-- Empty State (Hidden by default) -->
+        <div id="empty-favorites" class="empty-favorites hidden">
+            <div class="empty-icon">
+                <i class="fa-regular fa-heart"></i>
+            </div>
+            <h3>Favorilerinizde ürün bulunmuyor</h3>
+            <p>Beğendiğiniz ürünleri kalp ikonuna tıklayarak favorilerinize ekleyebilirsiniz.</p>
+            <a href="index.html" class="btn btn-primary start-shopping-btn">Alışverişe Başla</a>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            <p>&copy; 2025 Galata Çarşı. Tüm hakları saklıdır.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFavoritesPage();
+
+            // Arama fonksiyonu
+            const searchInput = document.getElementById('fav-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase();
+                    renderFavoritesPage(query);
+                });
+            }
+        });
+
+        function renderFavoritesPage(query = '') {
+            const grid = document.getElementById('favorites-grid');
+            const emptyState = document.getElementById('empty-favorites');
+            const countBadge = document.getElementById('fav-count-badge');
+
+            // LocalStorage'dan favorileri al
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+            // Arama filtresi
+            if (query) {
+                favorites = favorites.filter(item =>
+                    item.title.toLowerCase().includes(query) ||
+                    (item.name && item.name.toLowerCase().includes(query))
+                );
+            }
+
+            if (countBadge) countBadge.textContent = favorites.length;
+
+            if (favorites.length === 0) {
+                grid.style.display = 'none';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            grid.style.display = 'grid';
+            emptyState.classList.add('hidden');
+
+            let html = '';
+            favorites.forEach(item => {
+                const title = item.title || item.name;
+                const price = typeof item.price === 'string' ? parseFloat(item.price) : item.price;
+                const img = item.image || 'https://placehold.co/300x400/eee/333?text=Urun';
+
+                html += `
+                    <div class="fav-card">
+                        <div class="fav-card-actions">
+                            <button class="fav-remove-btn" onclick="removeFromFavoritesPage(${item.id})" title="Favorilerden Kaldır">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <a href="urun-detay.html?id=${item.id}" class="fav-img-wrapper">
+                            <img src="${img}" alt="${title}">
+                            <div class="fav-overlay">Ürüne Git</div>
+                        </a>
+                        <div class="fav-content">
+                            <div class="fav-header-info">
+                                <h3 class="fav-title" title="${title}">
+                                    <a href="urun-detay.html?id=${item.id}">${title}</a>
+                                </h3>
+                                <div class="fav-rating">
+                                    <i class="fa-solid fa-star"></i>
+                                    <span>4.5</span>
+                                    <span class="review-count">(12)</span>
+                                </div>
+                            </div>
+                            
+                            <div class="fav-price-box">
+                                <div class="price-labels">
+                                    <span class="shipping-label"><i class="fa-solid fa-truck-fast"></i> Kargo Bedava</span>
+                                </div>
+                                <div class="current-price">${price.toFixed(2)} TL</div>
+                            </div>
+
+                            <button class="btn btn-add-cart" onclick="addToCart({id:${item.id}, title:'${title.replace(/'/g, "\\'")}', price:${price}, image:'${img}'})">
+                                <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        window.removeFromFavoritesPage = function (id) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites = favorites.filter(item => item.id !== id);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+
+            // Sayfayı yenile (arama sorgusunu koru)
+            const searchInput = document.getElementById('fav-search-input');
+            renderFavoritesPage(searchInput ? searchInput.value.toLowerCase() : '');
+
+            // Header badge'i güncelle
+            if (window.updateCartCount) window.updateCartCount();
+        }
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+/* ChromaGrid - Static Grid Layout */
+.chroma-grid {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 40px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 1200px) {
+  .chroma-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 2rem 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chroma-grid {
+    grid-template-columns: 1fr;
+    padding: 1.5rem 20px;
+  }
+}
+
+/* Rectangular Card - Horizontal Layout */
+.chroma-card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 175px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: 2px solid transparent;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.chroma-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Image Section - Left Side */
+.chroma-img-wrapper {
+  position: relative;
+  width: 225px;
+  min-width: 225px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chroma-img-wrapper img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: transform 0.4s ease;
+  position: relative;
+  z-index: 3;
+}
+
+.chroma-card:hover .chroma-img-wrapper img {
+  transform: scale(1.05);
+}
+
+/* Category Info - Right Side */
+.chroma-info {
+  flex: 1;
+  padding: 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  color: #fff;
+  font-family: 'Poppins', system-ui, sans-serif;
+  position: relative;
+  z-index: 2;
+}
+
+.chroma-info .name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.3;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.3px;
+}
+
+/* Gradient Variations for Cards - Site Theme Colors */
+.chroma-card:nth-child(6n+1) {
+  background: linear-gradient(135deg, #8b7bd8 0%, #6b5b95 100%);
+}
+
+.chroma-card:nth-child(6n+2) {
+  background: linear-gradient(135deg, #6b9bd8 0%, #4a7ba7 100%);
+}
+
+.chroma-card:nth-child(6n+3) {
+  background: linear-gradient(135deg, #a29bfe 0%, #8b7bd8 100%);
+}
+
+.chroma-card:nth-child(6n+4) {
+  background: linear-gradient(135deg, #74b9ff 0%, #6b9bd8 100%);
+}
+
+.chroma-card:nth-child(6n+5) {
+  background: linear-gradient(135deg, #9b8fd8 0%, #7b6fb8 100%);
+}
+
+.chroma-card:nth-child(6n+6) {
+  background: linear-gradient(135deg, #8ba9d8 0%, #6b89b8 100%);
+}
+
+/* Hover Effect Overlay */
+.chroma-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.chroma-card:hover::before {
+  opacity: 1;
+}
+
+/* Remove unused overlay elements */
+.chroma-overlay,
+.chroma-fade {
+  display: none;
+}
