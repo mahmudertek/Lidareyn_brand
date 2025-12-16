@@ -1,0 +1,81 @@
+/* CircularGallery.css */
+.circular-gallery-wrapper {
+    width: 100%;
+    height: 750px;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 2500px;
+    /* Increased perspective for flatter look */
+    margin-bottom: 100px;
+    /* Added spacing between galleries */
+}
+
+.circular-gallery {
+    width: 200px;
+    /* Item width */
+    height: 320px;
+    /* Item height */
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.1s linear;
+}
+
+.circular-item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    backface-visibility: hidden;
+    /* Or visible if we want to see backs */
+    background: #222;
+}
+
+.circular-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.circular-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    color: #fff;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.circular-item:hover .circular-overlay {
+    transform: translateY(0);
+}
+
+.gallery-title {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    z-index: 10;
+    text-transform: uppercase;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 30px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    white-space: nowrap;
+    /* Prevent wrapping */
+}

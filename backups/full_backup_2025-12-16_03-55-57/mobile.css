@@ -1,0 +1,259 @@
+@media screen and (max-width: 768px) {
+
+    /* --- 1. GLOBAL LAYOUT ADJUSTMENTS --- */
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scroll-behavior: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body {
+        /* Header (60px) + Sub-Nav (45px) = 105px space needed */
+        padding-top: 105px !important;
+    }
+
+    /* Minimal container padding to push items to edges */
+    .container,
+    .header-container {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    /* --- 2. MAIN HEADER (TOP ROW) --- */
+    .main-header {
+        height: 60px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 1002;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .header-container {
+        display: flex;
+        justify-content: space-between !important;
+        align-items: center !important;
+        height: 100%;
+        gap: 0 !important;
+        position: relative;
+    }
+
+    /* 1. Mobile Categories Button - LEFT */
+    .mobile-categories-btn {
+        display: flex !important;
+        align-items: center;
+        gap: 4px !important;
+        color: #333;
+        text-decoration: none;
+        margin: 0 !important;
+        z-index: 20;
+        background: transparent;
+    }
+
+    .mobile-categories-btn i {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .mobile-categories-btn span {
+        font-size: 11px !important;
+        font-weight: 600;
+        color: #333;
+        display: inline-block !important;
+        /* Visible */
+        white-space: nowrap;
+    }
+
+    /* 2. Logo - ABSOLUTE CENTER */
+    .logo {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+        flex: 0 0 auto;
+        z-index: 10;
+        text-align: center;
+        width: auto;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    .logo a {
+        font-size: 16px !important;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #000 !important;
+        pointer-events: auto;
+    }
+
+    /* 3. Icons - RIGHT (Compressed) */
+    .header-icons {
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0 !important;
+        /* No gap between buttons */
+        margin-left: 0 !important;
+        z-index: 20;
+    }
+
+    /* Fix User Menu Container Spacing */
+    .user-menu-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center;
+        width: 26px !important;
+        /* Force width */
+        min-width: 26px !important;
+        /* FIX: Ensure it doesn't shrink */
+        height: 40px !important;
+        justify-content: center;
+    }
+
+    /* FIX: Force User Button inside container to fill space */
+    .user-menu-container .icon-btn {
+        width: 100% !important;
+        min-width: 26px !important;
+    }
+
+    /* TIGHT ICON SPACING */
+    .icon-btn {
+        width: 26px !important;
+        /* Explicit narrow width */
+        min-width: 26px !important;
+        /* FIX: Prevent Flexbox shrinking */
+        height: 40px !important;
+        padding: 0 !important;
+        /* No padding inside button */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 !important;
+        /* No margin */
+    }
+
+    .icon-btn i {
+        font-size: 18px !important;
+        /* Increased icon size to fill space visually */
+        color: #333;
+        display: block;
+        /* Ensure block layout */
+        line-height: 1;
+    }
+
+    /* Elements to Hide */
+    .icon-label,
+    .cart-count,
+    .search-container,
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+
+    .mobile-search-btn {
+        display: flex !important;
+        text-decoration: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Badge styles - adjusted for new tightness */
+    .cart-btn {
+        position: relative;
+    }
+
+    .cart-btn .cart-count {
+        display: flex !important;
+        font-size: 8px !important;
+        width: 12px !important;
+        height: 12px !important;
+        right: 0px !important;
+        top: 6px !important;
+        position: absolute;
+        border-radius: 50%;
+        background: #000;
+        color: #fff;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    /* --- 3. SUB-NAV (BOTTOM ROW) --- */
+    .main-nav {
+        display: block !important;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: 45px;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        z-index: 1001;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 0;
+    }
+
+    .nav-menu {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 10px !important;
+        gap: 15px !important;
+        list-style: none;
+        width: max-content;
+    }
+
+    .nav-item-dropdown,
+    .mega-menu,
+    .nav-item-dropdown>a>i {
+        display: none !important;
+    }
+
+    .nav-menu li {
+        flex: 0 0 auto;
+        border: none !important;
+        width: auto !important;
+        margin: 0 !important;
+    }
+
+    .nav-link {
+        display: inline-block !important;
+        padding: 0 !important;
+        line-height: 45px;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        color: #555 !important;
+        text-transform: uppercase;
+        border: none !important;
+        white-space: nowrap;
+    }
+
+    .nav-link i {
+        display: none;
+    }
+
+    /* --- 4. DISABLE GRID MOTION ON MOBILE --- */
+    #grid-motion-container {
+        display: none !important;
+    }
+
+    /* --- COMPONENTS --- */
+    .grid-container,
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+}

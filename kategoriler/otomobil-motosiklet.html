@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Otomobil & Motosiklet - Galata Çarşı</title>
+    <meta name="description" content="Otomobil ve motosiklet aksesuarları, bakım ürünleri ve ekipmanları.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../mobile.css?v=5">
+    <link rel="stylesheet" href="../mega_menu_styles.css">
+</head>
+
+<body>
+    <header class="main-header">
+        <!-- Will be populated by JS or simple header for now, consistent with others -->
+        <div class="header-container">
+            <!-- Simplified for now, assuming unified_headers.py might run later or manual copy -->
+            <!-- Copying header structure from hirdavat-el-aletleri.html for consistency -->
+            <a href="../index.html#kategoriler" class="mobile-categories-btn">
+                <i class="fa-solid fa-bars"></i>
+                <span class="mobile-cat-text">Tüm Kategoriler</span>
+            </a>
+            <div class="logo">
+                <a href="../index.html">Galata Çarşı</a>
+            </div>
+            <div class="header-icons">
+                <a href="../arama.html" class="icon-btn mobile-search-btn"><i
+                        class="fa-solid fa-magnifying-glass"></i></a>
+                <button class="mobile-menu-toggle"><i class="fa-solid fa-bars"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="../index.html">Ana Sayfa</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Otomobil & Motosiklet</span>
+        </div>
+    </div>
+
+    <!-- Hybrid Template Content -->
+    <section class="category-hero" style="padding: 2.5rem 0 1rem;">
+        <div class="container">
+            <div class="category-header">
+                <div class="category-info">
+                    <h1>Otomobil & Motosiklet</h1>
+                    <div class="category-search" style="margin-top: 15px; max-width: 400px; position: relative;">
+                        <input type="text" placeholder="Otomobil & Motosiklet içinde ara..."
+                            style="width: 100%; padding: 10px 15px; border-radius: 25px; border: 1px solid #ddd; outline: none; padding-right: 40px; font-size: 14px;">
+                        <button
+                            style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #8b7bd8; color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 14px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="subcategory-chips-section">
+        <div class="container">
+            <div class="subcategory-chips-wrapper">
+                <a href="#" class="sub-chip"><i class="fa-solid fa-car"></i> Oto Aksesuar</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-motorcycle"></i> Motosiklet Ekipman</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-spray-can"></i> Araç Bakım</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-compact-disc"></i> Lastik & Jant</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-helmet-safety"></i> Kasklar</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="category-products-section" style="padding: 20px 0;">
+        <div class="container">
+            <div class="listing-controls"
+                style="display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center;">
+                <span class="product-count" style="font-size: 14px; color: #666;">Popüler Ürünler</span>
+                <div class="sort-options">
+                    <select style="border: 1px solid #ddd; padding: 8px; border-radius: 6px;">
+                        <option>Önerilen Sıralama</option>
+                        <option>En Düşük Fiyat</option>
+                        <option>En Yüksek Fiyat</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="products-grid">
+                <!-- Placeholder Products -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="badge new">Yeni</span>
+                        <img src="https://placehold.co/300x300/f5f5f5/333?text=Oto+Paspas" alt="Ürün 1">
+                        <div class="card-actions">
+                            <button class="action-btn" aria-label="Favori"><i class="fa-regular fa-heart"></i></button>
+                            <button class="action-btn" aria-label="Sepet"><i
+                                    class="fa-solid fa-cart-shopping"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="brand">AutoKing</span>
+                        <h3 class="title">3D Havuzlu Paspas Seti</h3>
+                        <div class="price-wrapper">
+                            <span class="price">850.00 TL</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://placehold.co/300x300/f5f5f5/333?text=Motosiklet+Kask" alt="Ürün 2">
+                        <div class="card-actions">
+                            <button class="action-btn" aria-label="Favori"><i class="fa-regular fa-heart"></i></button>
+                            <button class="action-btn" aria-label="Sepet"><i
+                                    class="fa-solid fa-cart-shopping"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="brand">LS2</span>
+                        <h3 class="title">Rapid Kapalı Kask</h3>
+                        <div class="price-wrapper">
+                            <span class="price">2,300.00 TL</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer will be injected or we can hardcode for now for consistency -->
+    <!-- Copying footer structure roughly, or verify with add_footer_and_search.py later. -->
+    <!-- Ideally I should run unify_headers.py and add_footer_and_search.py on this file. -->
+
+    <script src="../script.js"></script>
+    <script src="../categories-data.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script src="../mobile-menu.js"></script>
+<footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="../hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="../iletisim.html">İletişim</a></li>
+
+                            <li><a href="../magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column (Restored) -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="../kvkk.html">KVKK Aydınlatma Metni</a></li>
+                            <li><a href="../mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="../gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
+                            <li><a href="../iade-iptal.html">İade ve İptal Koşulları</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="../siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="../yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="../uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="../sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="../sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="../sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@galatacarsi.com">destek@galatacarsi.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Section -->
+
+        </div>
+    </footer>
+</body>
+
+</html>

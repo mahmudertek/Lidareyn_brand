@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Evcil Hayvan Ürünleri - Galata Çarşı</title>
     <meta name="description"
         content="Evcil hayvanlarınız için kaliteli ürünler. Mama kapları, oyuncaklar, tasmalar ve bakım malzemeleri uygun fiyatlarla.">
@@ -13,15 +13,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../mobile.css?v=5">
     <link rel="stylesheet" href="../mega_menu_styles.css">
 </head>
 
 <body>
-    <header class="main-header">
+        <header class="main-header" role="banner">
         <div class="header-container">
-            <div class="logo"><a href="../index.html">Galata Çarşı</a></div>
-            <nav class="main-nav">
-                <ul class="nav-menu">
+            <!-- Mobile Categories Button -->
+            <a href="../index.html#kategoriler" class="mobile-categories-btn">
+                <i class="fa-solid fa-bars"></i>
+                <span class="mobile-cat-text">Tüm Kategoriler</span>
+            </a>
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
                     <li class="nav-item-dropdown" role="none">
                         <a href="../index.html#kategoriler" class="nav-link categories-link" role="menuitem"
                             aria-haspopup="true" aria-expanded="false">
@@ -313,7 +319,7 @@
 
                                     </div>
                                 </li>
-                                                                <li>
+                                <li>
                                     <a href="#">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-car-side"></i>
@@ -373,7 +379,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                                                <li>
+                                <li>
                                     <a href="yalitim-ve-kaplama.html">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-layer-group"></i>
@@ -391,7 +397,8 @@
                                         <div class="sub-menu-column">
                                             <h4>Su Yalıtımı</h4>
                                             <ul>
-                                                <li><a href="#">Su Yalıtım Malzemeleri (Membran, Sürme İzolasyon)</a></li>
+                                                <li><a href="#">Su Yalıtım Malzemeleri (Membran, Sürme İzolasyon)</a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -443,7 +450,7 @@
                                     </div>
                                 </li>
 
-                                                            <li>
+                                <li>
                                     <a href="kaynak-malzemeleri.html">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-fire-burner"></i>
@@ -646,24 +653,37 @@
                                     </div>
                                 </li>
 
-</ul>
+                            </ul>
                         </div>
                     </li>
-                    <li><a href="../index.html#markalar" class="nav-link">Tüm Markalar</a></li>
-                    <li><a href="../index.html#cok-satanlar" class="nav-link">Çok Satanlar</a></li>
-                    <li><a href="../index.html#yeni-gelenler" class="nav-link">Yeni Gelenler</a></li>
-                    <li><a href="../index.html#populer" class="nav-link">Popüler Ürünler</a></li>
+                    <li><a href="#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+
+                    <li><a href="../yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="../populer.html" class="nav-link">Popüler Ürünler</a></li>
                 </ul>
             </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="../index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
             <div class="header-icons">
+                <a href="../arama.html" class="icon-btn mobile-search-btn" aria-label="Arama Yap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
                 <div class="search-container" role="search">
-                    <input type="text" class="search-input" placeholder="Ürün ara..." aria-label="Ürün arama"
-                        autocomplete="off">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off">
                     <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
                             class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
                 </div>
                 <div class="user-menu-container">
-                    <button class="icon-btn user-btn" aria-label="Hesabım"><i class="fa-regular fa-user"></i></button>
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
                     <!-- User Dropdown -->
                     <div class="user-dropdown">
                         <a href="../giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
@@ -672,12 +692,22 @@
                                 class="fa-solid fa-user-plus"></i> Üye Ol</a>
                     </div>
                 </div>
-                <button class="icon-btn favorites-btn" aria-label="Favorilerim"><i
-                        class="fa-regular fa-heart"></i></button>
-                <button class="icon-btn cart-btn" aria-label="Sepetim"><i class="fa-solid fa-cart-shopping"></i><span
-                        class="cart-count">0</span></button>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
             </div>
-            <button class="mobile-menu-toggle" aria-label="Menü"><i class="fa-solid fa-bars"></i></button>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </header>
 
@@ -689,71 +719,228 @@
         </div>
     </div>
 
-    <section class="category-hero">
+    
+    <section class="category-hero" style="padding: 2.5rem 0 1rem;">
         <div class="container">
             <div class="category-header">
-                <div class="category-icon"><i class="fa-solid fa-paw"></i></div>
                 <div class="category-info">
                     <h1>Evcil Hayvan Ürünleri</h1>
-                    <p>Evcil hayvanlarınız için kaliteli ürünler. Mama kapları, oyuncaklar, tasmalar ve bakım
-                        malzemeleri uygun fiyatlarla.</p>
-                </div>
+                
+                    <div class="category-search" style="margin-top: 15px; max-width: 400px; position: relative;">
+                        <input type="text" placeholder="Evcil Hayvan Ürünleri içinde ara..." style="width: 100%; padding: 10px 15px; border-radius: 25px; border: 1px solid #ddd; outline: none; padding-right: 40px; font-size: 14px;">
+                        <button style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #8b7bd8; color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 14px;"></i>
+                        </button>
+                    </div>
+        </div>
             </div>
         </div>
     </section>
 
-    <section class="subcategories-section">
+    <!-- Hybrid: Subcategory Chips (Horizontal Scroll) -->
+    <section class="subcategory-chips-section">
         <div class="container">
-            <h2 class="section-title">Alt Kategoriler</h2>
-            <div class="subcategories-grid">
-                <div class="subcategory-card">
-                    <div class="subcategory-icon"><i class="fa-solid fa-bowl-food"></i></div>
-                    <h3>Mama & Su Kapları</h3>
-                    <ul class="subcategory-items">
-                        <li>Mama Kabı</li>
-                        <li>Su Kabı</li>
-                        <li>Otomatik Mama Kabı</li>
-                    </ul>
-                    <a href="#" class="subcategory-link">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></a>
+            <div class="subcategory-chips-wrapper">
+                <a href="#" class="sub-chip"><i class="fa-solid fa-layer-group"></i> Alt Kategori 1</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-layer-group"></i> Alt Kategori 2</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-layer-group"></i> Alt Kategori 3</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-layer-group"></i> Alt Kategori 4</a>
+                <a href="#" class="sub-chip"><i class="fa-solid fa-layer-group"></i> Alt Kategori 5</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hybrid: Product Listing -->
+    <section class="category-products-section" style="padding: 20px 0;">
+        <div class="container">
+            <!-- Simple Filter/Sort Bar -->
+            <div class="listing-controls" style="display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center;">
+                <span class="product-count" style="font-size: 14px; color: #666;">Popüler Ürünler</span>
+                <div class="sort-options">
+                    <select style="border: 1px solid #ddd; padding: 8px; border-radius: 6px;">
+                        <option>Önerilen Sıralama</option>
+                        <option>En Düşük Fiyat</option>
+                        <option>En Yüksek Fiyat</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="products-grid">
+                <!-- Product Card 1 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <span class="badge new">Yeni</span>
+                        <img src="https://placehold.co/300x300/f5f5f5/333?text=Boya+1" alt="Ürün 1">
+                        <div class="card-actions">
+                            <button class="action-btn" aria-label="Favori"><i class="fa-regular fa-heart"></i></button>
+                            <button class="action-btn" aria-label="Sepet"><i class="fa-solid fa-cart-shopping"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="brand">Marka A</span>
+                        <h3 class="title">Örnek Ürün Başlığı 1</h3>
+                        <div class="price-wrapper">
+                            <span class="price">1,250.00 TL</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="subcategory-card">
-                    <div class="subcategory-icon"><i class="fa-solid fa-baseball"></i></div>
-                    <h3>Oyuncaklar</h3>
-                    <ul class="subcategory-items">
-                        <li>Çiğneme Oyuncağı</li>
-                        <li>Top</li>
-                        <li>İnteraktif Oyuncak</li>
-                    </ul>
-                    <a href="#" class="subcategory-link">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></a>
+                <!-- Product Card 2 -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://placehold.co/300x300/f5f5f5/333?text=Boya+2" alt="Ürün 2">
+                        <div class="card-actions">
+                            <button class="action-btn" aria-label="Favori"><i class="fa-regular fa-heart"></i></button>
+                            <button class="action-btn" aria-label="Sepet"><i class="fa-solid fa-cart-shopping"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="brand">Marka B</span>
+                        <h3 class="title">Örnek Ürün Başlığı 2</h3>
+                        <div class="price-wrapper">
+                            <span class="price">450.00 TL</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="subcategory-card">
-                    <div class="subcategory-icon"><i class="fa-solid fa-link"></i></div>
-                    <h3>Tasma & Gezdirme</h3>
-                    <ul class="subcategory-items">
-                        <li>Tasma</li>
-                        <li>Gezdirme Kayışı</li>
-                        <li>Göğüs Tasması</li>
-                    </ul>
-                    <a href="#" class="subcategory-link">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></a>
+                 <!-- Product Card 3 -->
+                 <div class="product-card">
+                    <div class="product-image">
+                        <img src="https://placehold.co/300x300/f5f5f5/333?text=Boya+3" alt="Ürün 3">
+                        <div class="card-actions">
+                            <button class="action-btn" aria-label="Favori"><i class="fa-regular fa-heart"></i></button>
+                            <button class="action-btn" aria-label="Sepet"><i class="fa-solid fa-cart-shopping"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="brand">Marka C</span>
+                        <h3 class="title">Örnek Ürün Başlığı 3</h3>
+                        <div class="price-wrapper">
+                            <span class="price">890.00 TL</span>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="subcategory-card">
-                    <div class="subcategory-icon"><i class="fa-solid fa-shower"></i></div>
-                    <h3>Temizlik & Bakım</h3>
-                    <ul class="subcategory-items">
-                        <li>Şampuan</li>
-                        <li>Tırnak Makası</li>
-                        <li>Fırça</li>
-                    </ul>
-                    <a href="#" class="subcategory-link">Tümünü Gör <i class="fa-solid fa-arrow-right"></i></a>
+                 <!-- Product Card 4 -->
+                 <div class="product-card">
+                    <div class="product-image">
+                        <span class="badge sale">%20</span>
+                        <img src="https://placehold.co/300x300/f5f5f5/333?text=Boya+4" alt="Ürün 4">
+                        <div class="card-actions">
+                            <button class="action-btn" aria-label="Favori"><i class="fa-regular fa-heart"></i></button>
+                            <button class="action-btn" aria-label="Sepet"><i class="fa-solid fa-cart-shopping"></i></button>
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <span class="brand">Marka D</span>
+                        <h3 class="title">Örnek Ürün Başlığı 4</h3>
+                        <div class="price-wrapper">
+                            <span class="old-price">1,200.00 TL</span>
+                            <span class="price">960.00 TL</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
 
     <!-- Sidebar Overlay -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="../hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="../iletisim.html">İletişim</a></li>
+
+                            <li><a href="../magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column (Restored) -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="../kvkk.html">KVKK Aydınlatma Metni</a></li>
+                            <li><a href="../mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="../gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
+                            <li><a href="../iade-iptal.html">İade ve İptal Koşulları</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="../siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="../yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="../uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="../sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="../sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="../sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@galatacarsi.com">destek@galatacarsi.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Section -->
+
+        </div>
+    </footer>
+
     <div class="sidebar-overlay"></div>
 
     <!-- Favorites Sidebar -->
@@ -788,6 +975,7 @@
     <script src="../script.js"></script>
     <script src="../categories-data.js"></script>
     <script src="cookie-consent.js"></script>
+    <script src="../mobile-menu.js"></script>
 </body>
 
 </html>
