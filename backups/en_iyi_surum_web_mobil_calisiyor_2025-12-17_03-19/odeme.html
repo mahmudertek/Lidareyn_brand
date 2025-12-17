@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme Yap - Galata Çarşı</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="checkout.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Simplified Header for Checkout -->
+    <!-- Modern Premium Header (Solid White) -->
+        <!-- Modern Premium Header (Solid White) -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <div class="search-container" role="search" id="search-container">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off" onfocus="document.getElementById('search-container').classList.add('active')">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button" onclick="var sc = document.getElementById('search-container'); sc.classList.toggle('active'); if(sc.classList.contains('active')) document.getElementById('header-search-input').focus();"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="checkout-main">
+        <div class="container checkout-container">
+            <!-- Left Column: Forms -->
+            <div class="checkout-forms">
+
+                <!-- Address Section -->
+                <section class="checkout-section" id="address-section">
+                    <h2 class="section-title"><i class="fa-solid fa-location-dot"></i> Teslimat Adresi</h2>
+                    <form id="address-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="firstName">Adınız</label>
+                                <input type="text" id="firstName" name="firstName" required placeholder="Adınız">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Soyadınız</label>
+                                <input type="text" id="lastName" name="lastName" required placeholder="Soyadınız">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Cep Telefonu</label>
+                            <input type="tel" id="phone" name="phone" required placeholder="05XX XXX XX XX">
+                        </div>
+                        <div class="form-group">
+                            <label for="city">İl</label>
+                            <select id="city" name="city" required>
+                                <option value="">Şehir Seçiniz</option>
+                                <option value="Istanbul">İstanbul</option>
+                                <option value="Ankara">Ankara</option>
+                                <option value="Izmir">İzmir</option>
+                                <option value="Bursa">Bursa</option>
+                                <option value="Antalya">Antalya</option>
+                                <!-- Other cities can be added -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Adres Detayı</label>
+                            <textarea id="address" name="address" rows="3" required
+                                placeholder="Mahalle, cadde, sokak ve bina no..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="addressTitle">Adres Başlığı</label>
+                            <input type="text" id="addressTitle" name="addressTitle"
+                                placeholder="Örn: Ev Adresim, İşyeri">
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Payment Section -->
+                <section class="checkout-section" id="payment-section">
+                    <h2 class="section-title"><i class="fa-regular fa-credit-card"></i> Ödeme Bilgileri</h2>
+
+                    <div class="payment-tabs">
+                        <div class="payment-tab active" data-method="credit-card">Kredi / Banka Kartı</div>
+                        <div class="payment-tab" data-method="transfer">Havale / EFT</div>
+                    </div>
+
+                    <div class="payment-content active" id="credit-card-content">
+                        <form id="payment-form">
+                            <div class="card-wrapper"></div>
+                            <!-- For card.js or similar visualizer if we add it later -->
+                            <div class="form-group">
+                                <label for="cardHolder">Kart Üzerindeki İsim</label>
+                                <input type="text" id="cardHolder" required placeholder="Ad Soyad">
+                            </div>
+                            <div class="form-group">
+                                <label for="cardNumber">Kart Numarası</label>
+                                <input type="text" id="cardNumber" required placeholder="0000 0000 0000 0000"
+                                    maxlength="19">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Son Kullanma Tarihi</label>
+                                    <div class="expiry-inputs">
+                                        <input type="text" id="expiryMonth" placeholder="AA" maxlength="2" required>
+                                        <span>/</span>
+                                        <input type="text" id="expiryYear" placeholder="YY" maxlength="2" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cvv">CVV</label>
+                                    <input type="text" id="cvv" placeholder="000" maxlength="3" required>
+                                </div>
+                            </div>
+                            <div class="installment-options">
+                                <h3>Taksit Seçenekleri</h3>
+                                <div class="installment-option selected">
+                                    <input type="radio" name="installment" value="1" checked>
+                                    <span class="inst-label">Tek Çekim</span>
+                                    <span class="inst-price" id="single-payment-total">0.00 TL</span>
+                                </div>
+                                <!-- Installments can be generated dynamically via JS -->
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="payment-content" id="transfer-content">
+                        <p>Havale / EFT ile ödeme yapmak için aşağıdaki hesap bilgilerini kullanabilirsiniz. Sipariş
+                            numaranızı açıklama kısmına yazmayı unutmayınız.</p>
+                        <div class="bank-account">
+                            <strong>Banka:</strong> Garanti Bankası<br>
+                            <strong>IBAN:</strong> TR00 0000 0000 0000 0000 0000 00<br>
+                            <strong>Alıcı:</strong> Galata Çarşı E-Ticaret A.Ş.
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Right Column: Order Summary -->
+            <div class="checkout-sidebar">
+                <div class="order-summary">
+                    <h3>Sipariş Özeti</h3>
+                    <div class="summary-items" id="summary-items">
+                        <!-- Items will be injected here via JS -->
+                        <div class="empty-cart-msg">Sepetinizde ürün bulunmamaktadır.</div>
+                    </div>
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span>Ara Toplam</span>
+                            <span id="summary-subtotal">0.00 TL</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Kargo</span>
+                            <span id="summary-shipping">Ücretsiz</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span>Toplam</span>
+                            <span id="summary-total">0.00 TL</span>
+                        </div>
+                    </div>
+                    <div class="contracts-check">
+                        <label>
+                            <input type="checkbox" id="acceptContracts">
+                            <a href="#">Ön Bilgilendirme Formu</a> ve <a href="#">Mesafeli Satış Sözleşmesi</a>'ni
+                            okudum, onaylıyorum.
+                        </label>
+                    </div>
+                    <button id="complete-order-btn" class="btn-complete-order" disabled>Siparişi Tamamla</button>
+                    <div class="secure-badges">
+                        <i class="fa-brands fa-cc-visa"></i>
+                        <i class="fa-brands fa-cc-mastercard"></i>
+                        <i class="fa-brands fa-cc-amex"></i>
+                        <div class="ssl-badge"><i class="fa-solid fa-lock"></i> 256-bit SSL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content success-content">
+            <div class="success-icon">
+                <i class="fa-solid fa-check-circle"></i>
+            </div>
+            <h2>Siparişiniz Alındı!</h2>
+            <p>Teşekkür ederiz. Siparişiniz başarıyla oluşturuldu.</p>
+            <p>Sipariş Numarası: <strong id="order-number">#123456</strong></p>
+            <p>Sipariş detayları e-posta adresinize gönderildi.</p>
+            <button class="btn-primary" onclick="window.location.href='index.html'">Ana Sayfaya Dön</button>
+        </div>
+    </div>
+
+    <!-- Footer Simple -->
+    <footer class="checkout-footer">
+        <div class="container" style="text-align: center; color: #999; font-size: 13px;">
+            <p>&copy; 2024 Galata Çarşı E-Ticaret A.Ş. Tüm hakları saklıdır.</p>
+            <div style="margin-top: 10px; font-size: 20px;">
+                <i class="fa-brands fa-cc-visa" style="margin: 0 5px;"></i>
+                <i class="fa-brands fa-cc-mastercard" style="margin: 0 5px;"></i>
+                <i class="fa-solid fa-lock" style="margin: 0 5px;"></i>
+            </div>
+        </div>
+    </footer>
+
+    <script src="categories-data.js"></script>
+    <script src="products-data.js"></script>
+    <script src="checkout.js"></script>
+
+    <script src="cookie-consent.js"></script>
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="mobile-menu.js"></script>
+    <script src="categories-data.js"></script>
+    <script src="products-data.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="live-search.js"></script>
+</body>
+
+</html>

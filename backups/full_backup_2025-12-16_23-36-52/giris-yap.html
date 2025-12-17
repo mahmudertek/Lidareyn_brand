@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Giriş Yap / Üye Ol - Galata Çarşı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css?v=5">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <link rel="stylesheet" href="auth.css">
+    <style>
+        .view-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Modern Premium Header (Solid White) -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <!-- Mobile Categories Button -->
+            <a href="index.html#kategoriler" class="mobile-categories-btn">
+                <i class="fa-solid fa-bars"></i>
+                <span class="mobile-cat-text">Tüm Kategoriler</span>
+            </a>
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <div class="mega-menu">
+                            <ul class="mega-menu-list">
+<li>
+                                    <a href="kategoriler/olcme-ve-kontrol-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-ruler-combined"></i>
+                                            <span>Ölçme & Kontrol Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Lazerli Ölçüm</h4>
+                                            <ul>
+                                </li>
+<li>
+                                    <a href="kategoriler/el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            <span>El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Anahtarlar & Vidalama</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/oto-bakim-tamir.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-wrench"></i>
+                                            <span>Oto Bakım ve Tamir Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Kaldırma ve Taşıma</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/yapi-insaat-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-trowel-bricks"></i>
+                                            <span>Yapı ve İnşaat Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Kimyasal & Yapıştırıcı</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/asindirici-kesici.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-compact-disc"></i>
+                                            <span>Aşındırıcı ve Kesici Uçlar</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Delici & Vidalama</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/yapi-kimyasallari.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-flask"></i>
+                                            <span>Yapıştırıcı, Dolgu ve Kimyasallar</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Yapıştırıcılar</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/kaynak-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-fire-burner"></i>
+                                            <span>Kaynak Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Sarf Malzemeleri</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/tesisat-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-faucet-drip"></i>
+                                            <span>Tesisat Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Su Tesisatı</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/hirdavat-el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            <span>Hırdavat ve El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Ölçü Aletleri</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-helmet-safety"></i>
+                                            <span>İş Güvenliği ve Çalışma Ekipmanları</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Koruyucu Giyim</h4>
+                                            <ul>
+                                </li>
+</ul>
+                        </div>
+                    </li>
+                    <li><a href="#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <button class="icon-btn mobile-search-btn" aria-label="Arama Yap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <div class="search-container" role="search">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="auth-container" style="margin-top: 60px;">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <button class="tab-btn active" id="tab-login" onclick="switchView('login')">Giriş Yap</button>
+                <button class="tab-btn" id="tab-register" onclick="switchView('register')">Üye Ol</button>
+            </div>
+
+            <div class="auth-content">
+                <!-- LOGIN VIEW -->
+                <div id="view-login" class="view-section active">
+                    <div class="auth-header">
+                        <h2>Merhaba,</h2>
+                        <p>Galata Çarşı'e giriş yap veya hesap oluştur, indirimleri kaçırma!</p>
+                    </div>
+                    <form class="auth-form" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>E-Posta</label>
+                            <input type="email" name="email" required placeholder="E-posta adresiniz">
+                        </div>
+                        <div class="form-group">
+                            <label>Şifre</label>
+                            <div class="password-wrapper">
+                                <input type="password" name="password" id="login-password" required
+                                    placeholder="Şifreniz">
+                                <button type="button" class="toggle-password"
+                                    onclick="togglePassword('login-password')">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                            <a href="sifremi-unuttum.html" class="forgot-password-link">Şifremi Unuttum</a>
+                        </div>
+                        <button type="submit" class="auth-btn">GİRİŞ YAP</button>
+
+                        <div class="social-login">
+                            <button type="button" class="social-btn">
+                                <i class="fa-brands fa-facebook-f" style="color: #1877F2;"></i> Facebook
+                            </button>
+                            <button type="button" class="social-btn">
+                                <i class="fa-brands fa-google" style="color: #EA4335;"></i> Google
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- REGISTER VIEW -->
+                <div id="view-register" class="view-section">
+                    <form class="auth-form" onsubmit="handleRegister(event)">
+
+                        <div class="form-group">
+                            <label>E-Posta</label>
+                            <input type="email" name="email" required placeholder="E-posta adresiniz">
+                        </div>
+                        <div class="form-group">
+                            <label>Şifre</label>
+                            <div class="password-wrapper">
+                                <input type="password" name="password" id="register-password" required
+                                    placeholder="Şifreniz">
+                                <button type="button" class="toggle-password"
+                                    onclick="togglePassword('register-password')">
+                                    <i class="fa-regular fa-eye"></i>
+                                </button>
+                            </div>
+                            <span class="password-hint">Şifreniz en az 10 karakter olmalı. 1 büyük harf, 1 küçük harf ve
+                                rakam içermelidir.</span>
+                        </div>
+
+                        <!-- Gender Selection -->
+                        <div class="form-group">
+                            <span class="gender-label">Sana özel ürünler sunabilmemiz için ilgilendiğin ürün grubunu
+                                seçer misin?</span>
+                            <div class="gender-buttons">
+                                <button type="button" class="gender-btn"
+                                    onclick="selectGender(this, 'kadin')">Kadın</button>
+                                <button type="button" class="gender-btn"
+                                    onclick="selectGender(this, 'erkek')">Erkek</button>
+                            </div>
+                            <input type="hidden" name="gender" id="gender-input" value="">
+                        </div>
+
+                        <!-- Checkboxes -->
+                        <div class="checkbox-group">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" required>
+                                <span>Tarafıma avantajlı tekliflerin sunulabilmesi amacıyla kişisel verilerimin
+                                    işlenmesine ve paylaşılmasına <a href="#">açık rıza veriyorum</a>.</span>
+                            </label>
+                            <label class="custom-checkbox">
+                                <input type="checkbox">
+                                <span>Tarafıma elektronik ileti gönderilmesini kabul ediyorum.</span>
+                            </label>
+                            <label class="custom-checkbox">
+                                <input type="checkbox" required>
+                                <span>Kişisel verilerimin işlenmesine yönelik <a href="#">aydınlatma metnini</a> okudum
+                                    ve anladım.</span>
+                            </label>
+                        </div>
+
+                        <!-- Captcha Placeholder -->
+                        <div class="captcha-box">
+                            <div class="captcha-content">
+                                <div class="captcha-checkbox"></div>
+                                <span class="captcha-label">Ben robot değilim</span>
+                            </div>
+                            <div class="captcha-logo">
+                                <i class="fa-solid fa-shield-halved" style="font-size: 24px;"></i>
+                                <span>reCAPTCHA</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="auth-btn">ÜYE OL</button>
+                    </form>
+                </div>
+
+                <!-- VERIFY VIEW -->
+                <div id="view-verify" class="view-section">
+                    <div class="auth-header">
+                        <h2>Kodu Doğrula</h2>
+                        <p>E-posta adresinize (<strong>console/toast</strong>) gönderilen 4 haneli kodu girin.</p>
+                    </div>
+                    <form class="auth-form" onsubmit="handleVerify(event)">
+                        <div class="code-inputs">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 1)">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 2)">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 3)">
+                            <input type="text" maxlength="1" class="code-digit" oninput="moveFocus(this, 4)">
+                        </div>
+                        <button type="submit" class="auth-btn">Doğrula ve Tamamla</button>
+                    </form>
+                    <div class="auth-footer">
+                        <a onclick="resendCode()">Kodu Tekrar Gönder</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="main-footer" style="margin-top: 50px;">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="iletisim.html">İletişim</a></li>
+
+                            <li><a href="magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="kvkk.html">KVKK / Gizlilik Politikası</a></li>
+                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="iade-iptal.html">İade & Değişim Koşulları</a></li>
+                            <li><a href="iade-iptal.html">Kargo & Teslimat</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@galatacarsi.com">destek@galatacarsi.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="script.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        function switchView(viewName) {
+            // Update active content
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            const targetView = document.getElementById('view-' + viewName);
+            if (targetView) targetView.classList.add('active');
+
+            // Update active tab button if applicable
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            const tabBtn = document.getElementById('tab-' + viewName);
+            if (tabBtn) {
+                tabBtn.classList.add('active');
+            } else {
+                // If switching to verify or something else, maybe keep register active or neither?
+                if (viewName === 'verify') {
+                    // Start Verify mode logic if needed, or just let it overlay
+                }
+            }
+        }
+
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const btn = input.nextElementSibling;
+            const icon = btn.querySelector('i');
+
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        async function handleRegister(e) {
+            e.preventDefault();
+            const form = e.target;
+            const email = form.email.value;
+            const password = form.password.value;
+
+            // Ad için email'in @ öncesini kullan, boşsa 'Kullanıcı' yap
+            let name = email.split('@')[0];
+            if (!name || name.trim() === '') {
+                name = 'Kullanıcı';
+            }
+
+            // Gender değerini backend formatına çevir (kadin -> female, erkek -> male)
+            let gender = form.gender.value;
+            if (gender === 'kadin') {
+                gender = 'female';
+            } else if (gender === 'erkek') {
+                gender = 'male';
+            } else {
+                gender = 'other';
+            }
+
+            try {
+                const result = await Auth.register(email, password, name, gender);
+                if (result.success) {
+                    if (result.needsVerification) {
+                        // E-posta doğrulaması gerekiyor
+                        alert('Kayıt başarılı! E-postanıza gönderilen doğrulama kodunu girin.');
+                        switchView('verify');
+                    } else {
+                        // Doğrulama gerekmeden kayıt tamamlandı
+                        alert('Kayıt başarılı! Giriş yapabilirsiniz.');
+                        switchView('login');
+                    }
+                } else {
+                    alert(result.message || 'Kayıt sırasında bir hata oluştu.');
+                }
+            } catch (error) {
+                console.error('Register error:', error);
+                alert('Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+            }
+        }
+
+        async function handleVerify(e) {
+            e.preventDefault();
+            const inputs = document.querySelectorAll('.code-digit');
+            let code = '';
+            inputs.forEach(input => code += input.value);
+
+            try {
+                const result = await Auth.verify(code);
+                if (result.success) {
+                    // Doğrulama başarılı - giriş yap sayfasına yönlendir
+                    alert('Tebrikler! E-postanız doğrulandı. Şimdi giriş yapabilirsiniz.');
+                    switchView('login');
+                } else {
+                    alert(result.message || 'Doğrulama kodu hatalı.');
+                    inputs.forEach(i => i.value = '');
+                    inputs[0].focus();
+                }
+            } catch (error) {
+                console.error('Verify error:', error);
+                alert('Doğrulama sırasında bir hata oluştu. Lütfen tekrar deneyin.');
+                inputs.forEach(i => i.value = '');
+                inputs[0].focus();
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const form = e.target;
+            const email = form.email.value;
+            const password = form.password.value;
+
+            try {
+                const result = await Auth.login(email, password);
+                if (result && result.success) {
+                    window.location.href = 'profil.html';
+                } else if (result && result.needsVerification) {
+                    alert('Hesabınız henüz doğrulanmamış. Lütfen e-posta adresinize gelen doğrulama kodunu girin.');
+                    sessionStorage.setItem('galatacarsi_pending_email', email);
+                    switchView('verify');
+                } else {
+                    alert(result?.message || 'Giriş yapılamadı. E-posta veya şifrenizi kontrol edin.');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('Giriş sırasında bir hata oluştu. Lütfen backend sunucusunun çalıştığından emin olun.');
+            }
+        }
+
+        function moveFocus(current, nextIndex) {
+            if (current.value.length === 1) {
+                const next = document.querySelectorAll('.code-digit')[nextIndex];
+                if (next) next.focus();
+            }
+        }
+
+        function resendCode() {
+            const tempUser = JSON.parse(sessionStorage.getItem('galatacarsi_temp_reg'));
+            if (tempUser) {
+                Auth.sendVerificationEmail(tempUser.email, tempUser.name, tempUser.code);
+                alert('Doğrulama kodu tekrar gönderildi. Lütfen gelen kutunuzu ve spam klasörünü kontrol edin.');
+            }
+        }
+
+        function selectGender(btn, gender) {
+            // Remove active from all gender buttons
+            const buttons = btn.parentElement.querySelectorAll('.gender-btn');
+            buttons.forEach(b => b.classList.remove('active'));
+
+            // Add active to clicked
+            btn.classList.add('active');
+
+            // Set hidden input
+            document.getElementById('gender-input').value = gender;
+        }
+
+        // Check URL for tab
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            if (tab === 'register') {
+                switchView('register');
+            }
+        });
+    </script>
+    <script src="cookie-consent.js"></script>
+    <script src="products-data.js"></script>
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="mobile-menu.js"></script>
+</body>
+
+</html>

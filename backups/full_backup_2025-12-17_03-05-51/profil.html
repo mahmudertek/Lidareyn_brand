@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Hesabım - Galata Çarşı</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css?v=5">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="profile.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <!-- Modern Premium Header (Solid White) -->
+        <!-- Modern Premium Header (Solid White) -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <div class="search-container" role="search" id="search-container">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off" onfocus="document.getElementById('search-container').classList.add('active')">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button" onclick="var sc = document.getElementById('search-container'); sc.classList.toggle('active'); if(sc.classList.contains('active')) document.getElementById('header-search-input').focus();"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="page-container profile-page">
+        <div class="profile-layout">
+
+            <!-- Sidebar -->
+            <aside class="profile-sidebar">
+                <div class="user-summary">
+                    <div class="user-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <h3 id="profile-name">Ahmet Yılmaz</h3>
+                        <p id="profile-email">ahmet@example.com</p>
+                    </div>
+                </div>
+                <nav class="profile-nav">
+                    <a href="#account" class="profile-link active" data-tab="account">
+                        <i class="fa-solid fa-user"></i> Kullanıcı Bilgilerim
+                    </a>
+                    <a href="#addresses" class="profile-link" data-tab="addresses">
+                        <i class="fa-solid fa-location-dot"></i> Adres Bilgilerim
+                    </a>
+                    <a href="#cards" class="profile-link" data-tab="cards">
+                        <i class="fa-solid fa-credit-card"></i> Kayıtlı Kartlarım
+                    </a>
+                    <a href="#notifications" class="profile-link" data-tab="notifications">
+                        <i class="fa-solid fa-bell"></i> Duyuru Tercihlerim
+                    </a>
+                    <a href="#password" class="profile-link" data-tab="password">
+                        <i class="fa-solid fa-lock"></i> Şifre Değişikliği
+                    </a>
+
+                    <a href="iletisim.html" class="profile-link">
+                        <i class="fa-solid fa-circle-question"></i> Yardım
+                    </a>
+                    <a href="#history" class="profile-link" data-tab="history">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Önceden Gezdiklerim
+                    </a>
+                    <a href="#orders" class="profile-link" data-tab="orders">
+                        <i class="fa-solid fa-rotate-right"></i> Tekrar Satın Al
+                    </a>
+                    <a href="#orders" class="profile-link all-orders-link" data-tab="orders">
+                        <i class="fa-solid fa-box"></i> Tüm Siparişlerim
+                    </a>
+                    <a href="#" class="profile-link logout-link">
+                        <i class="fa-solid fa-power-off"></i> Çıkış Yap
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="profile-content">
+
+                <!-- Orders Tab -->
+                <!-- Orders Tab (Tüm Siparişlerim) -->
+                <div id="orders-tab" class="profile-tab-content active">
+                    <h2 class="tab-title">Tüm Siparişlerim</h2>
+
+                    <!-- Order Filter Tabs -->
+                    <div class="order-filter-tabs">
+                        <button class="order-filter-tab active" data-filter="all">
+                            <i class="fa-solid fa-list"></i>
+                            Tümü
+                        </button>
+                        <button class="order-filter-tab" data-filter="ongoing">
+                            <i class="fa-solid fa-clock"></i>
+                            Devam Eden
+                        </button>
+                        <button class="order-filter-tab" data-filter="returned">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            İade Edilen
+                        </button>
+                        <button class="order-filter-tab" data-filter="cancelled">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            İptal Edilen
+                        </button>
+                    </div>
+
+                    <!-- Orders List Container -->
+                    <div id="orders-list-container" class="orders-list">
+                        <!-- Orders will be loaded here by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Addresses Tab -->
+                <div id="addresses-tab" class="profile-tab-content">
+                    <div class="address-header-row">
+                        <h2 class="tab-title">Adres Bilgilerim</h2>
+                        <button class="btn-add-address" onclick="alert('Adres ekleme özelliği yakında!');">
+                            <i class="fa-solid fa-plus"></i> Yeni Adres Ekle
+                        </button>
+                    </div>
+                    <div class="address-content-box">
+                        <div class="address-empty-state">
+                            <div class="empty-icon">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <h3>Kayıtlı adresiniz bulunamadı</h3>
+                            <p>Siparişleriniz için kullanabileceğiniz adres eklemek için ekranın üstünden
+                                "Yeni Adres
+                                Ekle" linkine tıklayarak adres oluşturabilirsiniz.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards Tab -->
+                <div id="cards-tab" class="profile-tab-content">
+                    <div class="cards-header-row">
+                        <h2 class="tab-title">Kayıtlı Kartlarım</h2>
+                        <div class="cards-security-badge">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <div class="security-text">
+                                <strong>Secure</strong>
+                                <span>GlobalSign</span>
+                            </div>
+                            <div class="safe-badge">
+                                <i class="fa-solid fa-check"></i> Kayıtlı Kartlarınız<br>Burada Güvende
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cards-content-box">
+                        <div class="cards-empty-state">
+                            <div class="empty-card-icon">
+                                <i class="fa-solid fa-credit-card"></i>
+                            </div>
+                            <h3>Hesabınıza Kayıtlı Kart Bulunmamaktadır.</h3>
+                            <p>Kart kaydetme işlemi sadece alışveriş yaptıktan sonra karşınıza gelen
+                                onaylama ekranından
+                                yapılabilmektedir.</p>
+                        </div>
+                    </div>
+                    <div class="cards-info-footer">
+                        <div class="info-header">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Kayıtlı Kartlarınız <strong>Burada Güvende</strong></span>
+                        </div>
+                        <p>Kartınızı kaydederken kullanmış olduğunuz telefon numarasından, aşağıdaki
+                            durumlarda SMS
+                            onayı istiyoruz.</p>
+                        <ul>
+                            <li>Kartınızı kaydederken kullanmış olduğunuz adres dışında başka bir adres
+                                seçtiğinizde
+                            </li>
+                            <li>Kartınızı kaydederken kullanmış olduğunuz adres, e-posta veya telefon
+                                numarasında bir
+                                değişiklik yaptığınızda</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Notifications Tab -->
+                <div id="notifications-tab" class="profile-tab-content">
+                    <div class="notifications-header-box">
+                        <h2 class="tab-title">Duyuru Tercihlerim</h2>
+                    </div>
+                    <div class="notifications-form-box">
+                        <form id="notifications-form">
+                            <div class="preference-item">
+                                <div class="pref-checkbox">
+                                    <input type="checkbox" id="pref-email" checked>
+                                </div>
+                                <div class="pref-content">
+                                    <label for="pref-email" class="pref-title">E-mail</label>
+                                    <p class="pref-desc">İlgimi çekebilecek kampanyalarla ve butik
+                                        bültenleriyle ilgili
+                                        e-posta almak istiyorum.</p>
+                                </div>
+                            </div>
+                            <div class="preference-item">
+                                <div class="pref-checkbox">
+                                    <input type="checkbox" id="pref-sms">
+                                </div>
+                                <div class="pref-content">
+                                    <label for="pref-sms" class="pref-title">SMS</label>
+                                    <p class="pref-desc">İlgimi çekebilecek kampanyalarla ilgili SMS almak
+                                        istiyorum.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="pref-actions">
+                                <button type="submit" class="btn-pref-update active">GÜNCELLE</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Password Tab -->
+                <div id="password-tab" class="profile-tab-content">
+                    <div class="password-header-box">
+                        <h2 class="tab-title">Şifre Değişikliği</h2>
+                    </div>
+                    <div class="password-form-box">
+                        <form id="change-password-form">
+                            <div class="form-group">
+                                <label>Mevcut Şifre</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" class="form-control" placeholder="">
+                                    <i class="fa-solid fa-eye password-toggle"></i>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Yeni Şifre</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" class="form-control" placeholder="">
+                                    <i class="fa-solid fa-eye password-toggle"></i>
+                                </div>
+                                <div class="form-hint">Şifreniz en az 10 karakter olmalı. 1 büyük harf, 1
+                                    küçük harf ve
+                                    rakam içermelidir.</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Yeni Şifre (Tekrar)</label>
+                                <div class="password-input-wrapper">
+                                    <input type="password" class="form-control" placeholder="">
+                                    <i class="fa-solid fa-eye password-toggle"></i>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-save-password">Kaydet</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Account Info Tab -->
+                <div id="account-tab" class="profile-tab-content active">
+                    <div class="account-grid" style="grid-template-columns: 1fr; max-width: 800px;">
+                        <!-- Left Column: Membership Info -->
+                        <div class="account-col">
+                            <h3 class="account-section-title">Üyelik Bilgilerim</h3>
+                            <form id="membership-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Ad</label>
+                                        <input type="text" class="form-control" name="first_name" value="Ahmet">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Soyad</label>
+                                        <input type="text" class="form-control" name="last_name" value="Yılmaz">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>E-Mail</label>
+                                    <input type="email" class="form-control" name="email" value="ahmet@example.com"
+                                        disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cep Telefonu</label>
+                                    <div class="phone-group">
+                                        <select class="form-control phone-prefix">
+                                            <option value="+90">+90</option>
+                                        </select>
+                                        <input type="tel" class="form-control" name="phone" value="532 123 45 67">
+                                        <button type="button" class="btn-update active"
+                                            style="font-size: 0.8rem; height: 44px; margin-top:0; width:auto;">Güncelle</button>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Doğum Tarihiniz</label>
+                                    <div class="date-group">
+                                        <select class="form-control date-select">
+                                            <option>Gün</option>
+                                            <option>10</option>
+                                        </select>
+                                        <select class="form-control date-select">
+                                            <option>Ay</option>
+                                            <option>Aralık</option>
+                                        </select>
+                                        <select class="form-control date-select">
+                                            <option>Yıl</option>
+                                            <option>1990</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="checkbox-group">
+                                    <input type="checkbox" id="corporate-check">
+                                    <label for="corporate-check" class="checkbox-label">İş yeri
+                                        alışverişlerim için
+                                        fırsatlardan haberdar olmak istiyorum.</label>
+                                </div>
+                                <button type="submit" class="btn-update">Güncelle</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Tab (Önceden Gezdiklerim) -->
+                <div id="history-tab" class="profile-tab-content">
+                    <h2 class="tab-title">Önceden Gezdiklerim</h2>
+                    <div id="history-products-container">
+                        <!-- Products will be loaded here by JavaScript -->
+                        <div class="history-loading">
+                            <i class="fa-solid fa-spinner fa-spin"></i>
+                            <p>Geçmiş ürünler yükleniyor...</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div style="text-align: center; color: #666; padding: 20px;">
+                &copy; 2024 Galata Çarşı. Tüm hakları saklıdır.
+            </div>
+        </div>
+    </footer>
+
+    <script src="cart-logic.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="profile.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script src="products-data.js"></script>
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="mobile-menu.js"></script>
+    <script src="categories-data.js"></script>
+    <script src="products-data.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="live-search.js"></script>
+</body>
+
+</html>

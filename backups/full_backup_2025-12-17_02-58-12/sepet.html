@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sepetim - Galata Çarşı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css?v=5">
+    <link rel="stylesheet" href="cart-page.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+</head>
+
+<body>
+
+    <!-- Header (Index'ten alınan Tam Header) -->
+        <!-- Modern Premium Header (Solid White) -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <div class="search-container" role="search" id="search-container">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off" onfocus="document.getElementById('search-container').classList.add('active')">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button" onclick="var sc = document.getElementById('search-container'); sc.classList.toggle('active'); if(sc.classList.contains('active')) document.getElementById('header-search-input').focus();"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="cart-page-container">
+
+        <h1 class="cart-title">Sepetim (<span id="cart-count-title">0</span> Ürün)</h1>
+
+        <div class="cart-content-wrapper">
+
+            <!-- Items List -->
+            <div class="cart-items-section">
+                <!-- Shipping Info Banner -->
+                <div class="shipping-info-banner available hidden" id="free-shipping-banner">
+                    <i class="fa-solid fa-truck-fast"></i>
+                    <span>Kargon bedava!</span>
+                </div>
+
+                <div id="cart-items-container">
+                    <!-- JS ile doldurulacak -->
+                    <div class="loading-spinner">
+                        <i class="fa-solid fa-circle-notch fa-spin"></i> Yükleniyor...
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-cart-state" class="empty-cart-state hidden">
+                    <div class="empty-icon-cart">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <h3>Sepetinde ürün bulunmuyor</h3>
+                    <p>Hemen alışverişe başla, fırsatları kaçırma!</p>
+                    <a href="index.html" class="btn btn-primary start-shopping-btn">Alışverişe Başla</a>
+                </div>
+            </div>
+
+            <!-- Summary Sidebar -->
+            <div class="cart-summary-section" id="cart-summary-section">
+                <div class="summary-card">
+                    <h3>Sipariş Özeti</h3>
+
+                    <div class="summary-rows">
+                        <div class="summary-row">
+                            <span>Ürünün Toplamı</span>
+                            <span id="summary-subtotal">0.00 TL</span>
+                        </div>
+                        <div class="summary-row">
+                            <span>Kargo Toplam</span>
+                            <span id="summary-shipping">29.99 TL</span>
+                        </div>
+                        <div class="summary-row discount active hidden" id="free-shipping-discount">
+                            <span>Kargo İndirimi</span>
+                            <span class="text-success">-29.99 TL</span>
+                        </div>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Toplam</span>
+                        <span id="summary-total" class="total-price">0.00 TL</span>
+                    </div>
+
+                    <button class="btn btn-checkout" onclick="proceedToCheckout()">
+                        Sepeti Onayla <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+
+                    <div class="security-badges">
+                        <div class="badge-item"><i class="fa-solid fa-shield-halved"></i> Güvenli Alışveriş</div>
+                        <div class="badge-item"><i class="fa-solid fa-rotate-left"></i> Kolay İade</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Scripts -->
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCartPage();
+        });
+
+        function renderCartPage() {
+            const container = document.getElementById('cart-items-container');
+            const emptyState = document.getElementById('empty-cart-state');
+            const summarySection = document.getElementById('cart-summary-section');
+            const countTitle = document.getElementById('cart-count-title');
+
+            // LocalStorage'dan sepeti al
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            countTitle.textContent = cart.length;
+
+            if (cart.length === 0) {
+                container.style.display = 'none';
+                summarySection.style.display = 'none';
+                emptyState.classList.remove('hidden');
+                document.getElementById('free-shipping-banner').classList.add('hidden');
+                return;
+            }
+
+            container.style.display = 'block';
+            summarySection.style.display = 'block';
+            emptyState.classList.add('hidden');
+
+            let html = '';
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                const price = parseFloat(item.price);
+                const quantity = item.quantity || 1;
+                const total = price * quantity;
+                subtotal += total;
+
+                html += `
+                    <div class="cart-item-card">
+                        <div class="item-checkbox">
+                            <i class="fa-active fa-check-circle active"></i>
+                        </div>
+                        <div class="item-img">
+                            <img src="${item.image}" alt="${item.title}">
+                        </div>
+                        <div class="item-details">
+                            <h3 class="item-title"><a href="urun-detay.html?id=${item.id}">${item.title}</a></h3>
+                            <div class="item-meta">
+                                <span class="meta-badge"><i class="fa-solid fa-truck-fast"></i> Hızlı Teslimat</span>
+                            </div>
+                            <div class="item-price-mobile">${price.toFixed(2)} TL</div>
+                        </div>
+                        <div class="item-actions">
+                            <div class="quantity-control">
+                                <button onclick="updateCartQuantity(${index}, -1)">-</button>
+                                <input type="text" value="${quantity}" readonly>
+                                <button onclick="updateCartQuantity(${index}, 1)">+</button>
+                            </div>
+                            <div class="item-price-desktop">
+                                <div class="price-val">${price.toFixed(2)} TL</div>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCartPage(${index})">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            updateSummary(subtotal);
+        }
+
+        function updateSummary(subtotal) {
+            const shippingCost = 29.99;
+            const freeShippingLimit = 200; // 200 TL üzeri bedava
+
+            document.getElementById('summary-subtotal').textContent = subtotal.toFixed(2) + ' TL';
+
+            let total = subtotal + shippingCost;
+
+            if (subtotal >= freeShippingLimit) {
+                total = subtotal;
+                document.getElementById('free-shipping-banner').classList.remove('hidden');
+                document.getElementById('free-shipping-discount').classList.remove('hidden');
+            } else {
+                document.getElementById('free-shipping-banner').classList.add('hidden');
+                document.getElementById('free-shipping-discount').classList.add('hidden');
+            }
+
+            document.getElementById('summary-total').textContent = total.toFixed(2) + ' TL';
+        }
+
+        window.updateCartQuantity = function (index, change) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart[index]) {
+                cart[index].quantity = (cart[index].quantity || 1) + change;
+                if (cart[index].quantity < 1) cart[index].quantity = 1;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                renderCartPage();
+                // Global update
+                if (window.updateCartCount) window.updateCartCount();
+            }
+        }
+
+        window.removeFromCartPage = function (index) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCartPage();
+            // Global update
+            if (window.updateCartCount) window.updateCartCount();
+        }
+
+        window.proceedToCheckout = function () {
+            window.location.href = 'checkout.html'; // veya siparis tamamla sayfasi
+        }
+    </script>
+    <script src="cookie-consent.js"></script>
+    <script src="products-data.js"></script>
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="mobile-menu.js"></script>
+    <script src="categories-data.js"></script>
+    <script src="products-data.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="live-search.js"></script>
+</body>
+
+</html>

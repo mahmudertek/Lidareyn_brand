@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bebek Görsel Test</title>
+    <style>
+        body {
+            background: #111;
+            color: #fff;
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .test-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .test-card {
+            background: #222;
+            padding: 10px;
+            border-radius: 8px;
+            width: 300px;
+        }
+
+        .test-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .test-card h3 {
+            margin: 10px 0 5px;
+        }
+
+        .test-card p {
+            font-size: 12px;
+            color: #888;
+            word-break: break-all;
+        }
+
+        .success {
+            border: 2px solid green;
+        }
+
+        .error {
+            border: 2px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Bebek & Çocuk Görsel Test</h1>
+    <p>Aşağıdaki görsellerin hangisi görünüyor kontrol edin:</p>
+
+    <div class="test-container">
+        <div class="test-card" id="card1">
+            <img src="gorseller/bebek_new_v3.jpg" alt="bebek_new_v3"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>bebek_new_v3.jpg</h3>
+            <p>gorseller/bebek_new_v3.jpg</p>
+        </div>
+
+        <div class="test-card" id="card2">
+            <img src="gorseller/bebek_special_v2.jpg" alt="bebek_special_v2"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>bebek_special_v2.jpg</h3>
+            <p>gorseller/bebek_special_v2.jpg</p>
+        </div>
+
+        <div class="test-card" id="card3">
+            <img src="gorseller/bebek_v2.jpg" alt="bebek_v2" onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>bebek_v2.jpg</h3>
+            <p>gorseller/bebek_v2.jpg</p>
+        </div>
+
+        <div class="test-card" id="card4">
+            <img src="gorseller/bebek_final.jpg" alt="bebek_final" onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>bebek_final.jpg</h3>
+            <p>gorseller/bebek_final.jpg</p>
+        </div>
+
+        <div class="test-card" id="card5">
+            <img src="https://picsum.photos/seed/bebek-cocuk/320/240" alt="picsum"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Picsum (Harici)</h3>
+            <p>https://picsum.photos/seed/bebek-cocuk/320/240</p>
+        </div>
+    </div>
+
+    <h2 style="margin-top: 30px;">Sonuç Açıklaması:</h2>
+    <ul>
+        <li><span style="color: green;">Yeşil kenarlık</span> = Görsel başarıyla yüklendi</li>
+        <li><span style="color: red;">Kırmızı kenarlık</span> = Görsel yüklenemedi</li>
+    </ul>
+    <script src="cookie-consent.js"></script>
+    <script src="mobile-menu.js"></script>
+</body>
+
+</html>

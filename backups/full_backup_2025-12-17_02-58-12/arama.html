@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Arama Sonuçları - Galata Çarşı</title>
+
+    <!-- Shared Head Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css?v=1002">
+    <link rel="stylesheet" href="mobile.css?v=5">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="search.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <!-- Modern Premium Header (Solid White) -->
+        <!-- Modern Premium Header (Solid White) -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                    </li>
+                    <li><a href="index.html#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <div class="search-container" role="search" id="search-container">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off" onfocus="document.getElementById('search-container').classList.add('active')">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button" onclick="var sc = document.getElementById('search-container'); sc.classList.toggle('active'); if(sc.classList.contains('active')) document.getElementById('header-search-input').focus();"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="page-container search-page">
+
+        <div class="search-header-bar">
+            <h1><span id="search-query-display">"..."</span> için arama sonuçları</h1>
+            <span class="result-count" id="result-count">0 ürün bulundu</span>
+        </div>
+
+        <div class="search-layout">
+
+            <!-- Filters Sidebar -->
+            <aside class="search-sidebar">
+                <div class="sidebar-header-mobile">
+                    <h3>Filtrele</h3>
+                    <button id="close-filters"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
+                <!-- Category Filter -->
+                <div class="filter-group expanded">
+                    <h3 class="filter-title">Kategoriler <i class="fa-solid fa-chevron-down"></i></h3>
+                    <div class="filter-content" id="category-filters">
+                        <!-- Populated by JS -->
+                        <div class="skeleton-filter"></div>
+                        <div class="skeleton-filter"></div>
+                        <div class="skeleton-filter"></div>
+                    </div>
+                </div>
+
+                <!-- Brand Filter -->
+                <div class="filter-group expanded">
+                    <h3 class="filter-title">Marka <i class="fa-solid fa-chevron-down"></i></h3>
+                    <div class="filter-content" id="brand-filters">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <!-- Price Filter -->
+                <div class="filter-group expanded">
+                    <h3 class="filter-title">Fiyat Aralığı <i class="fa-solid fa-chevron-down"></i></h3>
+                    <div class="filter-content">
+                        <div class="price-inputs">
+                            <input type="number" id="min-price" placeholder="En Az">
+                            <span>-</span>
+                            <input type="number" id="max-price" placeholder="En Çok">
+                            <button id="price-filter-btn"><i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Results Grid -->
+            <div class="search-results-area">
+
+                <div class="results-toolbar">
+                    <button class="mobile-filter-btn" id="open-filters-btn">
+                        <i class="fa-solid fa-filter"></i> Filtrele
+                    </button>
+
+                    <div class="sort-dropdown">
+                        <select id="sort-select">
+                            <option value="relevance">Önerilen Sıralama</option>
+                            <option value="price-asc">En Düşük Fiyat</option>
+                            <option value="price-desc">En Yüksek Fiyat</option>
+                            <option value="newest">En Yeniler</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="products-grid" id="search-results-grid">
+                    <!-- Products will be injected here -->
+                    <!-- Empty State -->
+                    <div class="search-empty-state" style="display:none;">
+                        <i class="fa-solid fa-magnifying-glass-minus"></i>
+                        <h3>Sonuç Bulunamadı</h3>
+                        <p>Aradığınız kriterlere uygun ürün bulunamadı. Lütfen farklı anahtar kelimelerle tekrar
+                            deneyin.</p>
+                        <a href="index.html" class="btn-primary">Ana Sayfaya Dön</a>
+                    </div>
+                </div>
+
+                <!-- Pagination (Mock) -->
+                <div class="pagination" id="pagination-container" style="display:none;">
+                    <a href="#" class="page-link active">1</a>
+                    <a href="#" class="page-link">2</a>
+                    <a href="#" class="page-link">3</a>
+                    <a href="#" class="page-link"><i class="fa-solid fa-chevron-right"></i></a>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takip.html">Sipariş Takip</a></li>
+                            <li><a href="iletisim.html">İletişim</a></li>
+                            <li><a href="kvkk.html">KVKK / Gizlilik Politikası</a></li>
+                            <li><a href="mesafeli-satis.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="iade-degisim.html">İade & Değişim Koşulları</a></li>
+                            <li><a href="kargo-teslimat.html">Kargo & Teslimat</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
+                            <li><a href="odeme-teslimat.html">Ödeme ve Teslimat</a></li>
+                            <li><a href="garanti-sartlari.html">Garanti Şartları</a></li>
+                            <li><a href="iade-iptal.html">İade ve İptal Şartları</a></li>
+                            <li><a href="havale-bildirim.html">Havale Bildirim Formu</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@galatacarsi.com">destek@galatacarsi.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div style="text-align: center; color: #666; padding-top: 20px;">
+                    &copy; 2024 Galata Çarşı. Tüm hakları saklıdır.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shared Data & Logic -->
+    <script src="categories-data.js"></script>
+    <script src="cart-logic.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="search.js"></script>
+
+    <script src="cookie-consent.js"></script>
+    <script src="mobile-menu.js"></script>
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="products-data.js"></script>
+    <script src="mobile-menu.js"></script>
+    <script src="categories-data.js"></script>
+    <script src="products-data.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+    <script src="live-search.js"></script>
+</body>
+
+</html>
