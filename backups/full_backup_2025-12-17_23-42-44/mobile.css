@@ -1,0 +1,1037 @@
+@media screen and (max-width: 768px) {
+
+    /* --- 1. GLOBAL LAYOUT ADJUSTMENTS --- */
+    html,
+    body {
+        width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+        scroll-behavior: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    body {
+        /* Header (60px) + Sub-Nav (45px) = 105px space needed */
+        padding-top: 105px !important;
+    }
+
+    /* Minimal container padding to push items to edges */
+    .container,
+    .header-container {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
+
+    /* --- 2. MAIN HEADER (TOP ROW) --- */
+    .main-header {
+        height: 60px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 1002;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .header-container {
+        display: flex;
+        justify-content: space-between !important;
+        align-items: center !important;
+        height: 100%;
+        gap: 0 !important;
+        position: relative;
+    }
+
+    /* 1. Mobile Categories Button - LEFT */
+    .mobile-categories-btn {
+        display: flex !important;
+        align-items: center;
+        gap: 4px !important;
+        color: #333;
+        text-decoration: none;
+        margin: 0 !important;
+        z-index: 20;
+        background: transparent;
+    }
+
+    .mobile-categories-btn i {
+        font-size: 16px;
+        color: #333;
+    }
+
+    .mobile-categories-btn span {
+        font-size: 11px !important;
+        font-weight: 600;
+        color: #333;
+        display: inline-block !important;
+        /* Visible */
+        white-space: nowrap;
+    }
+
+    /* 2. Logo - ABSOLUTE CENTER */
+    .logo {
+        position: absolute !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin: 0 !important;
+        flex: 0 0 auto;
+        z-index: 10;
+        text-align: center;
+        width: auto;
+        pointer-events: none;
+        white-space: nowrap;
+    }
+
+    .logo a {
+        font-size: 16px !important;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #000 !important;
+        pointer-events: auto;
+    }
+
+    /* 3. Icons - RIGHT (Compressed) */
+    .header-icons {
+        display: flex !important;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 0 !important;
+        /* No gap between buttons */
+        margin-left: 0 !important;
+        z-index: 20;
+    }
+
+    /* Fix User Menu Container Spacing */
+    .user-menu-container {
+        margin: 0 !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: center;
+        width: 26px !important;
+        /* Force width */
+        min-width: 26px !important;
+        /* FIX: Ensure it doesn't shrink */
+        height: 40px !important;
+        justify-content: center;
+    }
+
+    /* FIX: Force User Button inside container to fill space */
+    .user-menu-container .icon-btn {
+        width: 100% !important;
+        min-width: 26px !important;
+    }
+
+    /* TIGHT ICON SPACING */
+    .icon-btn {
+        width: 26px !important;
+        /* Explicit narrow width */
+        min-width: 26px !important;
+        /* FIX: Prevent Flexbox shrinking */
+        height: 40px !important;
+        padding: 0 !important;
+        /* No padding inside button */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 !important;
+        /* No margin */
+    }
+
+    .icon-btn i {
+        font-size: 18px !important;
+        /* Increased icon size to fill space visually */
+        color: #333;
+        display: block;
+        /* Ensure block layout */
+        line-height: 1;
+    }
+
+    /* Elements to Hide */
+    .icon-label,
+    .cart-count,
+    .search-container,
+    .mobile-menu-toggle {
+        display: none !important;
+    }
+
+    .mobile-search-btn {
+        display: flex !important;
+        text-decoration: none !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Badge styles - adjusted for new tightness */
+    .cart-btn {
+        position: relative;
+    }
+
+    .cart-btn .cart-count {
+        display: flex !important;
+        font-size: 8px !important;
+        width: 12px !important;
+        height: 12px !important;
+        right: 0px !important;
+        top: 6px !important;
+        position: absolute;
+        border-radius: 50%;
+        background: #000;
+        color: #fff;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    /* --- 3. SUB-NAV (BOTTOM ROW) --- */
+    .main-nav {
+        display: block !important;
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        height: 45px;
+        background: #fff;
+        border-bottom: 1px solid #eee;
+        z-index: 1001;
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 0;
+    }
+
+    .nav-menu {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 10px !important;
+        gap: 15px !important;
+        list-style: none;
+        width: max-content;
+    }
+
+    .nav-item-dropdown,
+    .mega-menu,
+    .nav-item-dropdown>a>i {
+        display: none !important;
+    }
+
+    .nav-menu li {
+        flex: 0 0 auto;
+        border: none !important;
+        width: auto !important;
+        margin: 0 !important;
+    }
+
+    .nav-link {
+        display: inline-block !important;
+        padding: 0 !important;
+        line-height: 45px;
+        font-size: 11px !important;
+        font-weight: 600 !important;
+        color: #555 !important;
+        text-transform: uppercase;
+        border: none !important;
+        white-space: nowrap;
+    }
+
+    .nav-link i {
+        display: none;
+    }
+
+    /* --- 4. DISABLE GRID MOTION ON MOBILE --- */
+    #grid-motion-container {
+        display: none !important;
+    }
+
+    /* --- COMPONENTS --- */
+    .grid-container,
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    /* --- MOBILE MEGA MENU (ACCORDION) --- */
+
+    /* Reveal the container when active */
+    body.mobile-menu-active .nav-item-dropdown {
+        display: block !important;
+        position: static !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+
+    body.mobile-menu-active .nav-item-dropdown>a.categories-link,
+    body.mobile-menu-active .nav-item-dropdown>.categories-link {
+        display: none !important;
+        /* Hide the desktop trigger link inside the drawer */
+    }
+
+    /* Position the Mega Menu as a full-screen drawer */
+    body.mobile-menu-active .mega-menu {
+        display: block !important;
+        position: fixed !important;
+        top: 60px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: calc(100vh - 60px) !important;
+        background: #fff !important;
+        z-index: 2000 !important;
+        overflow-y: auto !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        transform: none !important;
+        border: none !important;
+        /* Remove wrapper border */
+    }
+
+    /* List Layout */
+    body.mobile-menu-active .mega-menu-list {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        height: auto !important;
+        border: none !important;
+        /* Ensure no borders */
+        min-height: auto !important;
+        overflow: visible !important;
+        /* Remove internal scrollbar */
+        background: #fff !important;
+        /* Ensure white bg */
+    }
+
+    /* List Items */
+    body.mobile-menu-active .mega-menu-list>li {
+        width: 100% !important;
+        border-bottom: none !important;
+        background: #fff !important;
+    }
+
+    body.mobile-menu-active .mega-menu-list>li>a {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 15px 20px !important;
+        width: 100% !important;
+        background: #fff !important;
+        color: #333 !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        height: auto !important;
+    }
+
+    /* Restore Chevron for Mobile */
+    body.mobile-menu-active .mega-menu-list>li>a>i.fa-chevron-right {
+        display: block !important;
+        font-size: 12px !important;
+        transition: transform 0.3s ease;
+    }
+
+    /* Rotate chevron when active */
+    body.mobile-menu-active .mega-menu-list>li.active>a>i.fa-chevron-right {
+        transform: rotate(90deg);
+    }
+
+    /* Sub Menu (Hidden by default, Static position for accordion) */
+    body.mobile-menu-active .sub-menu {
+        display: none;
+        /* JS toggles this via .active class on parent li */
+        position: static !important;
+        top: auto !important;
+        left: auto !important;
+        width: 100% !important;
+        min-height: unset !important;
+        height: auto !important;
+        box-shadow: none !important;
+        background: #f9f9f9 !important;
+        padding: 10px 0 !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* Show Sub Menu when Active */
+    body.mobile-menu-active .mega-menu-list>li.active .sub-menu {
+        display: block !important;
+    }
+
+    /* Sub Menu Columns */
+    body.mobile-menu-active .sub-menu-column {
+        width: 100% !important;
+        padding: 0 20px 15px 20px !important;
+        display: block !important;
+    }
+
+    body.mobile-menu-active .sub-menu-column h4 {
+        font-size: 13px !important;
+        color: #000 !important;
+        margin-bottom: 10px !important;
+        margin-top: 10px !important;
+        border-bottom: none !important;
+        /* Visual separator removed */
+        padding-bottom: 5px;
+    }
+
+    body.mobile-menu-active .sub-menu-column ul li {
+        margin-bottom: 8px !important;
+    }
+
+    body.mobile-menu-active .sub-menu-column ul li a {
+        font-size: 13px !important;
+        color: #555 !important;
+        padding: 5px 0 !important;
+    }
+
+    /* Disable body scroll when menu is open */
+    body.mobile-menu-active {
+        overflow: hidden !important;
+    }
+
+    /* Ensure existing menu item left structure works */
+    body.mobile-menu-active .menu-item-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+    }
+
+    /* FIX: Disable hover opening on mobile to fix toggle issue */
+    body.mobile-menu-active .mega-menu-list li:hover .sub-menu {
+        display: none !important;
+        /* Default hidden on hover */
+    }
+
+    /* Re-enable ONLY when active class is present */
+    body.mobile-menu-active .mega-menu-list li.active .sub-menu {
+        display: block !important;
+    }
+
+    /* SPECIFIC FIX: Remove left border from active items (it was defined in mega_menu_styles.css as border-left: 3px solid transparent/purple) */
+    body.mobile-menu-active .mega-menu-list li>a,
+    body.mobile-menu-active .mega-menu-list li:hover>a,
+    body.mobile-menu-active .mega-menu-list li.active>a {
+        border-left: none !important;
+        border-left-width: 0 !important;
+        border-right: none !important;
+        background-color: transparent !important;
+        /* Also prevent bg color shift if any grey */
+    }
+
+    /* FIX: Remove gray line (border/shadow) from all potential culprits */
+    body.mobile-menu-active .mega-menu,
+    body.mobile-menu-active .mega-menu-list,
+    body.mobile-menu-active .mega-menu-list>li,
+    body.mobile-menu-active .mega-menu-list>li>a,
+    body.mobile-menu-active .sub-menu,
+    body.mobile-menu-active .sub-menu-column h4 {
+        border: none !important;
+        border-top: none !important;
+        border-bottom: none !important;
+        border-left: none !important;
+        border-right: none !important;
+        box-shadow: none !important;
+        background-image: none !important;
+        /* Remove any gradients */
+    }
+
+    /* Add simple separator only if absolutely needed, user unwanted it so keeping clean */
+    body.mobile-menu-active .mega-menu-list>li {
+        border-bottom: 1px solid transparent !important;
+        /* Ensure transparent if computed style defaults */
+    }
+
+    /* --- CATEGORY CARDS (Main Page) - 50/50 Layout on Mobile --- */
+    .chroma-card {
+        flex-direction: row !important;
+        /* Force Horizontal */
+        height: auto !important;
+        /* Allow growing */
+        min-height: 100px !important;
+        align-items: stretch !important;
+    }
+
+    /* Left Side: Image (50%) */
+    .chroma-img-wrapper {
+        width: 50% !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        min-width: unset !important;
+        /* Override explicit pixel width */
+        height: auto !important;
+        min-height: 100px !important;
+    }
+
+    .chroma-img-wrapper img {
+        object-fit: cover !important;
+        height: 100% !important;
+    }
+
+    /* Right Side: Text (50%) */
+    .chroma-info {
+        width: 50% !important;
+        flex: 0 0 50% !important;
+        max-width: 50% !important;
+        padding: 10px 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: flex-start !important;
+    }
+
+    .chroma-info .name {
+        font-size: 14px !important;
+        line-height: 1.3 !important;
+        font-weight: 600 !important;
+        white-space: normal !important;
+        /* Allow wrapping */
+        text-align: left !important;
+    }
+
+    /* Ensure subtitle (if exists) is hidden or small */
+    .chroma-info .subtitle {
+        display: none !important;
+        /* Hide subtitle for cleaner 50/50 view */
+    }
+
+    /* --- COMPACT SPACING (Mobile) --- */
+
+    /* 1. Header to Categories Spacing */
+    /* Ensure no extra margin on the main container or section */
+    #kategoriler {
+        padding-top: 5px !important;
+        margin-top: 0 !important;
+    }
+
+    /* Force the injected JS title to have minimal margins */
+    #kategoriler h2.section-title {
+        margin-top: 5px !important;
+        /* Was 40px */
+        margin-bottom: 10px !important;
+        /* Was 20px */
+        font-size: 18px !important;
+        /* Smaller, cleaner title */
+        line-height: 1.2;
+    }
+
+    /* Compact Grid */
+    .chroma-grid {
+        padding: 0 10px 10px 10px !important;
+        /* Side padding 10px, top 0 since title handles it */
+        gap: 8px !important;
+    }
+
+    /* 2. Categories to Brands Spacing */
+    .brands-section {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        margin-top: 0 !important;
+    }
+
+    /* Brands Title */
+    .brands-section .section-title {
+        margin-top: 0 !important;
+        margin-bottom: 10px !important;
+        font-size: 18px !important;
+    }
+
+    /* Brand Circles Container */
+    .brands-single-row {
+        gap: 10px !important;
+        padding: 5px 0 15px 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    /* Ensure no other dividers disturb the flow */
+    hr {
+        display: none !important;
+    }
+
+    /* 3. Tüm Markalar Title Resizing */
+    .future-content h2 {
+        font-size: 18px !important;
+        /* Match other titles */
+        margin-top: 10px !important;
+        margin-bottom: 10px !important;
+        line-height: 1.2;
+    }
+}
+
+/* Mobile Page Main Title */
+.page-main-title {
+    font-size: 1.5rem !important;
+    margin: 15px 0 10px !important;
+    letter-spacing: 1px !important;
+}
+
+/* Stack Footer on Mobile */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 30px !important;
+        text-align: center;
+    }
+
+    .footer-column {
+        align-items: center !important;
+    }
+
+    .footer-links {
+        align-items: center !important;
+    }
+
+    .footer-links li {
+        justify-content: center;
+    }
+
+    .payment-logos {
+        justify-content: center;
+    }
+
+    .main-footer {
+        padding-top: 30px !important;
+        padding-bottom: 30px !important;
+    }
+}
+
+/* Mobile Footer Accordion */
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 0 15px !important;
+    }
+
+    .footer-grid {
+        display: block !important;
+        direction: ltr !important;
+        gap: 0 !important;
+    }
+
+    .footer-column {
+        display: block !important;
+        width: 100% !important;
+        margin-bottom: 0 !important;
+        border-bottom: none !important;
+    }
+
+    .footer-title {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+        padding: 15px 0 !important;
+        margin: 0 !important;
+        border-top: 1px solid #333;
+        border-bottom: 1px solid #333;
+        margin-top: -1px !important;
+        /* Collapse borders */
+        cursor: pointer;
+        font-size: 14px !important;
+        background: transparent;
+    }
+
+    .footer-title::after {
+        content: '\f078';
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        margin-left: 10px;
+        transition: transform 0.3s ease;
+        font-size: 12px;
+        color: #fff;
+    }
+
+    .footer-column.active .footer-title::after {
+        transform: rotate(180deg);
+    }
+
+    /* Content Defaults: Hidden */
+    .footer-links,
+    .payment-logos,
+    .payment-note,
+    .working-hours-note {
+        display: none !important;
+        padding: 15px 0;
+        border-bottom: 1px solid #222;
+    }
+
+    /* Active State: Shown */
+    .footer-column.active .footer-links,
+    .footer-column.active .payment-logos,
+    .footer-column.active .payment-note,
+    .footer-column.active .working-hours-note {
+        display: flex !important;
+    }
+
+    .footer-column.active .payment-logos {
+        flex-direction: row !important;
+        justify-content: flex-start !important;
+    }
+
+    .footer-links li {
+        justify-content: flex-start !important;
+    }
+
+    /* Reset alignment for accordion content */
+    .footer-column {
+        align-items: flex-start !important;
+        text-align: left !important;
+    }
+}
+
+/* Mobile Footer Full Width Fix */
+@media (max-width: 768px) {
+    .main-footer {
+        padding: 0 !important;
+        margin-top: 0 !important;
+    }
+
+    .footer-container {
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .footer-grid-wrapper {
+        padding: 0 !important;
+    }
+
+    .footer-title {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+    .footer-links,
+    .payment-note,
+    .working-hours-note {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+
+    .payment-logos {
+        padding-left: 20px !important;
+        padding-right: 20px !important;
+    }
+}
+
+/* Enable Grid Motion on Mobile (Override) */
+@media (max-width: 768px) {
+    #grid-motion-container {
+        display: block !important;
+        height: 250px !important;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+    }
+
+    #grid-motion-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}
+
+/* Mobile Grid Motion Content Tweaks */
+@media (max-width: 768px) {
+    .grid-content-overlay h1 {
+        font-size: 1.8rem !important;
+        margin-bottom: 5px !important;
+    }
+
+    .grid-content-overlay p {
+        font-size: 0.9rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    .grid-content-overlay a {
+        padding: 8px 16px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .grid-card {
+        border-width: 1px !important;
+        /* Thinner border for smaller appearance */
+        transform: scale(0.9);
+        /* Slightly shrink cards */
+    }
+}
+
+/* Mobile Grid Motion Landscape Cards */
+@media (max-width: 768px) {
+    .grid-rows-container {
+        gap: 10px !important;
+        width: 150% !important;
+        /* Increase width to allow more horizontal sliding space */
+        margin-left: -25% !important;
+        /* Center the wider container */
+    }
+
+    .grid-row-track {
+        gap: 10px !important;
+    }
+
+    .grid-card {
+        height: 70px !important;
+        width: 110px !important;
+        /* Force fixed width to ensure landscape 110x70 */
+        border-radius: 8px !important;
+        opacity: 0.9 !important;
+        /* Improve visibility */
+    }
+
+    #grid-motion-container {
+        height: 260px !important;
+        /* Slightly increased to fit 3 rows comfortably */
+    }
+}
+
+/* Mobile Grid Motion 4 Rows Tight Spacing */
+@media (max-width: 768px) {
+    .grid-rows-container {
+        gap: 6px !important;
+        /* Reduced vertical gap between rows */
+    }
+
+    .grid-row-track {
+        gap: 6px !important;
+        /* Reduced horizontal gap between cards */
+    }
+
+    .grid-card {
+        height: 60px !important;
+        /* Reduced height to fit 4 rows */
+        width: 100px !important;
+        /* Slightly smaller width */
+    }
+
+    #grid-motion-container {
+        height: 280px !important;
+        /* Adjusted container height for 4 rows */
+    }
+}
+
+/* Mobile Grid Motion Centering Fix */
+@media (max-width: 768px) {
+    .grid-rows-container {
+        width: 150% !important;
+        height: 140% !important;
+        /* Increase height to cover top gap */
+        margin-left: -25% !important;
+        margin-top: -15% !important;
+        /* Pull up rows to hide top gap */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    #grid-motion-container {
+        align-items: center !important;
+        /* Ensure vertical centering */
+        display: flex !important;
+    }
+}
+
+/* Mobile Grid Motion Perfect Centering (Final) */
+@media (max-width: 768px) {
+    #grid-motion-container {
+        height: 280px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .grid-rows-container {
+        width: 150% !important;
+        height: auto !important;
+        /* Let content dictate height */
+        margin: 0 !important;
+        /* Reset margins */
+        margin-left: -25% !important;
+        /* Keep horizontal centering */
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
+}
+
+/* Mobile Search Overlay */
+.mobile-search-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mobile-search-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.mobile-search-content {
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+.close-search-btn {
+    position: static;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 5px 8px;
+    z-index: 10000;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.mobile-search-content {
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-search-form {
+    display: flex;
+    gap: 8px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 6px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    padding: 8px 11px;
+    background: transparent;
+    color: #333;
+}
+
+.mobile-search-input::placeholder {
+    color: #999;
+}
+
+.mobile-search-submit {
+    background: #000;
+    border: none;
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.2s ease;
+}
+
+.mobile-search-submit:hover {
+    background: #333;
+}
+
+.mobile-search-submit i {
+    display: block;
+}
+
+/* Mobile Search Results (for live search) */
+.mobile-search-results {
+    display: none;
+    background: #fff;
+    border-radius: 12px;
+    margin-top: 15px;
+    max-height: 60vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.mobile-search-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #999;
+    text-transform: uppercase;
+    padding: 12px 16px 8px;
+    letter-spacing: 0.5px;
+}
+
+.mobile-search-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.2s ease;
+}
+
+.mobile-search-item:hover {
+    background: #f9f9f9;
+}
+
+.mobile-search-item:last-child {
+    border-bottom: none;
+}
+
+.mobile-search-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.mobile-search-item i {
+    font-size: 18px;
+    color: #666;
+    width: 24px;
+    text-align: center;
+}
+
+.mobile-search-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.mobile-search-info .name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+.mobile-search-info .price {
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+}
+
+.mobile-search-text-only {
+    padding: 10px 16px;
+}
+
+.mobile-no-results {
+    padding: 30px 20px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
