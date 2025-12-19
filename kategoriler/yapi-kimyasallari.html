@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="../breadcrumb.css">
     <link rel="stylesheet" href="../category-hero.css">
     <link rel="stylesheet" href="../category-accordion.css">
+    <link rel="stylesheet" href="../category-brands-dropdown.css">
 </head>
 
 <body>
@@ -492,6 +493,34 @@
                         <a href="#" class="accordion-child-item">Tiner ve Çözücüler</a>
                     </div>
                 </div>
+            
+        </div>
+        </div>
+
+        <!-- Brands Dropdown (Mobile Only) -->
+        <div class="brands-dropdown-wrapper">
+            <button class="brands-dropdown-trigger">
+                Bu kategorideki tüm markalar
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="brands-dropdown-content">
+                <div class="brands-search-container">
+                    <input type="text" class="brands-search-input" placeholder="Marka ara...">
+                </div>
+                <div class="brands-grid">
+                    <!-- Brands will be rendered by JS -->
+                </div>
+                <div class="brands-pagination">
+                    <button class="pagination-arrow pagination-prev" aria-label="Önceki">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="pagination-dots">
+                        <!-- Dots will be rendered by JS -->
+                    </div>
+                    <button class="pagination-arrow pagination-next" aria-label="Sonraki">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -730,6 +759,7 @@
     <script src="../categories-data.js"></script>
     <script src="../mobile-menu.js"></script>
     <script src="../category-accordion.js"></script>
+    <script src="../category-brands-dropdown.js"></script>
 
     <!-- Mobile Search Overlay -->
     <div id="mobile-search-overlay" class="mobile-search-overlay">

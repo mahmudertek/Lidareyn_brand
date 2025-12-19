@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="../breadcrumb.css">
     <link rel="stylesheet" href="../category-hero.css">
     <link rel="stylesheet" href="../category-accordion.css">
+    <link rel="stylesheet" href="../category-brands-dropdown.css">
 </head>
 
 <body>
@@ -515,6 +516,33 @@
                 </div>
             </div>
         </div>
+
+        <!-- Brands Dropdown (Mobile Only) -->
+        <div class="brands-dropdown-wrapper">
+            <button class="brands-dropdown-trigger">
+                Bu kategorideki tüm markalar
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="brands-dropdown-content">
+                <div class="brands-search-container">
+                    <input type="text" class="brands-search-input" placeholder="Marka ara...">
+                </div>
+                <div class="brands-grid">
+                    <!-- Brands will be rendered by JS -->
+                </div>
+                <div class="brands-pagination">
+                    <button class="pagination-arrow pagination-prev" aria-label="Önceki">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="pagination-dots">
+                        <!-- Dots will be rendered by JS -->
+                    </div>
+                    <button class="pagination-arrow pagination-next" aria-label="Sonraki">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Desktop: Subcategory Chips (Horizontal Scroll) -->
@@ -763,12 +791,14 @@
     <script src="cookie-consent.js"></script>
     <script src="../mobile-menu.js"></script>
     <script src="../category-accordion.js"></script>
+    <script src="../category-brands-dropdown.js"></script>
 
     <!-- Mobile Search Overlay -->
     <div id="mobile-search-overlay" class="mobile-search-overlay">
         <div class="mobile-search-content">
             <form action="../arama.html" method="GET" class="mobile-search-form">
-                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..." autocomplete="off">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
                 <button type="submit" class="mobile-search-submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -779,8 +809,8 @@
             <div class="mobile-search-results"></div>
         </div>
     </div>
-    
-    
+
+
 </body>
 
 

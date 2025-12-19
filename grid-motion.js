@@ -9,48 +9,42 @@ function initInfiniteRows() {
     // reset
     container.innerHTML = '';
 
-    // Images - Updated with 18 Category Images (New Professional Product Photography)
+    // Exactly 9 Categories for 9 Frames
     const images = [
         'gorseller/category_elektrikli_el_aletleri.png',
         'gorseller/category_olcme_kontrol.png',
         'gorseller/category_el_aletleri.png',
-        'gorseller/category_baglanti_sabitleme.png',
-        'gorseller/category_oto_bakim.png',
         'gorseller/category_yapi_insaat.png',
-        'gorseller/category_hortumlar.png',
         'gorseller/category_asindirici_kesici.png',
-        'gorseller/category_otomobil_motosiklet.png',
         'gorseller/category_yapi_kimyasallari.png',
-        'gorseller/category_yalitim_kaplama.png',
-        'gorseller/category_nalburiye_baglanti.png',
         'gorseller/category_kaynak.png',
-        'gorseller/category_boya.png',
-        'gorseller/category_kapi_pencere.png',
-        'gorseller/category_tesisat.png',
         'gorseller/category_hirdavat.png',
         'gorseller/category_is_guvenligi.png'
     ];
 
-    // Preload all images first
+    // Preload images
     const imagePromises = images.map(src => {
         return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => resolve(src);
-            img.onerror = () => resolve(src); // Resolve anyway to not block
+            img.onerror = () => resolve(src);
             img.src = src;
         });
     });
 
-    // Wait for all images to load before building grid
     Promise.all(imagePromises).then(() => {
-        buildGrid();
+        // Check if mobile - use 3 rows, desktop uses 4 rows
+        const isMobile = window.innerWidth <= 768;
+        buildGrid(isMobile);
     });
 
-    function buildGrid() {
-
-        // Config: 4 Rows with 18 cards each (all categories)
-        // We duplicate content to create the infinite loop wormhole effect
-        const rowConfigs = [
+    function buildGrid(isMobile = false) {
+        // Mobile: 3 Rows, Desktop: 4 Rows
+        const rowConfigs = isMobile ? [
+            { id: 1, count: 9, direction: -1 }, // Left
+            { id: 2, count: 9, direction: 1 },  // Right
+            { id: 3, count: 9, direction: -1 }  // Left
+        ] : [
             { id: 1, count: 18, direction: -1 }, // Left
             { id: 2, count: 18, direction: 1 },  // Right
             { id: 3, count: 18, direction: -1 }, // Left
@@ -65,43 +59,22 @@ function initInfiniteRows() {
         rowConfigs.forEach(config => {
             const row = document.createElement('div');
             row.classList.add('grid-row-track');
-            row.dataset.direction = config.direction; // 1 = right, -1 = left
+            row.dataset.direction = config.direction;
 
-            // We need enough items to fill the width + extra for seamless looping.
-            // A standard approach is to repeat the set multiple times.
-            // Base set based on count config, but we need more to fill screen width.
+            // Use the 9 images, but repeat them to fill the 18 count
             const baseSetOfImages = [];
             for (let i = 0; i < config.count; i++) {
                 baseSetOfImages.push(images[i % images.length]);
             }
 
-            // Repeat the set many times to ensure we have "infinite" content to scroll
-            // 5 repetitions should be plenty for a hero width
+            // Repeat to enable seamless looping
             const fullContent = [...baseSetOfImages, ...baseSetOfImages, ...baseSetOfImages, ...baseSetOfImages, ...baseSetOfImages, ...baseSetOfImages];
 
             fullContent.forEach(img => {
                 const card = document.createElement('div');
-                card.classList.add('grid-card', 'loading'); // Add loading class initially
-
-                // Preload image
-                const imageObj = new Image();
-                imageObj.onload = () => {
-                    // Image loaded successfully
-                    card.style.backgroundImage = `url('${img}')`;
-                    card.classList.remove('loading'); // Remove loading class
-                };
-                imageObj.onerror = () => {
-                    // Image failed to load - use fallback
-                    card.style.backgroundColor = '#2a2a2a';
-                    card.classList.remove('loading');
-                };
-                imageObj.src = img; // Start loading
-
-                // Adjust width based on row density
-                // Fewer items = wider cards
-                if (config.count === 2) card.style.width = '40%';
-                else if (config.count === 3) card.style.width = '30%';
-                else card.style.width = '22%';
+                card.classList.add('grid-card');
+                card.style.backgroundImage = `url('${img}')`;
+                card.style.width = '22%'; // Back to original desktop width
 
                 row.appendChild(card);
             });
@@ -118,9 +91,9 @@ function initInfiniteRows() {
         const content = document.createElement('div');
         content.classList.add('grid-content-overlay');
         content.innerHTML = `
-        <h1>Profesyonel Çözümler</h1>
-        <p>Her işin ustası için kaliteli malzemeler.</p>
-        <a href="#kategoriler">Keşfet</a>
+        <h1>Profesyonel El Aletleri & Yapı Malzemeleri</h1>
+        <p>Kaliteli hırdavat, el aletleri ve yapı malzemelerinde güvenilir tedarikçiniz. Uygun fiyat, hızlı teslimat.</p>
+        <a href="#kategoriler" class="btn-explore">Keşfet</a>
     `;
         container.appendChild(content);
 

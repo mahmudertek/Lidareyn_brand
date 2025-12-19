@@ -20,9 +20,8 @@
 
 <body>
 
-    <!-- Header -->
     <!-- Modern Premium Header (Solid White) -->
-        <header class="main-header" role="banner">
+    <header class="main-header" role="banner">
         <div class="header-container">
             <!-- Mobile Categories Button -->
             <a href="index.html#kategoriler" class="mobile-categories-btn">
@@ -640,6 +639,23 @@
     </script>
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>
+
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..." autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mobile-search-results"></div>
+        </div>
+    </div>
+
 </body>
 
 </html>

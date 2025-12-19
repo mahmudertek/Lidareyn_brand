@@ -1,0 +1,476 @@
+/* Checkout Layout */
+body {
+    background-color: #f7f7f7;
+    /* Hafif gri arka plan, odak içerikte */
+}
+
+.checkout-header {
+    background: #fff;
+    border-bottom: 1px solid #e1e1e1;
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+}
+
+.checkout-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkout-header .logo a {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    text-decoration: none;
+    letter-spacing: -0.5px;
+}
+
+.secure-badge {
+    color: #27ae60;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.checkout-main {
+    padding-bottom: 4rem;
+}
+
+.checkout-container {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 2rem;
+}
+
+/* Stepper */
+.checkout-steps {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #bbb;
+    font-weight: 500;
+}
+
+.step.active {
+    color: #333;
+}
+
+.step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #eee;
+    color: #888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.step.active .step-circle {
+    background: #333;
+    color: #fff;
+}
+
+.step-line {
+    flex: 1;
+    height: 2px;
+    background: #eee;
+    margin: 0 1.5rem;
+}
+
+/* Sections */
+.checkout-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+    margin-bottom: 1rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 1rem;
+}
+
+/* Address Cards */
+.saved-addresses {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.address-card {
+    border: 2px solid #eee;
+    border-radius: 10px;
+    padding: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.address-card:hover {
+    border-color: #ddd;
+}
+
+.address-card.selected {
+    border-color: #333;
+    /* Galata Çarşı Brand Black */
+    background: #fffcfc;
+}
+
+.address-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.address-card .fa-check-circle {
+    color: #333;
+    display: none;
+}
+
+.address-card.selected .fa-check-circle {
+    display: block;
+}
+
+.address-content {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.add-new-address {
+    border: 2px dashed #ddd;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #888;
+    cursor: pointer;
+    background: #fafafa;
+    min-height: 140px;
+    transition: all 0.2s;
+}
+
+.add-new-address:hover {
+    border-color: #bbb;
+    color: #555;
+    background: #f5f5f5;
+}
+
+/* Forms */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.2rem;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #555;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #333;
+}
+
+/* Visual Credit Card */
+.credit-card-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    perspective: 1000px;
+}
+
+.card-visual {
+    width: 360px;
+    height: 220px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+    border-radius: 16px;
+    color: #fff;
+    padding: 25px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    position: relative;
+    font-family: 'Courier New', monospace;
+    /* Monospace for card look */
+}
+
+.card-chip {
+    width: 50px;
+    height: 36px;
+    background: linear-gradient(135deg, #e0cba8 0%, #d4af37 100%);
+    border-radius: 6px;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.card-logo {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    font-style: italic;
+}
+
+.card-number-display {
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    margin-bottom: 2rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.card-details-row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-details-row span {
+    display: block;
+    font-size: 0.6rem;
+    color: #bbb;
+    margin-bottom: 4px;
+}
+
+.card-details-row div {
+    font-size: 1rem;
+    text-transform: uppercase;
+}
+
+/* Installment Options */
+.installment-options {
+    margin-top: 2rem;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.radio-container {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    position: relative;
+}
+
+.radio-container:last-child {
+    border-bottom: none;
+}
+
+.radio-container:hover {
+    background: #fafafa;
+}
+
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+}
+
+.radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-radius: 50%;
+    margin-right: 1rem;
+    position: relative;
+}
+
+.radio-container input:checked~.radio-custom {
+    border-color: #333;
+}
+
+.radio-container input:checked~.radio-custom::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.radio-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+}
+
+/* Buttons */
+.btn-primary,
+.btn-secondary {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+}
+
+.btn-primary {
+    background: #333;
+    color: #fff;
+    margin-top: 1rem;
+}
+
+.btn-primary:hover {
+    background: #000;
+}
+
+.btn-secondary {
+    background: #f0f0f0;
+    color: #333;
+    margin-top: 1rem;
+}
+
+.btn-secondary:hover {
+    background: #e0e0e0;
+}
+
+/* Sidebar Summary */
+.checkout-sidebar {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.summary-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.summary-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    color: #555;
+    font-size: 0.95rem;
+}
+
+.text-green {
+    color: #27ae60;
+    font-weight: 500;
+}
+
+.discount {
+    color: #e74c3c;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+}
+
+.agreement-check {
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+
+.agreement-check a {
+    color: #333;
+    text-decoration: underline;
+}
+
+.security-logos {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    font-size: 2rem;
+    color: #ccc;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-sidebar {
+        order: -1;
+        /* Summary on top on mobile? Standard is bottom usually, but maybe top is better for visibility. Let's keep normal order for now as users can scroll */
+        position: static;
+        margin-bottom: 2rem;
+    }
+}

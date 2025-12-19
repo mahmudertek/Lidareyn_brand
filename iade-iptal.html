@@ -3,11 +3,12 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>İade ve İptal Koşulları - Galata Çarşı</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mobile.css?v=5">
     <link rel="stylesheet" href="agreements.css">
     <link rel="stylesheet" href="mega_menu_styles.css">
 </head>
@@ -15,6 +16,7 @@
 <body>
 
     <!-- Header (Tam Header) -->
+    <!-- Modern Premium Header (Solid White) -->
     <header class="main-header" role="banner">
         <div class="header-container">
             <!-- Mobile Categories Button -->
@@ -546,6 +548,23 @@
     <script src="script.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>
+
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..." autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mobile-search-results"></div>
+        </div>
+    </div>
+
 </body>
 
 </html>
