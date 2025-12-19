@@ -59,12 +59,12 @@
     }
 
     .mobile-categories-btn i {
-        font-size: 16px;
+        font-size: 14px;
         color: #333;
     }
 
     .mobile-categories-btn span {
-        font-size: 11px !important;
+        font-size: 9px !important;
         font-weight: 600;
         color: #333;
         display: inline-block !important;
@@ -87,7 +87,7 @@
     }
 
     .logo a {
-        font-size: 16px !important;
+        font-size: 14px !important;
         font-weight: 800;
         letter-spacing: -0.5px;
         color: #000 !important;
@@ -127,11 +127,11 @@
 
     /* TIGHT ICON SPACING */
     .icon-btn {
-        width: 26px !important;
+        width: 22px !important;
         /* Explicit narrow width */
-        min-width: 26px !important;
+        min-width: 22px !important;
         /* FIX: Prevent Flexbox shrinking */
-        height: 40px !important;
+        height: 36px !important;
         padding: 0 !important;
         /* No padding inside button */
         display: flex;
@@ -142,8 +142,8 @@
     }
 
     .icon-btn i {
-        font-size: 18px !important;
-        /* Increased icon size to fill space visually */
+        font-size: 15px !important;
+        /* Reduced icon size */
         color: #333;
         display: block;
         /* Ensure block layout */
