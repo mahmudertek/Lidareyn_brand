@@ -1,0 +1,52 @@
+/* --- COMPACT SPACING (Mobile) --- */
+
+/* 1. Header to Categories Spacing */
+/* Ensure no extra margin on the main container or section */
+#kategoriler {
+    padding-top: 5px !important;
+    margin-top: 0 !important;
+}
+
+/* Force the injected JS title to have minimal margins */
+#kategoriler h2.section-title {
+    margin-top: 5px !important;
+    /* Was 40px */
+    margin-bottom: 10px !important;
+    /* Was 20px */
+    font-size: 18px !important;
+    /* Smaller, cleaner title */
+    line-height: 1.2;
+}
+
+/* Compact Grid */
+.chroma-grid {
+    padding: 0 10px 10px 10px !important;
+    /* Side padding 10px, top 0 since title handles it */
+    gap: 8px !important;
+}
+
+/* 2. Categories to Brands Spacing */
+.brands-section {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    margin-top: 0 !important;
+}
+
+/* Brands Title */
+.brands-section .section-title {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    font-size: 18px !important;
+}
+
+/* Brand Circles Container */
+.brands-single-row {
+    gap: 10px !important;
+    padding: 5px 0 15px 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Ensure no other dividers disturb the flow */
+hr {
+    display: none !important;
+}

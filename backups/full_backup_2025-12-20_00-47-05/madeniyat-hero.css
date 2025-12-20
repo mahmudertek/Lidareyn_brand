@@ -1,0 +1,515 @@
+/* ============================================
+   MADENIYAT Premium E-Commerce Hero Section
+   Hardware Brand - Derimod-Style Design
+   ============================================ */
+
+/* Google Fonts Import */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for MADENIYAT Theme */
+:root {
+    --madeniyat-gold: #D4AF37;
+    --madeniyat-gold-light: #E8C559;
+    --madeniyat-gold-dark: #B8962E;
+    --madeniyat-amber: #C78D32;
+    --madeniyat-charcoal: #1A1A1A;
+    --madeniyat-charcoal-light: #2D2D2D;
+    --madeniyat-cream: #F5F0E6;
+    --madeniyat-white: #FFFFFF;
+    --madeniyat-shadow: rgba(0, 0, 0, 0.15);
+}
+
+/* Main Hero Container - Derimod Style */
+.madeniyat-hero {
+    position: relative;
+    width: 100%;
+    min-height: 520px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+    overflow: visible;
+    margin: 30px 0 50px;
+}
+
+/* Reversed Layout - Image on Right, Products on Left */
+.madeniyat-hero.reversed {
+    direction: rtl;
+}
+
+.madeniyat-hero.reversed>* {
+    direction: ltr;
+}
+
+.madeniyat-hero.reversed .madeniyat-heritage-image::before {
+    background: linear-gradient(225deg,
+            rgba(199, 141, 50, 0.35) 0%,
+            rgba(26, 26, 26, 0.5) 100%);
+}
+
+/* Different color themes for variety */
+.madeniyat-hero.theme-silver .madeniyat-brand-name {
+    color: #C0C0C0;
+    text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(192, 192, 192, 0.2);
+}
+
+.madeniyat-hero.theme-silver .madeniyat-product-badge {
+    background: #C0C0C0;
+}
+
+.madeniyat-hero.theme-silver .madeniyat-collection-title::before {
+    color: #C0C0C0;
+}
+
+.madeniyat-hero.theme-bronze .madeniyat-brand-name {
+    color: #CD7F32;
+    text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(205, 127, 50, 0.2);
+}
+
+.madeniyat-hero.theme-bronze .madeniyat-product-badge {
+    background: #CD7F32;
+}
+
+.madeniyat-hero.theme-bronze .madeniyat-collection-title::before {
+    color: #CD7F32;
+}
+
+.madeniyat-hero.theme-emerald .madeniyat-brand-name {
+    color: #50C878;
+    text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(80, 200, 120, 0.2);
+}
+
+.madeniyat-hero.theme-emerald .madeniyat-product-badge {
+    background: #50C878;
+}
+
+.madeniyat-hero.theme-emerald .madeniyat-collection-title::before {
+    color: #50C878;
+}
+
+/* Left Side - Hero Image Section with Brand Overlay */
+.madeniyat-hero-left {
+    position: relative;
+    min-height: 520px;
+    overflow: hidden;
+}
+
+/* Heritage Image Container */
+.madeniyat-heritage-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: sepia(15%) contrast(1.05) brightness(0.95);
+}
+
+/* Amber-Charcoal Duotone Overlay */
+.madeniyat-heritage-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            rgba(199, 141, 50, 0.35) 0%,
+            rgba(26, 26, 26, 0.5) 100%);
+    mix-blend-mode: multiply;
+    z-index: 1;
+}
+
+/* Brand Logo Overlay on Image - Large Typography */
+.madeniyat-brand-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    pointer-events: none;
+}
+
+.madeniyat-brand-name {
+    font-family: 'Playfair Display', 'Times New Roman', serif;
+    font-size: clamp(48px, 8vw, 96px);
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    color: var(--madeniyat-gold);
+    text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(212, 175, 55, 0.2);
+    margin: 0;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.madeniyat-brand-sub {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 56px);
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin: 0;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+/* Right Side - Info and Products */
+.madeniyat-hero-right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--madeniyat-white);
+    z-index: 2;
+}
+
+/* Top Section - Title and Description */
+.madeniyat-info-section {
+    padding: 40px 40px 30px;
+    border-bottom: 1px solid #eee;
+}
+
+.madeniyat-collection-label {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    color: #666;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+}
+
+.madeniyat-collection-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--madeniyat-charcoal);
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.madeniyat-collection-title::before {
+    content: '—';
+    color: var(--madeniyat-gold);
+}
+
+.madeniyat-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #666;
+    line-height: 1.6;
+    margin: 0 0 16px;
+}
+
+.madeniyat-view-collection {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--madeniyat-charcoal);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.3s ease;
+}
+
+.madeniyat-view-collection:hover {
+    color: var(--madeniyat-gold);
+}
+
+.madeniyat-view-collection i {
+    font-size: 11px;
+    transition: transform 0.3s ease;
+}
+
+.madeniyat-view-collection:hover i {
+    transform: translateX(4px);
+}
+
+/* Products Grid Section */
+.madeniyat-products-section {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    background: #fafafa;
+}
+
+/* Individual Product Card - Derimod Style */
+.madeniyat-product-card {
+    flex: 0 0 200px;
+    background: var(--madeniyat-white);
+    border: 1px solid #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.madeniyat-product-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-4px);
+}
+
+/* Favorite Button */
+.madeniyat-favorite-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.madeniyat-favorite-btn:hover {
+    background: var(--madeniyat-charcoal);
+    border-color: var(--madeniyat-charcoal);
+}
+
+.madeniyat-favorite-btn i {
+    font-size: 14px;
+    color: var(--madeniyat-charcoal);
+    transition: color 0.3s ease;
+}
+
+.madeniyat-favorite-btn:hover i {
+    color: var(--madeniyat-white);
+}
+
+.madeniyat-favorite-btn.active i {
+    color: #e74c3c;
+}
+
+/* Product Image */
+.madeniyat-product-image {
+    width: 100%;
+    height: 180px;
+    object-fit: contain;
+    padding: 20px;
+    background: var(--madeniyat-white);
+}
+
+/* Product Info */
+.madeniyat-product-info {
+    padding: 16px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.madeniyat-product-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--madeniyat-charcoal);
+    margin: 0 0 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+
+.madeniyat-product-price {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--madeniyat-charcoal);
+    margin: 0;
+}
+
+/* Product badge */
+.madeniyat-product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--madeniyat-gold);
+    color: var(--madeniyat-charcoal);
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: 4px 10px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    z-index: 5;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .madeniyat-hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+    }
+
+    .madeniyat-hero-left {
+        min-height: 400px;
+    }
+
+    .madeniyat-brand-name {
+        font-size: clamp(36px, 10vw, 72px);
+    }
+
+    .madeniyat-brand-sub {
+        font-size: clamp(22px, 6vw, 42px);
+    }
+
+    .madeniyat-info-section {
+        padding: 30px 25px 20px;
+    }
+
+    .madeniyat-products-section {
+        padding: 20px 15px;
+    }
+
+    .madeniyat-product-card {
+        flex: 0 0 180px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .madeniyat-hero {
+        margin: 20px 0 40px;
+    }
+
+    .madeniyat-hero-left {
+        min-height: 320px;
+    }
+
+    .madeniyat-brand-name {
+        font-size: clamp(32px, 12vw, 56px);
+        letter-spacing: 0.1em;
+    }
+
+    .madeniyat-brand-sub {
+        font-size: clamp(18px, 6vw, 32px);
+        letter-spacing: 0.15em;
+    }
+
+    .madeniyat-collection-title {
+        font-size: 18px;
+    }
+
+    .madeniyat-description {
+        font-size: 13px;
+    }
+
+    .madeniyat-products-section {
+        gap: 12px;
+        padding: 16px 12px;
+    }
+
+    .madeniyat-product-card {
+        flex: 0 0 160px;
+    }
+
+    .madeniyat-product-image {
+        height: 150px;
+        padding: 15px;
+    }
+
+    .madeniyat-product-info {
+        padding: 12px;
+    }
+
+    .madeniyat-product-name {
+        font-size: 12px;
+    }
+
+    .madeniyat-product-price {
+        font-size: 14px;
+    }
+
+    .madeniyat-favorite-btn {
+        width: 32px;
+        height: 32px;
+    }
+
+    .madeniyat-favorite-btn i {
+        font-size: 12px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .madeniyat-hero-left {
+        min-height: 280px;
+    }
+
+    .madeniyat-info-section {
+        padding: 20px 16px 16px;
+    }
+
+    .madeniyat-collection-title {
+        font-size: 16px;
+    }
+
+    .madeniyat-products-section {
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .madeniyat-product-card {
+        flex: 0 0 150px;
+        scroll-snap-align: start;
+    }
+
+    .madeniyat-product-image {
+        height: 130px;
+    }
+}
+
+/* Silk Road decorative pattern overlay - Subtle */
+.madeniyat-pattern-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        repeating-linear-gradient(45deg,
+            transparent,
+            transparent 30px,
+            rgba(212, 175, 55, 0.03) 30px,
+            rgba(212, 175, 55, 0.03) 60px);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Shimmer removed for cleaner look like Derimod */
+.madeniyat-shimmer {
+    display: none;
+}
+
+/* Background text removed for cleaner Derimod style */
+.madeniyat-bg-text {
+    display: none;
+}

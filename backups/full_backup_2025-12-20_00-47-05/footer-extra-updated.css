@@ -1,0 +1,64 @@
+/* Footer Extra Sections - Updated */
+.footer-extra {
+    margin-top: 40px;
+    padding: 40px;
+    background: #2a2a2a;
+    border-radius: 12px;
+}
+
+.footer-extra-columns {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 40px;
+}
+
+.footer-extra-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-extra-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #ffffff;
+}
+
+.footer-extra-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-extra-links li a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer-extra-links li a:hover {
+    color: #ffffff;
+    padding-left: 4px;
+}
+
+@media (max-width: 1024px) {
+    .footer-extra-columns {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-extra-columns {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-extra-columns {
+        grid-template-columns: 1fr;
+    }
+}

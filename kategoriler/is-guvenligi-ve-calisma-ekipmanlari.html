@@ -14,10 +14,10 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../mobile.css?v=5">
     <link rel="stylesheet" href="../mega_menu_styles.css">
-    <link rel="stylesheet" href="../breadcrumb.css">
+    <link rel="stylesheet" href="../breadcrumb.css?v=4">
     <link rel="stylesheet" href="../category-hero.css">
-    <link rel="stylesheet" href="../category-accordion.css">
-    <link rel="stylesheet" href="../category-brands-dropdown.css">
+    <link rel="stylesheet" href="../category-accordion.css?v=5">
+    <link rel="stylesheet" href="../category-brands-dropdown.css?v=5">
 </head>
 
 <body>
@@ -432,27 +432,6 @@
         </div>
     </div>
 
-    <section class="category-hero" style="padding: 2.5rem 0 1rem;">
-        <div class="container">
-            <div class="category-header">
-                <div class="category-info">
-                    <h1>İş Güvenliği ve Çalışma Ekipmanları</h1>
-
-                    <div class="category-search" style="margin-top: 15px; max-width: 400px; position: relative;">
-                        <input type="text" id="category-search-input" placeholder="İş Güvenliği içinde ara..."
-                            style="width: 100%; padding: 10px 15px; border-radius: 25px; border: 1px solid #ddd; outline: none; padding-right: 40px; font-size: 14px;"
-                            onkeypress="if(event.key==='Enter'){var q=this.value.trim();if(q)window.location.href='../arama.html?q='+encodeURIComponent(q);}">
-                        <button
-                            onclick="var q=document.getElementById('category-search-input').value.trim();if(q)window.location.href='../arama.html?q='+encodeURIComponent(q);"
-                            style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #8b7bd8; color: #fff; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                            <i class="fa-solid fa-magnifying-glass" style="font-size: 14px;"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Mobile: Category Accordion Navigation -->
     <div class="container">
         <div class="category-accordion">
@@ -535,18 +514,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Desktop: Subcategory Chips -->
-    <section class="subcategory-chips-section">
-        <div class="container">
-            <div class="subcategory-chips-wrapper">
-                <a href="#" class="sub-chip"><i class="fa-solid fa-vest"></i> Koruyucu Giyim</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-hard-hat"></i> Baret & Ayakkabı</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-glasses"></i> Göz & Kulak Koruma</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-stairs"></i> İskele & Merdiven</a>
-            </div>
-        </div>
-    </section>
 
     <!-- Product Listing -->
     <section class="category-products-section" style="padding: 20px 0;">

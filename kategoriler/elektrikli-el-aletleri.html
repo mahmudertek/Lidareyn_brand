@@ -14,10 +14,10 @@
     <link rel="stylesheet" href="../style.css">
     <link rel="stylesheet" href="../mobile.css?v=5">
     <link rel="stylesheet" href="../mega_menu_styles.css">
-    <link rel="stylesheet" href="../breadcrumb.css">
+    <link rel="stylesheet" href="../breadcrumb.css?v=4">
     <link rel="stylesheet" href="../category-hero.css">
-    <link rel="stylesheet" href="../category-accordion.css">
-    <link rel="stylesheet" href="../category-brands-dropdown.css">
+    <link rel="stylesheet" href="../category-accordion.css?v=5">
+    <link rel="stylesheet" href="../category-brands-dropdown.css?v=5">
 </head>
 
 <body>
@@ -432,27 +432,6 @@
         </div>
     </div>
 
-    <section class="category-hero" style="padding: 1.5rem 0 1rem; background: #fafafa;">
-        <div class="container" style="max-width: 800px;">
-            <div class="category-header"
-                style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
-                <h1 style="font-size: 1.5rem; font-weight: 700; color: #333; margin: 0; flex-shrink: 0;">Elektrikli El
-                    Aletleri</h1>
-
-                <div class="category-search" style="flex: 1; max-width: 350px; position: relative; min-width: 250px;">
-                    <input type="text" id="category-search-input" placeholder="Kategori içinde ara..."
-                        style="width: 100%; padding: 8px 40px 8px 15px; border-radius: 20px; border: 1px solid #ddd; outline: none; font-size: 13px; transition: border-color 0.2s;"
-                        onkeypress="if(event.key==='Enter'){var q=this.value.trim();if(q)window.location.href='../arama.html?q='+encodeURIComponent(q);}">
-                    <button
-                        onclick="var q=document.getElementById('category-search-input').value.trim();if(q)window.location.href='../arama.html?q='+encodeURIComponent(q);"
-                        style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); background: #8b7bd8; color: #fff; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s;">
-                        <i class="fa-solid fa-magnifying-glass" style="font-size: 13px;"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Mobile: Category Accordion Navigation -->
     <div class="container">
         <div class="category-accordion">
@@ -544,20 +523,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Desktop: Subcategory Chips (Horizontal Scroll) -->
-    <section class="subcategory-chips-section">
-        <div class="container">
-            <div class="subcategory-chips-wrapper">
-                <a href="#" class="sub-chip"><i class="fa-solid fa-ruler-combined"></i> Ölçü Aletleri</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-scissors"></i> Kesici & Delici</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-wrench"></i> Sıkıştırma</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-hammer"></i> Vurucu Aletler</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-toolbox"></i> Takım Çantaları</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-screwdriver"></i> Tornavidalar</a>
-            </div>
-        </div>
-    </section>
 
     <!-- Hybrid: Product Listing -->
     <section class="category-products-section" style="padding: 20px 0;">
