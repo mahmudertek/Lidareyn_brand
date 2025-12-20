@@ -1,0 +1,192 @@
+/* ============================================
+   CATEGORY ACCORDION - Alt Kategori Navigasyonu
+   Combined with brands-dropdown as unified container
+   ============================================ */
+
+.category-accordion {
+    width: 100%;
+    max-width: 100%;
+    margin: 15px 0 0 0;
+    /* No bottom margin - connects to brands-dropdown */
+    overflow: hidden;
+}
+
+
+/* Ana Dropdown Butonu - Top part of combined container */
+.accordion-main-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-bottom: none;
+    /* No bottom border - connects to brands-dropdown */
+    border-radius: 8px 8px 0 0;
+    /* Only top corners rounded */
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.accordion-main-trigger:hover {
+    background: #fafafa;
+}
+
+.accordion-main-trigger i {
+    font-size: 10px;
+    color: #666;
+    transition: transform 0.3s ease;
+}
+
+.accordion-main-trigger.active i {
+    transform: rotate(180deg);
+}
+
+
+
+/* Accordion İçerik Container */
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-top: -1px;
+}
+
+.accordion-content.open {
+    max-height: 2000px;
+}
+
+
+/* Üst Başlık (Parent) */
+.accordion-parent {
+    border-top: 1px solid #eee;
+}
+
+.accordion-parent-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 12px 16px;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #444;
+    text-align: left;
+    transition: background 0.2s, color 0.2s;
+}
+
+.accordion-parent-trigger:hover {
+    background: #f9f9f9;
+    color: #8b7bd8;
+}
+
+.accordion-parent-trigger i {
+    font-size: 12px;
+    color: #999;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
+}
+
+.accordion-parent-trigger.active {
+    background: #f5f3ff;
+    color: #8b7bd8;
+}
+
+.accordion-parent-trigger.active i {
+    transform: rotate(180deg);
+    color: #8b7bd8;
+}
+
+/* Alt Başlıklar (Children) */
+.accordion-children {
+    max-height: 0;
+    overflow: hidden;
+    background: #fafafa;
+    transition: max-height 0.25s ease;
+}
+
+.accordion-children.open {
+    max-height: 500px;
+}
+
+.accordion-child-item {
+    display: block;
+    padding: 10px 16px 10px 32px;
+    font-size: 0.85rem;
+    color: #666;
+    text-decoration: none;
+    border-top: 1px solid #f0f0f0;
+    transition: background 0.2s, color 0.2s, padding-left 0.2s;
+}
+
+.accordion-child-item:first-child {
+    border-top: none;
+}
+
+.accordion-child-item:hover {
+    background: #f0edff;
+    color: #8b7bd8;
+    padding-left: 38px;
+}
+
+.accordion-child-item::before {
+    content: "•";
+    margin-right: 8px;
+    color: #bbb;
+}
+
+.accordion-child-item:hover::before {
+    color: #8b7bd8;
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+    .category-accordion {
+        display: block;
+        max-width: 320px;
+        margin: 20px 0 0 0;
+    }
+
+    .accordion-main-trigger {
+        padding: 12px 16px;
+        font-size: 13px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .accordion-parent-trigger {
+        padding: 12px 16px;
+        font-size: 12px;
+    }
+
+    .accordion-child-item {
+        padding: 10px 16px 10px 32px;
+        font-size: 12px;
+    }
+
+    /* Remove old chips section */
+    .subcategory-chips-section {
+        display: none !important;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .category-accordion {
+        display: block;
+    }
+
+    .subcategory-chips-section {
+        display: none !important;
+    }
+}
