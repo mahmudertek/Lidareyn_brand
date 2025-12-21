@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürün Yönetimi - Galata Çarşı Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        /* Product Management Styles */
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .add-product-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .add-product-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .products-filters {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .filter-group label {
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        .filter-select,
+        .filter-input {
+            padding: 10px 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 180px;
+            background: white;
+        }
+
+        .products-table {
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .products-table th,
+        .products-table td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .products-table th {
+            background: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-image {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #f3f4f6;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .product-brand {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e5e7eb;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .product-price {
+            font-weight: 700;
+            color: #059669;
+        }
+
+        .product-stock {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .stock-high {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .stock-low {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .stock-out {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .edit-btn {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .edit-btn:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+            color: #1f2937;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .image-upload {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .image-upload:hover {
+            border-color: #6366f1;
+            background: #f8fafc;
+        }
+
+        .image-upload i {
+            font-size: 40px;
+            color: #9ca3af;
+            margin-bottom: 10px;
+        }
+
+        .image-upload p {
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #6366f1;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            padding: 12px 24px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            padding: 12px 24px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">Galata Çarşı</span>
+            </div>
+
+            <nav class="sidebar-menu">
+                <div class="menu-item">
+                    <a href="dashboard.html" class="menu-link">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>Genel Bakış</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="products.html" class="menu-link active">
+                        <i class="fa-solid fa-box-open"></i>
+                        <span>Ürünler</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="brands.html" class="menu-link">
+                        <i class="fa-solid fa-tags"></i>
+                        <span>Markalar</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="orders.html" class="menu-link">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <span>Siparişler</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="categories.html" class="menu-link">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <span>Kategoriler</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="#" class="menu-link">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Müşteriler</span>
+                    </a>
+                </div>
+                <div class="menu-item">
+                    <a href="#" class="menu-link">
+                        <i class="fa-solid fa-gear"></i>
+                        <span>Ayarlar</span>
+                    </a>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="window.location.href='login.html'">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Çıkış Yap</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="page-title">Ürün Yönetimi</div>
+
+                <div class="topbar-right">
+                    <button class="notification-btn">
+                        <i class="fa-regular fa-bell"></i>
+                    </button>
+
+                    <div class="admin-profile">
+                        <div class="admin-info">
+                            <span class="admin-name">Admin User</span>
+                            <span class="admin-role">Süper Yönetici</span>
+                        </div>
+                        <div class="admin-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content-wrapper">
+
+                <!-- Header -->
+                <div class="products-header">
+                    <h2 style="margin: 0; color: #1f2937;">Tüm Ürünler</h2>
+                    <button class="add-product-btn" onclick="openAddModal()">
+                        <i class="fa-solid fa-plus"></i>
+                        Yeni Ürün Ekle
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="products-filters">
+                    <div class="filter-group">
+                        <label>Ara</label>
+                        <input type="text" class="filter-input" placeholder="Ürün adı ara..." id="searchInput">
+                    </div>
+                    <div class="filter-group">
+                        <label>Marka</label>
+                        <select class="filter-select" id="brandFilter">
+                            <option value="">Tüm Markalar</option>
+                            <option value="Beta">Beta</option>
+                            <option value="Bosch">Bosch</option>
+                            <option value="Makita">Makita</option>
+                            <option value="Knipex">Knipex</option>
+                            <option value="DEWALT">DEWALT</option>
+                            <option value="BLACK+DECKER">BLACK+DECKER</option>
+                            <option value="Stanley">Stanley</option>
+                            <option value="Milwaukee">Milwaukee</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Kategori</label>
+                        <select class="filter-select" id="categoryFilter">
+                            <option value="">Tüm Kategoriler</option>
+                            <option value="elektrikli">Elektrikli El Aletleri</option>
+                            <option value="olcme">Ölçme & Kontrol</option>
+                            <option value="el-aletleri">El Aletleri</option>
+                            <option value="asindirici">Aşındırıcı & Kesici</option>
+                            <option value="kaynak">Kaynak Malzemeleri</option>
+                            <option value="hirdavat">Hırdavat</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Stok Durumu</label>
+                        <select class="filter-select" id="stockFilter">
+                            <option value="">Tümü</option>
+                            <option value="high">Stokta</option>
+                            <option value="low">Düşük Stok</option>
+                            <option value="out">Tükendi</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <table class="products-table">
+                    <thead>
+                        <tr>
+                            <th>Görsel</th>
+                            <th>Ürün Adı</th>
+                            <th>Marka</th>
+                            <th>Kategori</th>
+                            <th>Fiyat</th>
+                            <th>Stok</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <!-- Products will be loaded here dynamically -->
+                    </tbody>
+                </table>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div class="modal-overlay" id="productModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle">Yeni Ürün Ekle</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ürün Adı *</label>
+                            <input type="text" id="productName" required placeholder="Ürün adını girin">
+                        </div>
+                        <div class="form-group">
+                            <label>SKU / Ürün Kodu</label>
+                            <input type="text" id="productSku" placeholder="Örn: BOS-GSR18V">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Marka *</label>
+                            <select id="productBrand" required>
+                                <option value="">Marka Seçin</option>
+                                <option value="Beta">Beta</option>
+                                <option value="Bosch">Bosch</option>
+                                <option value="Makita">Makita</option>
+                                <option value="Knipex">Knipex</option>
+                                <option value="DEWALT">DEWALT</option>
+                                <option value="BLACK+DECKER">BLACK+DECKER</option>
+                                <option value="WD-40">WD-40</option>
+                                <option value="Fisco">Fisco</option>
+                                <option value="Einhell">Einhell</option>
+                                <option value="İzeltaş">İzeltaş</option>
+                                <option value="Stanley">Stanley</option>
+                                <option value="Gedore">Gedore</option>
+                                <option value="Metabo">Metabo</option>
+                                <option value="Milwaukee">Milwaukee</option>
+                                <option value="Kama">Kama</option>
+                                <option value="Proxxon">Proxxon</option>
+                                <option value="Karbosan">Karbosan</option>
+                                <option value="Kristal">Kristal</option>
+                                <option value="Osaka">Osaka</option>
+                                <option value="Gison">Gison</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Kategori *</label>
+                            <select id="productCategory" required>
+                                <option value="">Kategori Seçin</option>
+                                <option value="elektrikli-el-aletleri">Elektrikli El Aletleri</option>
+                                <option value="olcme-ve-kontrol-aletleri">Ölçme & Kontrol Aletleri</option>
+                                <option value="el-aletleri">El Aletleri</option>
+                                <option value="asindirici-kesici">Aşındırıcı ve Kesici Uçlar</option>
+                                <option value="yapi-kimyasallari">Yapıştırıcı, Dolgu ve Kimyasallar</option>
+                                <option value="kaynak-malzemeleri">Kaynak Malzemeleri</option>
+                                <option value="hirdavat-el-aletleri">Hırdavat ve El Aletleri</option>
+                                <option value="nalbur-yapi-malzemeleri">Yapı ve İnşaat Malzemeleri</option>
+                                <option value="is-guvenligi-ve-calisma-ekipmanlari">İş Güvenliği ve Çalışma Ekipmanları
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fiyat (TL) *</label>
+                            <input type="number" id="productPrice" required placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>İndirimli Fiyat (TL)</label>
+                            <input type="number" id="productSalePrice" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Stok Adedi *</label>
+                            <input type="number" id="productStock" required placeholder="0" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Birim</label>
+                            <select id="productUnit">
+                                <option value="adet">Adet</option>
+                                <option value="paket">Paket</option>
+                                <option value="kutu">Kutu</option>
+                                <option value="set">Set</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Ürün Açıklaması</label>
+                        <textarea id="productDescription" placeholder="Ürün hakkında detaylı açıklama..."></textarea>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Ürün Görseli</label>
+                        <div class="image-upload" onclick="document.getElementById('productImage').click()">
+                            <i class="fa-solid fa-cloud-upload-alt"></i>
+                            <p>Görsel yüklemek için tıklayın veya sürükleyin</p>
+                            <p style="font-size: 12px; color: #9ca3af;">PNG, JPG, WEBP - Max 5MB</p>
+                        </div>
+                        <input type="file" id="productImage" accept="image/*" style="display: none;">
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label>Etiketler</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="tagPopular">
+                                <span>Popüler</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="tagBestSeller">
+                                <span>Çok Satan</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="tagNew">
+                                <span>Yeni</span>
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" id="tagFeatured">
+                                <span>Öne Çıkan</span>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">İptal</button>
+                <button class="btn-save" onclick="saveProduct()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin API -->
+    <script src="admin-api.js"></script>
+    <script>
+        // Product data will be loaded from API
+        let products = [];
+        let isLoading = false;
+
+        // Load products from API
+        async function loadProducts() {
+            isLoading = true;
+            showLoading();
+
+            try {
+                const response = await ADMIN_API.getProducts({ limit: 100 });
+                if (response.success) {
+                    products = response.data;
+                    renderProducts();
+                } else {
+                    showError('Ürünler yüklenirken hata oluştu');
+                }
+            } catch (error) {
+                console.error('Load products error:', error);
+                // Fallback to demo data if API fails
+                products = [
+                    { _id: '1', name: 'Bosch GSB 18V-55 Akülü Darbeli Matkap', brand: 'Bosch', category: 'Elektrikli El Aletleri', price: 7899, stock: 45, mainImage: 'https://placehold.co/60x60/005691/fff?text=Bosch' },
+                    { _id: '2', name: 'Makita DTD172 18V Darbe Vidalama', brand: 'Makita', category: 'Elektrikli El Aletleri', price: 5999, stock: 28, mainImage: 'https://placehold.co/60x60/00A0B0/fff?text=Makita' },
+                    { _id: '3', name: 'Beta 666N/30 Tork Anahtarı', brand: 'Beta', category: 'El Aletleri', price: 5499, stock: 12, mainImage: 'https://placehold.co/60x60/E30613/fff?text=Beta' },
+                    { _id: '4', name: 'Knipex Cobra 87 01 250', brand: 'Knipex', category: 'El Aletleri', price: 1899, stock: 0, mainImage: 'https://placehold.co/60x60/E31E24/fff?text=Knipex' },
+                    { _id: '5', name: 'DEWALT DCD791 20V MAX Matkap', brand: 'DEWALT', category: 'Elektrikli El Aletleri', price: 4599, stock: 33, mainImage: 'https://placehold.co/60x60/FEBD17/000?text=DEWALT' },
+                    { _id: '6', name: 'BLACK+DECKER 20V MAX Akülü Matkap', brand: 'BLACK+DECKER', category: 'Elektrikli El Aletleri', price: 2299, stock: 8, mainImage: 'https://placehold.co/60x60/FF6600/fff?text=B+D' },
+                ];
+                renderProducts();
+                console.warn('API bağlantısı kurulamadı, demo veriler gösteriliyor');
+            }
+
+            isLoading = false;
+        }
+
+        // Show loading state
+        function showLoading() {
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #6b7280;">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <p style="margin: 10px 0 0;">Ürünler yükleniyor...</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Show error
+        function showError(message) {
+            const tbody = document.getElementById('productsTableBody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="7" style="text-align: center; padding: 40px; color: #dc2626;">
+                        <i class="fa-solid fa-exclamation-triangle" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <p style="margin: 10px 0 0;">${message}</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Render products table
+        function renderProducts() {
+            const tbody = document.getElementById('productsTableBody');
+
+            if (products.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #6b7280;">
+                            <i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 10px;"></i>
+                            <p style="margin: 10px 0 0;">Henüz ürün eklenmemiş</p>
+                            <button class="add-product-btn" style="margin-top: 16px;" onclick="openAddModal()">
+                                <i class="fa-solid fa-plus"></i>
+                                İlk Ürünü Ekle
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = '';
+
+            products.forEach(product => {
+                let stockClass = 'stock-high';
+                let stockText = 'Stokta';
+                if (product.stock === 0) {
+                    stockClass = 'stock-out';
+                    stockText = 'Tükendi';
+                } else if (product.stock < 15) {
+                    stockClass = 'stock-low';
+                    stockText = 'Düşük';
+                }
+
+                const image = product.mainImage || `https://placehold.co/60x60/6366f1/fff?text=${(product.brand || 'P').charAt(0)}`;
+                const productId = product._id || product.id;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><img src="${image}" class="product-image" alt="${product.name}"></td>
+                        <td><span class="product-name">${product.name}</span></td>
+                        <td><span class="product-brand">${product.brand || '-'}</span></td>
+                        <td>${product.category || '-'}</td>
+                        <td><span class="product-price">₺${product.price?.toLocaleString() || '0'}</span></td>
+                        <td><span class="product-stock ${stockClass}">${stockText} (${product.stock || 0})</span></td>
+                        <td>
+                            <div class="action-btns">
+                                <button class="action-btn edit-btn" onclick="editProduct('${productId}')">
+                                    <i class="fa-solid fa-pen"></i>
+                                </button>
+                                <button class="action-btn delete-btn" onclick="deleteProduct('${productId}')">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Open add modal
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = 'Yeni Ürün Ekle';
+            document.getElementById('productForm').reset();
+            document.getElementById('productId').value = '';
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        // Edit product
+        async function editProduct(id) {
+            const product = products.find(p => (p._id || p.id) === id);
+            if (product) {
+                document.getElementById('modalTitle').textContent = 'Ürün Düzenle';
+                document.getElementById('productId').value = id;
+                document.getElementById('productName').value = product.name || '';
+                document.getElementById('productBrand').value = product.brand || '';
+                document.getElementById('productPrice').value = product.price || '';
+                document.getElementById('productStock').value = product.stock || 0;
+                document.getElementById('productDescription').value = product.description || '';
+                document.getElementById('productSku').value = product.sku || '';
+                document.getElementById('tagFeatured').checked = product.isFeatured || false;
+                document.getElementById('tagNew').checked = product.isNew || false;
+                document.getElementById('productModal').classList.add('active');
+            }
+        }
+
+        // Delete product
+        async function deleteProduct(id) {
+            if (confirm('Bu ürünü silmek istediğinizden emin misiniz?')) {
+                try {
+                    const response = await ADMIN_API.deleteProduct(id);
+                    if (response.success) {
+                        await loadProducts();
+                        alert('Ürün başarıyla silindi!');
+                    } else {
+                        alert(response.message || 'Silme işlemi başarısız');
+                    }
+                } catch (error) {
+                    console.error('Delete error:', error);
+                    // Fallback for demo mode
+                    products = products.filter(p => (p._id || p.id) !== id);
+                    renderProducts();
+                    alert('Ürün silindi (demo mod)');
+                }
+            }
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('productModal').classList.remove('active');
+        }
+
+        // Save product
+        async function saveProduct() {
+            const id = document.getElementById('productId').value;
+            const name = document.getElementById('productName').value;
+            const brand = document.getElementById('productBrand').value;
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const stock = parseInt(document.getElementById('productStock').value) || 0;
+            const category = document.getElementById('productCategory').value;
+            const description = document.getElementById('productDescription').value;
+            const sku = document.getElementById('productSku').value;
+            const isFeatured = document.getElementById('tagFeatured').checked;
+            const isNew = document.getElementById('tagNew').checked;
+
+            if (!name || !brand || !price) {
+                alert('Lütfen zorunlu alanları doldurun.');
+                return;
+            }
+
+            const productData = {
+                name,
+                brand,
+                category: getCategoryName(category),
+                price,
+                stock,
+                description: description || `${brand} ${name}`,
+                sku,
+                isFeatured,
+                isNew,
+                mainImage: `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`
+            };
+
+            try {
+                let response;
+                if (id) {
+                    response = await ADMIN_API.updateProduct(id, productData);
+                } else {
+                    response = await ADMIN_API.createProduct(productData);
+                }
+
+                if (response.success) {
+                    closeModal();
+                    await loadProducts();
+                    alert('Ürün başarıyla kaydedildi!');
+                } else {
+                    alert(response.message || 'Kaydetme işlemi başarısız');
+                }
+            } catch (error) {
+                console.error('Save error:', error);
+                // Fallback for demo mode
+                if (id) {
+                    const index = products.findIndex(p => (p._id || p.id) === id);
+                    if (index !== -1) {
+                        products[index] = { ...products[index], ...productData };
+                    }
+                } else {
+                    products.push({ _id: Date.now().toString(), ...productData });
+                }
+                closeModal();
+                renderProducts();
+                alert('Ürün kaydedildi (demo mod)');
+            }
+        }
+
+        // Get category name from slug
+        function getCategoryName(slug) {
+            const categoryMap = {
+                'elektrikli-el-aletleri': 'Elektrikli El Aletleri',
+                'olcme-ve-kontrol-aletleri': 'Ölçme & Kontrol Aletleri',
+                'el-aletleri': 'El Aletleri',
+                'asindirici-kesici': 'Aşındırıcı ve Kesici Uçlar',
+                'yapi-kimyasallari': 'Yapıştırıcı, Dolgu ve Kimyasallar',
+                'kaynak-malzemeleri': 'Kaynak Malzemeleri',
+                'hirdavat-el-aletleri': 'Hırdavat ve El Aletleri',
+                'nalbur-yapi-malzemeleri': 'Yapı ve İnşaat Malzemeleri',
+                'is-guvenligi-ve-calisma-ekipmanlari': 'İş Güvenliği ve Çalışma Ekipmanları'
+            };
+            return categoryMap[slug] || slug;
+        }
+
+        // Filter products
+        document.getElementById('searchInput')?.addEventListener('input', filterProducts);
+        document.getElementById('brandFilter')?.addEventListener('change', filterProducts);
+        document.getElementById('categoryFilter')?.addEventListener('change', filterProducts);
+
+        function filterProducts() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const brand = document.getElementById('brandFilter').value;
+
+            const filtered = products.filter(p => {
+                const matchSearch = !search || p.name.toLowerCase().includes(search);
+                const matchBrand = !brand || p.brand === brand;
+                return matchSearch && matchBrand;
+            });
+
+            // Temporarily show filtered products
+            const originalProducts = products;
+            products = filtered;
+            renderProducts();
+            products = originalProducts;
+        }
+
+        // Initial load
+        loadProducts();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakım Modu - Galata Çarşı</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #9b59b6;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --border-color: #e1e8ed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(#e1e8ed 1px, transparent 1px);
+            background-size: 30px 30px;
+            /* Hafif noktalı doku */
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            padding: 60px 40px;
+            background: var(--card-bg);
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+        }
+
+        .icon-box {
+            width: 100px;
+            height: 100px;
+            background: #fdf7ff;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            border: 1px solid #f2e6f7;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            margin-bottom: 35px;
+            font-size: 1rem;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 35px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 18px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+            box-shadow: 0 10px 20px rgba(155, 89, 182, 0.2);
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-2px);
+            background-color: #8e44ad;
+            box-shadow: 0 15px 25px rgba(155, 89, 182, 0.3);
+        }
+
+        .social-links {
+            margin-top: 50px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-links a {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f3f5;
+            color: var(--text-muted);
+            border-radius: 15px;
+            text-decoration: none;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-text {
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: #b2bec3;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="status-badge">🛠️ Planlı Çalışma</div>
+        <div class="logo">GALATA <span>ÇARŞI</span></div>
+
+        <div class="icon-box">
+            <i class="fas fa-layer-group"></i>
+        </div>
+
+        <h1>Kısa Bir Ara Veriyoruz</h1>
+        <p>Deneyiminizi iyileştirmek için sitemizde teknik bir güncelleme yapıyoruz. Çok yakında daha hızlı ve
+            yenilenmiş olarak buradayız.</p>
+
+        <a href="mailto:mail@galatacarsi.com" class="contact-btn">
+            <i class="fas fa-paper-plane"></i> Müşteri Hizmetleri
+        </a>
+
+        <div class="social-links">
+            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+        </div>
+
+        <div class="footer-text">
+            © 2025 Galata Çarşı. Güvendesiniz.
+        </div>
+    </div>
+
+</body>
+
+</html>

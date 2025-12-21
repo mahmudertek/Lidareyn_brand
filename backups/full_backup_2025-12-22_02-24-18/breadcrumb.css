@@ -1,0 +1,86 @@
+/* ============================================
+   BREADCRUMB NAVIGATION - Modern & Mobile-Friendly
+   ============================================ */
+
+.breadcrumb {
+    background: #fff;
+    padding: 12px 0;
+    border-bottom: none;
+    font-size: 13px;
+}
+
+
+.breadcrumb .container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-left: 14px;
+    /* Align with button text below */
+    padding-right: 14px;
+}
+
+.breadcrumb a {
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.breadcrumb a:hover {
+    color: #8b7bd8;
+}
+
+.breadcrumb i {
+    font-size: 10px;
+    color: #999;
+    margin: 0 4px;
+}
+
+.breadcrumb span {
+    color: #333;
+    font-weight: 500;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .breadcrumb {
+        padding: 6px 0;
+        font-size: 11px;
+        background: #fff;
+        border-bottom: none;
+    }
+
+    .breadcrumb .container {
+        gap: 4px;
+        /* Mobile: container has 5px padding + button has 14px = 19px total start */
+        padding-left: 19px !important;
+        padding-right: 19px !important;
+    }
+
+
+
+    .breadcrumb a,
+    .breadcrumb span {
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .breadcrumb a {
+        color: #888;
+    }
+
+    .breadcrumb span {
+        color: #333;
+        font-weight: 600;
+    }
+
+    .breadcrumb i {
+        font-size: 8px;
+        color: #bbb;
+        flex-shrink: 0;
+    }
+}
