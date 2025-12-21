@@ -188,6 +188,87 @@
     color: #D4AF37;
 }
 
+/* DEWALT - Yellow/Black Theme */
+.madeniyat-hero.theme-dewalt .madeniyat-brand-name {
+    color: #FEBD17;
+    text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(254, 189, 23, 0.3);
+}
+
+.madeniyat-hero.theme-dewalt .madeniyat-product-badge {
+    background: #FEBD17;
+    color: #1a1a1a;
+}
+
+.madeniyat-hero.theme-dewalt .madeniyat-collection-title::before {
+    color: #FEBD17;
+}
+
+.madeniyat-hero.theme-dewalt .madeniyat-heritage-image::before {
+    background: transparent !important;
+}
+
+.madeniyat-hero.theme-dewalt .madeniyat-view-collection:hover {
+    color: #FEBD17;
+}
+
+.madeniyat-hero.theme-dewalt .madeniyat-hero-left {
+    background: #ffffff !important;
+}
+
+.madeniyat-hero.theme-dewalt .madeniyat-brand-overlay {
+    background: #ffffff !important;
+    border: none !important;
+}
+
+.madeniyat-hero.theme-dewalt .madeniyat-brand-logo {
+    background: #ffffff !important;
+    padding: 10px;
+    width: 95% !important;
+    max-width: none !important;
+    max-height: 80% !important;
+}
+
+/* BLACK+DECKER - Orange/Black Theme */
+.madeniyat-hero.theme-blackdecker .madeniyat-brand-name {
+    color: #FF6600;
+    text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(255, 102, 0, 0.3);
+}
+
+.madeniyat-hero.theme-blackdecker .madeniyat-product-badge {
+    background: #FF6600;
+    color: #ffffff;
+}
+
+.madeniyat-hero.theme-blackdecker .madeniyat-collection-title::before {
+    color: #FF6600;
+}
+
+.madeniyat-hero.theme-blackdecker .madeniyat-heritage-image::before {
+    background: transparent !important;
+}
+
+.madeniyat-hero.theme-blackdecker .madeniyat-view-collection:hover {
+    color: #FF6600;
+}
+
+.madeniyat-hero.theme-blackdecker .madeniyat-hero-left {
+    background: #ffffff !important;
+}
+
+.madeniyat-hero.theme-blackdecker .madeniyat-brand-overlay {
+    background: #ffffff !important;
+    border: none !important;
+}
+
+.madeniyat-hero.theme-blackdecker .madeniyat-brand-logo {
+    background: #ffffff !important;
+    padding: 20px;
+}
+
 /* Section Title for Our Brands */
 .our-brands-section-title {
     text-align: center;

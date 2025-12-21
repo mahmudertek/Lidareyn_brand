@@ -432,35 +432,83 @@
         </div>
     </div>
 
-    <!-- Hybrid: Subcategory Chips (Horizontal Scroll) -->
-    <section class="subcategory-chips-section">
-        <div class="container">
-            <div class="subcategory-chips-wrapper">
-                <a href="#" class="sub-chip"><i class="fa-solid fa-compact-disc"></i> Kesme Diskleri</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-circle-notch"></i> Taşlama Taşları</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-screwdriver"></i> Matkap Uçları</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-pencil"></i> Zımparalar</a>
-                <a href="#" class="sub-chip"><i class="fa-solid fa-gem"></i> Elmas Uçlar</a>
+    <!-- Mobile: Category Accordion Navigation -->
+    <div class="container">
+        <div class="category-accordion">
+            <button class="accordion-main-trigger">Alt Kategoriler<i class="fa-solid fa-chevron-down"></i></button>
+            <div class="accordion-content">
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">Delici & Vidalama<i
+                            class="fa-solid fa-chevron-down"></i></button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Matkap Uçları (Metal, Ahşap, Beton)</a>
+                        <a href="#" class="accordion-child-item">Freze Uçları</a>
+                        <a href="#" class="accordion-child-item">Karot Uçları</a>
+                    </div>
+                </div>
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">Kesme & Taşlama<i
+                            class="fa-solid fa-chevron-down"></i></button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Taşlama Diskleri</a>
+                        <a href="#" class="accordion-child-item">Kesme Diskleri</a>
+                    </div>
+                </div>
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">Aşındırma ve Zımpara<i
+                            class="fa-solid fa-chevron-down"></i></button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Zımpara Kağıtları ve Bantları</a>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
+
+        <!-- Brands Dropdown (Mobile Only) -->
+        <div class="brands-dropdown-wrapper">
+            <button class="brands-dropdown-trigger">
+                Bu kategorideki tüm markalar
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="brands-dropdown-content">
+                <div class="brands-search-container">
+                    <input type="text" class="brands-search-input" placeholder="Marka ara...">
+                </div>
+                <div class="brands-grid">
+                    <!-- Brands will be rendered by JS -->
+                </div>
+                <div class="brands-pagination">
+                    <button class="pagination-arrow pagination-prev" aria-label="Önceki">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="pagination-dots">
+                        <!-- Dots will be rendered by JS -->
+                    </div>
+                    <button class="pagination-arrow pagination-next" aria-label="Sonraki">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter/Sort Bar - Part of unified container -->
+            <div class="category-filter-bar">
+                <span class="product-count">245 Ürün</span>
+                <div class="sort-options">
+                    <select class="sort-select">
+                        <option>Önerilen Sıralama</option>
+                        <option>En Düşük Fiyat</option>
+                        <option>En Yüksek Fiyat</option>
+                        <option>En Yeniler</option>
+                        <option>En Çok Satanlar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Hybrid: Product Listing -->
     <section class="category-products-section" style="padding: 20px 0;">
         <div class="container">
-            <!-- Simple Filter/Sort Bar -->
-            <div class="listing-controls"
-                style="display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center;">
-                <span class="product-count" style="font-size: 14px; color: #666;">245 Ürün</span>
-                <div class="sort-options">
-                    <select style="border: 1px solid #ddd; padding: 8px; border-radius: 6px;">
-                        <option>Önerilen Sıralama</option>
-                        <option>En Düşük Fiyat</option>
-                        <option>En Yüksek Fiyat</option>
-                    </select>
-                </div>
-            </div>
-
             <div class="products-grid">
                 <!-- Product Card 1 -->
                 <div class="product-card">
@@ -674,6 +722,8 @@
 
     <script src="../script.js"></script>
     <script src="../categories-data.js"></script>
+    <script src="../products-data.js"></script>
+    <script src="../live-search.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="../mobile-menu.js"></script>
     <script src="../category-accordion.js"></script>
@@ -683,7 +733,8 @@
     <div id="mobile-search-overlay" class="mobile-search-overlay">
         <div class="mobile-search-content">
             <form action="../arama.html" method="GET" class="mobile-search-form">
-                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..." autocomplete="off">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
                 <button type="submit" class="mobile-search-submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -694,8 +745,8 @@
             <div class="mobile-search-results"></div>
         </div>
     </div>
-    
-    
+
+
 </body>
 
 

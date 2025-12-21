@@ -471,8 +471,8 @@
                         <a href="#" class="accordion-child-item">Tiner ve Çözücüler</a>
                     </div>
                 </div>
-            
-        </div>
+
+            </div>
         </div>
 
         <!-- Brands Dropdown (Mobile Only) -->
@@ -500,24 +500,26 @@
                     </button>
                 </div>
             </div>
+
+            <!-- Filter/Sort Bar - Part of unified container -->
+            <div class="category-filter-bar">
+                <span class="product-count">198 Ürün</span>
+                <div class="sort-options">
+                    <select class="sort-select">
+                        <option>Önerilen Sıralama</option>
+                        <option>En Düşük Fiyat</option>
+                        <option>En Yüksek Fiyat</option>
+                        <option>En Yeniler</option>
+                        <option>En Çok Satanlar</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Product Listing -->
     <section class="category-products-section" style="padding: 20px 0;">
         <div class="container">
-            <div class="listing-controls"
-                style="display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center;">
-                <span class="product-count" style="font-size: 14px; color: #666;">198 Ürün</span>
-                <div class="sort-options">
-                    <select style="border: 1px solid #ddd; padding: 8px; border-radius: 6px;">
-                        <option>Önerilen Sıralama</option>
-                        <option>En Düşük Fiyat</option>
-                        <option>En Yüksek Fiyat</option>
-                    </select>
-                </div>
-            </div>
-
             <div class="products-grid">
                 <div class="product-card">
                     <div class="product-image">
@@ -723,6 +725,8 @@
 
     <script src="../script.js"></script>
     <script src="../categories-data.js"></script>
+    <script src="../products-data.js"></script>
+    <script src="../live-search.js"></script>
     <script src="../mobile-menu.js"></script>
     <script src="../category-accordion.js"></script>
     <script src="../category-brands-dropdown.js"></script>
@@ -731,7 +735,8 @@
     <div id="mobile-search-overlay" class="mobile-search-overlay">
         <div class="mobile-search-content">
             <form action="../arama.html" method="GET" class="mobile-search-form">
-                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..." autocomplete="off">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
                 <button type="submit" class="mobile-search-submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
@@ -742,8 +747,8 @@
             <div class="mobile-search-results"></div>
         </div>
     </div>
-    
-    
+
+
 </body>
 
 

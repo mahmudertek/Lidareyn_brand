@@ -1,0 +1,107 @@
+// ============================================
+// KATEGORI VERİLERİ - KARAKÖY TÜCCARI E-TİCARET
+// ============================================
+
+const categoriesData = {
+
+    'olcme-ve-kontrol-aletleri': {
+        title: 'Ölçme & Kontrol Aletleri',
+        description: 'Hassas ölçüm ve kontrol işlemleri için profesyonel cihazlar.',
+        icon: 'fa-ruler-combined',
+        image: 'gorseller/category_olcme_kontrol.png',
+        subcategories: [
+            { name: 'Lazerli Ölçüm', items: ['Lazerli Ölçüm Cihazları (Mesafe Ölçer)', 'Lazer Hizalamalar (Çizgi, Nokta)'], icon: 'fa-crosshairs' },
+            { name: 'Mekanik Ölçüm', items: ['Şerit Metreler', 'Çelik Metreler', 'Kumpaslar (Dijital, Analog)', 'Mikrometreler'], icon: 'fa-ruler' },
+            { name: 'Terazi & Açı', items: ['Su Terazileri (Dijital, Klasik)', 'Açı Ölçerler', 'Dijital Tartılar'], icon: 'fa-scale-balanced' },
+            { name: 'Görüntüleme', items: ['Endoskoplar'], icon: 'fa-eye' }
+        ]
+    },
+
+    'nalbur-yapi-malzemeleri': {
+        title: 'Yapı ve İnşaat Malzemeleri',
+        description: 'İnşaat, tadilat ve tamirat işleriniz için profesyonel yapı kimyasalları ve malzemeleri.',
+        icon: 'fa-trowel-bricks',
+        image: 'gorseller/category_yapi_insaat.png',
+        slug: 'nalbur-yapi-malzemeleri',
+        subcategories: [
+            { name: 'Kimyasal & Yapıştırıcı', items: ['Silikon, Mastik ve Köpükler', 'Yapıştırıcılar (Epoksi, Japon, Poliüretan)', 'Harç ve Beton Malzemeleri'], icon: 'fa-flask' },
+            { name: 'Boya & İzolasyon', items: ['Boyalar ve Boya Malzemeleri (Fırça, Rulo, Tiner)', 'İzolasyon Malzemeleri'], icon: 'fa-paint-roller' },
+            { name: 'Donanım', items: ['Kilitler ve Menteşeler'], icon: 'fa-lock' }
+        ]
+    },
+
+    'asindirici-kesici': {
+        title: 'Aşındırıcı ve Kesici Uçlar',
+        description: 'Her türlü yüzey işlemi için profesyonel kesme, taşlama ve zımparalama ürünleri.',
+        icon: 'fa-compact-disc',
+        image: 'gorseller/category_asindirici_kesici.png',
+        subcategories: [
+            { name: 'Delici & Vidalama', items: ['Matkap Uçları (Metal, Ahşap, Beton)', 'Freze Uçları', 'Karot Uçları'], icon: 'fa-screwdriver' },
+            { name: 'Kesme & Taşlama', items: ['Taşlama Diskleri', 'Kesme Diskleri'], icon: 'fa-compact-disc' },
+            { name: 'Aşındırma ve Zımpara', items: ['Zımpara Kağıtları ve Bantları'], icon: 'fa-note-sticky' }
+        ]
+    },
+
+    'yapi-kimyasallari': {
+        title: 'Yapıştırıcı, Dolgu ve Kimyasallar',
+        description: 'İnşaat ve tamirat işleriniz için profesyonel yapı kimyasalları.',
+        icon: 'fa-flask',
+        image: 'gorseller/category_yapi_kimyasallari.png',
+        subcategories: [
+            { name: 'Yapıştırıcılar', items: ['Silikon, Mastik ve Akrilikler', 'Yapıştırıcı Çeşitleri (Epoksi, Japon, Ahşap)', 'Poliüretan Köpükler'], icon: 'fa-glue' },
+            { name: 'Dolgu ve Harçlar', items: ['Çimento Esaslı Harçlar', 'Alçı ve Alçı Ürünleri', 'Derz Dolgular'], icon: 'fa-trowel' },
+            { name: 'Kimyasallar', items: ['Tiner ve Çözücüler'], icon: 'fa-bottle-droplet' }
+        ]
+    },
+
+    'kaynak-malzemeleri': {
+        title: 'Kaynak Malzemeleri',
+        description: 'Profesyonel kaynak makineleri, elektrotlar ve koruyucu ekipmanlar.',
+        icon: 'fa-fire-burner',
+        image: 'gorseller/category_kaynak.png',
+        subcategories: [
+            { name: 'Sarf Malzemeleri', items: ['Elektrotlar (Rutil, Bazik)', 'Kaynak Telleri (Gazaltı, Tig)'], icon: 'fa-bolt' },
+            { name: 'Koruyucu Ekipman', items: ['Kaynak Maskeleri ve Eldivenleri'], icon: 'fa-helmet-safety' },
+            { name: 'Makine ve Aksesuar', items: ['Kaynak Makineleri ve Aksesuarları'], icon: 'fa-plug' }
+        ]
+    },
+
+    'hirdavat-el-aletleri': {
+        title: 'Hırdavat ve El Aletleri',
+        description: 'Her türlü tamirat işi için el aletleri.',
+        icon: 'fa-screwdriver-wrench',
+        image: 'gorseller/category_hirdavat.png',
+        subcategories: [
+            { name: 'Ölçü Aletleri', items: ['Ölçü Aletleri (Metre, Su Terazisi, Gönye)'], icon: 'fa-ruler-combined' },
+            { name: 'Kesici & Delici', items: ['Kesici ve Delici Aletler (Testere, Matkap Uçları)'], icon: 'fa-scissors' },
+            { name: 'Sıkıştırma & Tutma', items: ['Sıkıştırma ve Tutma Aletleri (Pense, İngiliz Anahtarı, Mengene)'], icon: 'fa-wrench' },
+            { name: 'Vurucu Aletler', items: ['Vurucu Aletler (Çekiç, Balta)'], icon: 'fa-hammer' }
+        ]
+    },
+
+    'is-guvenligi-ve-calisma-ekipmanlari': {
+        title: 'İş Güvenliği ve Çalışma Ekipmanları',
+        description: 'Güvenli çalışma ortamları için gerekli koruyucu donanımlar.',
+        icon: 'fa-helmet-safety',
+        image: 'gorseller/category_is_guvenligi.png',
+        subcategories: [
+            { name: 'Koruyucu Giyim', items: ['Koruyucu Giyim (İş Elbisesi, Eldiven)'], icon: 'fa-vest' },
+            { name: 'Ayak & Baş Koruma', items: ['Ayak ve Baş Koruyucuları (Baret, Çelik Burunlu Ayakkabı)'], icon: 'fa-hard-hat' },
+            { name: 'Göz & Kulak Koruma', items: ['Göz ve Kulak Koruyucuları'], icon: 'fa-glasses' },
+            { name: 'Çalışma Ekipmanları', items: ['İş İskelesi ve Merdivenler'], icon: 'fa-stairs' }
+        ]
+    },
+};
+
+// Kategori listesini döndür
+function getAllCategories() {
+    return Object.keys(categoriesData).map(slug => ({
+        slug: slug,
+        ...categoriesData[slug]
+    }));
+}
+
+// Belirli bir kategoriyi getir
+function getCategoryBySlug(slug) {
+    return categoriesData[slug] || null;
+}

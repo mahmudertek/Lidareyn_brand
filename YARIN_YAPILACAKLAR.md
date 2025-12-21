@@ -1,153 +1,123 @@
-# 🚀 YARIN YAPILACAKLAR - 14 ARALIK 2025
+# 🚀 YAPILACAKLAR LİSTESİ - Galata Çarşı
 
-## ✅ BUGÜN TAMAMLANANLAR
+## ✅ TAMAMLANAN ÖZELLİKLER
 
-- ✅ MongoDB Atlas kuruldu
-- ✅ Connection string alındı
-- ✅ JWT Secret oluşturuldu
-- ✅ Railway hesabı oluşturuldu
-- ✅ GitHub'da backend repo oluşturuldu (`galatacarsi-backend-api`)
-- ✅ Backend kodu GitHub'a yüklendi
+### Backend Ödeme Sistemi
+- ✅ Order Controller (sipariş yönetimi)
+- ✅ Payment Controller (iyzico entegrasyonu)
+- ✅ Demo Payment (test için ödeme simülasyonu)
+- ✅ Taksit seçenekleri API
+- ✅ İade/İptal işlemleri
+- ✅ Admin sipariş yönetimi
+- ✅ Kargo takip URL'leri (Yurtiçi, MNG, Aras, PTT, UPS, DHL)
+
+### Frontend Ödeme
+- ✅ checkout.js tamamen yenilendi
+- ✅ Form validasyonu
+- ✅ Kart numarası formatlama
+- ✅ Kart tipi algılama (Visa, Mastercard, Troy)
+- ✅ Backend entegrasyonu
+- ✅ Ödeme sonuç sayfası (odeme-sonuc.html)
+
+### Rehberler
+- ✅ PAYMENT_INTEGRATION.md (detaylı entegrasyon rehberi)
 
 ---
 
-## 🎯 YARIN YAPILACAKLAR (10 Dakika)
+## 🎯 SIRADAKI ADIMLAR
 
-### 1. Railway'de Backend Deploy (5 dakika)
-
-1. **Railway'e git:** https://railway.app/dashboard
-2. **"New Project"** → **"Deploy from GitHub repo"**
-3. **"galatacarsi-backend-api"** seç
-4. **Environment Variables ekle:**
-
+### 1. iyzico Hesabı Aç (10 dk)
+1. https://sandbox-merchant.iyzipay.com adresine git
+2. Ücretsiz sandbox hesabı oluştur
+3. API Key ve Secret Key al
+4. `.env` dosyasına ekle:
 ```env
-NODE_ENV=production
-PORT=5000
-MONGODB_URI=mongodb+srv://mahmudertek_db_user:LNv8IZt1taUJxf-Ncv@cluster0.zt7kzzt.mongodb.net/galatacarsı?appName=Cluster0
-JWT_SECRET=1a2f949090039ec504f022cf7264ba1760a5696f969180b4451066dd95c1437
-JWT_EXPIRE=30d
-FRONTEND_URL=https://yourdomain.com
+IYZICO_API_KEY=sandbox-xxxxx
+IYZICO_SECRET_KEY=sandbox-xxxxx
+IYZICO_BASE_URL=https://sandbox-api.iyzipay.com
 ```
 
-5. **Deploy!**
-6. **Public URL al** (Settings → Networking → Generate Domain)
-
----
-
-### 2. Domain Satın Al (10 dakika)
-
-**Önerilen:**
-- GoDaddy: https://www.godaddy.com/tr-tr
-- Namecheap: https://www.namecheap.com
-
-**Domain adı önerileri:**
-- galatacarsı.com
-- galatacarsı.com.tr
-
-**Fiyat:**
-- .com → ~₺200-300/yıl
-- .com.tr → ~₺100-150/yıl
-
----
-
-### 3. Frontend Deploy (Vercel) (5 dakika)
-
-1. **config.js güncelle:**
-   - Backend URL'i ekle (Railway'den aldığın)
-   - Domain'i ekle
-
-2. **Vercel'e deploy:**
+### 2. Backend'i Başlat ve Test Et (5 dk)
 ```bash
-npm install -g vercel
-vercel login
-cd c:\Users\pc\Desktop\Lidareyn_brand
-vercel --prod
+cd backend
+npm run dev
 ```
 
-3. **Domain bağla:**
-   - Vercel Dashboard → Settings → Domains
-   - Custom domain ekle
-   - DNS kayıtlarını güncelle
+### 3. Ödeme Testi Yap (5 dk)
+- Test kart: 5528790000000008
+- SKT: 12/30
+- CVV: 123
 
 ---
 
-### 4. DNS Ayarları (5 dakika)
+## 📋 KRİTİK EKSİKLİKLER (Sırayla Yapılacak)
 
-**Domain sağlayıcıda:**
+### A. Admin Paneli Geliştirmeleri
+- [ ] Sipariş yönetimi sayfası
+- [ ] Sipariş durumu güncelleme UI
+- [ ] Kargo takip numarası girişi
+- [ ] İstatistik dashboard
+
+### B. E-posta Bildirimleri  
+- [ ] Sipariş onay e-postası
+- [ ] Kargo bildirim e-postası
+- [ ] İade onay e-postası
+- [ ] PDF fatura oluşturma
+
+### C. Stok Yönetimi
+- [ ] Stok miktarı ekleme
+- [ ] Sipariş verildiğinde stok düşürme
+- [ ] Stok uyarıları
+
+### D. Kargo Entegrasyonu
+- [ ] Yurtiçi Kargo API
+- [ ] MNG Kargo API
+- [ ] Otomatik etiket oluşturma
+
+---
+
+## 💰 MALİYET ÖZETİ
+
+| Hizmet | Maliyet |
+|--------|---------|
+| iyzico Komisyon | ~%2.99/işlem |
+| Domain (.com.tr) | ~150₺/yıl |
+| Railway (Backend) | $5/ay |
+| MongoDB Atlas (M0) | Ücretsiz |
+| Vercel (Frontend) | Ücretsiz |
+
+---
+
+## 📁 OLUŞTURULAN DOSYALAR
 
 ```
-A Record:
-Name: @
-Value: 76.76.21.21
+backend/
+├── controllers/
+│   ├── orderController.js    ✅ YENİ
+│   └── paymentController.js  ✅ YENİ
+├── routes/
+│   ├── order.js              ✅ GÜNCELLENDİ
+│   └── payment.js            ✅ YENİ
+├── server.js                 ✅ GÜNCELLENDİ
+├── package.json              ✅ GÜNCELLENDİ (iyzipay eklendi)
+├── .env.example              ✅ GÜNCELLENDİ
+└── PAYMENT_INTEGRATION.md    ✅ YENİ
 
-CNAME:
-Name: www
-Value: cname.vercel-dns.com
+frontend/
+├── checkout.js               ✅ YENİDEN YAZILDI
+└── odeme-sonuc.html          ✅ YENİ
 ```
 
 ---
 
-## 📝 ÖNEMLİ BİLGİLER
+## 🔴 ÖNCELİK 1: Canlıya Çıkış
 
-### MongoDB Connection String:
-```
-mongodb+srv://mahmudertek_db_user:LNv8IZt1taUJxf-Ncv@cluster0.zt7kzzt.mongodb.net/galatacarsı?appName=Cluster0
-```
-
-### JWT Secret:
-```
-1a2f949090039ec504f022cf7264ba1760a5696f969180b4451066dd95c1437
-```
-
-### GitHub Repos:
-- Backend: https://github.com/mahmudertek/galatacarsi-backend-api
-- Frontend: (henüz yok)
-
-### Railway:
-- Dashboard: https://railway.app/dashboard
-- Project: (yarın oluşturulacak)
+1. Backend'i Railway'e deploy et
+2. Frontend'i Vercel'e deploy et
+3. Domain bağla
+4. iyzico production hesabı aç
+5. Test siparişi ver
 
 ---
 
-## 🎯 TOPLAM SÜRE: ~30 Dakika
-
-1. Railway deploy: 5 dk
-2. Domain satın al: 10 dk
-3. Frontend deploy: 5 dk
-4. DNS ayarları: 5 dk
-5. Test: 5 dk
-
-**TOPLAM: 30 dakika**
-
----
-
-## ✅ BAŞARI KRİTERLERİ
-
-Site başarıyla yayında sayılır eğer:
-- ✅ HTTPS ile açılıyor
-- ✅ Backend API çalışıyor (`/api/health`)
-- ✅ Kayıt ol çalışıyor
-- ✅ Email doğrulama geliyor
-- ✅ Giriş yapma çalışıyor
-- ✅ Sepet ve favoriler çalışıyor
-
----
-
-## 📞 YARDIM KAYNAKLARI
-
-**Deployment Rehberleri:**
-- `DEPLOYMENT_GUIDE.md` - Detaylı rehber
-- `README.md` - Hızlı başlangıç
-- `LAUNCH_CHECKLIST.md` - Adım adım checklist
-
-**Backend Rehberleri:**
-- `backend/RAILWAY_DASHBOARD_GUIDE.md` - Railway deployment
-- `backend/RAILWAY_CLI_GUIDE.md` - CLI ile deployment
-
----
-
-## 🎉 BAŞARILAR!
-
-Yarın bu saatlerde siten canlıda olacak! 🚀
-
-**İyi geceler ve iyi uykular!** 😴💤
+*Son güncelleme: 21 Aralık 2025*
