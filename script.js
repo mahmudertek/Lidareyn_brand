@@ -2,6 +2,24 @@
 // KARAKÖY TÜCCARI - MODERN E-COMMERCE JAVASCRIPT
 // ============================================
 
+// ============================================
+// BAKIM MODU KONTROLÜ - Sayfa yüklenmeden önce kontrol et
+// ============================================
+(function checkMaintenanceMode() {
+    const isMaintenanceMode = localStorage.getItem('maintenanceMode') === 'true';
+    const currentPath = window.location.pathname;
+
+    // Admin panelini ve bakım sayfasını hariç tut
+    const isAdminPage = currentPath.includes('/admin/');
+    const isMaintenancePage = currentPath.includes('maintenance.html');
+
+    // Bakım modundaysa ve admin değilse, bakım sayfasına yönlendir
+    if (isMaintenanceMode && !isAdminPage && !isMaintenancePage) {
+        window.location.href = 'maintenance.html';
+        return;
+    }
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
 
     // ============================================

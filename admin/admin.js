@@ -61,4 +61,104 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ============================================
+    // BAKIM MODU KONTROLÜ
+    // ============================================
+
+    // Sayfa yüklendiğinde bakım modunu kontrol et
+    checkMaintenanceMode();
+
 });
+
+// Bakım modunu kontrol et ve UI güncelle
+function checkMaintenanceMode() {
+    const isMaintenanceMode = localStorage.getItem('maintenanceMode') === 'true';
+    const toggle = document.getElementById('maintenanceToggle');
+    const card = document.getElementById('maintenanceCard');
+    const status = document.getElementById('maintenanceStatus');
+
+    if (toggle && card && status) {
+        toggle.checked = isMaintenanceMode;
+
+        if (isMaintenanceMode) {
+            card.classList.add('maintenance-active');
+            status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
+        } else {
+            card.classList.remove('maintenance-active');
+            status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
+        }
+    }
+}
+
+// Bakım modunu aç/kapat
+function toggleMaintenanceMode() {
+    const toggle = document.getElementById('maintenanceToggle');
+    const card = document.getElementById('maintenanceCard');
+    const status = document.getElementById('maintenanceStatus');
+
+    const isMaintenanceMode = toggle.checked;
+
+    // LocalStorage'a kaydet
+    localStorage.setItem('maintenanceMode', isMaintenanceMode);
+
+    // UI güncelle
+    if (isMaintenanceMode) {
+        card.classList.add('maintenance-active');
+        status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
+
+        // Bildirim göster
+        showNotification('🔧 Bakım modu aktif edildi!', 'warning');
+    } else {
+        card.classList.remove('maintenance-active');
+        status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
+
+        // Bildirim göster
+        showNotification('✅ Site tekrar açıldı!', 'success');
+    }
+}
+
+// Bildirim göster
+function showNotification(message, type) {
+    // Varsa eski bildirimi kaldır
+    const existing = document.querySelector('.admin-notification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = `admin-notification notification-${type}`;
+    notification.innerHTML = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 16px 24px;
+        border-radius: 12px;
+        font-weight: 500;
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+        ${type === 'success' ? 'background: #d1fae5; color: #065f46; border: 1px solid #10b981;' : ''}
+        ${type === 'warning' ? 'background: #fef3c7; color: #92400e; border: 1px solid #f59e0b;' : ''}
+        ${type === 'error' ? 'background: #fee2e2; color: #991b1b; border: 1px solid #ef4444;' : ''}
+    `;
+
+    document.body.appendChild(notification);
+
+    // 3 saniye sonra kaldır
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// CSS animasyonları için stil ekle
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);

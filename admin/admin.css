@@ -477,3 +477,129 @@ td {
         margin-left: 0;
     }
 }
+
+/* ============================================
+   BAKIM MODU TOGGLE
+   ============================================ */
+
+.maintenance-toggle-card {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    border: 2px solid #10b981;
+    border-radius: 16px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+.maintenance-toggle-card.maintenance-active {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-color: #f59e0b;
+}
+
+.maintenance-toggle-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.maintenance-icon {
+    width: 50px;
+    height: 50px;
+    background: #10b981;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.maintenance-toggle-card.maintenance-active .maintenance-icon {
+    background: #f59e0b;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.maintenance-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #065f46;
+    margin-bottom: 4px;
+}
+
+.maintenance-toggle-card.maintenance-active .maintenance-info h3 {
+    color: #92400e;
+}
+
+.maintenance-info p {
+    font-size: 13px;
+    color: #047857;
+    margin: 0;
+}
+
+.maintenance-toggle-card.maintenance-active .maintenance-info p {
+    color: #b45309;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #10b981;
+    transition: 0.4s;
+    border-radius: 32px;
+}
+
+.toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 24px;
+    width: 24px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-switch input:checked+.toggle-slider {
+    background-color: #f59e0b;
+}
+
+.toggle-switch input:checked+.toggle-slider:before {
+    transform: translateX(28px);
+}
