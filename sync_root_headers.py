@@ -46,7 +46,7 @@ TARGET_NAV_UL = """                <ul class="nav-menu" role="menubar">
                         </div>
                     </li>
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
-                    <li><a href="populer.html" class="nav-link">Popüler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
                 </ul>"""
 
 ROOT_DIR = r"c:\Users\pc\Desktop\Lidareyn_brand"
@@ -79,8 +79,10 @@ for filename in os.listdir(ROOT_DIR):
         # Remove "Tüm Markalar" links
         new_content = re.sub(r'<li><a href="[^"]*flowing-menu-root"[^>]*>.*?</a></li>', '', new_content)
         
-        # Consistent naming for "Popüler"
-        new_content = new_content.replace('Popüler Ürünler</a>', 'Popüler</a>')
+        # Consistent naming for "Popüler Ürünler"
+        new_content = new_content.replace('Popüler</a>', 'Popüler Ürünler</a>')
+        # Fix possible double naming
+        new_content = new_content.replace('Popüler Ürünler Ürünler</a>', 'Popüler Ürünler</a>')
 
         # Also remove specific category links if they exists in root nav
         # Like Nalbur & Yapı, etc.

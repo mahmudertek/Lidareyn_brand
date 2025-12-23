@@ -90,7 +90,7 @@ BASE_HEADER = """    <header class="main-header" role="banner">
                         </div>
                     </li>
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
-                    <li><a href="populer.html" class="nav-link">Popüler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
                 </ul>
             </nav>
 
