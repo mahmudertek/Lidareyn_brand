@@ -3,358 +3,804 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bakım Çalışması - Galata Çarşı</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script>
+        history.scrollRestoration = "manual";
+        window.onbeforeunload = function () {
+            window.scrollTo(0, 0);
+        }
+    </script>
+    <title>Galata Çarşı - Premium E-Ticaret | Kaliteli Ürünler Uygun Fiyatlar</title>
+    <meta name="description"
+        content="Galata Çarşı - En kaliteli ürünleri en uygun fiyatlarla satın alın. Elektronik, moda, ev & yaşam ve daha fazlası.">
+
+    <!-- SEO Meta Tags -->
+    <meta name="keywords"
+        content="e-ticaret, online alışveriş, elektronik, moda, ev yaşam, nalbur, hırdavat, uygun fiyat, kaliteli ürünler">
+    <meta name="author" content="Galata Çarşı">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Galata Çarşı - Premium E-Ticaret">
+    <meta property="og:description" content="En kaliteli ürünleri en uygun fiyatlarla satın alın.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://galatacarsi.com">
+    <meta property="og:image" content="./assets/hero-banner-1.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Galata Çarşı - Premium E-Ticaret">
+    <meta name="twitter:description" content="En kaliteli ürünleri en uygun fiyatlarla satın alın.">
+    <meta name="twitter:image" content="./assets/hero-banner-1.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://galatacarsi.com">
+
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        as="style">
+    <link rel="preload" href="style.css" as="style">
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+
+    <!-- Font Awesome for Icons -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    </noscript>
+
+    <link rel="stylesheet" href="style.css?v=201">
+    <link rel="stylesheet" href="mobile.css?v=5">
+    <link rel="stylesheet" href="grid-motion.css">
+
+    <link rel="stylesheet" href="slider.css">
+    <link rel="stylesheet" href="mega_menu_styles.css">
+    <link rel="stylesheet" href="categories-carousel.css">
+    <link rel="stylesheet" href="brands-single-row.css">
+    <link rel="stylesheet" href="popular-section.css">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Galata Çarşı",
+        "description": "Premium e-ticaret platformu - En kaliteli ürünler en uygun fiyatlar",
+        "url": "https://galatacarsi.com",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://galatacarsi.com/arama?q={search_term_string}",
+            "query-input": "required name=search_term_string"
         }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* Animated Background */
-        .bg-animation {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: 0;
-        }
-
-        .bg-animation span {
-            position: absolute;
-            display: block;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 25s infinite;
-            border-radius: 50%;
-        }
-
-        .bg-animation span:nth-child(1) {
-            left: 10%;
-            width: 80px;
-            height: 80px;
-            animation-delay: 0s;
-        }
-
-        .bg-animation span:nth-child(2) {
-            left: 20%;
-            width: 20px;
-            height: 20px;
-            animation-delay: 2s;
-            animation-duration: 12s;
-        }
-
-        .bg-animation span:nth-child(3) {
-            left: 25%;
-            width: 30px;
-            height: 30px;
-            animation-delay: 4s;
-        }
-
-        .bg-animation span:nth-child(4) {
-            left: 40%;
-            width: 60px;
-            height: 60px;
-            animation-delay: 0s;
-            animation-duration: 18s;
-        }
-
-        .bg-animation span:nth-child(5) {
-            left: 65%;
-            width: 20px;
-            height: 20px;
-            animation-delay: 0s;
-        }
-
-        .bg-animation span:nth-child(6) {
-            left: 75%;
-            width: 110px;
-            height: 110px;
-            animation-delay: 3s;
-        }
-
-        .bg-animation span:nth-child(7) {
-            left: 35%;
-            width: 100px;
-            height: 100px;
-            animation-delay: 7s;
-        }
-
-        .bg-animation span:nth-child(8) {
-            left: 50%;
-            width: 40px;
-            height: 40px;
-            animation-delay: 15s;
-            animation-duration: 45s;
-        }
-
-        .bg-animation span:nth-child(9) {
-            left: 85%;
-            width: 25px;
-            height: 25px;
-            animation-delay: 2s;
-            animation-duration: 35s;
-        }
-
-        .bg-animation span:nth-child(10) {
-            left: 90%;
-            width: 150px;
-            height: 150px;
-            animation-delay: 0s;
-            animation-duration: 11s;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-
-            10% {
-                opacity: 0.5;
-            }
-
-            100% {
-                transform: translateY(-100vh) rotate(720deg);
-                opacity: 0;
-            }
-        }
-
-        /* Main Content */
-        .maintenance-container {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            padding: 40px;
-            max-width: 600px;
-        }
-
-        .maintenance-icon {
-            width: 120px;
-            height: 120px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        .maintenance-icon i {
-            font-size: 50px;
-            color: white;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        .maintenance-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 16px;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .maintenance-subtitle {
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .countdown-item {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            padding: 20px 25px;
-            border-radius: 16px;
-            min-width: 80px;
-        }
-
-        .countdown-value {
-            font-size: 36px;
-            font-weight: 700;
-            color: white;
-        }
-
-        .countdown-label {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.7);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .maintenance-info {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-        }
-
-        .maintenance-info p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 14px;
-        }
-
-        .maintenance-info i {
-            margin-right: 8px;
-            color: #fbbf24;
-        }
-
-        .contact-info {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 14px;
-        }
-
-        .contact-info a {
-            color: white;
-            text-decoration: underline;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-            margin-bottom: 40px;
-            display: block;
-        }
-
-        /* Responsive */
-        @media (max-width: 600px) {
-            .maintenance-title {
-                font-size: 28px;
-            }
-
-            .countdown {
-                gap: 10px;
-            }
-
-            .countdown-item {
-                padding: 15px;
-                min-width: 60px;
-            }
-
-            .countdown-value {
-                font-size: 24px;
-            }
-        }
-    </style>
+    }
+    </script>
 </head>
 
 <body>
-    <!-- Animated Background -->
-    <div class="bg-animation">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link">Ana içeriğe geç</a>
+
+    <!-- Modern Premium Header (Solid White) -->
+    <header class="main-header" role="banner">
+        <div class="header-container">
+            <!-- Mobile Categories Button -->
+            <a href="index.html#kategoriler" class="mobile-categories-btn">
+                <i class="fa-solid fa-bars"></i>
+                <span class="mobile-cat-text">Tüm Kategoriler</span>
+            </a>
+            <!-- Navigation Menu (Left Side) -->
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
+                <ul class="nav-menu" role="menubar">
+                    <li class="nav-item-dropdown" role="none">
+                        <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
+                            aria-haspopup="true" aria-expanded="false">
+                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                            Tüm Kategoriler
+                        </a>
+                        <div class="mega-menu">
+                            <ul class="mega-menu-list">
+                                <li>
+                                    <a href="kategoriler/elektrikli-el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-plug"></i>
+                                            <span>Elektrikli El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Delme & Vidalama</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/olcme-ve-kontrol-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-ruler-combined"></i>
+                                            <span>Ölçme & Kontrol Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Lazerli Ölçüm</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/hirdavat-el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            <span>El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Anahtarlar & Vidalama</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/oto-bakim-tamir.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-wrench"></i>
+                                            <span>Oto Bakım ve Tamir Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Kaldırma ve Taşıma</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/nalbur-yapi-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-trowel-bricks"></i>
+                                            <span>Yapı ve İnşaat Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Kimyasal & Yapıştırıcı</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/asindirici-kesici.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-compact-disc"></i>
+                                            <span>Aşındırıcı ve Kesici Uçlar</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Delici & Vidalama</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/yapi-kimyasallari.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-flask"></i>
+                                            <span>Yapıştırıcı, Dolgu ve Kimyasallar</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Yapıştırıcılar</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/kaynak-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-fire-burner"></i>
+                                            <span>Kaynak Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Sarf Malzemeleri</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/tesisat-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-faucet-drip"></i>
+                                            <span>Tesisat Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Su Tesisatı</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/hirdavat-el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            <span>Hırdavat ve El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Ölçü Aletleri</h4>
+                                            <ul>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-helmet-safety"></i>
+                                            <span>İş Güvenliği ve Çalışma Ekipmanları</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Koruyucu Giyim</h4>
+                                            <ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li><a href="#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+
+                    <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                </ul>
+            </nav>
+
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="index.html">Galata Çarşı</a>
+            </div>
+
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <button class="icon-btn mobile-search-btn" aria-label="Arama Yap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <div class="search-container" role="search">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Static Banner -->
+    <!-- Grid Motion Container (Restored) -->
+    <section id="grid-motion-container"></section>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content" role="main">
+        <!-- Trending Products Section -->
+        <section class="products-carousel-section" style="padding: 60px 0; background: #f8fafc;">
+            <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                    <h2 class="section-title" style="margin: 0; font-size: 28px; font-weight: 700; color: #1e293b;">
+                        Popüler Ürünler</h2>
+                    <a href="populer.html"
+                        style="color: #6366f1; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s ease;"
+                        onmouseover="this.style.color='#4f46e5'" onmouseout="this.style.color='#6366f1'">Tümünü Gör <i
+                            class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></a>
+                </div>
+                <!-- Dynamic Carousel Container -->
+                <div id="product-carousel-container" style="position: relative; min-height: 400px;">
+                    <!-- Content will be injected by product-carousel.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="categories-section" id="kategoriler" aria-labelledby="categories-title">
+        </section>
+
+
+
+        <!-- Brands Section -->
+        <section class="brands-section">
+            <div class="container">
+                <h2 class="section-title" id="brands-title">Popüler Markalar</h2>
+
+                <!-- Single Row Brands Grid -->
+                <div class="brands-single-row">
+                    <!-- Brand 1 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/8b7bd8?text=Brand+1" alt="Marka 1" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 2 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/6b9bd8?text=Brand+2" alt="Marka 2" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 3 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/a29bfe?text=Brand+3" alt="Marka 3" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 4 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/fab1a0?text=Brand+4" alt="Marka 4" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 5 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/ff7675?text=Brand+5" alt="Marka 5" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 6 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/74b9ff?text=Brand+6" alt="Marka 6" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 7 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/0984e3?text=Brand+7" alt="Marka 7" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 8 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/6c5ce7?text=Brand+8" alt="Marka 8" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 9 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/e17055?text=Brand+9" alt="Marka 9" loading="lazy"
+                            width="150" height="150">
+                    </div>
+
+                    <!-- Brand 10 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/00b894?text=Brand+10" alt="Marka 10"
+                            loading="lazy" width="150" height="150">
+                    </div>
+
+                    <!-- Brand 11 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/00cec9?text=Brand+11" alt="Marka 11"
+                            loading="lazy" width="150" height="150">
+                    </div>
+
+                    <!-- Brand 12 -->
+                    <div class="brand-circle">
+                        <img src="https://placehold.co/150x150/ffffff/fd79a8?text=Brand+12" alt="Marka 12"
+                            loading="lazy" width="150" height="150">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Flowing Menu Section -->
+        <section class="future-content" style="padding: 0; background: transparent;">
+            <h2 class="page-main-title">
+                Tüm Markalar</h2>
+            <div id="flowing-menu-root" style="width: 100%; height: 100%;"></div>
+        </section>
+
+        <!-- Popular Brands & Pages Section -->
+        <section class="popular-section">
+            <div class="popular-container">
+                <!-- Popular Brands Column (Left) -->
+                <div class="popular-column">
+                    <h2 class="popular-title">Popüler Markalar</h2>
+                    <ul class="popular-list">
+                        <li><a href="markalar/adidas.html">Adidas</a></li>
+                        <li><a href="markalar/nike.html">Nike</a></li>
+                        <li><a href="markalar/puma.html">Puma</a></li>
+                        <li><a href="markalar/zara.html">Zara</a></li>
+                        <li><a href="markalar/hm.html">H&M</a></li>
+                        <li><a href="markalar/mango.html">Mango</a></li>
+                        <li><a href="markalar/bershka.html">Bershka</a></li>
+                        <li><a href="markalar/pull-bear.html">Pull & Bear</a></li>
+                        <li><a href="markalar/stradivarius.html">Stradivarius</a></li>
+                        <li><a href="markalar/koton.html">Koton</a></li>
+                        <li><a href="markalar/lc-waikiki.html">LC Waikiki</a></li>
+                        <li><a href="markalar/defacto.html">Defacto</a></li>
+                        <li><a href="markalar/mavi.html">Mavi</a></li>
+                        <li><a href="markalar/pierre-cardin.html">Pierre Cardin</a></li>
+                        <li><a href="markalar/us-polo.html">US Polo Assn</a></li>
+                        <li><a href="markalar/hummel.html">Hummel</a></li>
+                        <li><a href="markalar/skechers.html">Skechers</a></li>
+                        <li><a href="markalar/new-balance.html">New Balance</a></li>
+                        <li><a href="markalar/reebok.html">Reebok</a></li>
+                        <li><a href="markalar/under-armour.html">Under Armour</a></li>
+                    </ul>
+                </div>
+
+                <!-- Popular Pages Column (Right) -->
+                <div class="popular-column">
+                    <h2 class="popular-title">Popüler Sayfalar</h2>
+                    <ul class="popular-list">
+                        <li><a href="yeni-gelenler.html">Yeni Gelenler</a></li>
+                        <li><a href="cok-satanlar.html">Çok Satanlar</a></li>
+                        <li><a href="populer.html">Popüler Ürünler</a></li>
+                        <li><a href="indirimli-urunler.html">İndirimli Ürünler</a></li>
+                        <li><a href="kampanyalar.html">Kampanyalar</a></li>
+                        <li><a href="erkek-giyim.html">Erkek Giyim</a></li>
+                        <li><a href="kadin-giyim.html">Kadın Giyim</a></li>
+                        <li><a href="cocuk-giyim.html">Çocuk Giyim</a></li>
+                        <li><a href="ayakkabi.html">Ayakkabı</a></li>
+                        <li><a href="canta-aksesuar.html">Çanta & Aksesuar</a></li>
+                        <li><a href="elektronik.html">Elektronik</a></li>
+                        <li><a href="ev-yasam.html">Ev & Yaşam</a></li>
+                        <li><a href="kozmetik.html">Kozmetik</a></li>
+                        <li><a href="spor-outdoor.html">Spor & Outdoor</a></li>
+                        <li><a href="hirdavat.html">Hırdavat</a></li>
+                        <li><a href="yapi-market.html">Yapı Market</a></li>
+                        <li><a href="otomobil.html">Otomobil</a></li>
+                        <li><a href="kisisel-bakim.html">Kişisel Bakım</a></li>
+                        <li><a href="anne-bebek.html">Anne & Bebek</a></li>
+                        <li><a href="kitap-muzik.html">Kitap & Müzik</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sidebars and Overlays -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Favorites Sidebar -->
+    <div class="sidebar favorites-sidebar">
+        <div class="sidebar-header">
+            <h3>Favori Ürünlerim</h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-content" id="favorites-content">
+            <!-- Content injected by JS -->
+        </div>
     </div>
 
-    <div class="maintenance-container">
-        <span class="logo">🏪 Galata Çarşı</span>
-
-        <div class="maintenance-icon">
-            <i class="fa-solid fa-wrench"></i>
+    <!-- Cart Sidebar -->
+    <div class="sidebar cart-sidebar">
+        <div class="sidebar-header">
+            <h3>Sepetim <span class="cart-badge">0</span></h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
         </div>
-
-        <h1 class="maintenance-title">Bakım Çalışması</h1>
-        <p class="maintenance-subtitle">
-            Sitemiz şu anda bakım çalışması nedeniyle geçici olarak kapalıdır.
-            En kısa sürede sizlerle tekrar burada olmayı dört gözle bekliyoruz!
-        </p>
-
-        <div class="countdown">
-            <div class="countdown-item">
-                <div class="countdown-value" id="hours">02</div>
-                <div class="countdown-label">Saat</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="minutes">30</div>
-                <div class="countdown-label">Dakika</div>
-            </div>
-            <div class="countdown-item">
-                <div class="countdown-value" id="seconds">00</div>
-                <div class="countdown-label">Saniye</div>
-            </div>
+        <div class="sidebar-content" id="cart-content">
+            <!-- Content injected by JS -->
         </div>
-
-        <div class="maintenance-info">
-            <p><i class="fa-solid fa-circle-info"></i> Sistemimizi sizin için daha iyi hale getirmek adına güncelleme
-                yapıyoruz.</p>
-        </div>
-
-        <div class="contact-info">
-            <p>Acil durumlar için: <a href="mailto:mail@galatacarsi.com">mail@galatacarsi.com</a></p>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Ara Toplam:</span>
+                <span class="total-amount">0.00 TL</span>
+            </div>
+            <button class="btn btn-primary btn-block" onclick="window.location.href='sepet.html'">Sepete Git</button>
+            <button class="btn btn-secondary btn-block" onclick="window.location.href='odeme.html'">Ödeme Yap</button>
         </div>
     </div>
 
-    <script>
-        // Countdown timer (örnek: 2 saat 30 dakika)
-        let totalSeconds = 2 * 60 * 60 + 30 * 60;
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="iletisim.html">İletişim</a></li>
 
-        function updateCountdown() {
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
+                            <li><a href="magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
 
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                    <!-- Sözleşmeler Column (Restored) -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="kvkk.html">KVKK Aydınlatma Metni</a></li>
+                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
+                            <li><a href="iade-iptal.html">İade ve İptal Koşulları</a></li>
+                        </ul>
+                    </div>
 
-            if (totalSeconds > 0) {
-                totalSeconds--;
-            } else {
-                // Bakım bitti, sayfayı yenile
-                location.reload();
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <i class="fa-solid fa-envelope"></i>
+                                <a href="mailto:destek@galatacarsi.com">destek@galatacarsi.com</a>
+                            </li>
+                            <li>
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <a href="https://wa.me/905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li>
+                                <i class="fa-solid fa-phone"></i>
+                                <a href="tel:+905551234567">+90 555 123 45 67</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Section -->
+
+        </div>
+    </footer>
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Favorites Sidebar -->
+    <div class="favorites-sidebar">
+        <div class="sidebar-header">
+            <h2>Favorilerim</h2>
+            <button class="close-sidebar" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="favorites-content" class="sidebar-content"></div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="sidebar-header">
+            <h2>Sepetim</h2>
+            <button class="close-sidebar" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="cart-content" class="sidebar-content"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Toplam:</span>
+                <span class="total-amount">0.00 TL</span>
+            </div>
+            <a href="sepet.html" class="btn btn-primary checkout-btn">Sepete Git</a>
+        </div>
+    </div>
+
+    <script src="api-client.js"></script>
+    <script src="product-carousel.js"></script>
+    <script src="categories-data.js?v=103"></script>
+    <script src="products-data.js?v=99"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+
+    <script src="slider.js"></script>
+
+    <!-- React Integration Scripts -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Component Stylesheet -->
+    <link rel="stylesheet" href="ChromaGrid.css">
+    <link rel="stylesheet" href="FlowingMenu.css">
+
+    <!-- Inlined React Component and Mounting Logic -->
+    <script type="text/babel">
+        // Shared React Imports
+        const { useRef, useEffect, useState } = React;
+        const { gsap } = window;
+
+        // --- ChromaGrid Component ---
+        const ChromaGrid = ({ items, className = '' }) => {
+            const handleCardClick = url => { if (url) window.location.href = url; };
+            return (
+                <div className={`chroma-grid ${className}`}>
+                    {items.map((c, i) => (
+                        <article key={i} className="chroma-card" onClick={() => handleCardClick(c.url)} style={{ cursor: c.url ? 'pointer' : 'default' }}>
+                            <div className="chroma-img-wrapper">
+                                <img src={c.image} alt={c.title} loading="lazy" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=Kategori'; }} />
+                            </div>
+                            <footer className="chroma-info">
+                                <h3 className="name">{c.title}</h3>
+                            </footer>
+                        </article>
+                    ))}
+                </div>
+            );
+        };
+
+        // --- FlowingMenu Component ---
+        const FlowingMenu = () => {
+            const [activeImage, setActiveImage] = useState(null);
+            const [categories, setCategories] = useState([]);
+
+            useEffect(() => {
+                const fetchData = async () => {
+                    const [catRes, brandRes] = await Promise.all([
+                        window.API.getCategories(),
+                        window.API.getBrands()
+                    ]);
+
+                    if (catRes.success && brandRes.success) {
+                        const formatted = catRes.data.slice(0, 10).map((cat, i) => ({
+                            id: cat._id,
+                            name: cat.name,
+                            brands: brandRes.data.filter(b => b.category === cat.name || i % 2 === 0).slice(0, 15).map(b => ({
+                                id: b._id,
+                                text: b.name,
+                                image: b.logo || `https://picsum.photos/seed/${b._id}/1920/1080`
+                            }))
+                        }));
+                        setCategories(formatted);
+                    }
+                };
+                fetchData();
+            }, []);
+
+            const allBrands = categories.flatMap(c => c.brands);
+
+            return (
+                <div className="flowing-menu-container">
+                    <div className="flowing-menu-scroll-wrapper">
+                        {categories.map((cat) => (
+                            <div key={cat.id} className="flowing-menu-column">
+                                <h3 className="flowing-menu-header">{cat.name}</h3>
+                                <ul className="flowing-menu-list-column">
+                                    {cat.brands.map((brand) => (
+                                        <li key={brand.id} className="flowing-menu-item" onMouseEnter={() => setActiveImage(brand.image)}>
+                                            {brand.text}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flowing-menu-background">
+                        {allBrands.map((item) => (
+                            <div key={item.id} className={`flowing-image ${activeImage === item.image ? 'active' : ''}`} style={{ backgroundImage: `url(${item.image})` }} />
+                        ))}
+                    </div>
+                </div>
+            );
+        };
+
+        // --- Mounting Logic ---
+        async function mountComponents() {
+            // 1. Mount ChromaGrid
+            const categoriesNode = document.getElementById('kategoriler');
+            if (categoriesNode) {
+                const res = await window.API.getCategories();
+                if (res.success && res.data) {
+                    const items = res.data.slice(0, 18).map(cat => ({
+                        title: cat.name,
+                        url: `kategoriler/${cat.slug}.html`,
+                        image: cat.image || `gorseller/category_${cat.slug}.png`
+                    }));
+
+                    const rootNode = document.createElement('div');
+                    rootNode.id = 'categories-grid-root';
+                    categoriesNode.innerHTML = '<h2 class="section-title page-main-title">Tüm Kategoriler</h2>';
+                    categoriesNode.appendChild(rootNode);
+
+                    const root = ReactDOM.createRoot(rootNode);
+                    root.render(<ChromaGrid items={items} />);
+                }
+            }
+
+            // 2. Mount FlowingMenu
+            const flowingNode = document.getElementById('flowing-menu-root');
+            if (flowingNode) {
+                const rootFlowing = ReactDOM.createRoot(flowingNode);
+                rootFlowing.render(<FlowingMenu />);
             }
         }
 
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+        mountComponents();
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="grid-motion.js"></script>
+    <script src="live-search.js"></script>
+    <script src="cookie-consent.js"></script>
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Ensure Data is Loaded for Live Search -->
+    <script src="products-data.js"></script>
+    <script src="mobile-menu.js"></script>
 </body>
 
 </html>

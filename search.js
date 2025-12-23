@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 brand: getRandomBrand(),
                                 price: Math.floor(Math.random() * 2000) + 100,
                                 oldPrice: Math.random() > 0.7 ? Math.floor(Math.random() * 500) + 2100 : null,
-                                image: `https://picsum.photos/seed/${idCounter}/300/400`,
+                                image: `https://placehold.co/300x400/e5e7eb/6b7280?text=${encodeURIComponent(item.substring(0, 15))}`,
                                 badge: Math.random() > 0.8 ? 'new' : (Math.random() > 0.8 ? 'sale' : null)
                             });
                         }

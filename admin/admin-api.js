@@ -124,6 +124,66 @@ const ADMIN_API = {
         }
     },
 
+    // ==================== CATEGORIES ====================
+
+    // Get all categories
+    async getCategories(params = {}) {
+        try {
+            const queryString = new URLSearchParams(params).toString();
+            const response = await fetch(`${this.baseUrl}/categories?${queryString}`, {
+                headers: this.getHeaders()
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Get categories error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Create category
+    async createCategory(categoryData) {
+        try {
+            const response = await fetch(`${this.baseUrl}/categories`, {
+                method: 'POST',
+                headers: this.getHeaders(),
+                body: JSON.stringify(categoryData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Create category error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Update category
+    async updateCategory(id, categoryData) {
+        try {
+            const response = await fetch(`${this.baseUrl}/categories/${id}`, {
+                method: 'PUT',
+                headers: this.getHeaders(),
+                body: JSON.stringify(categoryData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Update category error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Delete category
+    async deleteCategory(id) {
+        try {
+            const response = await fetch(`${this.baseUrl}/categories/${id}`, {
+                method: 'DELETE',
+                headers: this.getHeaders()
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Delete category error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
     // ==================== BRANDS ====================
 
     // Get all brands
@@ -213,11 +273,11 @@ const ADMIN_API = {
 
     // ==================== ORDERS ====================
 
-    // Get all orders
+    // Get all orders (Admin)
     async getOrders(params = {}) {
         try {
             const queryString = new URLSearchParams(params).toString();
-            const response = await fetch(`${this.baseUrl}/orders?${queryString}`, {
+            const response = await fetch(`${this.baseUrl}/orders/admin/all?${queryString}`, {
                 headers: this.getHeaders()
             });
             return await response.json();
@@ -290,23 +350,77 @@ const ADMIN_API = {
     async getDashboardStats() {
         try {
             // Parallel requests for all stats
-            const [products, orders, brands] = await Promise.all([
+            const [productsRes, ordersRes, brandsRes] = await Promise.all([
                 this.getProductStats(),
-                this.getOrders({ limit: 10 }),
+                this.getOrders({ limit: 100 }),
                 this.getBrands()
             ]);
+
+            // Calculate order stats
+            const orders = ordersRes.data || [];
+            const totalSales = orders.reduce((sum, order) => {
+                if (order.status !== 'cancelled' && order.status !== 'refunded') {
+                    return sum + (order.pricing?.total || order.totalAmount || 0);
+                }
+                return sum;
+            }, 0);
+
+            const pendingOrders = orders.filter(o =>
+                ['pending', 'confirmed', 'processing'].includes(o.status)
+            ).length;
+
+            // Product stats
+            const productStats = productsRes.data || {};
+            const totalProducts = productStats.totalProducts || 0;
+            const activeProducts = productStats.activeProducts || totalProducts;
 
             return {
                 success: true,
                 data: {
-                    products: products.data || {},
-                    recentOrders: orders.data || [],
-                    totalBrands: brands.count || 0
+                    totalSales: totalSales,
+                    totalOrders: orders.length,
+                    totalProducts: totalProducts,
+                    activeProducts: activeProducts,
+                    pendingOrders: pendingOrders,
+                    totalBrands: brandsRes.count || 0,
+                    recentOrders: orders.slice(0, 5),
+                    salesTrend: 0, // Will be calculated from historical data
+                    ordersTrend: 0
                 }
             };
         } catch (error) {
             console.error('Get dashboard stats error:', error);
             return { success: false, error: error.message };
+        }
+    },
+
+    // Get customers (users with role 'customer')
+    async getCustomers(params = {}) {
+        try {
+            const queryParams = new URLSearchParams();
+            if (params.page) queryParams.append('page', params.page);
+            if (params.limit) queryParams.append('limit', params.limit || 50);
+            if (params.search) queryParams.append('search', params.search);
+
+            const response = await fetch(`${this.baseUrl}/users?${queryParams}`, {
+                headers: this.getHeaders()
+            });
+            const data = await response.json();
+
+            if (data.success) {
+                // Filter only customers
+                const customers = (data.data || []).filter(u => u.role === 'customer' || !u.role);
+                return { success: true, data: customers, count: customers.length };
+            }
+            return data;
+        } catch (error) {
+            console.error('Get customers error:', error);
+            // Return demo data if API fails
+            return {
+                success: true,
+                data: [],
+                count: 0
+            };
         }
     }
 };

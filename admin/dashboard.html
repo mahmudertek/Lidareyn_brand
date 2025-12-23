@@ -12,66 +12,19 @@
 </head>
 
 <body>
+    <!-- Admin API and Sidebar -->
+    <script src="admin-api.js"></script>
+    <script src="admin-sidebar.js"></script>
+    <script>
+        // Auth Check
+        if (!ADMIN_API.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+    </script>
 
     <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-logo">Galata Çarşı</span>
-            </div>
-
-            <nav class="sidebar-menu">
-                <div class="menu-item">
-                    <a href="dashboard.html" class="menu-link active">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Genel Bakış</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="products.html" class="menu-link">
-                        <i class="fa-solid fa-box-open"></i>
-                        <span>Ürünler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="brands.html" class="menu-link">
-                        <i class="fa-solid fa-tags"></i>
-                        <span>Markalar</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="categories.html" class="menu-link">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>Kategoriler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="orders.html" class="menu-link">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span>Siparişler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Müşteriler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-gear"></i>
-                        <span>Ayarlar</span>
-                    </a>
-                </div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <button class="logout-btn" onclick="window.location.href='login.html'">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Çıkış Yap</span>
-                </button>
-            </div>
-        </aside>
+        <!-- Sidebar - Dynamically loaded by admin-sidebar.js -->
+        <aside class="sidebar"></aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -120,10 +73,10 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>Toplam Satış</h3>
-                            <div class="stat-value">₺124,500</div>
+                            <div class="stat-value" id="totalSales">Yükleniyor...</div>
                             <div class="stat-trend trend-up">
                                 <i class="fa-solid fa-arrow-trend-up"></i>
-                                <span>+12.5%</span>
+                                <span id="salesTrend">--</span>
                             </div>
                         </div>
                         <div class="stat-icon bg-purple-light">
@@ -134,10 +87,10 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>Toplam Sipariş</h3>
-                            <div class="stat-value">1,240</div>
+                            <div class="stat-value" id="totalOrders">Yükleniyor...</div>
                             <div class="stat-trend trend-up">
                                 <i class="fa-solid fa-arrow-trend-up"></i>
-                                <span>+8.2%</span>
+                                <span id="ordersTrend">--</span>
                             </div>
                         </div>
                         <div class="stat-icon bg-blue-light">
@@ -147,22 +100,21 @@
 
                     <div class="stat-card">
                         <div class="stat-info">
-                            <h3>Yeni Müşteriler</h3>
-                            <div class="stat-value">358</div>
-                            <div class="stat-trend trend-down">
-                                <i class="fa-solid fa-arrow-trend-down"></i>
-                                <span>-2.4%</span>
+                            <h3>Toplam Ürün</h3>
+                            <div class="stat-value" id="totalProducts">Yükleniyor...</div>
+                            <div class="stat-trend">
+                                <span id="productsTrend">--</span>
                             </div>
                         </div>
                         <div class="stat-icon bg-green-light">
-                            <i class="fa-solid fa-user-plus"></i>
+                            <i class="fa-solid fa-box"></i>
                         </div>
                     </div>
 
                     <div class="stat-card">
                         <div class="stat-info">
-                            <h3>Bekleyen İşlemler</h3>
-                            <div class="stat-value">12</div>
+                            <h3>Bekleyen Siparişler</h3>
+                            <div class="stat-value" id="pendingOrders">Yükleniyor...</div>
                             <div class="stat-trend">
                                 <span>Bugün</span>
                             </div>
@@ -198,36 +150,11 @@
                                         <th>Durum</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody id="recentOrdersTable">
                                     <tr>
-                                        <td>#ORD-7352</td>
-                                        <td>Ahmet Yılmaz</td>
-                                        <td>₺1,250</td>
-                                        <td><span class="status-badge status-completed">Tamamlandı</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-7353</td>
-                                        <td>Ayşe Demir</td>
-                                        <td>₺450</td>
-                                        <td><span class="status-badge status-pending">Kargoda</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-7354</td>
-                                        <td>Mehmet Kaya</td>
-                                        <td>₺3,400</td>
-                                        <td><span class="status-badge status-pending">Hazırlanıyor</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-7355</td>
-                                        <td>Zeynep Çelik</td>
-                                        <td>₺890</td>
-                                        <td><span class="status-badge status-cancelled">İptal</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#ORD-7356</td>
-                                        <td>Caner Erkin</td>
-                                        <td>₺2,100</td>
-                                        <td><span class="status-badge status-completed">Tamamlandı</span></td>
+                                        <td colspan="4" style="text-align: center; padding: 20px; color: #6b7280;">
+                                            <i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -235,10 +162,10 @@
                     </div>
                 </div>
 
-                <!-- Analytics Section -->
+                <!-- Analytics Section - Real Data from Site Analytics -->
                 <h2 style="margin: 30px 0 20px; color: #1f2937; font-size: 18px;">
                     <i class="fa-solid fa-chart-pie" style="color: #6366f1; margin-right: 10px;"></i>
-                    Ziyaretçi Analizi
+                    Site Analitiği
                 </h2>
 
                 <div class="stats-grid">
@@ -246,10 +173,9 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>Bugünkü Ziyaretçi</h3>
-                            <div class="stat-value">1,247</div>
-                            <div class="stat-trend trend-up">
-                                <i class="fa-solid fa-arrow-trend-up"></i>
-                                <span>+18.3%</span>
+                            <div class="stat-value" id="todayVisitors">0</div>
+                            <div class="stat-trend" id="visitorTrend">
+                                <span>Bugün</span>
                             </div>
                         </div>
                         <div class="stat-icon" style="background: #dbeafe;">
@@ -261,10 +187,9 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>Sayfa Görüntüleme</h3>
-                            <div class="stat-value">4,892</div>
-                            <div class="stat-trend trend-up">
-                                <i class="fa-solid fa-arrow-trend-up"></i>
-                                <span>+12.7%</span>
+                            <div class="stat-value" id="todayPageViews">0</div>
+                            <div class="stat-trend" id="pageViewTrend">
+                                <span>Bugün</span>
                             </div>
                         </div>
                         <div class="stat-icon" style="background: #d1fae5;">
@@ -276,10 +201,9 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>Ort. Oturum Süresi</h3>
-                            <div class="stat-value">3:42</div>
-                            <div class="stat-trend trend-up">
-                                <i class="fa-solid fa-arrow-trend-up"></i>
-                                <span>+5.2%</span>
+                            <div class="stat-value" id="avgSessionDuration">0:00</div>
+                            <div class="stat-trend">
+                                <span>Son 7 gün</span>
                             </div>
                         </div>
                         <div class="stat-icon" style="background: #fef3c7;">
@@ -291,106 +215,13 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>Hemen Çıkma Oranı</h3>
-                            <div class="stat-value">32.4%</div>
-                            <div class="stat-trend trend-down">
-                                <i class="fa-solid fa-arrow-trend-down"></i>
-                                <span>-4.1%</span>
+                            <div class="stat-value" id="bounceRate">0%</div>
+                            <div class="stat-trend">
+                                <span>Son 7 gün</span>
                             </div>
                         </div>
                         <div class="stat-icon" style="background: #fee2e2;">
                             <i class="fa-solid fa-arrow-right-from-bracket" style="color: #dc2626;"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dashboard-grid" style="margin-top: 24px;">
-                    <!-- Traffic Sources -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Trafik Kaynakları</h2>
-                        </div>
-                        <div style="padding: 20px;">
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="font-weight: 500;">Google Arama</span>
-                                    <span style="color: #6366f1; font-weight: 600;">42%</span>
-                                </div>
-                                <div style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
-                                    <div
-                                        style="width: 42%; height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6);">
-                                    </div>
-                                </div>
-                            </div>
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="font-weight: 500;">Direkt Giriş</span>
-                                    <span style="color: #059669; font-weight: 600;">28%</span>
-                                </div>
-                                <div style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
-                                    <div style="width: 28%; height: 100%; background: #059669;"></div>
-                                </div>
-                            </div>
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="font-weight: 500;">Sosyal Medya</span>
-                                    <span style="color: #2563eb; font-weight: 600;">18%</span>
-                                </div>
-                                <div style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
-                                    <div style="width: 18%; height: 100%; background: #2563eb;"></div>
-                                </div>
-                            </div>
-                            <div style="margin-bottom: 20px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                                    <span style="font-weight: 500;">Referans Siteler</span>
-                                    <span style="color: #d97706; font-weight: 600;">12%</span>
-                                </div>
-                                <div style="height: 8px; background: #e5e7eb; border-radius: 4px; overflow: hidden;">
-                                    <div style="width: 12%; height: 100%; background: #d97706;"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Visitor Locations -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="card-title">Ziyaretçi Konumları</h2>
-                        </div>
-                        <div style="padding: 20px;">
-                            <div
-                                style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6;">
-                                <span style="font-size: 24px; margin-right: 12px;">🇹🇷</span>
-                                <span style="flex: 1; font-weight: 500;">Türkiye</span>
-                                <span style="font-weight: 600; color: #1f2937;">78%</span>
-                                <span style="margin-left: 8px; color: #6b7280; font-size: 13px;">974 ziyaretçi</span>
-                            </div>
-                            <div
-                                style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6;">
-                                <span style="font-size: 24px; margin-right: 12px;">🇩🇪</span>
-                                <span style="flex: 1; font-weight: 500;">Almanya</span>
-                                <span style="font-weight: 600; color: #1f2937;">8%</span>
-                                <span style="margin-left: 8px; color: #6b7280; font-size: 13px;">100 ziyaretçi</span>
-                            </div>
-                            <div
-                                style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6;">
-                                <span style="font-size: 24px; margin-right: 12px;">🇳🇱</span>
-                                <span style="flex: 1; font-weight: 500;">Hollanda</span>
-                                <span style="font-weight: 600; color: #1f2937;">5%</span>
-                                <span style="margin-left: 8px; color: #6b7280; font-size: 13px;">62 ziyaretçi</span>
-                            </div>
-                            <div
-                                style="display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid #f3f4f6;">
-                                <span style="font-size: 24px; margin-right: 12px;">🇬🇧</span>
-                                <span style="flex: 1; font-weight: 500;">İngiltere</span>
-                                <span style="font-weight: 600; color: #1f2937;">4%</span>
-                                <span style="margin-left: 8px; color: #6b7280; font-size: 13px;">50 ziyaretçi</span>
-                            </div>
-                            <div style="display: flex; align-items: center; padding: 12px 0;">
-                                <span style="font-size: 24px; margin-right: 12px;">🌍</span>
-                                <span style="flex: 1; font-weight: 500;">Diğer</span>
-                                <span style="font-weight: 600; color: #1f2937;">5%</span>
-                                <span style="margin-left: 8px; color: #6b7280; font-size: 13px;">61 ziyaretçi</span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -407,7 +238,8 @@
                                     style="width: 80px; height: 80px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
                                     <i class="fa-solid fa-mobile-screen" style="font-size: 28px; color: white;"></i>
                                 </div>
-                                <div style="font-size: 24px; font-weight: 700; color: #1f2937;">62%</div>
+                                <div style="font-size: 24px; font-weight: 700; color: #1f2937;" id="mobilePercent">0%
+                                </div>
                                 <div style="font-size: 13px; color: #6b7280;">Mobil</div>
                             </div>
                             <div>
@@ -415,7 +247,8 @@
                                     style="width: 80px; height: 80px; background: linear-gradient(135deg, #059669, #10b981); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px;">
                                     <i class="fa-solid fa-desktop" style="font-size: 28px; color: white;"></i>
                                 </div>
-                                <div style="font-size: 24px; font-weight: 700; color: #1f2937;">31%</div>
+                                <div style="font-size: 24px; font-weight: 700; color: #1f2937;" id="desktopPercent">0%
+                                </div>
                                 <div style="font-size: 13px; color: #6b7280;">Masaüstü</div>
                             </div>
                             <div>
@@ -424,7 +257,8 @@
                                     <i class="fa-solid fa-tablet-screen-button"
                                         style="font-size: 28px; color: white;"></i>
                                 </div>
-                                <div style="font-size: 24px; font-weight: 700; color: #1f2937;">7%</div>
+                                <div style="font-size: 24px; font-weight: 700; color: #1f2937;" id="tabletPercent">0%
+                                </div>
                                 <div style="font-size: 13px; color: #6b7280;">Tablet</div>
                             </div>
                         </div>
@@ -435,33 +269,33 @@
                         <div class="card-header">
                             <h2 class="card-title">Tarayıcı İstatistikleri</h2>
                         </div>
-                        <div style="padding: 20px;">
+                        <div style="padding: 20px;" id="browserStats">
                             <div
                                 style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6;">
                                 <i class="fa-brands fa-chrome"
                                     style="font-size: 24px; color: #4285f4; margin-right: 12px;"></i>
                                 <span style="flex: 1; font-weight: 500;">Chrome</span>
-                                <span style="font-weight: 600; color: #1f2937;">68%</span>
+                                <span style="font-weight: 600; color: #1f2937;" id="chromePercent">0%</span>
                             </div>
                             <div
                                 style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6;">
                                 <i class="fa-brands fa-safari"
                                     style="font-size: 24px; color: #006cff; margin-right: 12px;"></i>
                                 <span style="flex: 1; font-weight: 500;">Safari</span>
-                                <span style="font-weight: 600; color: #1f2937;">18%</span>
+                                <span style="font-weight: 600; color: #1f2937;" id="safariPercent">0%</span>
                             </div>
                             <div
                                 style="display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f3f4f6;">
                                 <i class="fa-brands fa-firefox-browser"
                                     style="font-size: 24px; color: #ff7139; margin-right: 12px;"></i>
                                 <span style="flex: 1; font-weight: 500;">Firefox</span>
-                                <span style="font-weight: 600; color: #1f2937;">8%</span>
+                                <span style="font-size: 600; color: #1f2937;" id="firefoxPercent">0%</span>
                             </div>
                             <div style="display: flex; align-items: center; padding: 10px 0;">
                                 <i class="fa-brands fa-edge"
                                     style="font-size: 24px; color: #0078d7; margin-right: 12px;"></i>
                                 <span style="flex: 1; font-weight: 500;">Edge</span>
-                                <span style="font-weight: 600; color: #1f2937;">6%</span>
+                                <span style="font-weight: 600; color: #1f2937;" id="edgePercent">0%</span>
                             </div>
                         </div>
                     </div>
@@ -491,9 +325,63 @@
         </main>
     </div>
 
+    <!-- Admin API -->
+    <script src="admin-api.js"></script>
+    <!-- Site Analytics -->
+    <script src="../site-analytics.js"></script>
     <!-- Admin Logic -->
     <script src="admin.js"></script>
     <script src="cookie-consent.js"></script>
+
+    <!-- Load Analytics Data -->
+    <script>
+        function loadSiteAnalytics() {
+            try {
+                if (typeof getAnalyticsSummary !== 'function') {
+                    console.log('Analytics not loaded yet');
+                    return;
+                }
+
+                const analytics = getAnalyticsSummary();
+                console.log('📊 Site Analytics:', analytics);
+
+                // Today's stats
+                document.getElementById('todayVisitors').textContent = analytics.today.visitors.toLocaleString('tr-TR');
+                document.getElementById('todayPageViews').textContent = analytics.today.pageViews.toLocaleString('tr-TR');
+
+                // Update trends
+                const visitorTrend = analytics.today.visitorTrend;
+                const visitorTrendEl = document.getElementById('visitorTrend');
+                if (visitorTrend !== 0) {
+                    const trendIcon = visitorTrend > 0 ? 'fa-arrow-trend-up' : 'fa-arrow-trend-down';
+                    const trendClass = visitorTrend > 0 ? 'trend-up' : 'trend-down';
+                    visitorTrendEl.className = 'stat-trend ' + trendClass;
+                    visitorTrendEl.innerHTML = `<i class="fa-solid ${trendIcon}"></i><span>${visitorTrend > 0 ? '+' : ''}${visitorTrend}%</span>`;
+                }
+
+                // Session duration and bounce rate
+                document.getElementById('avgSessionDuration').textContent = analytics.avgSessionDuration;
+                document.getElementById('bounceRate').textContent = analytics.bounceRate + '%';
+
+                // Device breakdown
+                document.getElementById('mobilePercent').textContent = analytics.devices.mobile + '%';
+                document.getElementById('desktopPercent').textContent = analytics.devices.desktop + '%';
+                document.getElementById('tabletPercent').textContent = analytics.devices.tablet + '%';
+
+                // Browser stats
+                document.getElementById('chromePercent').textContent = (analytics.browsers.Chrome || 0) + '%';
+                document.getElementById('safariPercent').textContent = (analytics.browsers.Safari || 0) + '%';
+                document.getElementById('firefoxPercent').textContent = (analytics.browsers.Firefox || 0) + '%';
+                document.getElementById('edgePercent').textContent = (analytics.browsers.Edge || 0) + '%';
+
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        // Load analytics after page is ready
+        setTimeout(loadSiteAnalytics, 500);
+    </script>
 </body>
 
 </html>

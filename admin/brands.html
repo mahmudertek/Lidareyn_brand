@@ -379,64 +379,8 @@
 <body>
 
     <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-logo">Galata Çarşı</span>
-            </div>
-
-            <nav class="sidebar-menu">
-                <div class="menu-item">
-                    <a href="dashboard.html" class="menu-link">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Genel Bakış</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="products.html" class="menu-link">
-                        <i class="fa-solid fa-box-open"></i>
-                        <span>Ürünler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="brands.html" class="menu-link active">
-                        <i class="fa-solid fa-tags"></i>
-                        <span>Markalar</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="orders.html" class="menu-link">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span>Siparişler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="categories.html" class="menu-link">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>Kategoriler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Müşteriler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-gear"></i>
-                        <span>Ayarlar</span>
-                    </a>
-                </div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <button class="logout-btn" onclick="window.location.href='login.html'">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Çıkış Yap</span>
-                </button>
-            </div>
-        </aside>
+        <!-- Sidebar - Dynamically loaded by admin-sidebar.js -->
+        <aside class="sidebar"></aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -569,7 +513,13 @@
 
     <!-- Admin API -->
     <script src="admin-api.js"></script>
+    <script src="admin-sidebar.js"></script>
     <script>
+        // Auth check - redirect if not logged in
+        if (!ADMIN_API.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
         // Brand data will be loaded from API
         let brands = [];
         let currentBrandId = null;

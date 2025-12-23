@@ -493,23 +493,28 @@
 
     <!-- Product Grid Script -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const container = document.getElementById('products-container');
-            let products = window.productsData || generateSampleProducts();
+            if (!container) return;
 
-            // Ensure we have exactly 48 products (6 columns x 8 rows)
-            if (products.length < 48) {
-                // Repeat products to fill 48 slots
-                const originalProducts = [...products];
-                while (products.length < 48) {
-                    products = [...products, ...originalProducts];
+            container.innerHTML = '<div style="text-align: center; padding: 100px 0; grid-column: 1/-1;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 40px; color: #6366f1;"></i><p style="margin-top: 15px; color: #64748b;">Yeni ürünler yükleniyor...</p></div>';
+
+            let products = [];
+            try {
+                const res = await window.API.getProducts({ sort: '-createdAt', limit: 48 });
+                if (res.success && res.data && res.data.length > 0) {
+                    products = res.data;
+                } else {
+                    container.innerHTML = '<div style="text-align: center; padding: 100px 0; grid-column: 1/-1;"><p>Henüz yeni ürün eklenmemiş.</p></div>';
+                    return;
                 }
-                products = products.slice(0, 48);
-            } else if (products.length > 48) {
-                // Take only first 48 products
-                products = products.slice(0, 48);
+            } catch (error) {
+                console.error('API Error:', error);
+                container.innerHTML = '<div style="text-align: center; padding: 100px 0; grid-column: 1/-1;"><p>Ürünler yüklenirken bir hata oluştu.</p></div>';
+                return;
             }
 
+            container.innerHTML = '';
             // Create grid
             const grid = document.createElement('div');
             grid.className = 'products-grid';
@@ -524,22 +529,25 @@
 
         function createProductCard(product) {
             const card = document.createElement('a');
-            card.href = `urun-detay.html?id=${product.id}`;
+            const priceStr = typeof product.price === 'number' ? product.price.toLocaleString('tr-TR') + ' TL' : product.price;
+            const image = product.images && product.images[0] ? product.images[0] : 'https://placehold.co/400x400?text=Urun';
+
+            card.href = `urun-detay.html?slug=${product.slug}`;
             card.className = 'product-card';
 
             card.innerHTML = `
                 <div class="card-actions">
-                    <button class="action-btn" onclick="handleToggleFavorite(event, ${product.id})" title="Favorilere Ekle">
+                    <button class="action-btn" onclick="handleToggleFavorite(event, '${product._id}')" title="Favorilere Ekle">
                         <i class="fa-regular fa-heart"></i>
                     </button>
-                    <button class="action-btn" onclick="handleAddToCart(event, ${product.id})" title="Sepete Ekle">
+                    <button class="action-btn" onclick="handleAddToCart(event, '${product._id}')" title="Sepete Ekle">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </div>
-                <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
+                <img src="${image}" alt="${product.name}" class="product-image" loading="lazy">
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
-                    <div class="product-price">${product.price}</div>
+                    <div class="product-price">${priceStr}</div>
                 </div>
             `;
 
@@ -722,6 +730,7 @@
         </div>
     </div>
 
+    <script src="api-client.js"></script>
     <script src="script.js"></script>
     <script src="categories-data.js"></script>
     <script src="cart-logic.js"></script>
@@ -729,6 +738,7 @@
     <script src="auth.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>
+    <script src="site-analytics.js"></script>
 </body>
 
 </html>

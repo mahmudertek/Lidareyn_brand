@@ -690,7 +690,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('img').forEach(img => {
         img.addEventListener('error', function () {
             // Replace broken images with placeholder
-            this.src = 'https://picsum.photos/seed/galatacarsi-placeholder/300x200.jpg';
+            this.src = 'https://placehold.co/300x200/e5e7eb/6b7280?text=Görsel';
             this.alt = 'Görsel yüklenemedi - Galata Çarşı e-ticaret';
             this.title = 'Görsel yüklenemedi';
 

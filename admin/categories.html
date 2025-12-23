@@ -231,64 +231,8 @@
 <body>
 
     <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-logo">Galata Çarşı</span>
-            </div>
-
-            <nav class="sidebar-menu">
-                <div class="menu-item">
-                    <a href="dashboard.html" class="menu-link">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Genel Bakış</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="products.html" class="menu-link">
-                        <i class="fa-solid fa-box-open"></i>
-                        <span>Ürünler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="brands.html" class="menu-link">
-                        <i class="fa-solid fa-tags"></i>
-                        <span>Markalar</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="orders.html" class="menu-link">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span>Siparişler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="categories.html" class="menu-link active">
-                        <i class="fa-solid fa-layer-group"></i>
-                        <span>Kategoriler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Müşteriler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-gear"></i>
-                        <span>Ayarlar</span>
-                    </a>
-                </div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <button class="logout-btn" onclick="window.location.href='login.html'">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Çıkış Yap</span>
-                </button>
-            </div>
-        </aside>
+        <!-- Sidebar - Dynamically loaded by admin-sidebar.js -->
+        <aside class="sidebar"></aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -352,36 +296,52 @@
         </div>
     </div>
 
+    <!-- Admin API -->
+    <script src="admin-api.js"></script>
+    <script src="admin-sidebar.js"></script>
     <script>
-        const categories = [
-            { id: 1, name: 'Elektrikli El Aletleri', slug: 'elektrikli-el-aletleri', icon: 'fa-solid fa-bolt', productCount: 156, brandCount: 12 },
-            { id: 2, name: 'Ölçme & Kontrol Aletleri', slug: 'olcme-ve-kontrol-aletleri', icon: 'fa-solid fa-ruler', productCount: 89, brandCount: 8 },
-            { id: 3, name: 'El Aletleri', slug: 'el-aletleri', icon: 'fa-solid fa-wrench', productCount: 234, brandCount: 15 },
-            { id: 4, name: 'Yapı ve İnşaat Malzemeleri', slug: 'nalbur-yapi-malzemeleri', icon: 'fa-solid fa-helmet-safety', productCount: 67, brandCount: 6 },
-            { id: 5, name: 'Aşındırıcı ve Kesici Uçlar', slug: 'asindirici-kesici', icon: 'fa-solid fa-compact-disc', productCount: 112, brandCount: 9 },
-            { id: 6, name: 'Yapıştırıcı, Dolgu ve Kimyasallar', slug: 'yapi-kimyasallari', icon: 'fa-solid fa-flask', productCount: 78, brandCount: 7 },
-            { id: 7, name: 'Kaynak Malzemeleri', slug: 'kaynak-malzemeleri', icon: 'fa-solid fa-fire', productCount: 45, brandCount: 5 },
-            { id: 8, name: 'Hırdavat ve El Aletleri', slug: 'hirdavat-el-aletleri', icon: 'fa-solid fa-screwdriver-wrench', productCount: 189, brandCount: 11 },
-            { id: 9, name: 'İş Güvenliği ve Çalışma Ekipmanları', slug: 'is-guvenligi-ve-calisma-ekipmanlari', icon: 'fa-solid fa-shield-halved', productCount: 56, brandCount: 4 }
-        ];
+        // Auth check - redirect if not logged in
+        if (!ADMIN_API.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
+        let allCategories = [];
+
+        async function loadCategories() {
+            try {
+                const response = await ADMIN_API.getCategories();
+                if (response.success && response.data) {
+                    allCategories = response.data;
+                    renderCategories();
+                    console.log('✅ Kategoriler yüklendi:', allCategories.length);
+                }
+            } catch (error) {
+                console.error('Load categories error:', error);
+            }
+        }
 
         function renderCategories() {
             const grid = document.getElementById('categoriesGrid');
-            grid.innerHTML = categories.map(cat => `
-                <div class="category-card">
+            if (allCategories.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #6b7280;">Henüz kategori bulunmuyor.</div>';
+                return;
+            }
+
+            grid.innerHTML = allCategories.map(cat => `
+                <div class="category-card" id="category-${cat._id}">
                     <div class="category-icon-wrapper">
-                        <i class="${cat.icon}"></i>
+                        <i class="${cat.icon || 'fa-solid fa-folder'}"></i>
                     </div>
                     <div class="category-info">
                         <h3 class="category-name">${cat.name}</h3>
                         <div class="category-slug">/${cat.slug}</div>
                         <div class="category-stats">
                             <div class="category-stat">
-                                <div class="category-stat-value">${cat.productCount}</div>
+                                <div class="category-stat-value">${cat.productCount || 0}</div>
                                 <div class="category-stat-label">Ürün</div>
                             </div>
                             <div class="category-stat">
-                                <div class="category-stat-value">${cat.brandCount}</div>
+                                <div class="category-stat-value">${cat.brandCount || 0}</div>
                                 <div class="category-stat-label">Marka</div>
                             </div>
                         </div>
@@ -390,9 +350,13 @@
                                 <i class="fa-solid fa-eye"></i>
                                 Görüntüle
                             </button>
-                            <button class="category-action-btn btn-edit" onclick="editCategory(${cat.id})">
+                            <button class="category-action-btn btn-edit" onclick="editCategory('${cat._id}')">
                                 <i class="fa-solid fa-pen"></i>
                                 Düzenle
+                            </button>
+                            <button class="category-action-btn btn-delete" onclick="deleteCategory('${cat._id}')" style="background: #fee2e2; color: #dc2626;">
+                                <i class="fa-solid fa-trash"></i>
+                                Sil
                             </button>
                         </div>
                     </div>
@@ -405,26 +369,90 @@
         }
 
         function editCategory(id) {
-            const cat = categories.find(c => c.id === id);
+            const cat = allCategories.find(c => c._id === id);
             if (cat) {
-                document.getElementById('categoryId').value = cat.id;
+                document.getElementById('categoryId').value = cat._id;
                 document.getElementById('categoryName').value = cat.name;
                 document.getElementById('categorySlug').value = cat.slug;
-                document.getElementById('categoryIcon').value = cat.icon;
+                document.getElementById('categoryIcon').value = cat.icon || '';
+                document.getElementById('categoryDescription').value = cat.description || '';
+
+                document.querySelector('.modal-title').textContent = 'Kategoriyi Düzenle';
                 document.getElementById('categoryModal').classList.add('active');
             }
+        }
+
+        function openAddModal() {
+            document.getElementById('categoryForm').reset();
+            document.getElementById('categoryId').value = '';
+            document.querySelector('.modal-title').textContent = 'Yeni Kategori Ekle';
+            document.getElementById('categoryModal').classList.add('active');
         }
 
         function closeModal() {
             document.getElementById('categoryModal').classList.remove('active');
         }
 
-        function saveCategory() {
-            alert('Kategori başarıyla kaydedildi!');
-            closeModal();
+        async function saveCategory() {
+            const id = document.getElementById('categoryId').value;
+            const data = {
+                name: document.getElementById('categoryName').value,
+                slug: document.getElementById('categorySlug').value,
+                icon: document.getElementById('categoryIcon').value,
+                description: document.getElementById('categoryDescription').value,
+                isActive: true
+            };
+
+            if (!data.name) {
+                alert('Lütfen kategori adını girin');
+                return;
+            }
+
+            try {
+                let response;
+                if (id) {
+                    // Update
+                    response = await ADMIN_API.updateCategory(id, data);
+                } else {
+                    // Create
+                    response = await ADMIN_API.createCategory(data);
+                }
+
+                if (response.success) {
+                    alert(id ? 'Kategori güncellendi!' : 'Kategori oluşturuldu!');
+                    closeModal();
+                    loadCategories();
+                } else {
+                    alert('Hata: ' + response.message);
+                }
+            } catch (error) {
+                console.error('Save category error:', error);
+                alert('Bir hata oluştu');
+            }
         }
 
-        renderCategories();
+        async function deleteCategory(id) {
+            if (confirm('Bu kategoriyi silmek istediğinize emin misiniz?')) {
+                try {
+                    const response = await ADMIN_API.deleteCategory(id);
+                    if (response.success) {
+                        alert('Kategori silindi!');
+                        loadCategories();
+                    } else {
+                        alert('Hata: ' + response.message);
+                    }
+                } catch (error) {
+                    console.error('Delete category error:', error);
+                    alert('Bir hata oluştu');
+                }
+            }
+        }
+
+        // Add Category Button Click
+        document.querySelector('.btn-add').onclick = openAddModal;
+
+        // Initial Load
+        loadCategories();
     </script>
 </body>
 

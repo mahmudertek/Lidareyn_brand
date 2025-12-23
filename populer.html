@@ -432,9 +432,8 @@
     </main>
 
     <!-- React Integration -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
     <!-- Component Styles -->
     <!-- Custom Component Styles -->
@@ -643,92 +642,8 @@
     </style>
     <script src="products-data.js"></script>
 
-    <script type="text/babel">
-        const ProductCard = ({ product }) => {
-            const handleAddToCart = (e) => {
-                e.preventDefault();
-                // Call global addToCart if available
-                if (typeof window.addToCart === 'function') {
-                    window.addToCart({
-                        ...product,
-                        variant: 'Standart'
-                    });
-                } else if (typeof window.addToCartMock === 'function') {
-                    window.addToCartMock(e.target, product.id);
-                } else {
-                    alert('Sepete eklendi (Demo): ' + product.name);
-                }
-            };
-
-            const handleToggleFav = (e) => {
-                e.preventDefault();
-                if (typeof window.toggleFavorite === 'function') {
-                    window.toggleFavorite(product);
-                }
-            };
-
-            return (
-                <article className="product-card">
-                    <button className="fav-btn-card" onClick={handleToggleFav} title="Favorilere Ekle">
-                        <i className="fa-regular fa-heart"></i>
-                    </button>
-                    <button className="cart-btn-card" onClick={handleAddToCart} title="Sepete Ekle">
-                        <i className="fa-solid fa-cart-plus"></i>
-                    </button>
-
-                    <a href={`urun-detay.html?id=${product.id}`} className="product-img-wrapper">
-                        <img src={product.image} alt={product.name} loading="lazy" />
-                    </a>
-
-                    <div className="product-info">
-                        <div className="product-brand">{product.brand || 'KARAKÖY TÜCCARI'}</div>
-                        <a href={`urun-detay.html?id=${product.id}`} className="product-title">
-                            {product.name}
-                        </a>
-
-                        <div className="product-price-area">
-                            <span className="current-price">
-                                {typeof product.price === 'number'
-                                    ? new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(product.price)
-                                    : product.price}
-                            </span>
-                        </div>
-
-                        <button className="add-to-cart-sm" onClick={handleAddToCart}>
-                            <i className="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                        </button>
-                    </div>
-                </article>
-            );
-        };
-
-        const App = () => {
-            const [products, setProducts] = React.useState([]);
-
-            React.useEffect(() => {
-                // Get products from global variable loaded by products-data.js
-                // Duplicate the list to make it look full if it is short
-                let allProducts = window.productsData || [];
-                if (allProducts.length > 0 && allProducts.length < 20) {
-                    // Repeat products to fill the grid for demo purposes
-                    allProducts = [...allProducts, ...allProducts, ...allProducts];
-                }
-                setProducts(allProducts);
-            }, []);
-
-            return (
-                <div className="populer-grid">
-                    {products.map((product, index) => (
-                        <ProductCard key={`${product.id}-${index}`} product={product} />
-                    ))}
-                </div>
-            );
-        };
-
-        const root = ReactDOM.createRoot(document.getElementById('circular-gallery-root'));
-        root.render(<App />);
-
-    </script>
+    <!-- Pre-compiled React Components (No Babel needed - much faster!) -->
+    <script src="populer-components.js?v=1"></script>
 
 
 
@@ -855,6 +770,7 @@
         </div>
     </div>
 
+    <script src="api-client.js"></script>
     <script src="script.js"></script>
     <script src="categories-data.js"></script>
     <script src="cart-logic.js"></script>
@@ -862,6 +778,7 @@
     <script src="auth.js"></script>
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>
+    <script src="site-analytics.js"></script>
 </body>
 
 </html>

@@ -438,64 +438,8 @@
 
 <body>
     <div class="admin-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-logo">Galata Çarşı</span>
-            </div>
-
-            <nav class="sidebar-menu">
-                <div class="menu-item">
-                    <a href="dashboard.html" class="menu-link">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <span>Genel Bakış</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-box-open"></i>
-                        <span>Ürünler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="orders.html" class="menu-link active">
-                        <i class="fa-solid fa-cart-shopping"></i>
-                        <span>Siparişler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-truck"></i>
-                        <span>Kargo</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Müşteriler</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-envelope"></i>
-                        <span>E-posta</span>
-                    </a>
-                </div>
-                <div class="menu-item">
-                    <a href="#" class="menu-link">
-                        <i class="fa-solid fa-gear"></i>
-                        <span>Ayarlar</span>
-                    </a>
-                </div>
-            </nav>
-
-            <div class="sidebar-footer">
-                <button class="logout-btn" onclick="window.location.href='login.html'">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Çıkış Yap</span>
-                </button>
-            </div>
-        </aside>
+        <!-- Sidebar - Dynamically loaded by admin-sidebar.js -->
+        <aside class="sidebar"></aside>
 
         <!-- Main Content -->
         <main class="main-content">
@@ -737,10 +681,14 @@
         </div>
     </div>
 
+    <!-- Admin API -->
+    <script src="admin-api.js"></script>
+    <script src="admin-sidebar.js"></script>
     <script>
-        // API Configuration
-        const API_BASE_URL = window.CONFIG?.API_URL || 'http://localhost:5000/api';
-        const authToken = localStorage.getItem('adminToken') || localStorage.getItem('authToken');
+        // Auth check - redirect if not logged in
+        if (!ADMIN_API.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
 
         // Current state
         let currentOrders = [];
@@ -748,7 +696,7 @@
         let currentPage = 1;
         let selectedOrderId = null;
 
-        // Demo orders data
+        // Demo orders data (fallback)
         const demoOrders = [
             {
                 _id: '1',
@@ -816,23 +764,33 @@
             setupEmailTemplate();
         });
 
-        // Load orders
-        async function loadOrders() {
-            try {
-                // Try to fetch from API
-                const response = await fetch(`${API_BASE_URL}/orders/admin/all?status=${currentFilter}&page=${currentPage}`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
+        // Show loading state
+        function showLoading() {
+            const tbody = document.getElementById('orders-tbody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 40px; color: #6b7280;">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <p style="margin: 10px 0 0;">Siparişler yükleniyor...</p>
+                    </td>
+                </tr>
+            `;
+        }
 
-                if (response.ok) {
-                    const data = await response.json();
-                    currentOrders = data.data || [];
+        // Load orders from API
+        async function loadOrders() {
+            showLoading();
+            try {
+                const response = await ADMIN_API.getOrders({ status: currentFilter !== 'all' ? currentFilter : '', page: currentPage });
+                if (response.success && response.data) {
+                    currentOrders = response.data;
+                    console.log('✅ API\'den siparişler yüklendi:', currentOrders.length);
                 } else {
-                    // Use demo data
+                    console.log('⚠️ API yanıtı boş, demo veriler kullanılıyor');
                     currentOrders = demoOrders;
                 }
             } catch (error) {
-                console.log('Using demo orders');
+                console.log('❌ API hatası, demo veriler kullanılıyor:', error.message);
                 currentOrders = demoOrders;
             }
 
@@ -996,16 +954,9 @@
             const note = document.getElementById('modal-note').value;
 
             try {
-                const response = await fetch(`${API_BASE_URL}/orders/admin/${selectedOrderId}/status`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
-                    },
-                    body: JSON.stringify({ status, note })
-                });
+                const response = await ADMIN_API.updateOrderStatus(selectedOrderId, status);
 
-                if (response.ok) {
+                if (response.success) {
                     showToast('Sipariş durumu güncellendi', 'success');
                     closeModal();
                     loadOrders();

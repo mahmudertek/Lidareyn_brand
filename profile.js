@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 items: [
                     {
                         name: `Ürün ${i}`,
-                        image: `https://picsum.photos/seed/order${i}/200/200`,
+                        image: `https://placehold.co/200x200/e5e7eb/6b7280?text=Ürün+${i}`,
                         quantity: Math.floor(Math.random() * 3) + 1
                     }
                 ]
