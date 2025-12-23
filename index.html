@@ -12,23 +12,24 @@
         }
 
         if (window.BAKIM_MODU_AKTIF === true) {
-            // GIZLI ANAHTAR KONTROLU (?admin=true)
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('admin') === 'true') {
-                localStorage.setItem('admin_bypass', 'true');
-                console.log('🔑 Gizli anahtar kabul edildi. Bakim modu devre disi.');
+            // GİZLİ ŞİFRE: lidareyn_ozel_giris
+            if (urlParams.has('lidareyn_ozel_giris')) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                console.log('✅ Özel giriş onaylandı!');
+                // Parametreyi temizleyip sayfayı yenile (şifre linkte kalmasın)
+                window.location.href = window.location.pathname;
+                return;
             }
 
-            // ADMIN KONTROLÜ (Giriş yapanlar veya gizli anahtarı olanlar)
-            const isAdmin = localStorage.getItem('adminToken') ||
-                localStorage.getItem('token') ||
-                localStorage.getItem('galatacarsi_token') ||
-                localStorage.getItem('admin_bypass') === 'true';
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
 
             const isBakimPage = window.location.pathname.includes('bakimda.html');
 
             if (!isBakimPage) {
-                if (isAdmin) {
+                if (isAuthorized) {
                     console.log('🛡️ Admin tespiti: Bakım modu size gösterilmiyor.');
                 } else {
                     console.warn('🚧 SİTE BAKIMDA! Yönlendiriliyor...');
