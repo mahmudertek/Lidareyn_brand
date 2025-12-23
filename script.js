@@ -2,61 +2,9 @@
 // KARAKÖY TÜCCARI - MODERN E-COMMERCE JAVASCRIPT
 // ============================================
 
-// ============================================
-// BAKIM MODU KONTROLÜ - API üzerinden kontrol et
-// ============================================
-async function checkMaintenanceMode() {
-    console.log('🔍 Bakım modu kontrolü başladı...');
-    const currentPath = window.location.pathname.toLowerCase();
+// [BAKIM MODU KONTROLÜ index.html İÇİNE TAŞINDI]
+// Artık bakim-ayari.js üzerinden merkezi olarak kontrol ediliyor.
 
-    // Admin panelini ve bakım sayfalarını hariç tut
-    if (currentPath.includes('/admin/') || currentPath.includes('bakimda.html') || currentPath.includes('maintenance.html')) {
-        console.log('⏩ Admin veya bakım sayfası, kontrol atlanıyor.');
-        return;
-    }
-
-    try {
-        // API URL'sini zorla belirle (Yerel test için en garantisi)
-        const apiUrl = 'http://localhost:5000/api';
-
-        const response = await fetch(`${apiUrl}/settings?t=${Date.now()}`, { cache: 'no-store' });
-        const result = await response.json();
-
-        console.log('📡 Bakım durumu yanıtı:', result);
-
-        // Admin bypass
-        const isAdmin = localStorage.getItem('adminToken') || localStorage.getItem('token');
-        if (isAdmin) {
-            console.log('🛡️ Admin girişi tespit edildi, bypass aktif.');
-            return;
-        }
-
-        if (result.success && result.data.isMaintenanceMode) {
-            localStorage.setItem('maintenanceMode', 'true');
-
-            // Yerel bilgisayar için en güvenli yönlendirme
-            const isKategori = currentPath.includes('/kategoriler/');
-            const redirectUrl = isKategori ? '../bakimda.html' : 'bakimda.html';
-
-            console.warn('🚧 SİTE BAKIMDA! Yönlendiriliyor:', redirectUrl);
-            window.location.href = redirectUrl;
-        } else {
-            localStorage.setItem('maintenanceMode', 'false');
-        }
-    } catch (error) {
-        console.error('❌ Bakım kontrolü sırasında hata:', error);
-
-        // Sunucuya ulaşılamazsa ama lokalde "bakımda" işaretliyse yine yönlendir
-        const isAdmin = localStorage.getItem('adminToken') || localStorage.getItem('token');
-        if (localStorage.getItem('maintenanceMode') === 'true' && !isAdmin) {
-            const redirectUrl = currentPath.includes('/kategoriler/') ? '../bakimda.html' : 'bakimda.html';
-            window.location.href = redirectUrl;
-        }
-    }
-}
-
-// Hemen çalıştır
-checkMaintenanceMode();
 
 document.addEventListener('DOMContentLoaded', function () {
 

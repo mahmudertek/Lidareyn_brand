@@ -2,41 +2,40 @@
 <html lang="tr">
 
 <head>
-    <script src="bakim-ayari.js?v=2"></script>
+    <script src="bakim-ayari.js?v=3"></script>
     <script>
-        console.log('🔧 Bakım Modu Durumu:', window.BAKIM_MODU_AKTIF);
+        // Bakım modu kontrolü - Sayfa yüklenir yüklenmez en tepede çalışır
+        (function () {
+            console.log('🔧 Bakım Modu Sistemi Aktif. Durum:', window.BAKIM_MODU_AKTIF);
 
-        // Eğer dosya yüklenmediyse bile kontrol et
-        if (typeof window.BAKIM_MODU_AKTIF === 'undefined') {
-            console.error('❌ bakim-ayari.js yuklenemedi!');
-        }
+            if (window.BAKIM_MODU_AKTIF === true) {
 
-        if (window.BAKIM_MODU_AKTIF === true) {
-            const urlParams = new URLSearchParams(window.location.search);
-            // GİZLİ ŞİFRE: lidareyn_ozel_girisKask12121O
-            if (urlParams.has('lidareyn_ozel_girisKask12121O')) {
-                localStorage.setItem('admin_session', 'active_' + Date.now());
-                console.log('✅ Özel giriş onaylandı!');
-                // Parametreyi temizleyip sayfayı yenile (şifre linkte kalmasın)
-                window.location.href = window.location.pathname;
-                return;
-            }
+                const urlParams = new URLSearchParams(window.location.search);
+                // GİZLİ ŞİFRE: lidareyn_ozel_girisKask12121O
+                if (urlParams.has('lidareyn_ozel_girisKask12121O')) {
+                    localStorage.setItem('admin_session', 'active_' + Date.now());
+                    console.log('✅ Özel giriş onaylandı!');
+                    // Parametreyi temizleyip sayfayı yenile (şifre linkte kalmasın)
+                    window.location.href = window.location.pathname;
+                    return;
+                }
 
-            const isAuthorized = localStorage.getItem('admin_session') ||
-                localStorage.getItem('adminToken') ||
-                localStorage.getItem('token');
+                const isAuthorized = localStorage.getItem('admin_session') ||
+                    localStorage.getItem('adminToken') ||
+                    localStorage.getItem('token');
 
-            const isBakimPage = window.location.pathname.includes('bakimda.html');
+                const isBakimPage = window.location.pathname.includes('bakimda.html');
 
-            if (!isBakimPage) {
-                if (isAuthorized) {
-                    console.log('🛡️ Admin tespiti: Bakım modu size gösterilmiyor.');
-                } else {
-                    console.warn('🚧 SİTE BAKIMDA! Yönlendiriliyor...');
-                    window.location.href = 'bakimda.html';
+                if (!isBakimPage) {
+                    if (isAuthorized) {
+                        console.log('🛡️ Admin tespiti: Bakım modu size gösterilmiyor.');
+                    } else {
+                        console.warn('🚧 SİTE BAKIMDA! Yönlendiriliyor...');
+                        window.location.href = 'bakimda.html';
+                    }
                 }
             }
-        }
+        })();
     </script>
     <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
