@@ -2,6 +2,32 @@
 <html lang="tr">
 
 <head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">html { display: none !important; }</style>
+    <script src="bakim-ayari.js?v=4"></script>
+    <script>
+        (function () {
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            document.getElementById('bakim-blocking-style').remove();
+        })();
+    </script>
+
     <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
@@ -462,10 +488,10 @@
                             </ul>
                         </div>
                     </li>
-                    <li><a href="#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    
 
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
-                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler</a></li>
                 </ul>
             </nav>
 
@@ -1055,15 +1081,15 @@
                     <ul class="popular-list">
                         <li><a href="yeni-gelenler.html">Yeni Gelenler</a></li>
                         <li><a href="cok-satanlar.html">Çok Satanlar</a></li>
-                        <li><a href="populer.html">Popüler Ürünler</a></li>
-                        <li><a href="kategoriler/elektrikli-el-aletleri.html">Elektrikli El Aletleri</a></li>
-                        <li><a href="kategoriler/olcme-ve-kontrol-aletleri.html">Ölçme & Kontrol Aletleri</a></li>
-                        <li><a href="kategoriler/el-aletleri.html">El Aletleri</a></li>
-                        <li><a href="kategoriler/nalbur-yapi-malzemeleri.html">Yapı ve İnşaat Malzemeleri</a></li>
-                        <li><a href="kategoriler/asindirici-kesici.html">Aşındırıcı ve Kesici Uçlar</a></li>
-                        <li><a href="kategoriler/yapi-kimyasallari.html">Yapıştırıcı, Dolgu ve Kimyasallar</a></li>
-                        <li><a href="kategoriler/kaynak-malzemeleri.html">Kaynak Malzemeleri</a></li>
-                        <li><a href="kategoriler/hirdavat-el-aletleri.html">Hırdavat ve El Aletleri</a></li>
+                        <li><a href="populer.html">Popüler</a></li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         <li><a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">İş Güvenliği ve Çalışma
                                 Ekipmanları</a></li>
                     </ul>

@@ -2,39 +2,35 @@
 <html lang="tr">
 
 <head>
-    <script src="bakim-ayari.js?v=3"></script>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        html {
+            display: none !important;
+        }
+    </style>
+    <script src="bakim-ayari.js?v=4"></script>
     <script>
-        // Bakım modu kontrolü - Sayfa yüklenir yüklenmez en tepede çalışır
         (function () {
-            console.log('🔧 Bakım Modu Sistemi Aktif. Durum:', window.BAKIM_MODU_AKTIF);
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
 
-            if (window.BAKIM_MODU_AKTIF === true) {
-
-                const urlParams = new URLSearchParams(window.location.search);
-                // GİZLİ ŞİFRE: lidareyn_ozel_girisKask12121O
-                if (urlParams.has('lidareyn_ozel_girisKask12121O')) {
-                    localStorage.setItem('admin_session', 'active_' + Date.now());
-                    console.log('✅ Özel giriş onaylandı!');
-                    // Parametreyi temizleyip sayfayı yenile (şifre linkte kalmasın)
-                    window.location.href = window.location.pathname;
-                    return;
-                }
-
-                const isAuthorized = localStorage.getItem('admin_session') ||
-                    localStorage.getItem('adminToken') ||
-                    localStorage.getItem('token');
-
-                const isBakimPage = window.location.pathname.includes('bakimda.html');
-
-                if (!isBakimPage) {
-                    if (isAuthorized) {
-                        console.log('🛡️ Admin tespiti: Bakım modu size gösterilmiyor.');
-                    } else {
-                        console.warn('🚧 SİTE BAKIMDA! Yönlendiriliyor...');
-                        window.location.href = 'bakimda.html';
-                    }
-                }
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
             }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            document.getElementById('bakim-blocking-style').remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
         })();
     </script>
     <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
@@ -497,10 +493,6 @@
                             </ul>
                         </div>
                     </li>
-                    <li><a href="kategoriler/nalbur-yapi-malzemeleri.html" class="nav-link">Nalbur & Yapı</a></li>
-                    <li><a href="kategoriler/yapi-kimyasallari.html" class="nav-link">Yapı Kimyasalları</a></li>
-                    <li><a href="kategoriler/hirdavat-el-aletleri.html" class="nav-link">El Aletleri</a></li>
-                    <li><a href="kategoriler/elektrikli-el-aletleri.html" class="nav-link">Elektrikli Aletler</a></li>
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
                     <li><a href="populer.html" class="nav-link">Popüler</a></li>
                 </ul>

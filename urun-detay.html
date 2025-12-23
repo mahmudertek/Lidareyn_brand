@@ -16,13 +16,38 @@
     <link rel="stylesheet" href="mobile.css?v=5">
     <link rel="stylesheet" href="mega_menu_styles.css">
     <link rel="stylesheet" href="product-detail.css">
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">html { display: none !important; }</style>
+    <script src="bakim-ayari.js?v=4"></script>
+    <script>
+        (function () {
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            document.getElementById('bakim-blocking-style').remove();
+        })();
+    </script>
 </head>
 
 <body>
 
     <!-- Header (Same as index.html) -->
     <!-- Modern Premium Header (Solid White) -->
-        <header class="main-header" role="banner">
+    <header class="main-header" role="banner">
         <div class="header-container">
             <!-- Mobile Categories Button -->
             <a href="index.html#kategoriler" class="mobile-categories-btn">
@@ -370,10 +395,8 @@
                             </ul>
                         </div>
                     </li>
-                    <li><a href="#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
-
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
-                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler</a></li>
                 </ul>
             </nav>
 

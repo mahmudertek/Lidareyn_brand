@@ -2,6 +2,32 @@
 <html lang="tr">
 
 <head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">html { display: none !important; }</style>
+    <script src="bakim-ayari.js?v=4"></script>
+    <script>
+        (function () {
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            document.getElementById('bakim-blocking-style').remove();
+        })();
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hakkımızda - Galata Çarşı</title>
@@ -369,10 +395,10 @@
                             </ul>
                         </div>
                     </li>
-                    <li><a href="#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
+                    
 
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
-                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler</a></li>
                 </ul>
             </nav>
 
