@@ -310,49 +310,64 @@ function showErrorState() {
 }
 
 // Bakım modunu kontrol et ve UI güncelle
-function checkMaintenanceMode() {
-    const isMaintenanceMode = localStorage.getItem('maintenanceMode') === 'true';
-    const toggle = document.getElementById('maintenanceToggle');
-    const card = document.getElementById('maintenanceCard');
-    const status = document.getElementById('maintenanceStatus');
+async function checkMaintenanceMode() {
+    try {
+        const response = await ADMIN_API.getSettings();
+        const isMaintenanceMode = response.success ? response.data.isMaintenanceMode : false;
 
-    if (toggle && card && status) {
-        toggle.checked = isMaintenanceMode;
+        const toggle = document.getElementById('maintenanceToggle');
+        const card = document.getElementById('maintenanceCard');
+        const status = document.getElementById('maintenanceStatus');
 
-        if (isMaintenanceMode) {
-            card.classList.add('maintenance-active');
-            status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
-        } else {
-            card.classList.remove('maintenance-active');
-            status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
+        if (toggle && card && status) {
+            toggle.checked = isMaintenanceMode;
+
+            if (isMaintenanceMode) {
+                card.classList.add('maintenance-active');
+                status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
+            } else {
+                card.classList.remove('maintenance-active');
+                status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
+            }
         }
+    } catch (error) {
+        console.error('Maintenance mode check error:', error);
     }
 }
 
 // Bakım modunu aç/kapat
-function toggleMaintenanceMode() {
+async function toggleMaintenanceMode() {
     const toggle = document.getElementById('maintenanceToggle');
     const card = document.getElementById('maintenanceCard');
     const status = document.getElementById('maintenanceStatus');
 
     const isMaintenanceMode = toggle.checked;
 
-    // LocalStorage'a kaydet
-    localStorage.setItem('maintenanceMode', isMaintenanceMode);
+    try {
+        const response = await ADMIN_API.updateMaintenanceMode(isMaintenanceMode);
 
-    // UI güncelle
-    if (isMaintenanceMode) {
-        card.classList.add('maintenance-active');
-        status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
-
-        // Bildirim göster
-        showNotification('🔧 Bakım modu aktif edildi!', 'warning');
-    } else {
-        card.classList.remove('maintenance-active');
-        status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
-
-        // Bildirim göster
-        showNotification('✅ Site tekrar açıldı!', 'success');
+        if (response.success) {
+            // UI güncelle
+            if (isMaintenanceMode) {
+                card.classList.add('maintenance-active');
+                status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
+                showNotification('🔧 Bakım modu aktif edildi!', 'warning');
+            } else {
+                card.classList.remove('maintenance-active');
+                status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
+                showNotification('✅ Site tekrar açıldı!', 'success');
+            }
+        } else {
+            // Hata durumunda toggle'ı geri al
+            toggle.checked = !isMaintenanceMode;
+            const errorMsg = response.message || response.error || 'Bilinmeyen bir hata oluştu';
+            showNotification('❌ Hata: ' + errorMsg, 'error');
+        }
+    } catch (error) {
+        console.error('Maintenance mode toggle error:', error);
+        toggle.checked = !isMaintenanceMode;
+        const msg = error.message || 'Sunucuya ulaşılamıyor (Bağlantı Engellendi)';
+        showNotification('❌ Hata: ' + msg, 'error');
     }
 }
 

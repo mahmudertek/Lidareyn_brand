@@ -7,13 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initProductCarousel();
 });
 
-function initProductCarousel() {
+async function initProductCarousel() {
     const container = document.getElementById('product-carousel-container');
     if (!container) return;
 
-    // Sample Products Data (replace with real data)
-    const products = [
-        // Page 1 - 18 products
+    // Default static products as fallback
+    let products = [
         { id: 1, name: 'Bosch GSB 18V-55 Akülü Darbeli Matkap', price: '7,899.00TL', image: 'https://placehold.co/300x200/8b7bd8/ffffff?text=Bosch+Matkap', badge: 'Çok Satan', link: 'urun-detay.html?id=1' },
         { id: 2, name: 'Makita DTD172 18V Darbe Vidalama', price: '5,999.00TL', image: 'https://placehold.co/300x200/6b9bd8/ffffff?text=Makita+Vidalama', badge: 'Yeni', link: 'urun-detay.html?id=2' },
         { id: 3, name: 'Knipex Cobra 87 01 250 Su Pompa Pense', price: '1,899.00TL', image: 'https://placehold.co/300x200/a29bfe/ffffff?text=Knipex+Pense', badge: '', link: 'urun-detay.html?id=3' },
@@ -32,7 +31,6 @@ function initProductCarousel() {
         { id: 16, name: 'Einhell TC-CD 18/35 Li Akülü Matkap', price: '2,199.00TL', image: 'https://placehold.co/300x200/74b9ff/ffffff?text=Einhell+Matkap', badge: '', link: 'urun-detay.html?id=16' },
         { id: 17, name: 'Fisco 3m Profesyonel Şerit Metre', price: '299.00TL', image: 'https://placehold.co/300x200/9b8fd8/ffffff?text=Fisco+Metre', badge: '', link: 'urun-detay.html?id=17' },
         { id: 18, name: 'WD-40 Çok Amaçlı 400ml Sprey', price: '149.00TL', image: 'https://placehold.co/300x200/8ba9d8/ffffff?text=WD40+Sprey', badge: '', link: 'urun-detay.html?id=18' },
-        // Page 2 - 6 more products (24 total for 4 mobile pages)
         { id: 19, name: 'ASKA Pro 20V Akülü Matkap Set', price: '3,299.00TL', image: 'https://placehold.co/300x200/8b7bd8/ffffff?text=ASKA+Matkap', badge: 'Özel Üretim', link: 'urun-detay.html?id=19' },
         { id: 20, name: 'Madeniyat Pro 18V Darbeli Matkap', price: '2,799.00TL', image: 'https://placehold.co/300x200/D4AF37/1a1a1a?text=Madeniyat+Matkap', badge: 'Çok Satan', link: 'urun-detay.html?id=20' },
         { id: 21, name: 'Izeltaş 10mm Kombinasyon Anahtar', price: '189.00TL', image: 'https://placehold.co/300x200/a29bfe/ffffff?text=Izeltas+Anahtar', badge: '', link: 'urun-detay.html?id=21' },
@@ -41,6 +39,25 @@ function initProductCarousel() {
         { id: 24, name: 'ASKA Premium Alet Çantası 150 Parça', price: '4,499.00TL', image: 'https://placehold.co/300x200/8b7bd8/ffffff?text=ASKA+Set', badge: 'Premium', link: 'urun-detay.html?id=24' }
     ];
 
+    // Try to fetch products from API
+    try {
+        if (window.API && typeof window.API.getProducts === 'function') {
+            const response = await window.API.getProducts({ featured: 'true', limit: 24 });
+            if (response && response.success && response.data && response.data.length > 0) {
+                console.log('✅ Featured products loaded from API:', response.data.length);
+                products = response.data.map(product => ({
+                    id: product._id,
+                    name: product.name,
+                    price: `₺${product.price.toLocaleString()}`,
+                    image: product.mainImage || 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name),
+                    badge: product.isNew ? 'Yeni' : (product.tags && product.tags[0]) || '',
+                    link: `urun-detay.html?id=${product._id}`
+                }));
+            }
+        }
+    } catch (error) {
+        console.error('Failed to fetch featured products from API:', error);
+    }
 
     // Configuration - Responsive
     const isMobile = () => window.innerWidth <= 768;
@@ -110,6 +127,7 @@ function initProductCarousel() {
 
     function renderPage(pageIndex) {
         const grid = document.getElementById('product-carousel-grid');
+        if (!grid) return;
         grid.innerHTML = '';
 
         const startIndex = pageIndex * PRODUCTS_PER_PAGE;
@@ -166,7 +184,7 @@ function initProductCarousel() {
         const prevBtn = document.querySelector('.carousel-nav-arrow.prev');
         const nextBtn = document.querySelector('.carousel-nav-arrow.next');
 
-        prevBtn.disabled = pageIndex === 0;
-        nextBtn.disabled = pageIndex === totalPages - 1;
+        if (prevBtn) prevBtn.disabled = pageIndex === 0;
+        if (nextBtn) nextBtn.disabled = pageIndex === totalPages - 1;
     }
 }

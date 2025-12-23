@@ -1,4 +1,4 @@
-const productsData = [
+const galataProductsData = [
     // --- ERKEK ---
     {
         id: "erkek-siyah-tshirt",
@@ -150,19 +150,19 @@ const productsData = [
 ];
 
 function getProductById(id) {
-    return productsData.find(p => p.id === id);
+    return galataProductsData.find(p => p.id === id);
 }
 
 function getAllProducts() {
-    return productsData;
+    return galataProductsData;
 }
 
 function getProductsByCategory(category) {
-    return productsData.filter(p => p.category.includes(category));
+    return galataProductsData.filter(p => p.category.includes(category));
 }
 
 // Expose to window for global access
-window.productsData = productsData;
+window.galataProductsData = galataProductsData;
 window.getProductById = getProductById;
 window.getAllProducts = getAllProducts;
 window.getProductsByCategory = getProductsByCategory;

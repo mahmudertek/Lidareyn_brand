@@ -2,9 +2,9 @@
 // Bu dosya web sitesinin backend API ile iletişimini sağlar
 
 const API = {
-    baseUrl: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    baseUrl: window.ENV ? window.ENV.API_URL : ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5000/api'
-        : 'https://galatacarsi-backend-api.onrender.com/api',
+        : 'https://galatacarsi-backend-api.onrender.com/api'),
 
     // --- PRODUCTS ---
     async getProducts(params = {}) {

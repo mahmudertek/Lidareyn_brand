@@ -718,11 +718,16 @@
 
                 const image = product.mainImage || `https://placehold.co/60x60/6366f1/fff?text=${(product.brand || 'P').charAt(0)}`;
                 const productId = product._id || product.id;
+                const featuredBadge = product.isFeatured ? '<span style="background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px;">ÖNE ÇIKAN</span>' : '';
+                const newBadge = product.isNew ? '<span style="background:#dbeafe;color:#2563eb;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px;">YENİ</span>' : '';
 
                 tbody.innerHTML += `
                     <tr>
                         <td><img src="${image}" class="product-image" alt="${product.name}"></td>
-                        <td><span class="product-name">${product.name}</span></td>
+                        <td>
+                            <div class="product-name">${product.name}</div>
+                            <div style="margin-top:4px;">${featuredBadge}${newBadge}</div>
+                        </td>
                         <td><span class="product-brand">${product.brand || '-'}</span></td>
                         <td>${product.category || '-'}</td>
                         <td><span class="product-price">₺${product.price?.toLocaleString() || '0'}</span></td>

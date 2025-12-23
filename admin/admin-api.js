@@ -5,7 +5,8 @@ const ADMIN_API = {
     // API Base URL
     baseUrl: window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:'
+        window.location.protocol === 'file:' ||
+        true // Test aşamasında her zaman yereli kullan
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api',
 
@@ -421,6 +422,35 @@ const ADMIN_API = {
                 data: [],
                 count: 0
             };
+        }
+    },
+    // ==================== SETTINGS ====================
+    async getSettings() {
+        try {
+            const response = await fetch(`${this.baseUrl}/settings`, {
+                headers: this.getHeaders()
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Get settings error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    async updateMaintenanceMode(isMaintenanceMode) {
+        console.log('🔄 Bakım modu güncelleniyor:', isMaintenanceMode);
+        try {
+            const response = await fetch(`${this.baseUrl}/settings/maintenance`, {
+                method: 'POST',
+                headers: this.getHeaders(),
+                body: JSON.stringify({ isMaintenanceMode })
+            });
+            const data = await response.json();
+            console.log('📥 Sunucu yanıtı:', data);
+            return data;
+        } catch (error) {
+            console.error('❌ Fetch hatası detayı:', error);
+            throw error;
         }
     }
 };

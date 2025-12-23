@@ -142,7 +142,7 @@ function initLiveSearch() {
         }
 
         // Get Data with Fallback
-        const products = window.productsData || [];
+        const products = window.galataProductsData || [];
         const categories = window.categoriesData || [];
 
         // Debug data availability

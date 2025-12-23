@@ -2,6 +2,42 @@
 <html lang="tr">
 
 <head>
+    <script src="bakim-ayari.js?v=2"></script>
+    <script>
+        console.log('🔧 Bakım Modu Durumu:', window.BAKIM_MODU_AKTIF);
+
+        // Eğer dosya yüklenmediyse bile kontrol et
+        if (typeof window.BAKIM_MODU_AKTIF === 'undefined') {
+            console.error('❌ bakim-ayari.js yuklenemedi!');
+        }
+
+        if (window.BAKIM_MODU_AKTIF === true) {
+            // ADMIN KONTROLÜ (Giriş yaptıysanız siteyi görebilirsiniz)
+            const isAdmin = localStorage.getItem('adminToken') ||
+                localStorage.getItem('token') ||
+                localStorage.getItem('galatacarsi_token');
+
+            const isBakimPage = window.location.pathname.includes('bakimda.html');
+
+            if (!isBakimPage) {
+                if (isAdmin) {
+                    console.log('🛡️ Admin tespiti: Bakım modu size gösterilmiyor.');
+                } else {
+                    console.warn('🚧 SİTE BAKIMDA! Yönlendiriliyor...');
+                    window.location.href = 'bakimda.html';
+                }
+            }
+        }
+    </script>
+    <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-XXXXXXXXXX'); // BU ID'Yİ KENDİ GA4 ID'NİZLE DEĞİŞTİRİN
+    </script>
+    <!-- Google Analytics Sonu -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script>
@@ -56,13 +92,32 @@
 
     <link rel="stylesheet" href="style.css?v=201">
     <link rel="stylesheet" href="mobile.css?v=5">
-    <link rel="stylesheet" href="grid-motion.css">
+    <link rel="stylesheet" href="grid-motion.css?v=4">
+
+
+
 
     <link rel="stylesheet" href="slider.css">
     <link rel="stylesheet" href="mega_menu_styles.css">
     <link rel="stylesheet" href="categories-carousel.css">
-    <link rel="stylesheet" href="brands-single-row.css">
+    <link rel="stylesheet" href="brands-single-row.css?v=3">
+
     <link rel="stylesheet" href="popular-section.css">
+
+    <link rel="stylesheet" href="madeniyat-hero.css?v=5">
+
+    <link rel="stylesheet" href="product-carousel.css?v=7">
+
+
+
+
+
+
+    <!-- Google Fonts for MADENIYAT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -116,6 +171,38 @@
                                         <div class="sub-menu-column">
                                             <h4>Delme & Vidalama</h4>
                                             <ul>
+                                                <li><a href="#">Matkaplar (Darbeli, Darbesiz)</a></li>
+                                                <li><a href="#">Vidalayıcılar (Akülü, Elektrikli)</a></li>
+                                                <li><a href="#">Kırıcı-Deliciler (SDS Max, SDS Plus)</a></li>
+                                                <li><a href="#">Karot Makineleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kesme & Taşlama</h4>
+                                            <ul>
+                                                <li><a href="#">Taşlama ve Kesme Makineleri (Avuç İçi, Büyük)</a></li>
+                                                <li><a href="#">Dekupaj Testereler</a></li>
+                                                <li><a href="#">Daire Testereler</a></li>
+                                                <li><a href="#">Gönye Kesmeler</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Yüzey İşleme</h4>
+                                            <ul>
+                                                <li><a href="#">Zımparalar (Titreşim, Eksantrik, Şerit)</a></li>
+                                                <li><a href="#">Planyalar</a></li>
+                                                <li><a href="#">Frezeler</a></li>
+                                                <li><a href="#">Sıcak Hava Tabancaları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Diğer Makineler</h4>
+                                            <ul>
+                                                <li><a href="#">Kaynak Makineleri (Inverter, Gazaltı)</a></li>
+                                                <li><a href="#">Akülü Alet Setleri</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
                                     <a href="kategoriler/olcme-ve-kontrol-aletleri.html">
@@ -129,6 +216,35 @@
                                         <div class="sub-menu-column">
                                             <h4>Lazerli Ölçüm</h4>
                                             <ul>
+                                                <li><a href="#">Lazerli Ölçüm Cihazları (Mesafe Ölçer)</a></li>
+                                                <li><a href="#">Lazer Hizalamalar (Çizgi, Nokta)</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Mekanik Ölçüm</h4>
+                                            <ul>
+                                                <li><a href="#">Şerit Metreler</a></li>
+                                                <li><a href="#">Çelik Metreler</a></li>
+                                                <li><a href="#">Kumpaslar (Dijital, Analog)</a></li>
+                                                <li><a href="#">Mikrometreler</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Terazi & Açı</h4>
+                                            <ul>
+                                                <li><a href="#">Su Terazileri (Dijital, Klasik)</a></li>
+                                                <li><a href="#">Açı Ölçerler</a></li>
+                                                <li><a href="#">Dijital Tartılar</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Görüntüleme</h4>
+                                            <ul>
+                                                <li><a href="#">Endoskoplar</a></li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
                                 </li>
                                 <li>
                                     <a href="kategoriler/hirdavat-el-aletleri.html">
@@ -142,19 +258,28 @@
                                         <div class="sub-menu-column">
                                             <h4>Anahtarlar & Vidalama</h4>
                                             <ul>
-                                </li>
-                                <li>
-                                    <a href="kategoriler/oto-bakim-tamir.html">
-                                        <div class="menu-item-left">
-                                            <i class="fa-solid fa-wrench"></i>
-                                            <span>Oto Bakım ve Tamir Malzemeleri</span>
+                                                <li><a href="#">Anahtar Takımları (Lokma, Kombine, Alyen)</a></li>
+                                                <li><a href="#">Tornavidalar (Düz, Yıldız, Tork)</a></li>
+                                            </ul>
                                         </div>
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </a>
-                                    <div class="sub-menu">
                                         <div class="sub-menu-column">
-                                            <h4>Kaldırma ve Taşıma</h4>
+                                            <h4>Kesme & Şekillendirme</h4>
                                             <ul>
+                                                <li><a href="#">Pense ve Yan Keski Çeşitleri</a></li>
+                                                <li><a href="#">Maket Bıçakları ve Yedekleri</a></li>
+                                                <li><a href="#">Testereler (El, Budama)</a></li>
+                                                <li><a href="#">Eğeler ve Raspalar</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Vurma & Sabitleme</h4>
+                                            <ul>
+                                                <li><a href="#">Çekiçler (Demirci, Lastik, Kaya)</a></li>
+                                                <li><a href="#">Keski ve Zımbalar</a></li>
+                                                <li><a href="#">Mengene ve Kelepçeler</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
                                     <a href="kategoriler/nalbur-yapi-malzemeleri.html">
@@ -168,6 +293,26 @@
                                         <div class="sub-menu-column">
                                             <h4>Kimyasal & Yapıştırıcı</h4>
                                             <ul>
+                                                <li><a href="#">Silikon, Mastik ve Köpükler</a></li>
+                                                <li><a href="#">Yapıştırıcılar (Epoksi, Japon, Poliüretan)</a></li>
+                                                <li><a href="#">Harç ve Beton Malzemeleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Boya & İzolasyon</h4>
+                                            <ul>
+                                                <li><a href="#">Boyalar ve Boya Malzemeleri (Fırça, Rulo, Tiner)</a>
+                                                </li>
+                                                <li><a href="#">İzolasyon Malzemeleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Donanım</h4>
+                                            <ul>
+                                                <li><a href="#">Kilitler ve Menteşeler</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
                                 <li>
                                     <a href="kategoriler/asindirici-kesici.html">
@@ -181,6 +326,27 @@
                                         <div class="sub-menu-column">
                                             <h4>Delici & Vidalama</h4>
                                             <ul>
+                                                <li><a href="#">Matkap Uçları (Metal, Ahşap, Beton)</a></li>
+                                                <li><a href="#">Freze Uçları</a></li>
+                                                <li><a href="#">Karot Uçları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kesme & Taşlama</h4>
+                                            <ul>
+                                                <li><a href="#">Taşlama Diskleri</a></li>
+                                                <li><a href="#">Kesme Diskleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Aşındırma ve Zımpara</h4>
+                                            <ul>
+                                                <li><a href="#">Zımpara Kağıtları ve Bantları</a></li>
+                                            </ul>
+                                        </div>
+
+
+                                    </div>
                                 </li>
                                 <li>
                                     <a href="kategoriler/yapi-kimyasallari.html">
@@ -194,7 +360,28 @@
                                         <div class="sub-menu-column">
                                             <h4>Yapıştırıcılar</h4>
                                             <ul>
+                                                <li><a href="#">Silikon, Mastik ve Akrilikler</a></li>
+                                                <li><a href="#">Yapıştırıcı Çeşitleri (Epoksi, Japon, Ahşap)</a></li>
+                                                <li><a href="#">Poliüretan Köpükler</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Dolgu ve Harçlar</h4>
+                                            <ul>
+                                                <li><a href="#">Çimento Esaslı Harçlar</a></li>
+                                                <li><a href="#">Alçı ve Alçı Ürünleri</a></li>
+                                                <li><a href="#">Derz Dolgular</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kimyasallar</h4>
+                                            <ul>
+                                                <li><a href="#">Tiner ve Çözücüler</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
+
                                 <li>
                                     <a href="kategoriler/kaynak-malzemeleri.html">
                                         <div class="menu-item-left">
@@ -207,20 +394,25 @@
                                         <div class="sub-menu-column">
                                             <h4>Sarf Malzemeleri</h4>
                                             <ul>
-                                </li>
-                                <li>
-                                    <a href="kategoriler/tesisat-malzemeleri.html">
-                                        <div class="menu-item-left">
-                                            <i class="fa-solid fa-faucet-drip"></i>
-                                            <span>Tesisat Malzemeleri</span>
+                                                <li><a href="#">Elektrotlar (Rutil, Bazik)</a></li>
+                                                <li><a href="#">Kaynak Telleri (Gazaltı, Tig)</a></li>
+                                            </ul>
                                         </div>
-                                        <i class="fa-solid fa-chevron-right"></i>
-                                    </a>
-                                    <div class="sub-menu">
                                         <div class="sub-menu-column">
-                                            <h4>Su Tesisatı</h4>
+                                            <h4>Koruyucu Ekipman</h4>
                                             <ul>
+                                                <li><a href="#">Kaynak Maskeleri ve Eldivenleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Makine ve Aksesuar</h4>
+                                            <ul>
+                                                <li><a href="#">Kaynak Makineleri ve Aksesuarları</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
+
                                 <li>
                                     <a href="kategoriler/hirdavat-el-aletleri.html">
                                         <div class="menu-item-left">
@@ -233,7 +425,31 @@
                                         <div class="sub-menu-column">
                                             <h4>Ölçü Aletleri</h4>
                                             <ul>
+                                                <li><a href="#">Metre, Su Terazisi, Gönye</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kesici & Delici</h4>
+                                            <ul>
+                                                <li><a href="#">Testere, Matkap Uçları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Sıkıştırma & Tutma</h4>
+                                            <ul>
+                                                <li><a href="#">Pense, İngiliz Anahtarı</a></li>
+                                                <li><a href="#">Mengene</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Vurucu Aletler</h4>
+                                            <ul>
+                                                <li><a href="#">Çekiç, Balta</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
+
                                 <li>
                                     <a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">
                                         <div class="menu-item-left">
@@ -246,14 +462,39 @@
                                         <div class="sub-menu-column">
                                             <h4>Koruyucu Giyim</h4>
                                             <ul>
+                                                <li><a href="#">İş Elbiseleri, Eldiven</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Ayak & Baş Koruma</h4>
+                                            <ul>
+                                                <li><a href="#">Baret, Çelik Burunlu Ayakkabı</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Göz & Kulak Koruma</h4>
+                                            <ul>
+                                                <li><a href="#">Göz ve Kulak Koruyucuları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Çalışma Ekipmanları</h4>
+                                            <ul>
+                                                <li><a href="#">İş İskelesi ve Merdivenler</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </li>
+
                             </ul>
                         </div>
                     </li>
-                    <li><a href="#flowing-menu-root" class="nav-link">Tüm Markalar</a></li>
-
+                    <li><a href="kategoriler/nalbur-yapi-malzemeleri.html" class="nav-link">Nalbur & Yapı</a></li>
+                    <li><a href="kategoriler/yapi-kimyasallari.html" class="nav-link">Yapı Kimyasalları</a></li>
+                    <li><a href="kategoriler/hirdavat-el-aletleri.html" class="nav-link">El Aletleri</a></li>
+                    <li><a href="kategoriler/elektrikli-el-aletleri.html" class="nav-link">Elektrikli Aletler</a></li>
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
-                    <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
+                    <li><a href="populer.html" class="nav-link">Popüler</a></li>
                 </ul>
             </nav>
 
@@ -311,113 +552,496 @@
 
     <!-- Main Content -->
     <main class="main-content" id="main-content" role="main">
-        <!-- Trending Products Section -->
-        <section class="products-carousel-section" style="padding: 60px 0; background: #f8fafc;">
-            <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 20px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-                    <h2 class="section-title" style="margin: 0; font-size: 28px; font-weight: 700; color: #1e293b;">
-                        Popüler Ürünler</h2>
-                    <a href="populer.html"
-                        style="color: #6366f1; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s ease;"
-                        onmouseover="this.style.color='#4f46e5'" onmouseout="this.style.color='#6366f1'">Tümünü Gör <i
-                            class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i></a>
-                </div>
-                <!-- Dynamic Carousel Container -->
-                <div id="product-carousel-container" style="position: relative; min-height: 400px;">
-                    <!-- Content will be injected by product-carousel.js -->
-                </div>
-            </div>
-        </section>
-
         <!-- Categories Section -->
         <section class="categories-section" id="kategoriler" aria-labelledby="categories-title">
         </section>
 
+        <!-- ÇOK SATAN MARKALAR Section Title -->
+        <h2 class="our-brands-section-title">ÇOK SATAN MARKALAR</h2>
 
+        <!-- BETA Premium Hero Section - Italian Tools Brand -->
 
-        <!-- Brands Section -->
-        <section class="brands-section">
-            <div class="container">
-                <h2 class="section-title" id="brands-title">Popüler Markalar</h2>
+        <section class="madeniyat-hero theme-beta" aria-label="BETA Koleksiyonu">
+            <!-- Left Side - Heritage Image with Brand Overlay -->
+            <div class="madeniyat-hero-left">
+                <div class="madeniyat-brand-overlay">
+                    <img src="gorseller/beta_official_logo.png" alt="BETA Official Logo" class="madeniyat-brand-logo">
+                </div>
+            </div>
 
-                <!-- Single Row Brands Grid -->
-                <div class="brands-single-row">
-                    <!-- Brand 1 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/8b7bd8?text=Brand+1" alt="Marka 1" loading="lazy"
-                            width="150" height="150">
+            <!-- Right Side - Info Panel & Products -->
+            <div class="madeniyat-hero-right">
+                <div class="madeniyat-info-section">
+                    <span class="madeniyat-collection-label">İTALYAN ZANAATI, PROFESYONEL GÜCÜ</span>
+                    <h3 class="madeniyat-collection-title">Beta Professional Tools</h3>
+                    <p class="madeniyat-description">
+                        1939'dan bu yana İtalyan ustaların titizliğiyle şekillenen, ömür boyu performans vaadeden
+                        aletler.
+                        Sadece bir alet değil, işinizin bir uzantısı.
+                    </p>
+                    <div class="beta-features">
+                        <p class="beta-feature-title">Neden farklı?</p>
+                        <p class="beta-feature-item">✦ <strong>Endüstriyel Dayanıklılık:</strong> En zorlu atölye ve
+                            servis koşulları için.</p>
+                        <p class="beta-feature-item">✦ <strong>Kusursuz Ergonomi:</strong> Uzun saatler süren kullanımda
+                            yorgunluk hissetmezsiniz.</p>
+                        <p class="beta-feature-item">✦ <strong>Ömür Boyu Miras:</strong> Nesilden nesile aktarılabilecek
+                            kalitede.</p>
                     </div>
+                    <a href="markalar/beta.html" class="madeniyat-view-collection">
+                        En İkonik Aletleri Görün
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
 
-                    <!-- Brand 2 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/6b9bd8?text=Brand+2" alt="Marka 2" loading="lazy"
-                            width="150" height="150">
-                    </div>
+                <div class="madeniyat-products-section">
+                    <!-- Beta Product 1 - Torque Wrench -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Çok Satan</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://cdn.shopify.com/s/files/1/0266/9022/9441/products/beta-torque-wrench_400x400.png?v=1634000000"
+                            alt="Beta Tork Anahtarı" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/E30613/ffffff?text=Beta+Tork'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Beta 666N/30 Tork Anahtarı 40-200Nm</h3>
+                            <p class="madeniyat-product-price">5,499.00TL</p>
+                        </div>
+                    </article>
 
-                    <!-- Brand 3 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/a29bfe?text=Brand+3" alt="Marka 3" loading="lazy"
-                            width="150" height="150">
-                    </div>
+                    <!-- Beta Product 2 - Socket Set -->
+                    <article class="madeniyat-product-card">
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://cdn.shopify.com/s/files/1/0266/9022/9441/products/beta-socket-set_400x400.png?v=1634000000"
+                            alt="Beta Lokma Takımı" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/E30613/ffffff?text=Beta+Lokma'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Beta 903E/C98 Profesyonel Lokma Seti</h3>
+                            <p class="madeniyat-product-price">4,299.00TL</p>
+                        </div>
+                    </article>
 
-                    <!-- Brand 4 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/fab1a0?text=Brand+4" alt="Marka 4" loading="lazy"
-                            width="150" height="150">
-                    </div>
+                    <!-- Beta Product 3 - Tool Cabinet -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Premium</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://cdn.shopify.com/s/files/1/0266/9022/9441/products/beta-tool-cabinet_400x400.png?v=1634000000"
+                            alt="Beta Alet Dolabı" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/E30613/ffffff?text=Beta+Dolap'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Beta C24S/8 8 Çekmeceli Alet Dolabı</h3>
+                            <p class="madeniyat-product-price">28,999.00TL</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
 
-                    <!-- Brand 5 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/ff7675?text=Brand+5" alt="Marka 5" loading="lazy"
-                            width="150" height="150">
-                    </div>
+        <!-- BOSCH Hero Section - Reversed (Image Right) -->
+        <section class="madeniyat-hero reversed theme-bosch" aria-label="BOSCH Koleksiyonu">
+            <div class="madeniyat-hero-left">
+                <div class="madeniyat-brand-overlay">
+                    <img src="gorseller/bosch_official_logo.png" alt="BOSCH Official Logo" class="madeniyat-brand-logo">
+                </div>
+            </div>
 
-                    <!-- Brand 6 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/74b9ff?text=Brand+6" alt="Marka 6" loading="lazy"
-                            width="150" height="150">
-                    </div>
+            <div class="madeniyat-hero-right">
+                <div class="madeniyat-info-section">
+                    <span class="madeniyat-collection-label">135 YILLIK ALMAN MÜHENDİSLİĞİ</span>
+                    <h3 class="madeniyat-collection-title">Bosch Professional</h3>
+                    <p class="madeniyat-description">
+                        135 yıldır dünyanın atölyelerine, şantiyelerine ve en zorlu çalışma koşullarına yön veren bir
+                        bilgelik: Alman mühendisliği.
+                        Bosch Professional, bu köklü mirasın somut bir ifadesi olarak, sadece bir alet değil;
+                        profesyonel işinizin sessiz bir ortağıdır.
+                    </p>
+                    <p class="madeniyat-description bosch-sub-text">
+                        Burada, hobi amaçlı değil, geçimini kalemi ve ustalığı ile sağlayanlar için seçilmiş Bosch
+                        Professional ürün gamının özünü bulacaksınız.
+                        Zamanınızı, emeğinizi ve itibarınızı destekleyecek, sizi asla yarı yolda bırakmayacak güvenilir
+                        çözümler.
+                    </p>
+                    <a href="markalar/bosch.html" class="madeniyat-view-collection">
+                        Profesyonel Çözümleri Keşfet
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
 
-                    <!-- Brand 7 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/0984e3?text=Brand+7" alt="Marka 7" loading="lazy"
-                            width="150" height="150">
-                    </div>
+                <div class="madeniyat-products-section">
+                    <!-- Bosch Product 1 - Impact Drill -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Yeni</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://media.bosch-professional.com/binary/ocsmedia/optimized/full/o483859v21.webp"
+                            alt="Bosch GSB 18V-55" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/005691/ffffff?text=Bosch+Matkap'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Bosch GSB 18V-55 Akülü Darbeli Matkap</h3>
+                            <p class="madeniyat-product-price">7,899.00TL</p>
+                        </div>
+                    </article>
 
-                    <!-- Brand 8 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/6c5ce7?text=Brand+8" alt="Marka 8" loading="lazy"
-                            width="150" height="150">
-                    </div>
+                    <!-- Bosch Product 2 - Angle Grinder -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Çok Satan</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://media.bosch-professional.com/binary/ocsmedia/optimized/full/o491671v21.webp"
+                            alt="Bosch GWS 18V-10" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/005691/ffffff?text=Bosch+Taslama'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Bosch GWS 18V-10 Akülü Avuç Taşlama</h3>
+                            <p class="madeniyat-product-price">6,499.00TL</p>
+                        </div>
+                    </article>
 
-                    <!-- Brand 9 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/e17055?text=Brand+9" alt="Marka 9" loading="lazy"
-                            width="150" height="150">
-                    </div>
+                    <!-- Bosch Product 3 - Laser Level -->
+                    <article class="madeniyat-product-card">
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://media.bosch-professional.com/binary/ocsmedia/optimized/full/o91096v21.webp"
+                            alt="Bosch GLL 3-80" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/005691/ffffff?text=Bosch+Lazer'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Bosch GLL 3-80 Profesyonel Lazer</h3>
+                            <p class="madeniyat-product-price">9,299.00TL</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
 
-                    <!-- Brand 10 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/00b894?text=Brand+10" alt="Marka 10"
-                            loading="lazy" width="150" height="150">
-                    </div>
+        <!-- MAKITA Hero Section - Normal Layout -->
+        <section class="madeniyat-hero theme-makita" aria-label="MAKITA Koleksiyonu">
+            <div class="madeniyat-hero-left">
+                <div class="madeniyat-brand-overlay">
+                    <img src="gorseller/makita_official_logo.png" alt="MAKITA Official Logo"
+                        class="madeniyat-brand-logo">
+                </div>
+            </div>
 
-                    <!-- Brand 11 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/00cec9?text=Brand+11" alt="Marka 11"
-                            loading="lazy" width="150" height="150">
-                    </div>
+            <div class="madeniyat-hero-right">
+                <div class="madeniyat-info-section">
+                    <span class="madeniyat-collection-label">SADECE BİR ALET DEĞİL, BİR ÖMÜRLÜK YOLDAŞ</span>
+                    <h3 class="madeniyat-collection-title">Makita LXT Series</h3>
+                    <p class="madeniyat-description makita-quote">
+                        Mükemmellik, bir varış noktası değil, yola çıktığınız andan itibaren sürdürdüğünüz bir
+                        disiplindir.
+                    </p>
+                    <p class="madeniyat-description">
+                        Bu, sadece bir alet koleksiyonu değil. Bu, sizin hikayenize eşlik edecek, her detayında bir
+                        asırlık
+                        sadakatin ve inovasyonun izlerini taşıyan bir yol arkadaşlığı davetidir.
+                    </p>
+                    <a href="markalar/makita.html" class="madeniyat-view-collection">
+                        Hikayenizin Bir Parçası Olsun
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
 
-                    <!-- Brand 12 -->
-                    <div class="brand-circle">
-                        <img src="https://placehold.co/150x150/ffffff/fd79a8?text=Brand+12" alt="Marka 12"
-                            loading="lazy" width="150" height="150">
-                    </div>
+                <div class="madeniyat-products-section">
+                    <!-- Makita Product 1 - Impact Driver -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Yeni</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://www.makitatools.com/sites/default/files/styles/product_feature/public/products/XDT16Z_F_1500px.png"
+                            alt="Makita XDT16" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/00A0B0/ffffff?text=Makita+Somun'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Makita DTD172 18V Darbe Vidalama</h3>
+                            <p class="madeniyat-product-price">5,999.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- Makita Product 2 - Circular Saw -->
+                    <article class="madeniyat-product-card">
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://www.makitatools.com/sites/default/files/styles/product_feature/public/products/XSH06Z_F_1500px.png"
+                            alt="Makita DHS680" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/00A0B0/ffffff?text=Makita+Testere'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Makita DHS680 18V Daire Testere</h3>
+                            <p class="madeniyat-product-price">8,499.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- Makita Product 3 - Blower -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Çok Satan</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://www.makitatools.com/sites/default/files/styles/product_feature/public/products/XBU03Z_F_1500px.png"
+                            alt="Makita DUB184" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/00A0B0/ffffff?text=Makita+Ufleyici'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Makita DUB184 Akülü Yaprak Üfleyici</h3>
+                            <p class="madeniyat-product-price">4,299.00TL</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- KNIPEX Hero Section - Reversed Layout -->
+        <section class="madeniyat-hero reversed theme-knipex" aria-label="KNIPEX Koleksiyonu">
+            <div class="madeniyat-hero-left">
+                <div class="madeniyat-brand-overlay">
+                    <img src="gorseller/knipex_official_logo.png" alt="KNIPEX Official Logo"
+                        class="madeniyat-brand-logo">
+                </div>
+            </div>
+
+            <div class="madeniyat-hero-right">
+                <div class="madeniyat-info-section">
+                    <span class="madeniyat-collection-label">ALMAN MÜHENDİSLİĞİNİN ZİRVESİ: DÜNYANIN EN İYİ
+                        PENSELERİ</span>
+                    <h3 class="madeniyat-collection-title">Knipex ile Tanışın</h3>
+                    <p class="madeniyat-description">
+                        1882 yılından beri Almanya'nın Wuppertal kentinde üretilmeye başlanan Knipex, el aletlerinde
+                        dayanıklılığın ve hassasiyetin küresel simgesidir. En zorlu şantiye koşullarından hassas
+                        elektrik
+                        işlerine kadar her alanda kusursuz performans sunan bu koleksiyon, ergonomik tasarımıyla el
+                        yorgunluğunu en aza indirirken çalışma verimliliğinizi maksimuma çıkarır.
+                    </p>
+                    <a href="markalar/knipex.html" class="madeniyat-view-collection">
+                        Profesyonel Koleksiyonu İncele
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="madeniyat-products-section">
+                    <!-- Knipex Product 1 - Cobra Pliers -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Best Seller</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://www.knipex.com/sites/default/files/styles/product_image_580x580/public/product_images/87_01_250_0.png"
+                            alt="Knipex Cobra" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/E31E24/ffffff?text=Knipex+Cobra'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Knipex Cobra 87 01 250 Su Pompa Pense</h3>
+                            <p class="madeniyat-product-price">1,899.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- Knipex Product 2 - Diagonal Cutter -->
+                    <article class="madeniyat-product-card">
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://www.knipex.com/sites/default/files/styles/product_image_580x580/public/product_images/70_06_160_0.png"
+                            alt="Knipex Yan Keski" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/E31E24/ffffff?text=Knipex+Keski'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Knipex 70 06 160 Yan Keski</h3>
+                            <p class="madeniyat-product-price">899.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- Knipex Product 3 - Pliers Wrench -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Premium</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://www.knipex.com/sites/default/files/styles/product_image_580x580/public/product_images/86_05_250_0.png"
+                            alt="Knipex Pliers Wrench" class="madeniyat-product-image"
+                            onerror="this.src='https://placehold.co/400x400/E31E24/ffffff?text=Knipex+Wrench'">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Knipex 86 05 250 Pliers Wrench</h3>
+                            <p class="madeniyat-product-price">2,499.00TL</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+
+
+
+        <!-- ============================================
+             PRODUCT CAROUSEL - 18 Products Grid
+             3 Rows x 6 Columns with Arrow Navigation
+             ============================================ -->
+        <h2 class="our-brands-section-title">ÖNE ÇIKANLAR</h2>
+        <section id="product-carousel-container" class="product-carousel-container" aria-label="Öne Çıkan Ürünler">
+
+            <!-- Content will be dynamically generated by product-carousel.js -->
+        </section>
+
+        <!-- ============================================
+             TARAFIMIZA AİT FİRMALAR - OUR OWN BRANDS
+             ============================================ -->
+        <h2 class="our-brands-section-title">ÇALIŞTIĞIMIZ DİSTRİBÜTÖRLER</h2>
+
+
+
+
+        <!-- DEWALT Hero Section - Normal Layout (Image Left) -->
+        <section class="madeniyat-hero theme-dewalt" aria-label="DEWALT Koleksiyonu">
+            <div class="madeniyat-hero-left">
+                <div class="madeniyat-brand-overlay">
+                    <img src="gorseller/dewalt_official_logo.png" alt="DEWALT Official Logo"
+                        class="madeniyat-brand-logo">
+                </div>
+            </div>
+
+            <div class="madeniyat-hero-right">
+                <div class="madeniyat-info-section">
+                    <span class="madeniyat-collection-label">AMERİKAN GÜCÜ VE SARSILMAZ PERFORMANS</span>
+                    <h3 class="madeniyat-collection-title">DeWalt Profesyonel Çözümler</h3>
+                    <p class="madeniyat-description">
+                        En zorlu şantiye koşullarında bile asla yarı yolda bırakmayan DeWalt, profesyonel ve endüstriyel
+                        kullanıcılar için dayanıklılığın kitabını yeniden yazıyor. Maksimum güç çıkışı ve uzun kullanım
+                        ömrü sunan kömürsüz (brushless) motor teknolojisiyle donatılmış elektrikli el aletlerimizle,
+                        imkansız görünen işlerin üstesinden gelin.
+                    </p>
+                    <p class="madeniyat-description dewalt-sub-text">
+                        Matkaplardan testerelere, kırıcılardan taşlamalara kadar her bir parça, en ağır iş yükleri
+                        altında bile yüksek verimlilik sunmak üzere Amerika'nın mühendislik mirasıyla tasarlanmıştır.
+                    </p>
+                    <a href="markalar/dewalt.html" class="madeniyat-view-collection">
+                        Profesyonel Gücü Keşfet
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="madeniyat-products-section">
+                    <!-- DEWALT Product 1 -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Çok Satan</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://placehold.co/400x400/FEBD17/1a1a1a?text=DEWALT+Drill" alt="DEWALT Matkap"
+                            class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">DEWALT DCD791 20V MAX Matkap</h3>
+                            <p class="madeniyat-product-price">4,599.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- DEWALT Product 2 -->
+                    <article class="madeniyat-product-card">
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://placehold.co/400x400/FEBD17/1a1a1a?text=DEWALT+Saw" alt="DEWALT Testere"
+                            class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">DEWALT DCS391 20V MAX Daire Testere</h3>
+                            <p class="madeniyat-product-price">5,799.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- DEWALT Product 3 -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Yeni</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://placehold.co/400x400/FEBD17/1a1a1a?text=DEWALT+Impact"
+                            alt="DEWALT Somun Sıkma" class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">DEWALT DCF899 20V MAX Somun Sıkma</h3>
+                            <p class="madeniyat-product-price">6,499.00TL</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- BLACK+DECKER Hero Section - Reversed Layout (Image Right) -->
+        <section class="madeniyat-hero reversed theme-blackdecker" aria-label="BLACK+DECKER Koleksiyonu">
+            <div class="madeniyat-hero-left">
+                <div class="madeniyat-brand-overlay">
+                    <img src="gorseller/blackdecker_official_logo.png" alt="BLACK+DECKER Official Logo"
+                        class="madeniyat-brand-logo">
+                </div>
+            </div>
+
+            <div class="madeniyat-hero-right">
+                <div class="madeniyat-info-section">
+                    <span class="madeniyat-collection-label">EVİNİZİN VE BAHÇENİZİN UZMANI</span>
+                    <h3 class="madeniyat-collection-title">BLACK+DECKER ile Değişime Başlayın</h3>
+                    <p class="madeniyat-description">
+                        100 yılı aşkın süredir dünyanın dört bir yanındaki evlerde hayatı kolaylaştıran BLACK+DECKER,
+                        şimdi en yenilikçi çözümleriyle karşınızda. Pratik kullanım sunan akülü vidalamalardan bahçenizi
+                        kusursuz hale getirecek çim biçme ve budama makinelerine kadar her şey tek bir çatıda.
+                    </p>
+                    <p class="madeniyat-description blackdecker-sub-text">
+                        Amatör ruhu profesyonel sonuçlarla birleştiren bu koleksiyon, en karmaşık ev projelerini bile
+                        keyifli bir hobiye dönüştürüyor. Modern tasarımı ve güvenilir performansıyla evinizin her
+                        köşesinde bir imzanız olsun.
+                    </p>
+                    <a href="markalar/black-decker.html" class="madeniyat-view-collection">
+                        Koleksiyonu İncele
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="madeniyat-products-section">
+                    <!-- BLACK+DECKER Product 1 -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Çok Satan</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://placehold.co/400x400/FF6600/1a1a1a?text=BD+Drill" alt="BLACK+DECKER Matkap"
+                            class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">BLACK+DECKER 20V MAX Akülü Matkap</h3>
+                            <p class="madeniyat-product-price">2,299.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- BLACK+DECKER Product 2 -->
+                    <article class="madeniyat-product-card">
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://placehold.co/400x400/FF6600/1a1a1a?text=BD+Sander" alt="BLACK+DECKER Zımpara"
+                            class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">BLACK+DECKER Mouse Zımpara Makinesi</h3>
+                            <p class="madeniyat-product-price">1,599.00TL</p>
+                        </div>
+                    </article>
+
+                    <!-- BLACK+DECKER Product 3 -->
+                    <article class="madeniyat-product-card">
+                        <span class="madeniyat-product-badge">Premium</span>
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="https://placehold.co/400x400/FF6600/1a1a1a?text=BD+Set" alt="BLACK+DECKER Set"
+                            class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">BLACK+DECKER 160 Parça Aksesuar Seti</h3>
+                            <p class="madeniyat-product-price">1,899.00TL</p>
+                        </div>
+                    </article>
                 </div>
             </div>
         </section>
 
         <!-- Flowing Menu Section -->
+
         <section class="future-content" style="padding: 0; background: transparent;">
             <h2 class="page-main-title">
                 Tüm Markalar</h2>
@@ -431,26 +1055,26 @@
                 <div class="popular-column">
                     <h2 class="popular-title">Popüler Markalar</h2>
                     <ul class="popular-list">
-                        <li><a href="markalar/adidas.html">Adidas</a></li>
-                        <li><a href="markalar/nike.html">Nike</a></li>
-                        <li><a href="markalar/puma.html">Puma</a></li>
-                        <li><a href="markalar/zara.html">Zara</a></li>
-                        <li><a href="markalar/hm.html">H&M</a></li>
-                        <li><a href="markalar/mango.html">Mango</a></li>
-                        <li><a href="markalar/bershka.html">Bershka</a></li>
-                        <li><a href="markalar/pull-bear.html">Pull & Bear</a></li>
-                        <li><a href="markalar/stradivarius.html">Stradivarius</a></li>
-                        <li><a href="markalar/koton.html">Koton</a></li>
-                        <li><a href="markalar/lc-waikiki.html">LC Waikiki</a></li>
-                        <li><a href="markalar/defacto.html">Defacto</a></li>
-                        <li><a href="markalar/mavi.html">Mavi</a></li>
-                        <li><a href="markalar/pierre-cardin.html">Pierre Cardin</a></li>
-                        <li><a href="markalar/us-polo.html">US Polo Assn</a></li>
-                        <li><a href="markalar/hummel.html">Hummel</a></li>
-                        <li><a href="markalar/skechers.html">Skechers</a></li>
-                        <li><a href="markalar/new-balance.html">New Balance</a></li>
-                        <li><a href="markalar/reebok.html">Reebok</a></li>
-                        <li><a href="markalar/under-armour.html">Under Armour</a></li>
+                        <li><a href="markalar/beta.html">Beta</a></li>
+                        <li><a href="markalar/bosch.html">Bosch</a></li>
+                        <li><a href="markalar/makita.html">Makita</a></li>
+                        <li><a href="markalar/knipex.html">Knipex</a></li>
+                        <li><a href="markalar/wd-40.html">WD-40</a></li>
+                        <li><a href="markalar/fisco.html">Fisco</a></li>
+                        <li><a href="markalar/einhell.html">Einhell</a></li>
+                        <li><a href="markalar/black-decker.html">Black+Decker</a></li>
+                        <li><a href="markalar/dewalt.html">Dewalt</a></li>
+                        <li><a href="markalar/izeltas.html">İzeltaş</a></li>
+                        <li><a href="markalar/stanley.html">Stanley</a></li>
+                        <li><a href="markalar/gedore.html">Gedore</a></li>
+                        <li><a href="markalar/metabo.html">Metabo</a></li>
+                        <li><a href="markalar/milwaukee.html">Milwaukee</a></li>
+                        <li><a href="markalar/kama.html">Kama</a></li>
+                        <li><a href="markalar/proxxon.html">Proxxon</a></li>
+                        <li><a href="markalar/karbosan.html">Karbosan</a></li>
+                        <li><a href="markalar/kristal.html">Kristal</a></li>
+                        <li><a href="markalar/osaka.html">Osaka</a></li>
+                        <li><a href="markalar/gison.html">Gison</a></li>
                     </ul>
                 </div>
 
@@ -461,23 +1085,16 @@
                         <li><a href="yeni-gelenler.html">Yeni Gelenler</a></li>
                         <li><a href="cok-satanlar.html">Çok Satanlar</a></li>
                         <li><a href="populer.html">Popüler Ürünler</a></li>
-                        <li><a href="indirimli-urunler.html">İndirimli Ürünler</a></li>
-                        <li><a href="kampanyalar.html">Kampanyalar</a></li>
-                        <li><a href="erkek-giyim.html">Erkek Giyim</a></li>
-                        <li><a href="kadin-giyim.html">Kadın Giyim</a></li>
-                        <li><a href="cocuk-giyim.html">Çocuk Giyim</a></li>
-                        <li><a href="ayakkabi.html">Ayakkabı</a></li>
-                        <li><a href="canta-aksesuar.html">Çanta & Aksesuar</a></li>
-                        <li><a href="elektronik.html">Elektronik</a></li>
-                        <li><a href="ev-yasam.html">Ev & Yaşam</a></li>
-                        <li><a href="kozmetik.html">Kozmetik</a></li>
-                        <li><a href="spor-outdoor.html">Spor & Outdoor</a></li>
-                        <li><a href="hirdavat.html">Hırdavat</a></li>
-                        <li><a href="yapi-market.html">Yapı Market</a></li>
-                        <li><a href="otomobil.html">Otomobil</a></li>
-                        <li><a href="kisisel-bakim.html">Kişisel Bakım</a></li>
-                        <li><a href="anne-bebek.html">Anne & Bebek</a></li>
-                        <li><a href="kitap-muzik.html">Kitap & Müzik</a></li>
+                        <li><a href="kategoriler/elektrikli-el-aletleri.html">Elektrikli El Aletleri</a></li>
+                        <li><a href="kategoriler/olcme-ve-kontrol-aletleri.html">Ölçme & Kontrol Aletleri</a></li>
+                        <li><a href="kategoriler/el-aletleri.html">El Aletleri</a></li>
+                        <li><a href="kategoriler/nalbur-yapi-malzemeleri.html">Yapı ve İnşaat Malzemeleri</a></li>
+                        <li><a href="kategoriler/asindirici-kesici.html">Aşındırıcı ve Kesici Uçlar</a></li>
+                        <li><a href="kategoriler/yapi-kimyasallari.html">Yapıştırıcı, Dolgu ve Kimyasallar</a></li>
+                        <li><a href="kategoriler/kaynak-malzemeleri.html">Kaynak Malzemeleri</a></li>
+                        <li><a href="kategoriler/hirdavat-el-aletleri.html">Hırdavat ve El Aletleri</a></li>
+                        <li><a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">İş Güvenliği ve Çalışma
+                                Ekipmanları</a></li>
                     </ul>
                 </div>
             </div>
@@ -645,149 +1262,36 @@
         </div>
     </div>
 
-    <script src="api-client.js"></script>
-    <script src="product-carousel.js"></script>
     <script src="categories-data.js?v=103"></script>
     <script src="products-data.js?v=99"></script>
     <script src="config.js"></script>
+    <script src="api-client.js"></script>
     <script src="auth.js"></script>
+    <script src="live-search.js"></script>
     <script src="script.js"></script>
 
     <script src="slider.js"></script>
+    <script src="product-carousel.js"></script>
+
 
     <!-- React Integration Scripts -->
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <!-- Component Stylesheet -->
-    <link rel="stylesheet" href="ChromaGrid.css">
-    <link rel="stylesheet" href="FlowingMenu.css">
+    <link rel="stylesheet" href="ChromaGrid.css?v=2">
+    <link rel="stylesheet" href="FlowingMenu.css?v=200">
 
-    <!-- Inlined React Component and Mounting Logic -->
-    <script type="text/babel">
-        // Shared React Imports
-        const { useRef, useEffect, useState } = React;
-        const { gsap } = window;
+    <!-- Pre-compiled React Components (No Babel needed - much faster!) -->
+    <script src="react-components.js?v=1"></script>
 
-        // --- ChromaGrid Component ---
-        const ChromaGrid = ({ items, className = '' }) => {
-            const handleCardClick = url => { if (url) window.location.href = url; };
-            return (
-                <div className={`chroma-grid ${className}`}>
-                    {items.map((c, i) => (
-                        <article key={i} className="chroma-card" onClick={() => handleCardClick(c.url)} style={{ cursor: c.url ? 'pointer' : 'default' }}>
-                            <div className="chroma-img-wrapper">
-                                <img src={c.image} alt={c.title} loading="lazy" style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover' }} onError={(e) => { e.target.src = 'https://placehold.co/400x300?text=Kategori'; }} />
-                            </div>
-                            <footer className="chroma-info">
-                                <h3 className="name">{c.title}</h3>
-                            </footer>
-                        </article>
-                    ))}
-                </div>
-            );
-        };
-
-        // --- FlowingMenu Component ---
-        const FlowingMenu = () => {
-            const [activeImage, setActiveImage] = useState(null);
-            const [categories, setCategories] = useState([]);
-
-            useEffect(() => {
-                const fetchData = async () => {
-                    const [catRes, brandRes] = await Promise.all([
-                        window.API.getCategories(),
-                        window.API.getBrands()
-                    ]);
-
-                    if (catRes.success && brandRes.success) {
-                        const formatted = catRes.data.slice(0, 10).map((cat, i) => ({
-                            id: cat._id,
-                            name: cat.name,
-                            brands: brandRes.data.filter(b => b.category === cat.name || i % 2 === 0).slice(0, 15).map(b => ({
-                                id: b._id,
-                                text: b.name,
-                                image: b.logo || `https://picsum.photos/seed/${b._id}/1920/1080`
-                            }))
-                        }));
-                        setCategories(formatted);
-                    }
-                };
-                fetchData();
-            }, []);
-
-            const allBrands = categories.flatMap(c => c.brands);
-
-            return (
-                <div className="flowing-menu-container">
-                    <div className="flowing-menu-scroll-wrapper">
-                        {categories.map((cat) => (
-                            <div key={cat.id} className="flowing-menu-column">
-                                <h3 className="flowing-menu-header">{cat.name}</h3>
-                                <ul className="flowing-menu-list-column">
-                                    {cat.brands.map((brand) => (
-                                        <li key={brand.id} className="flowing-menu-item" onMouseEnter={() => setActiveImage(brand.image)}>
-                                            {brand.text}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flowing-menu-background">
-                        {allBrands.map((item) => (
-                            <div key={item.id} className={`flowing-image ${activeImage === item.image ? 'active' : ''}`} style={{ backgroundImage: `url(${item.image})` }} />
-                        ))}
-                    </div>
-                </div>
-            );
-        };
-
-        // --- Mounting Logic ---
-        async function mountComponents() {
-            // 1. Mount ChromaGrid
-            const categoriesNode = document.getElementById('kategoriler');
-            if (categoriesNode) {
-                const res = await window.API.getCategories();
-                if (res.success && res.data) {
-                    const items = res.data.slice(0, 18).map(cat => ({
-                        title: cat.name,
-                        url: `kategoriler/${cat.slug}.html`,
-                        image: cat.image || `gorseller/category_${cat.slug}.png`
-                    }));
-
-                    const rootNode = document.createElement('div');
-                    rootNode.id = 'categories-grid-root';
-                    categoriesNode.innerHTML = '<h2 class="section-title page-main-title">Tüm Kategoriler</h2>';
-                    categoriesNode.appendChild(rootNode);
-
-                    const root = ReactDOM.createRoot(rootNode);
-                    root.render(<ChromaGrid items={items} />);
-                }
-            }
-
-            // 2. Mount FlowingMenu
-            const flowingNode = document.getElementById('flowing-menu-root');
-            if (flowingNode) {
-                const rootFlowing = ReactDOM.createRoot(flowingNode);
-                rootFlowing.render(<FlowingMenu />);
-            }
-        }
-
-        mountComponents();
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="grid-motion.js"></script>
-    <script src="live-search.js"></script>
     <script src="cookie-consent.js"></script>
+
     <!-- Mobile Search Overlay -->
     <div id="mobile-search-overlay" class="mobile-search-overlay">
         <div class="mobile-search-content">
-            <button class="close-search-btn" aria-label="Kapat">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
             <form action="arama.html" method="GET" class="mobile-search-form">
                 <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
                     autocomplete="off">
@@ -795,11 +1299,12 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
     </div>
 
-    <!-- Ensure Data is Loaded for Live Search -->
-    <script src="products-data.js"></script>
     <script src="mobile-menu.js"></script>
 </body>
 
