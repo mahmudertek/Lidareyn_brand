@@ -12,10 +12,18 @@
         }
 
         if (window.BAKIM_MODU_AKTIF === true) {
-            // ADMIN KONTROLÜ (Giriş yaptıysanız siteyi görebilirsiniz)
+            // GIZLI ANAHTAR KONTROLU (?admin=true)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('admin') === 'true') {
+                localStorage.setItem('admin_bypass', 'true');
+                console.log('🔑 Gizli anahtar kabul edildi. Bakim modu devre disi.');
+            }
+
+            // ADMIN KONTROLÜ (Giriş yapanlar veya gizli anahtarı olanlar)
             const isAdmin = localStorage.getItem('adminToken') ||
                 localStorage.getItem('token') ||
-                localStorage.getItem('galatacarsi_token');
+                localStorage.getItem('galatacarsi_token') ||
+                localStorage.getItem('admin_bypass') === 'true';
 
             const isBakimPage = window.location.pathname.includes('bakimda.html');
 
