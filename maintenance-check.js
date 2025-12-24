@@ -21,29 +21,40 @@
 
     // API Base URL (admin-api.js ile senkronize olmalı)
     const baseUrl = window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1'
+        window.location.hostname === '127.0.0.1' ||
+        window.location.protocol === 'file:' // Bilgisayardan açıldığında yerel sunucuyu dene
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api';
 
     // Backend'den bakım durumu kontrolü
-    // Not: Bu işlem asenkron olduğu için sayfa yüklenirken kısa bir süre içerik görünebilir
-    // Bu yüzden index.html'de blocking style kullanıyoruz.
     fetch(`${baseUrl}/settings`)
-        .then(res => res.json())
+        .then(res => {
+            // Eğer sunucu 503 (Bakım) veriyorsa direkt bakım sayfasına git
+            if (res.status === 503 && !isAuthorized) {
+                window.location.href = 'maintenance.html';
+                return;
+            }
+            return res.json();
+        })
         .then(data => {
+            if (!data) return; // Zaten yönlendirildik
+
             if (data.success && data.data && data.data.isMaintenanceMode) {
+                // Sadece admin DEĞİLSEN yönlendir
                 if (!isAuthorized) {
-                    window.location.href = '/maintenance.html';
+                    window.location.href = 'maintenance.html';
+                } else {
+                    console.log('👷 Admin yetkisiyle siteyi görüyorsunuz.');
+                    const blockingStyle = document.getElementById('bakim-blocking-style');
+                    if (blockingStyle) blockingStyle.remove();
                 }
             } else {
-                // Bakım modu kapalıysa veya hata varsa blocking style'ı kaldır (index.html için)
                 const blockingStyle = document.getElementById('bakim-blocking-style');
                 if (blockingStyle) blockingStyle.remove();
             }
         })
         .catch(err => {
-            console.error('Maintenance check failed:', err);
-            // Hata durumunda siteyi açık bırakıyoruz (safe-fail)
+            console.error('Maintenance check error:', err);
             const blockingStyle = document.getElementById('bakim-blocking-style');
             if (blockingStyle) blockingStyle.remove();
         });

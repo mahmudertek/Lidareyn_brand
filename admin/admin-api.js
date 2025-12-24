@@ -4,7 +4,8 @@
 const ADMIN_API = {
     // API Base URL
     baseUrl: window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1'
+        window.location.hostname === '127.0.0.1' ||
+        window.location.protocol === 'file:' // Yerel dosyadan açıldığında da localhost'u dene
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api',
 
