@@ -436,10 +436,14 @@ const ADMIN_API = {
     async updateMaintenanceMode(isMaintenanceMode) {
         console.log('🔄 Bakım modu güncelleniyor:', isMaintenanceMode);
         try {
-            const response = await fetch(`${this.baseUrl}/settings/maintenance`, {
+            // Yeni public endpoint kullan (secret key ile)
+            const response = await fetch(`${this.baseUrl}/settings/maintenance-toggle`, {
                 method: 'POST',
-                headers: this.getHeaders(),
-                body: JSON.stringify({ isMaintenanceMode })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    isMaintenanceMode,
+                    secretKey: 'galatacarsi2024-bakim-secret'
+                })
             });
             const data = await response.json();
             console.log('📥 Sunucu yanıtı:', data);
