@@ -27,25 +27,33 @@
         : 'https://galatacarsi-backend-api.onrender.com/api';
 
     // Backend'den bakım durumu kontrolü
-    // Cache bozucu ekleyerek her seferinde güncel durumu almasını sağlıyoruz
+    console.log('🔗 Bakım kontrolü yapılıyor: ' + baseUrl);
+
     fetch(`${baseUrl}/settings?t=${Date.now()}`)
         .then(res => {
-            // Eğer sunucu 503 (Bakım) veriyorsa direkt bakım sayfasına git
-            if (res.status === 503 && !isAuthorized) {
-                window.location.href = '/maintenance.html';
-                return;
+            console.log('📡 Sunucu Yanıt Kodu:', res.status);
+            // Eğer sunucu 503 (Bakım) veriyorsa ve admin değilsek
+            if (res.status === 503) {
+                if (!isAuthorized) {
+                    console.log('🚫 Erişim Reddedildi: Bakım Modu Aktif.');
+                    window.location.href = '/maintenance.html';
+                    return;
+                }
             }
             return res.json();
         })
         .then(data => {
-            if (!data) return; // Zaten yönlendirildik
+            if (!data) return;
 
-            if (data.success && data.data && data.data.isMaintenanceMode) {
-                // Sadece admin DEĞİLSEN yönlendir
+            const isMaintenance = data.data?.isMaintenanceMode;
+            console.log('📊 Bakım Modu Aktif mi?:', isMaintenance);
+            console.log('👤 Yetkili Kullanıcı mı?:', !!isAuthorized);
+
+            if (isMaintenance) {
                 if (!isAuthorized) {
                     window.location.href = '/maintenance.html';
                 } else {
-                    console.log('👷 Admin yetkisiyle siteyi görüyorsunuz.');
+                    console.warn('⚠️ DİKKAT: Site şu an bakımda ama Admin olduğunuz için görebiliyorsunuz.');
                     const blockingStyle = document.getElementById('bakim-blocking-style');
                     if (blockingStyle) blockingStyle.remove();
                 }
