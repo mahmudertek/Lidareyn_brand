@@ -2,12 +2,9 @@
 // Bu dosya admin panelini backend API'lere bağlar
 
 const ADMIN_API = {
-    // API Base URL
-    baseUrl: window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:' // Yerel dosyadan açıldığında da localhost'u dene
-        ? 'http://localhost:5000/api'
-        : 'https://galatacarsi-backend-api.onrender.com/api',
+    // API Base URL - HER ZAMAN CANLI API KULLAN
+    // Bakım modu ve diğer ayarlar canlı siteyi etkilemeli
+    baseUrl: 'https://galatacarsi-backend-api.onrender.com/api',
 
     // Get auth token from localStorage
     getToken() {
