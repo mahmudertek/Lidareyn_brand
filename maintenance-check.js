@@ -10,11 +10,11 @@
         return;
     }
 
-    const isAuthorized = localStorage.getItem('adminToken');
-    if (isAuthorized) {
-        console.log('🛡️ Admin yetkisi algılandı, siteye erişim serbest.');
-        return;
-    }
+    // const isAuthorized = localStorage.getItem('adminToken');
+    // if (isAuthorized) {
+    //     console.log('🛡️ Admin yetkisi algılandı, siteye erişim serbest.');
+    //     return;
+    // }
 
     const baseUrl = (window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
@@ -49,6 +49,19 @@
     }
 
     function redirectToMaintenance() {
+        if (window.location.protocol === 'file:') {
+            // Local file system redirect
+            // Check if we are in a subdirectory (e.g. admin or categories)
+            const pathParts = window.location.pathname.split('/');
+            const isInSubDir = pathParts.length > 2 && !window.location.pathname.endsWith('/'); // Rough check
+
+            // If we are deep, we might need ../maintenance.html. 
+            // But usually this script runs on main pages. 
+            // For now, assume root or simple relative.
+            window.location.href = 'maintenance.html';
+            return;
+        }
+
         const siteUrl = window.location.hostname === 'localhost' ? '' : 'https://www.galatacarsi.com';
         const finalTarget = siteUrl + '/maintenance.html';
         console.log('✈️ Hedef: ' + finalTarget);

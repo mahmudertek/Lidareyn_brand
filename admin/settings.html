@@ -815,6 +815,12 @@
                     throw new Error(maintenanceRes.message || 'Bakım modu güncellenemedi');
                 }
 
+                // Notify other tabs/windows
+                try {
+                    const bc = new BroadcastChannel('admin_settings_channel');
+                    bc.postMessage({ type: 'maintenance_updated', isMaintenanceMode: maintenanceMode });
+                } catch (e) { console.log('BroadcastChannel error', e); }
+
                 alert('Genel ayarlar başarıyla kaydedildi!');
             } catch (error) {
                 console.error('Save settings error:', error);
@@ -902,6 +908,22 @@
         }
 
         loadSettings();
+
+        // Listen for updates from other tabs (Dashboard)
+        try {
+            const bc = new BroadcastChannel('admin_settings_channel');
+            bc.onmessage = (event) => {
+                if (event.data && event.data.type === 'maintenance_updated') {
+                    console.log('📡 [Ayarlar] Senkronizasyon mesajı alındı:', event.data);
+                    const checkbox = document.getElementById('maintenanceMode');
+                    if (checkbox) {
+                        checkbox.checked = event.data.isMaintenanceMode;
+                    }
+                }
+            };
+        } catch (e) {
+            console.log('BroadcastChannel not supported');
+        }
     </script>
 </body>
 

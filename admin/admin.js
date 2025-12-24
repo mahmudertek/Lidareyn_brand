@@ -148,6 +148,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // Sayfa yüklendiğinde gerçek verileri çek
     loadDashboardData();
 
+    // Listen for updates from other tabs
+    try {
+        const bc = new BroadcastChannel('admin_settings_channel');
+        bc.onmessage = (event) => {
+            if (event.data && event.data.type === 'maintenance_updated') {
+                console.log('📡 Senkronizasyon mesajı alındı:', event.data);
+                checkMaintenanceMode(); // Re-fetch status
+            }
+        };
+    } catch (e) {
+        console.log('BroadcastChannel not supported');
+    }
+
 });
 
 // Dashboard verilerini backend'den çek
@@ -320,6 +333,7 @@ async function checkMaintenanceMode() {
         const status = document.getElementById('maintenanceStatus');
 
         if (toggle && card && status) {
+            console.log('🔄 Dashboard Bakım Modu Senkronizasyonu:', isMaintenanceMode);
             toggle.checked = isMaintenanceMode;
 
             if (isMaintenanceMode) {
@@ -352,11 +366,19 @@ async function toggleMaintenanceMode() {
                 card.classList.add('maintenance-active');
                 status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
                 showNotification('🔧 Bakım modu aktif edildi!', 'warning');
+                // alert('Bakım modu AÇILDI. Lütfen ana sayfayı (index.html) yenileyerek kontrol edin.');
             } else {
                 card.classList.remove('maintenance-active');
                 status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
                 showNotification('✅ Site tekrar açıldı!', 'success');
+                // alert('Bakım modu KAPATILDI. Site tekrar ziyarete açıldı.');
             }
+
+            // Broadcast the change
+            try {
+                const bc = new BroadcastChannel('admin_settings_channel');
+                bc.postMessage({ type: 'maintenance_updated', isMaintenanceMode: isMaintenanceMode });
+            } catch (e) { }
         } else {
             // Hata durumunda toggle'ı geri al
             toggle.checked = !isMaintenanceMode;
@@ -368,6 +390,7 @@ async function toggleMaintenanceMode() {
         toggle.checked = !isMaintenanceMode;
         const msg = error.message || 'Sunucuya ulaşılamıyor (Bağlantı Engellendi)';
         showNotification('❌ Hata: ' + msg, 'error');
+        alert('Bakım modu değiştirilemedi: ' + msg);
     }
 }
 
