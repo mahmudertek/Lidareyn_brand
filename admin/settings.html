@@ -797,20 +797,32 @@
         }
 
         // Save functions
-        function saveGeneralSettings() {
-            const data = {
-                storeName: document.getElementById('storeName').value,
-                storeEmail: document.getElementById('storeEmail').value,
-                storePhone: document.getElementById('storePhone').value,
-                storeWhatsapp: document.getElementById('storeWhatsapp').value,
-                storeAddress: document.getElementById('storeAddress').value,
-                themeColor: document.getElementById('themeColor').value,
-                maintenanceMode: document.getElementById('maintenanceMode').checked,
-                allowRegistration: document.getElementById('allowRegistration').checked
-            };
-            localStorage.setItem('siteSettings', JSON.stringify(data));
-            localStorage.setItem('maintenanceMode', data.maintenanceMode);
-            alert('Genel ayarlar kaydedildi!');
+        // Save general settings
+        async function saveGeneralSettings() {
+            const btn = document.querySelector('.btn-save');
+            const originalContent = btn.innerHTML;
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...';
+
+                const maintenanceMode = document.getElementById('maintenanceMode').checked;
+
+                // 1. Update maintenance mode
+                const maintenanceRes = await ADMIN_API.updateMaintenanceMode(maintenanceMode);
+
+                if (!maintenanceRes.success) {
+                    throw new Error(maintenanceRes.message || 'Bakım modu güncellenemedi');
+                }
+
+                alert('Genel ayarlar başarıyla kaydedildi!');
+            } catch (error) {
+                console.error('Save settings error:', error);
+                alert('Hata: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
         }
 
         function savePaymentSettings() {
@@ -861,7 +873,7 @@
         }
 
         function clearAllData() {
-            if (confirm('TÜM VERİLERİ SİLMEK İSTEDİĞİNİZDEN EMİN MİSİNİZ?\n\nBu işlem geri alınamaz!')) {
+            if (confirm('TÜM VERİLERİ SİLMEK İSTEDİĞİNİZDEN EMİN MİSİZ?\n\nBu işlem geri alınamaz!')) {
                 if (confirm('Son kez onaylayın: Tüm veriler silinecek!')) {
                     alert('Bu işlem için backend desteği gereklidir.');
                 }
@@ -869,13 +881,20 @@
         }
 
         // Load saved settings
-        function loadSettings() {
-            const saved = localStorage.getItem('siteSettings');
-            if (saved) {
-                const data = JSON.parse(saved);
-                if (data.storeName) document.getElementById('storeName').value = data.storeName;
-                if (data.storeEmail) document.getElementById('storeEmail').value = data.storeEmail;
-                if (data.maintenanceMode !== undefined) document.getElementById('maintenanceMode').checked = data.maintenanceMode;
+        async function loadSettings() {
+            try {
+                const response = await ADMIN_API.getSettings();
+                if (response.success && response.data) {
+                    const settings = response.data;
+                    document.getElementById('maintenanceMode').checked = settings.isMaintenanceMode || false;
+
+                    if (settings.siteName) document.getElementById('storeName').value = settings.siteName;
+                    if (settings.contactEmail) document.getElementById('storeEmail').value = settings.contactEmail;
+                    if (settings.phoneNumber) document.getElementById('storePhone').value = settings.phoneNumber;
+                    if (settings.address) document.getElementById('storeAddress').value = settings.address;
+                }
+            } catch (error) {
+                console.error('Load settings error:', error);
             }
 
             const ga4Id = localStorage.getItem('ga4Id');

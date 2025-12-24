@@ -633,25 +633,19 @@
 
             try {
                 const response = await ADMIN_API.getProducts({ limit: 100 });
-                if (response.success) {
+                if (response.success && response.data) {
                     products = response.data;
                     renderProducts();
+                    console.log('✅ Gerçek veriler yüklendi');
                 } else {
-                    showError('Ürünler yüklenirken hata oluştu');
+                    products = [];
+                    renderProducts();
+                    console.warn('⚠️ Sunucudan boş veri geldi veya hata oluştu');
                 }
             } catch (error) {
                 console.error('Load products error:', error);
-                // Fallback to demo data if API fails
-                products = [
-                    { _id: '1', name: 'Bosch GSB 18V-55 Akülü Darbeli Matkap', brand: 'Bosch', category: 'Elektrikli El Aletleri', price: 7899, stock: 45, mainImage: 'https://placehold.co/60x60/005691/fff?text=Bosch' },
-                    { _id: '2', name: 'Makita DTD172 18V Darbe Vidalama', brand: 'Makita', category: 'Elektrikli El Aletleri', price: 5999, stock: 28, mainImage: 'https://placehold.co/60x60/00A0B0/fff?text=Makita' },
-                    { _id: '3', name: 'Beta 666N/30 Tork Anahtarı', brand: 'Beta', category: 'El Aletleri', price: 5499, stock: 12, mainImage: 'https://placehold.co/60x60/E30613/fff?text=Beta' },
-                    { _id: '4', name: 'Knipex Cobra 87 01 250', brand: 'Knipex', category: 'El Aletleri', price: 1899, stock: 0, mainImage: 'https://placehold.co/60x60/E31E24/fff?text=Knipex' },
-                    { _id: '5', name: 'DEWALT DCD791 20V MAX Matkap', brand: 'DEWALT', category: 'Elektrikli El Aletleri', price: 4599, stock: 33, mainImage: 'https://placehold.co/60x60/FEBD17/000?text=DEWALT' },
-                    { _id: '6', name: 'BLACK+DECKER 20V MAX Akülü Matkap', brand: 'BLACK+DECKER', category: 'Elektrikli El Aletleri', price: 2299, stock: 8, mainImage: 'https://placehold.co/60x60/FF6600/fff?text=B+D' },
-                ];
-                renderProducts();
-                console.warn('API bağlantısı kurulamadı, demo veriler gösteriliyor');
+                showError('Sunucu bağlantısı kurulamadı. Lütfen sunucunun (server.js) çalıştığından emin olun.');
+                products = [];
             }
 
             isLoading = false;

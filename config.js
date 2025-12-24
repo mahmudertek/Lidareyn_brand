@@ -4,20 +4,17 @@
 const ENV = {
     // Otomatik ortam tespiti
     isDevelopment: window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:',
+        window.location.hostname === '127.0.0.1',
 
     // API URL'leri
     API_URL: window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:'
+        window.location.hostname === '127.0.0.1'
         ? 'http://localhost:5000/api'  // Development
         : 'https://galatacarsi-backend-api.onrender.com/api',  // Production - Render Backend
 
     // Site URL'leri
     SITE_URL: window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:'
+        window.location.hostname === '127.0.0.1'
         ? 'http://localhost'  // Development
         : 'https://yourdomain.com',  // Production - BURAYA DOMAIN'İNİZİ YAZIN
 
@@ -27,8 +24,7 @@ const ENV = {
 
     // Debug modu
     DEBUG: window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:'
+        window.location.hostname === '127.0.0.1'
 };
 
 // Console'da ortam bilgisini göster
