@@ -2,8 +2,18 @@
 <html lang="tr">
 
 <head>
-    <!-- Bakım Modu Sistemi (Dinamik) -->
-    <script src="maintenance-check.js?v=3.0"></script>
+    <!-- BAKIM MODU KONTROLU (INLINE - V6) -->
+    <script>
+    (function(){
+        if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
+        if(localStorage.getItem('adminToken')) return;
+        fetch('https://galatacarsi-backend-api.onrender.com/api/settings?t='+Date.now())
+        .then(r=>r.json())
+        .then(d=>{if(d.data&&d.data.isMaintenanceMode)location.href='/maintenance.html';})
+        .catch(()=>{});
+    })();
+    </script>
+
     <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
     <script>
