@@ -27,11 +27,12 @@
         : 'https://galatacarsi-backend-api.onrender.com/api';
 
     // Backend'den bakım durumu kontrolü
-    fetch(`${baseUrl}/settings`)
+    // Cache bozucu ekleyerek her seferinde güncel durumu almasını sağlıyoruz
+    fetch(`${baseUrl}/settings?t=${Date.now()}`)
         .then(res => {
             // Eğer sunucu 503 (Bakım) veriyorsa direkt bakım sayfasına git
             if (res.status === 503 && !isAuthorized) {
-                window.location.href = 'maintenance.html';
+                window.location.href = '/maintenance.html';
                 return;
             }
             return res.json();
@@ -42,7 +43,7 @@
             if (data.success && data.data && data.data.isMaintenanceMode) {
                 // Sadece admin DEĞİLSEN yönlendir
                 if (!isAuthorized) {
-                    window.location.href = 'maintenance.html';
+                    window.location.href = '/maintenance.html';
                 } else {
                     console.log('👷 Admin yetkisiyle siteyi görüyorsunuz.');
                     const blockingStyle = document.getElementById('bakim-blocking-style');

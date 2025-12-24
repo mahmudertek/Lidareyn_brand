@@ -2,31 +2,13 @@
 <html lang="tr">
 
 <head>
-    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (Dinamik) -->
     <style id="bakim-blocking-style">html { display: none !important; }</style>
-    <script src="bakim-ayari.js?v=4"></script>
-    <script>
-        (function () {
-            const isAuthorized = localStorage.getItem('admin_session') ||
-                localStorage.getItem('adminToken') ||
-                localStorage.getItem('token');
-            const urlParams = new URLSearchParams(window.location.search);
-            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
-
-            if (hasBypass) {
-                localStorage.setItem('admin_session', 'active_' + Date.now());
-                window.location.href = window.location.pathname;
-                return;
-            }
-
-            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
-                window.location.href = 'bakimda.html';
-                return;
-            }
-
-            document.getElementById('bakim-blocking-style').remove();
-        })();
-    </script>
+    <script src="/maintenance-check.js?v=Global_1.1"></script>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    
+    
+    
 
     <meta charset="UTF-8">
     <title>Bebek Görsel Test</title>
