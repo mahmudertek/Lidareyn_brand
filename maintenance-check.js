@@ -26,11 +26,21 @@
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api';
 
+    // EMNİYET ZAMANLAYICISI: Sunucu 3 saniye içinde yanıt vermezse kilidi aç (Beyaz ekranı önler)
+    const safetyTimeout = setTimeout(() => {
+        const blockingStyle = document.getElementById('bakim-blocking-style');
+        if (blockingStyle) {
+            console.warn('⏰ Sunucu geç yanıt verdi, kilit güvenlik amacıyla açıldı.');
+            blockingStyle.remove();
+        }
+    }, 3000);
+
     // Backend'den bakım durumu kontrolü
     console.log('🔗 Bakım kontrolü yapılıyor: ' + baseUrl);
 
     fetch(`${baseUrl}/settings?t=${Date.now()}`)
         .then(res => {
+            clearTimeout(safetyTimeout); // Yanıt geldi, zamanlayıcıyı durdur
             console.log('📡 Sunucu Yanıt Kodu:', res.status);
             // Eğer sunucu 503 (Bakım) veriyorsa ve admin değilsek
             if (res.status === 503) {
@@ -63,6 +73,7 @@
             }
         })
         .catch(err => {
+            clearTimeout(safetyTimeout);
             console.error('Maintenance check error:', err);
             const blockingStyle = document.getElementById('bakim-blocking-style');
             if (blockingStyle) blockingStyle.remove();
