@@ -1,5 +1,5 @@
 {
-    "enabled": false,
+    "enabled": true,
     "message": "Sitemiz şu anda bakımdadır. Lütfen daha sonra tekrar deneyiniz.",
     "estimatedTime": "Kısa süre içinde hizmetinizde olacağız."
 }
