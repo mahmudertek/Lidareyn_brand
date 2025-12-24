@@ -4,14 +4,13 @@
 <head>
     <!-- BAKIM MODU KONTROLU (INLINE - V6) -->
     <script>
-    (function(){
-        if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
-        if(localStorage.getItem('adminToken')) return;
-        fetch('https://galatacarsi-backend-api.onrender.com/api/settings?t='+Date.now())
-        .then(r=>r.json())
-        .then(d=>{if(d.data&&d.data.isMaintenanceMode)location.href='/maintenance.html';})
-        .catch(()=>{});
-    })();
+        (function () {
+            if (location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
+            if (localStorage.getItem('adminToken')) return;
+            fetch('https://galatacarsi-backend-api.oder.ings?t=' + Date.now())
+                .then(r => r.json())
+                .then(d => { if (d.data && d.data.isMaintenanceMode) location.href = '/maintenance.html'; }).catch(() => { });
+        })();
     </script>
 
     <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
@@ -31,19 +30,20 @@
             window.scrollTo(0, 0);
         }
     </script>
-    <title>Galata Çarşı - Premium E-Ticaret | Kaliteli Ürünler Uygun Fiyatlar</title>
+    <title>Galata Çarşı - Hırdavat, Nalbur ve El Aletleri | Profesyonel Ekipmanlar</title>
     <meta name="description"
-        content="Galata Çarşı - En kaliteli ürünleri en uygun fiyatlarla satın alın. Elektronik, moda, ev & yaşam ve daha fazlası.">
+        content="En uygun fiyata en kaliteli hırdavat ürünleri. Profesyonel el aletleri, elektrikli aletler, yapı malzemeleri. Bosch, Makita, Knipex, DeWalt ve daha fazlası Galata Çarşı'da!">
 
     <!-- SEO Meta Tags -->
     <meta name="keywords"
-        content="e-ticaret, online alışveriş, elektronik, moda, ev yaşam, nalbur, hırdavat, uygun fiyat, kaliteli ürünler">
+        content="hırdavat, nalbur, el aletleri, elektrikli el aletleri, Bosch, Makita, Knipex, DeWalt, yapı malzemeleri, kaynak malzemeleri, iş güvenliği, profesyonel aletler">
     <meta name="author" content="Galata Çarşı">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Galata Çarşı - Premium E-Ticaret">
-    <meta property="og:description" content="En kaliteli ürünleri en uygun fiyatlarla satın alın.">
+    <meta property="og:title" content="Galata Çarşı - Hırdavat, Nalbur ve El Aletleri">
+    <meta property="og:description"
+        content="Profesyonel el aletleri, elektrikli aletler ve yapı malzemeleri. Dünya markaları en uygun fiyatlarla.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://galatacarsi.com">
     <meta property="og:image" content="./assets/hero-banner-1.png">
