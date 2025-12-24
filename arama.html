@@ -2,17 +2,17 @@
 <html lang="tr">
 
 <head>
-    <!-- BAKIM MODU KONTROLU (INLINE - V6) -->
+    <!-- BAKIM MODU KONTROLU (V6 - Config File Based) -->
     <script>
-    (function(){
-        if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
-        if(localStorage.getItem('adminToken')) return;
-        fetch('https://galatacarsi-backend-api.onrender.com/api/settings?t='+Date.now())
-        .then(r=>r.json())
-        .then(d=>{if(d.data&&d.data.isMaintenanceMode)location.href='/maintenance.html';})
-        .catch(()=>{});
-    })();
+        (function () {
+            if (location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
+            fetch('/maintenance-config.json?t=' + Date.now())
+                .then(r => r.json())
+                .then(config => { if (config && config.enabled) location.href = '/maintenance.html'; })
+                .catch(() => { });
+        })();
     </script>
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -383,7 +383,7 @@
                             </ul>
                         </div>
                     </li>
-                    
+
 
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
                     <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
