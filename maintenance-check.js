@@ -1,67 +1,55 @@
 (function () {
-    // 1. EMNİYET LİSTESİ VE KİLİT KALDIRICI
+    // 1. AYARLAR VE YOL BELİRLEME
     const path = window.location.pathname;
-    const isAdminPage = path.includes('/admin/') || path.includes('admin.html');
     const isMaintenancePage = path.includes('maintenance.html') || path.includes('bakimda.html');
+    const isAdminPage = path.includes('/admin/') || path.includes('admin.html');
 
-    const removeLock = () => {
-        // Eski versiyonlardan kalma kilitleri temizle (Cache sorununu çözer)
-        const blockingStyle = document.getElementById('bakim-blocking-style');
-        if (blockingStyle) blockingStyle.remove();
+    // Bakım sayfasındaysak veya admin sayfasındaysak hiçbir şey yapma
+    if (isMaintenancePage || isAdminPage) return;
 
-        // Eğer bir şekilde html hala gizliyse zorla aç
-        document.documentElement.style.display = 'block';
-        document.documentElement.style.visibility = 'visible';
-    };
-
-    // Eğer admin veya bakım sayfasındaysak kilidi hemen aç
-    if (isAdminPage || isMaintenancePage) {
-        removeLock();
-        return;
-    }
-
-    // 2. YETKİ KONTROLÜ
+    // 2. YETKİ KONTROLÜ (Adminler muaf)
     const isAuthorized = localStorage.getItem('admin_session') ||
         localStorage.getItem('adminToken') ||
         localStorage.getItem('token');
 
-    // 3. API ADRESİ
-    const baseUrl = window.location.hostname === 'localhost' ||
+    // 3. API URL (Gelişmiş Tespit)
+    const baseUrl = (window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:'
+        window.location.protocol === 'file:')
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api';
 
-    // 4. EMNİYET ZAMANLAYICISI (Hızlı açılması için 1.5 saniye)
-    const safetyTimeout = setTimeout(() => {
-        removeLock();
-    }, 1500);
+    // 4. KONTROL FONKSİYONU
+    async function checkMaintenance() {
+        try {
+            const response = await fetch(`${baseUrl}/settings?t=${Date.now()}`);
 
-    // 5. KONTROL SORGUSU
-    fetch(`${baseUrl}/settings?t=${Date.now()}`)
-        .then(res => {
-            clearTimeout(safetyTimeout);
-
-            if (res.status === 503) {
-                if (!isAuthorized) {
-                    window.location.href = '/maintenance.html';
-                    return null;
-                }
+            // Eğer sunucu 503 (Bakım) veriyorsa
+            if (response.status === 503 && !isAuthorized) {
+                redirectToMaintenance();
+                return;
             }
-            return res.json();
-        })
-        .then(data => {
-            if (!data) return;
 
-            const isMaintenance = data.data?.isMaintenanceMode;
-            if (isMaintenance && !isAuthorized) {
-                window.location.href = '/maintenance.html';
-            } else {
-                removeLock();
+            const data = await response.json();
+            if (data && data.data && data.data.isMaintenanceMode && !isAuthorized) {
+                redirectToMaintenance();
             }
-        })
-        .catch(err => {
-            clearTimeout(safetyTimeout);
-            removeLock();
-        });
+        } catch (error) {
+            console.log('Maintenance check skipped or server unreachable.');
+        }
+    }
+
+    function redirectToMaintenance() {
+        // Alt klasör kontrolü
+        const isInSubfolder = window.location.pathname.includes('/kategoriler/');
+        const target = isInSubfolder ? '../maintenance.html' : 'maintenance.html';
+
+        // Eğer zaten o sayfada değilsek yönlendir
+        if (!window.location.pathname.includes(target)) {
+            window.location.href = target;
+        }
+    }
+
+    // Sorguyu arka planda başlat (Sayfa açılışını engellemez, beyaz ekranı çözer)
+    checkMaintenance();
 })();
