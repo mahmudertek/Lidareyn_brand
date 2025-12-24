@@ -1,81 +1,67 @@
 (function () {
-    // Bakım modunu kontrol etmeden önce istisnaları belirle
+    // 1. AYARLAR VE İSTİSNALAR
     const path = window.location.pathname;
     const isAdminPage = path.includes('/admin/') || path.includes('admin.html');
-    const isMaintenancePage = path.includes('maintenance.html');
+    const isMaintenancePage = path.includes('maintenance.html') || path.includes('bakimda.html');
 
-    // Eğer admin sayfası veya zaten bakım sayfasındaysak kontrol etme
-    if (isAdminPage || isMaintenancePage) return;
+    const removeLock = () => {
+        const blockingStyle = document.getElementById('bakim-blocking-style');
+        if (blockingStyle) blockingStyle.remove();
+    };
 
-    // Yetki kontrolü (Adminler bakım modundan etkilenmez)
+    // Eğer admin sayfası veya zaten bakım sayfasındaysak KİLİDİ HEMEN AÇ
+    if (isAdminPage || isMaintenancePage) {
+        removeLock();
+        return;
+    }
+
+    // 2. YETKİ KONTROLÜ
     const isAuthorized = localStorage.getItem('admin_session') ||
         localStorage.getItem('adminToken') ||
         localStorage.getItem('token');
 
-    // URL üzerinden bypass kontrolü (Geliştirici için)
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('maintenance_bypass')) {
-        localStorage.setItem('admin_session', 'active_' + Date.now());
-        return;
-    }
-
-    // API Base URL (admin-api.js ile senkronize olmalı)
+    // 3. API ADRESİ
     const baseUrl = window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:' // Bilgisayardan açıldığında yerel sunucuyu dene
+        window.location.protocol === 'file:'
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api';
 
-    // EMNİYET ZAMANLAYICISI: Sunucu 3 saniye içinde yanıt vermezse kilidi aç (Beyaz ekranı önler)
+    // 4. EMNİYET ZAMANLAYICISI (2 Saniye)
     const safetyTimeout = setTimeout(() => {
-        const blockingStyle = document.getElementById('bakim-blocking-style');
-        if (blockingStyle) {
-            console.warn('⏰ Sunucu geç yanıt verdi, kilit güvenlik amacıyla açıldı.');
-            blockingStyle.remove();
-        }
-    }, 3000);
+        console.warn('⚠️ Bakım kontrolü zaman aşımına uğradı, kilit açılıyor.');
+        removeLock();
+    }, 2000);
 
-    // Backend'den bakım durumu kontrolü
-    console.log('🔗 Bakım kontrolü yapılıyor: ' + baseUrl);
-
+    // 5. KONTROL SORGUSU
     fetch(`${baseUrl}/settings?t=${Date.now()}`)
         .then(res => {
-            clearTimeout(safetyTimeout); // Yanıt geldi, zamanlayıcıyı durdur
-            console.log('📡 Sunucu Yanıt Kodu:', res.status);
-            // Eğer sunucu 503 (Bakım) veriyorsa ve admin değilsek
+            clearTimeout(safetyTimeout);
+
+            // Sunucu bakım modunda 503 verir
             if (res.status === 503) {
                 if (!isAuthorized) {
-                    console.log('🚫 Erişim Reddedildi: Bakım Modu Aktif.');
                     window.location.href = '/maintenance.html';
-                    return;
+                    return null;
                 }
             }
+
+            if (!res.ok) throw new Error('Sunucu hatası');
             return res.json();
         })
         .then(data => {
             if (!data) return;
 
             const isMaintenance = data.data?.isMaintenanceMode;
-            console.log('📊 Bakım Modu Aktif mi?:', isMaintenance);
-            console.log('👤 Yetkili Kullanıcı mı?:', !!isAuthorized);
-
-            if (isMaintenance) {
-                if (!isAuthorized) {
-                    window.location.href = '/maintenance.html';
-                } else {
-                    console.warn('⚠️ DİKKAT: Site şu an bakımda ama Admin olduğunuz için görebiliyorsunuz.');
-                    const blockingStyle = document.getElementById('bakim-blocking-style');
-                    if (blockingStyle) blockingStyle.remove();
-                }
+            if (isMaintenance && !isAuthorized) {
+                window.location.href = '/maintenance.html';
             } else {
-                const blockingStyle = document.getElementById('bakim-blocking-style');
-                if (blockingStyle) blockingStyle.remove();
+                removeLock();
             }
         })
         .catch(err => {
             clearTimeout(safetyTimeout);
-            console.error('Maintenance check error:', err);
-            const blockingStyle = document.getElementById('bakim-blocking-style');
-            if (blockingStyle) blockingStyle.remove();
+            console.error('Bakım kontrol hatası:', err);
+            removeLock(); // Hata varsa siteyi aç, kullanıcıyı mağdur etme
         });
 })();
