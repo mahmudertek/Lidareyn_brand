@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -7,18 +7,18 @@
     (function(){
         if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
         if(localStorage.getItem('adminToken')) return;
-        fetch('https://galatacarsi-backend-api.onrender.com/api/settings?t='+Date.now())
+        fetch('/maintenance-config.json?t='+Date.now())
         .then(r=>r.json())
-        .then(d=>{if(d.data&&d.data.isMaintenanceMode)location.href='/maintenance.html';})
+        .then(config=>{if(config&&config.enabled)location.href='/maintenance.html';})
         .catch(()=>{});
     })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galata Çarşı - Premium E-Ticaret</title>
+    <title>Galata �ar�� - Premium E-Ticaret</title>
     <meta name="description"
-        content="Galata Çarşı - En kaliteli Ã¼rÃ¼nleri en uygun fiyatlarla satÄ±n alÄ±n. Elektronik, moda, ev & yaÅŸam ve daha fazlasÄ±.">
+        content="Galata �ar�� - En kaliteli ürünleri en uygun fiyatlarla satın alın. Elektronik, moda, ev & yaşam ve daha fazlası.">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,18 +35,18 @@
     <section class="hero-slider">
         <div class="slider-container">
             <div class="slide active">
-                <img src="assets/hero-banner-1.png" alt="Galata Çarşı Hero Banner 1">
+                <img src="assets/hero-banner-1.png" alt="Galata �ar�� Hero Banner 1">
             </div>
             <div class="slide">
-                <img src="assets/hero-banner-2.png" alt="Galata Çarşı Hero Banner 2">
+                <img src="assets/hero-banner-2.png" alt="Galata �ar�� Hero Banner 2">
             </div>
             <div class="slide">
-                <img src="assets/hero-banner-3.png" alt="Galata Çarşı Hero Banner 3">
+                <img src="assets/hero-banner-3.png" alt="Galata �ar�� Hero Banner 3">
             </div>
         </div>
         <!-- Slider Navigation -->
-        <button class="slider-btn prev" onclick="changeSlide(-1)">â®</button>
-        <button class="slider-btn next" onclick="changeSlide(1)">â¯</button>
+        <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
+        <button class="slider-btn next" onclick="changeSlide(1)">❯</button>
         <!-- Slider Dots -->
         <div class="slider-dots">
             <span class="dot active" onclick="currentSlide(1)"></span>
@@ -60,51 +60,51 @@
         <!-- Categories Section -->
         <section class="categories-section" id="kategoriler">
             <div class="container">
-                <h2 class="section-title">TÃ¼m Kategoriler</h2>
+                <h2 class="section-title">Tüm Kategoriler</h2>
                 <div class="categories-grid">
-                    <!-- Nalbur & YapÄ± Malzemeleri -->
+                    <!-- Nalbur & Yapı Malzemeleri -->
                     <a href="kategoriler/nalbur-yapi-malzemeleri.html" class="category-card">
                         <div class="category-icon">
                             <i class="fa-solid fa-hammer"></i>
                         </div>
-                        <h3>Nalbur & YapÄ± Malzemeleri</h3>
-                        <p>El aletleri, vida, Ã§ivi, silikon ve tamir malzemeleri</p>
+                        <h3>Nalbur & Yapı Malzemeleri</h3>
+                        <p>El aletleri, vida, çivi, silikon ve tamir malzemeleri</p>
                     </a>
 
-                    <!-- HÄ±rdavat & Teknik Malzemeler -->
+                    <!-- Hırdavat & Teknik Malzemeler -->
                     <a href="kategoriler/hirdavat-teknik-malzemeler.html" class="category-card">
                         <div class="category-icon">
                             <i class="fa-solid fa-screwdriver-wrench"></i>
                         </div>
-                        <h3>HÄ±rdavat & Teknik Malzemeler</h3>
-                        <p>Elektrik, tesisat, boya ekipmanlarÄ± ve profesyonel aletler</p>
+                        <h3>Hırdavat & Teknik Malzemeler</h3>
+                        <p>Elektrik, tesisat, boya ekipmanları ve profesyonel aletler</p>
                     </a>
 
-                    <!-- Ev GereÃ§leri & ZÃ¼ccaciye -->
+                    <!-- Ev Gereçleri & Züccaciye -->
                     <a href="kategoriler/ev-gerecleri-zuccaciye.html" class="category-card">
                         <div class="category-icon">
                             <i class="fa-solid fa-kitchen-set"></i>
                         </div>
-                        <h3>Ev GereÃ§leri & ZÃ¼ccaciye</h3>
-                        <p>Mutfak, banyo ve saklama Ã§Ã¶zÃ¼mleri</p>
+                        <h3>Ev Gereçleri & Züccaciye</h3>
+                        <p>Mutfak, banyo ve saklama çözümleri</p>
                     </a>
 
-                    <!-- Evcil Hayvan ÃœrÃ¼nleri -->
+                    <!-- Evcil Hayvan Ürünleri -->
                     <a href="kategoriler/evcil-hayvan-urunleri.html" class="category-card">
                         <div class="category-icon">
                             <i class="fa-solid fa-paw"></i>
                         </div>
-                        <h3>Evcil Hayvan ÃœrÃ¼nleri</h3>
-                        <p>Mama kaplarÄ±, oyuncaklar, tasmalar ve bakÄ±m malzemeleri</p>
+                        <h3>Evcil Hayvan Ürünleri</h3>
+                        <p>Mama kapları, oyuncaklar, tasmalar ve bakım malzemeleri</p>
                     </a>
 
-                    <!-- Ev & YaÅŸam -->
+                    <!-- Ev & Yaşam -->
                     <a href="kategoriler/ev-yasam.html" class="category-card">
                         <div class="category-icon">
                             <i class="fa-solid fa-house"></i>
                         </div>
-                        <h3>Ev & YaÅŸam</h3>
-                        <p>Dekoratif Ã¼rÃ¼nler, LED aydÄ±nlatma ve organizer</p>
+                        <h3>Ev & Yaşam</h3>
+                        <p>Dekoratif ürünler, LED aydınlatma ve organizer</p>
                     </a>
 
                     <!-- Temizlik & Hijyen -->
@@ -113,16 +113,16 @@
                             <i class="fa-solid fa-spray-can-sparkles"></i>
                         </div>
                         <h3>Temizlik & Hijyen</h3>
-                        <p>Mop, bez, sÃ¼nger ve doÄŸal temizlik malzemeleri</p>
+                        <p>Mop, bez, sünger ve doğal temizlik malzemeleri</p>
                     </a>
 
-                    <!-- KÄ±rtasiye & Ofis -->
+                    <!-- Kırtasiye & Ofis -->
                     <a href="kategoriler/kirtasiye-ofis.html" class="category-card">
                         <div class="category-icon">
                             <i class="fa-solid fa-pen"></i>
                         </div>
-                        <h3>KÄ±rtasiye & Ofis Malzemeleri</h3>
-                        <p>Kalem, defter, dosyalama ve masaÃ¼stÃ¼ organizerleri</p>
+                        <h3>Kırtasiye & Ofis Malzemeleri</h3>
+                        <p>Kalem, defter, dosyalama ve masaüstü organizerleri</p>
                     </a>
 
                     <!-- Elektronik Aksesuar -->
@@ -131,7 +131,7 @@
                             <i class="fa-solid fa-mobile-screen"></i>
                         </div>
                         <h3>Elektronik Aksesuar</h3>
-                        <p>Telefon kÄ±lÄ±flarÄ±, ÅŸarj kablolarÄ± ve Bluetooth hoparlÃ¶rler</p>
+                        <p>Telefon kılıfları, şarj kabloları ve Bluetooth hoparlörler</p>
                     </a>
                 </div>
             </div>
@@ -144,7 +144,7 @@
     <!-- Favorites Sidebar -->
     <div class="sidebar favorites-sidebar">
         <div class="sidebar-header">
-            <h3>Favori ÃœrÃ¼nlerim</h3>
+            <h3>Favori Ürünlerim</h3>
             <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
         </div>
         <div class="sidebar-content" id="favorites-content">
@@ -167,7 +167,7 @@
                 <span class="total-amount">0.00 TL</span>
             </div>
             <button class="btn btn-primary btn-block">Sepete Git</button>
-            <button class="btn btn-secondary btn-block">Ã–deme Yap</button>
+            <button class="btn btn-secondary btn-block">Ödeme Yap</button>
         </div>
     </div>
 
@@ -182,40 +182,40 @@
                     <div class="footer-column">
                         <h3 class="footer-title">Kurumsal</h3>
                         <ul class="footer-links">
-                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
-                            <li><a href="iletisim.html">İletişim</a></li>
+                            <li><a href="hakkimizda.html">Hakk�m�zda</a></li>
+                            <li><a href="iletisim.html">�leti�im</a></li>
 
-                            <li><a href="magazalar.html">Mağazalarımız</a></li>
+                            <li><a href="magazalar.html">Ma�azalar�m�z</a></li>
                         </ul>
                     </div>
 
-                    <!-- Sözleşmeler Column (Restored) -->
+                    <!-- S�zle�meler Column (Restored) -->
                     <div class="footer-column">
-                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <h3 class="footer-title">S�zle�meler</h3>
                         <ul class="footer-links">
-                            <li><a href="kvkk.html">KVKK Aydınlatma Metni</a></li>
-                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
-                            <li><a href="gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
-                            <li><a href="iade-iptal.html">İade ve İptal Koşulları</a></li>
+                            <li><a href="kvkk.html">KVKK Ayd�nlatma Metni</a></li>
+                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Sat�� S�zle�mesi</a></li>
+                            <li><a href="gizlilik-guvenlik.html">Gizlilik ve G�venlik</a></li>
+                            <li><a href="iade-iptal.html">�ade ve �ptal Ko�ullar�</a></li>
                         </ul>
                     </div>
 
-                    <!-- Yardım Column -->
+                    <!-- Yard�m Column -->
                     <div class="footer-column">
-                        <h3 class="footer-title">Yardım</h3>
+                        <h3 class="footer-title">Yard�m</h3>
                         <ul class="footer-links">
-                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
-                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
-                            <li><a href="uye-giris.html">Üye Giriş</a></li>
-                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
-                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="siparis-takibi.html">Sipari� Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni �yelik</a></li>
+                            <li><a href="uye-giris.html">�ye Giri�</a></li>
+                            <li><a href="sifremi-unuttum.html">�ifremi Unuttum</a></li>
+                            <li><a href="sss.html">S�k�a Sorulan Sorular</a></li>
                             <li><a href="sepet.html">Sepetiniz</a></li>
                         </ul>
                     </div>
 
-                    <!-- Müşteri Hizmetleri Column -->
+                    <!-- M��teri Hizmetleri Column -->
                     <div class="footer-column">
-                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <h3 class="footer-title">M��teri Hizmetleri</h3>
                         <ul class="footer-links">
                             <li>
                                 <i class="fa-solid fa-envelope"></i>
@@ -231,14 +231,14 @@
                             </li>
                             <li class="working-hours">
                                 <i class="fa-solid fa-clock"></i>
-                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                                <span>�al��ma Saatleri: Hafta i�i 09:00 - 18:00</span>
                             </li>
                         </ul>
                     </div>
 
-                    <!-- Güvenli Ödeme Column -->
+                    <!-- G�venli �deme Column -->
                     <div class="footer-column">
-                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <h3 class="footer-title">G�venli �deme</h3>
                         <div class="payment-logos">
                             <div class="payment-logo">
                                 <i class="fa-brands fa-cc-visa"></i>
@@ -257,7 +257,7 @@
                                 <span>Amex</span>
                             </div>
                         </div>
-                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                        <p class="payment-note">T�m �demeleriniz SSL sertifikas� ile g�vence alt�ndad�r.</p>
                     </div>
                 </div>
             </div>
