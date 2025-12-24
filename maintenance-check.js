@@ -1,12 +1,20 @@
 (function () {
+    console.log('🚀 [BAKIM SİSTEMİ V5.0] Yükleniyor...');
+
     const path = window.location.pathname;
     const isMaintenancePage = path.includes('maintenance.html') || path.includes('bakimda.html');
     const isAdminPage = path.includes('/admin/') || path.includes('admin.html');
 
-    if (isMaintenancePage || isAdminPage) return;
+    if (isMaintenancePage || isAdminPage) {
+        console.log('✅ İstisna sayfa, kontrol atlandı.');
+        return;
+    }
 
-    // SADECE adminToken kontrolü yapalım (Daha güvenli)
     const isAuthorized = localStorage.getItem('adminToken');
+    if (isAuthorized) {
+        console.log('🛡️ Admin yetkisi algılandı, siteye erişim serbest.');
+        return;
+    }
 
     const baseUrl = (window.location.hostname === 'localhost' ||
         window.location.hostname === '127.0.0.1' ||
@@ -15,31 +23,36 @@
         : 'https://galatacarsi-backend-api.onrender.com/api';
 
     async function checkMaintenance() {
+        console.log('📡 Sunucuya bakım durumu soruluyor... (URL: ' + baseUrl + ')');
         try {
-            console.log('🔍 Bakım kontrolü başlatıldı...');
             const response = await fetch(`${baseUrl}/settings?t=${Date.now()}`);
 
-            if (response.status === 503 && !isAuthorized) {
+            // 503 HTTP Kodu (Middleware'den gelen)
+            if (response.status === 503) {
+                console.log('🔥 Sunucu 503 döndü! Bakım aktif.');
                 redirectToMaintenance();
                 return;
             }
 
             const data = await response.json();
-            console.log('📡 Sunucu yanıtı:', data);
+            console.log('📥 Sunucu Yanıtı:', data);
 
-            if (data && data.data && data.data.isMaintenanceMode && !isAuthorized) {
+            if (data && data.data && data.data.isMaintenanceMode) {
+                console.log('🚩 Bakım modu veritabanında AÇIK. Yönlendiriliyor...');
                 redirectToMaintenance();
+            } else {
+                console.log('🟢 Bakım modu kapalı. İyi alışverişler!');
             }
         } catch (error) {
-            console.error('❌ Bağlantı hatası:', error);
+            console.error('❌ Bağlantı hatası veya 500 hatası:', error);
         }
     }
 
     function redirectToMaintenance() {
-        console.log('🚀 Bakım sayfasına uçuş başlatılıyor...');
-        // Tam adres kullanarak hatayı engelliyoruz
         const siteUrl = window.location.hostname === 'localhost' ? '' : 'https://www.galatacarsi.com';
-        window.location.href = siteUrl + '/maintenance.html';
+        const finalTarget = siteUrl + '/maintenance.html';
+        console.log('✈️ Hedef: ' + finalTarget);
+        window.location.href = finalTarget;
     }
 
     checkMaintenance();
