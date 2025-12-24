@@ -1,0 +1,9 @@
+{
+    "redirects": [
+        {
+            "source": "/((?!maintenance.html|admin|api|_next|favicon.ico|gorseller|assets).*)",
+            "destination": "/maintenance.html",
+            "permanent": false
+        }
+    ]
+}
