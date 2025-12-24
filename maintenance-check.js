@@ -1,72 +1,99 @@
+/**
+ * BAKIM MODU SİSTEMİ v6.0 - TEK DOSYA KONTROL
+ * 
+ * Nasıl Kullanılır:
+ * 1. Bakım modunu AÇMAK için: maintenance-config.json dosyasında "enabled": true yapın
+ * 2. Bakım modunu KAPATMAK için: maintenance-config.json dosyasında "enabled": false yapın
+ * 3. Değişikliği GitHub'a push edin, Vercel otomatik deploy edecek
+ * 
+ * Bu kadar basit! 🎉
+ */
 (function () {
-    console.log('🚀 [BAKIM SİSTEMİ V5.0] Yükleniyor...');
+    console.log('🚀 [BAKIM SİSTEMİ V6.0] Yükleniyor...');
 
     const path = window.location.pathname;
     const isMaintenancePage = path.includes('maintenance.html') || path.includes('bakimda.html');
     const isAdminPage = path.includes('/admin/') || path.includes('admin.html');
 
+    // Bakım ve admin sayfalarını atla
     if (isMaintenancePage || isAdminPage) {
         console.log('✅ İstisna sayfa, kontrol atlandı.');
         return;
     }
 
-    // const isAuthorized = localStorage.getItem('adminToken');
-    // if (isAuthorized) {
-    //     console.log('🛡️ Admin yetkisi algılandı, siteye erişim serbest.');
-    //     return;
-    // }
+    // Config dosyasının yolunu belirle
+    function getConfigPath() {
+        const hostname = window.location.hostname;
 
-    const baseUrl = (window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:')
-        ? 'http://localhost:5000/api'
-        : 'https://galatacarsi-backend-api.onrender.com/api';
+        // Canlı site
+        if (hostname === 'www.galatacarsi.com' || hostname === 'galatacarsi.com') {
+            return 'https://www.galatacarsi.com/maintenance-config.json';
+        }
+
+        // Vercel preview
+        if (hostname.includes('vercel.app')) {
+            return '/maintenance-config.json';
+        }
+
+        // Localhost
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+            return '/maintenance-config.json';
+        }
+
+        // File protocol için
+        if (window.location.protocol === 'file:') {
+            return 'maintenance-config.json';
+        }
+
+        // Varsayılan
+        return '/maintenance-config.json';
+    }
 
     async function checkMaintenance() {
-        console.log('📡 Sunucuya bakım durumu soruluyor... (URL: ' + baseUrl + ')');
-        try {
-            const response = await fetch(`${baseUrl}/settings?t=${Date.now()}`);
+        const configPath = getConfigPath();
+        console.log('📡 Bakım durumu kontrol ediliyor... (' + configPath + ')');
 
-            // 503 HTTP Kodu (Middleware'den gelen)
-            if (response.status === 503) {
-                console.log('🔥 Sunucu 503 döndü! Bakım aktif.');
-                redirectToMaintenance();
+        try {
+            // Cache'i bypass etmek için timestamp ekle
+            const response = await fetch(configPath + '?t=' + Date.now(), {
+                cache: 'no-store'
+            });
+
+            if (!response.ok) {
+                console.log('⚠️ Config dosyası bulunamadı, bakım kapalı varsayılıyor.');
                 return;
             }
 
-            const data = await response.json();
-            console.log('📥 Sunucu Yanıtı:', data);
+            const config = await response.json();
+            console.log('📥 Bakım Ayarları:', config);
 
-            if (data && data.data && data.data.isMaintenanceMode) {
-                console.log('🚩 Bakım modu veritabanında AÇIK. Yönlendiriliyor...');
+            if (config && config.enabled === true) {
+                console.log('🚩 BAKIM MODU AÇIK! Yönlendiriliyor...');
                 redirectToMaintenance();
             } else {
                 console.log('🟢 Bakım modu kapalı. İyi alışverişler!');
             }
         } catch (error) {
-            console.error('❌ Bağlantı hatası veya 500 hatası:', error);
+            console.log('⚠️ Config okunamadı:', error.message);
+            // Hata durumunda siteyi açık tut (fail-safe)
         }
     }
 
     function redirectToMaintenance() {
-        if (window.location.protocol === 'file:') {
-            // Local file system redirect
-            // Check if we are in a subdirectory (e.g. admin or categories)
-            const pathParts = window.location.pathname.split('/');
-            const isInSubDir = pathParts.length > 2 && !window.location.pathname.endsWith('/'); // Rough check
+        const hostname = window.location.hostname;
 
-            // If we are deep, we might need ../maintenance.html. 
-            // But usually this script runs on main pages. 
-            // For now, assume root or simple relative.
+        if (window.location.protocol === 'file:') {
             window.location.href = 'maintenance.html';
             return;
         }
 
-        const siteUrl = window.location.hostname === 'localhost' ? '' : 'https://www.galatacarsi.com';
-        const finalTarget = siteUrl + '/maintenance.html';
-        console.log('✈️ Hedef: ' + finalTarget);
-        window.location.href = finalTarget;
+        if (hostname === 'www.galatacarsi.com' || hostname === 'galatacarsi.com') {
+            window.location.href = 'https://www.galatacarsi.com/maintenance.html';
+        } else {
+            window.location.href = '/maintenance.html';
+        }
     }
 
+    // Kontrol başlat
     checkMaintenance();
 })();
