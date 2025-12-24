@@ -136,4 +136,5 @@ echo 1. backups klasörüne gidin
 echo 2. İstediğiniz yedekleme klasörünü açın
 echo 3. Dosyaları kopyalayıp ana klasöre yapıştırın
 echo.
-pause
+echo.
+REM pause
