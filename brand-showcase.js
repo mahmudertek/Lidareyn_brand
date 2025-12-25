@@ -76,7 +76,7 @@ const BRAND_SHOWCASE = {
         if (!container) return;
 
         // Bu marka için ürünleri filtrele (büyük/küçük harf duyarsız)
-        const brandProducts = products.filter(p => {
+        const brandProducts = (products || []).filter(p => {
             const showcaseValue = (p.brandShowcase || '').toLowerCase();
             return showcaseValue === brandKey.toLowerCase();
         }).slice(0, 3);
@@ -84,6 +84,37 @@ const BRAND_SHOWCASE = {
         if (brandProducts.length > 0) {
             container.innerHTML = brandProducts.map(p => this.createProductCard(p)).join('');
             console.log(`✅ ${brandKey} vitrini güncellendi: ${brandProducts.length} ürün`);
+        } else {
+            // Ürün yoksa ŞIK BOŞ ÇERÇEVELERİ GÖSTER (Kullanıcı talebi)
+            container.innerHTML = `
+                <div class="madeniyat-product-card placeholder-card">
+                    <div class="madeniyat-product-image" style="background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
+                        <i class="fa-solid fa-image fa-2x"></i>
+                    </div>
+                    <div class="madeniyat-product-info">
+                        <div style="height:12px; background:#f0f0f0; width:80%; margin-bottom:8px; border-radius:2px;"></div>
+                        <div style="height:15px; background:#f0f0f0; width:40%; border-radius:2px;"></div>
+                    </div>
+                </div>
+                <div class="madeniyat-product-card placeholder-card">
+                    <div class="madeniyat-product-image" style="background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
+                        <i class="fa-solid fa-image fa-2x"></i>
+                    </div>
+                    <div class="madeniyat-product-info">
+                        <div style="height:12px; background:#f0f0f0; width:80%; margin-bottom:8px; border-radius:2px;"></div>
+                        <div style="height:15px; background:#f0f0f0; width:40%; border-radius:2px;"></div>
+                    </div>
+                </div>
+                <div class="madeniyat-product-card placeholder-card">
+                    <div class="madeniyat-product-image" style="background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
+                        <i class="fa-solid fa-image fa-2x"></i>
+                    </div>
+                    <div class="madeniyat-product-info">
+                        <div style="height:12px; background:#f0f0f0; width:80%; margin-bottom:8px; border-radius:2px;"></div>
+                        <div style="height:15px; background:#f0f0f0; width:40%; border-radius:2px;"></div>
+                    </div>
+                </div>
+            `;
         }
     },
 
@@ -91,27 +122,18 @@ const BRAND_SHOWCASE = {
     async loadAllShowcases() {
         const products = await this.fetchProducts();
 
-        if (products === null) {
-            // Hata veya Bakım Modu: Tekrar dene
-            if (this.retryCount < this.maxRetries) {
-                this.retryCount++;
-                console.log(`🔄 Sunucu uyanıyor olabilir, ${30} saniye sonra tekrar denenecek...`);
-                setTimeout(() => this.loadAllShowcases(), 30000);
-            }
-            return;
-        }
+        // Ürün listesi null ise (bakım modu/hata)
+        const productList = products || [];
 
-        if (products.length === 0) {
-            console.log('ℹ️ API\'den hiç ürün gelmedi.');
-            return;
-        }
-
-        // Her marka için ürünleri render et
+        // Her marka için ürünleri render et (Boş olsa bile render edecek, placeholder gösterecek)
         Object.keys(this.brands).forEach(brandKey => {
-            this.renderBrandProducts(brandKey, products);
+            this.renderBrandProducts(brandKey, productList);
         });
 
-        console.log('✨ Marka vitrinleri başarıyla yüklendi!');
+        if (products === null && this.retryCount < this.maxRetries) {
+            this.retryCount++;
+            setTimeout(() => this.loadAllShowcases(), 30000);
+        }
     },
 
     // Başlat
