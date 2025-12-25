@@ -74,7 +74,10 @@ const BRAND_SHOWCASE = {
 
         // Bu marka için ürünleri filtrele (max 3)
         const brandProducts = products
-            .filter(p => p.brandShowcase === brandKey)
+            .filter(p => {
+                const showcaseValue = (p.brandShowcase || '').toLowerCase();
+                return showcaseValue === brandKey.toLowerCase();
+            })
             .slice(0, 3);
 
         if (brandProducts.length === 0) {
