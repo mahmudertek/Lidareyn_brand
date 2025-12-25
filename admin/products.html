@@ -465,17 +465,129 @@
                             <label>Marka *</label>
                             <select id="productBrand" required>
                                 <option value="">Marka Seçin</option>
-                                <!-- Markalar API'den yüklenecek -->
+                                <option value="Bosch">Bosch</option>
+                                <option value="Makita">Makita</option>
+                                <option value="DeWalt">DeWalt</option>
+                                <option value="Beta">Beta</option>
+                                <option value="Knipex">Knipex</option>
+                                <option value="Stanley">Stanley</option>
+                                <option value="Black+Decker">Black+Decker</option>
+                                <option value="Hikoki">Hikoki</option>
+                                <option value="Milwaukee">Milwaukee</option>
+                                <option value="Karcher">Kärcher</option>
+                                <option value="Einhell">Einhell</option>
+                                <option value="Gedore">Gedore</option>
+                                <option value="Irwin">Irwin</option>
+                                <option value="Bahco">Bahco</option>
+                                <option value="Wiha">Wiha</option>
+                                <option value="Wera">Wera</option>
+                                <option value="Metabo">Metabo</option>
+                                <option value="Festool">Festool</option>
+                                <option value="Diğer">Diğer</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Kategori *</label>
                             <select id="productCategory" required>
                                 <option value="">Kategori Seçin</option>
-                                <!-- Kategoriler API'den yüklenecek -->
+                                <option value="elektrikli-el-aletleri">Elektrikli El Aletleri</option>
+                                <option value="olcme-ve-kontrol-aletleri">Ölçme & Kontrol Aletleri</option>
+                                <option value="el-aletleri">El Aletleri</option>
+                                <option value="nalbur-yapi-malzemeleri">Yapı ve İnşaat Malzemeleri</option>
+                                <option value="asindirici-kesici">Aşındırıcı ve Kesici Uçlar</option>
+                                <option value="yapi-kimyasallari">Yapıştırıcı, Dolgu ve Kimyasallar</option>
+                                <option value="kaynak-malzemeleri">Kaynak Malzemeleri</option>
+                                <option value="hirdavat-el-aletleri">Hırdavat ve El Aletleri</option>
+                                <option value="is-guvenligi-ve-calisma-ekipmanlari">İş Güvenliği ve Çalışma Ekipmanları
+                                </option>
                             </select>
                         </div>
                     </div>
+
+                    <!-- SAYFA ETİKETLERİ - ÖNEMLİ BÖLÜM -->
+                    <div class="form-group full-width"
+                        style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 20px; border-radius: 12px; border: 2px solid #e2e8f0; margin: 16px 0;">
+                        <label
+                            style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: block;">
+                            📌 Ürünün Görüneceği Sayfalar
+                        </label>
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">Ürünün hangi özel sayfalarda
+                            görüneceğini seçin:</p>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #ecfdf5; border-radius: 10px; border: 2px solid #86efac; cursor: pointer;">
+                                <input type="checkbox" id="tagPopular"
+                                    style="width: 20px; height: 20px; accent-color: #22c55e;">
+                                <div>
+                                    <span style="font-weight: 600; color: #166534;">🔥 POPÜLER ÜRÜNLER</span>
+                                    <small style="display: block; color: #15803d; font-size: 11px;">populer.html
+                                        sayfasında görünür</small>
+                                </div>
+                            </label>
+
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #eff6ff; border-radius: 10px; border: 2px solid #93c5fd; cursor: pointer;">
+                                <input type="checkbox" id="tagNew"
+                                    style="width: 20px; height: 20px; accent-color: #3b82f6;">
+                                <div>
+                                    <span style="font-weight: 600; color: #1e40af;">🆕 YENİ GELENLER</span>
+                                    <small style="display: block; color: #1d4ed8; font-size: 11px;">yeni-gelenler.html
+                                        sayfasında görünür</small>
+                                </div>
+                            </label>
+
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #fefce8; border-radius: 10px; border: 2px solid #fde047; cursor: pointer;">
+                                <input type="checkbox" id="tagBestSeller"
+                                    style="width: 20px; height: 20px; accent-color: #eab308;">
+                                <div>
+                                    <span style="font-weight: 600; color: #854d0e;">⭐ ÇOK SATAN</span>
+                                    <small style="display: block; color: #a16207; font-size: 11px;">Üründe "Çok Satan"
+                                        rozeti görünür</small>
+                                </div>
+                            </label>
+
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #faf5ff; border-radius: 10px; border: 2px solid #d8b4fe; cursor: pointer;">
+                                <input type="checkbox" id="tagFeatured"
+                                    style="width: 20px; height: 20px; accent-color: #a855f7;">
+                                <div>
+                                    <span style="font-weight: 600; color: #6b21a8;">✨ ÖNE ÇIKAN</span>
+                                    <small style="display: block; color: #7e22ce; font-size: 11px;">Ana sayfada öne
+                                        çıkan bölümünde</small>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- ANA SAYFA MARKA VİTRİNİ - YENİ BÖLÜM -->
+                    <div class="form-group full-width"
+                        style="background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 20px; border-radius: 12px; border: 2px solid #f59e0b; margin: 16px 0;">
+                        <label
+                            style="font-size: 16px; font-weight: 700; color: #92400e; margin-bottom: 12px; display: block;">
+                            🏪 Ana Sayfa Marka Vitrini
+                        </label>
+                        <p style="font-size: 13px; color: #a16207; margin-bottom: 16px;">
+                            Bu ürünü ana sayfadaki marka bölümlerinden birinde sergilemek istiyorsanız seçin:
+                        </p>
+
+                        <select id="brandShowcase"
+                            style="width: 100%; padding: 14px 16px; border: 2px solid #f59e0b; border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
+                            <option value="">❌ Marka vitrininde gösterme</option>
+                            <option value="beta">🔧 Beta - Ana Sayfada Göster</option>
+                            <option value="bosch">🔵 Bosch - Ana Sayfada Göster</option>
+                            <option value="makita">🟢 Makita - Ana Sayfada Göster</option>
+                            <option value="knipex">🔴 Knipex - Ana Sayfada Göster</option>
+                            <option value="dewalt">🟡 DeWalt - Ana Sayfada Göster</option>
+                            <option value="blackdecker">⚫ Black+Decker - Ana Sayfada Göster</option>
+                        </select>
+
+                        <p style="font-size: 11px; color: #b45309; margin-top: 10px;">
+                            ⚠️ Her marka için maksimum 3 ürün gösterilir. Fazlası otomatik gizlenir.
+                        </p>
+                    </div>
+
 
                     <div class="form-row">
                         <div class="form-group">
@@ -519,28 +631,8 @@
                         <input type="file" id="productImage" accept="image/*" style="display: none;">
                     </div>
 
-                    <div class="form-group full-width">
-                        <label>Etiketler</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="tagPopular">
-                                <span>Popüler</span>
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="tagBestSeller">
-                                <span>Çok Satan</span>
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="tagNew">
-                                <span>Yeni</span>
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" id="tagFeatured">
-                                <span>Öne Çıkan</span>
-                            </label>
-                        </div>
-                    </div>
                 </form>
+
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeModal()">İptal</button>
@@ -757,15 +849,28 @@
                 document.getElementById('productId').value = id;
                 document.getElementById('productName').value = product.name || '';
                 document.getElementById('productBrand').value = product.brand || '';
+                document.getElementById('productCategory').value = product.categorySlug || product.category || '';
                 document.getElementById('productPrice').value = product.price || '';
+                document.getElementById('productSalePrice').value = product.salePrice || '';
                 document.getElementById('productStock').value = product.stock || 0;
+                document.getElementById('productUnit').value = product.unit || 'adet';
                 document.getElementById('productDescription').value = product.description || '';
                 document.getElementById('productSku').value = product.sku || '';
-                document.getElementById('tagFeatured').checked = product.isFeatured || false;
+
+                // Tüm etiketleri yükle
+                document.getElementById('tagPopular').checked = product.isPopular || false;
+                document.getElementById('tagBestSeller').checked = product.isBestSeller || false;
                 document.getElementById('tagNew').checked = product.isNew || false;
+                document.getElementById('tagFeatured').checked = product.isFeatured || false;
+
+                // Marka vitrini seçimi
+                document.getElementById('brandShowcase').value = product.brandShowcase || '';
+
                 document.getElementById('productModal').classList.add('active');
+
             }
         }
+
 
         // Delete product
         async function deleteProduct(id) {
@@ -799,12 +904,21 @@
             const name = document.getElementById('productName').value;
             const brand = document.getElementById('productBrand').value;
             const price = parseFloat(document.getElementById('productPrice').value);
+            const salePrice = parseFloat(document.getElementById('productSalePrice').value) || null;
             const stock = parseInt(document.getElementById('productStock').value) || 0;
             const category = document.getElementById('productCategory').value;
             const description = document.getElementById('productDescription').value;
             const sku = document.getElementById('productSku').value;
-            const isFeatured = document.getElementById('tagFeatured').checked;
-            const isNew = document.getElementById('tagNew').checked;
+            const unit = document.getElementById('productUnit').value;
+
+            // Tüm etiketleri oku
+            const isPopular = document.getElementById('tagPopular').checked;      // Popüler Ürünler sayfası
+            const isBestSeller = document.getElementById('tagBestSeller').checked; // Çok Satan etiketi
+            const isNew = document.getElementById('tagNew').checked;               // Yeni Gelenler sayfası
+            const isFeatured = document.getElementById('tagFeatured').checked;     // Öne Çıkan
+
+            // Marka vitrini
+            const brandShowcase = document.getElementById('brandShowcase').value;  // Ana sayfa marka vitrini
 
             if (!name || !brand || !price) {
                 alert('Lütfen zorunlu alanları doldurun.');
@@ -815,14 +929,24 @@
                 name,
                 brand,
                 category: getCategoryName(category),
+                categorySlug: category,
                 price,
+                salePrice,
                 stock,
+                unit,
                 description: description || `${brand} ${name}`,
                 sku,
-                isFeatured,
-                isNew,
+                // Tüm etiketler
+                isPopular,      // Popüler Ürünler sayfasında görünsün
+                isBestSeller,   // Çok Satan badge'i
+                isNew,          // Yeni Gelenler sayfasında görünsün  
+                isFeatured,     // Öne Çıkan ürün
+                // Ana sayfa marka vitrini
+                brandShowcase,  // beta, bosch, makita, knipex, dewalt, blackdecker
                 mainImage: `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`
             };
+
+
 
             try {
                 let response;
