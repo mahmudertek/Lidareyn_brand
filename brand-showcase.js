@@ -6,6 +6,8 @@
 const BRAND_SHOWCASE = {
     // API URL
     apiUrl: 'https://galatacarsi-backend-api.onrender.com/api',
+    retryCount: 0,
+    maxRetries: 5,
 
     // Marka ID'leri ve container seçicileri
     brands: {
@@ -20,16 +22,20 @@ const BRAND_SHOWCASE = {
     // Ürünleri API'den çek
     async fetchProducts() {
         try {
+            console.log(`📡 Ürünler çekiliyor (Deneme ${this.retryCount + 1})...`);
             const response = await fetch(`${this.apiUrl}/products?limit=100`);
             const result = await response.json();
 
-            if (result.success && result.data) {
-                return result.data;
+            // Eğer bakım modundaysa veya hata varsa
+            if (!result.success || result.isMaintenance) {
+                console.warn('⚠️ Sunucu bakım modunda veya hata verdi.');
+                return null;
             }
-            return [];
+
+            return result.data || [];
         } catch (error) {
-            console.error('Marka vitrini ürünleri yüklenemedi:', error);
-            return [];
+            console.error('❌ Marka vitrini API hatası:', error);
+            return null;
         }
     },
 
@@ -67,38 +73,36 @@ const BRAND_SHOWCASE = {
         const selector = this.brands[brandKey];
         const container = document.querySelector(selector);
 
-        if (!container) {
-            console.log(`Marka container bulunamadı: ${brandKey}`);
-            return;
+        if (!container) return;
+
+        // Bu marka için ürünleri filtrele (büyük/küçük harf duyarsız)
+        const brandProducts = products.filter(p => {
+            const showcaseValue = (p.brandShowcase || '').toLowerCase();
+            return showcaseValue === brandKey.toLowerCase();
+        }).slice(0, 3);
+
+        if (brandProducts.length > 0) {
+            container.innerHTML = brandProducts.map(p => this.createProductCard(p)).join('');
+            console.log(`✅ ${brandKey} vitrini güncellendi: ${brandProducts.length} ürün`);
         }
-
-        // Bu marka için ürünleri filtrele (max 3)
-        const brandProducts = products
-            .filter(p => {
-                const showcaseValue = (p.brandShowcase || '').toLowerCase();
-                return showcaseValue === brandKey.toLowerCase();
-            })
-            .slice(0, 3);
-
-        if (brandProducts.length === 0) {
-            // Ürün yoksa placeholder göster
-            console.log(`${brandKey} için vitrin ürünü bulunamadı.`);
-            return;
-        }
-
-        // Ürünleri render et (placeholder otomatik kaybolur)
-        container.innerHTML = brandProducts.map(p => this.createProductCard(p)).join('');
-        console.log(`✅ ${brandKey} vitrini güncellendi: ${brandProducts.length} ürün`);
     },
 
     // Tüm marka vitrinlerini yükle
     async loadAllShowcases() {
-        console.log('🏪 Marka vitrinleri yükleniyor...');
-
         const products = await this.fetchProducts();
 
+        if (products === null) {
+            // Hata veya Bakım Modu: Tekrar dene
+            if (this.retryCount < this.maxRetries) {
+                this.retryCount++;
+                console.log(`🔄 Sunucu uyanıyor olabilir, ${30} saniye sonra tekrar denenecek...`);
+                setTimeout(() => this.loadAllShowcases(), 30000);
+            }
+            return;
+        }
+
         if (products.length === 0) {
-            console.log('API\'den ürün gelmedi, statik içerik korunuyor.');
+            console.log('ℹ️ API\'den hiç ürün gelmedi.');
             return;
         }
 
@@ -107,12 +111,11 @@ const BRAND_SHOWCASE = {
             this.renderBrandProducts(brandKey, products);
         });
 
-        console.log('✅ Marka vitrinleri yüklendi!');
+        console.log('✨ Marka vitrinleri başarıyla yüklendi!');
     },
 
     // Başlat
     init() {
-        // DOM hazır olduğunda çalıştır
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.loadAllShowcases());
         } else {
@@ -121,5 +124,4 @@ const BRAND_SHOWCASE = {
     }
 };
 
-// Scripti başlat
 BRAND_SHOWCASE.init();
