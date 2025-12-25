@@ -561,7 +561,6 @@
                         </div>
                     </div>
 
-                    <!-- ANA SAYFA MARKA VİTRİNİ - YENİ BÖLÜM -->
                     <div class="form-group full-width"
                         style="background: linear-gradient(135deg, #fef3c7, #fde68a); padding: 20px; border-radius: 12px; border: 2px solid #f59e0b; margin: 16px 0;">
                         <label
@@ -569,10 +568,11 @@
                             🏪 Ana Sayfa Marka Vitrini
                         </label>
                         <p style="font-size: 13px; color: #a16207; margin-bottom: 16px;">
-                            Bu ürünü ana sayfadaki marka bölümlerinden birinde sergilemek istiyorsanız seçin:
+                            Bu ürünü ana sayfadaki marka bölümlerinden birinde sergilemek istiyorsanız seçin (Marka ve
+                            Kategori Otomatik Seçilir):
                         </p>
 
-                        <select id="brandShowcase"
+                        <select id="brandShowcase" onchange="autoFillBrandAndCategory(this.value)"
                             style="width: 100%; padding: 14px 16px; border: 2px solid #f59e0b; border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
                             <option value="">❌ Marka vitrininde gösterme</option>
                             <option value="beta">🔧 Beta - Ana Sayfada Göster</option>
@@ -1120,7 +1120,7 @@
                 salePrice,
                 stock,
                 unit,
-                description: description || `${brand} ${name}`,
+                description: description || `${brand} ${name} - Galata Çarşı kalitesiyle.`,
                 sku,
                 // Tüm etiketler
                 isPopular,      // Popüler Ürünler sayfasında görünsün
@@ -1146,13 +1146,23 @@
                 if (response.success) {
                     closeModal();
                     await loadProducts();
-                    alert('Ürün başarıyla kaydedildi!');
+                    alert('✅ Ürün başarıyla kaydedildi!');
                 } else {
-                    alert(response.message || 'Kaydetme işlemi başarısız');
+                    console.error('API Hatası:', response);
+                    alert('❌ Hata: ' + (response.message || response.error || 'Kaydetme işlemi başarısız. Lütfen tüm alanları kontrol edin.'));
                 }
             } catch (error) {
                 console.error('Save error:', error);
-                // LocalStorage'a kaydet (offline mod)
+
+                // Hata mesajını daha detaylı göster
+                let errorMessage = 'Sunucu bağlantısı kurulamadı.';
+                if (error.message && error.message.includes('entity too large')) {
+                    errorMessage = 'Görsel boyutu çok büyük! Lütfen daha küçük bir görsel seçin.';
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+
+                // Fallback for offline mode or network error
                 if (id) {
                     const index = products.findIndex(p => (p._id || p.id) === id);
                     if (index !== -1) {
@@ -1169,7 +1179,7 @@
             }
         }
 
-        // Get category name from slug
+        // Get category name from slug - Backend Enum Değerleriyle Birebir Eşleşmeli
         function getCategoryName(slug) {
             const categoryMap = {
                 'elektrikli-el-aletleri': 'Elektrikli El Aletleri',
@@ -1205,6 +1215,46 @@
             products = filtered;
             renderProducts();
             products = originalProducts;
+        }
+
+        // Marka vitrini seçildiğinde marka ve kategoriyi otomatik doldur
+        function autoFillBrandAndCategory(val) {
+            if (!val) return;
+
+            const brandSelect = document.getElementById('productBrand');
+            const categorySelect = document.getElementById('productCategory');
+
+            // Değerleri eşleştir
+            const mapping = {
+                'beta': { brand: 'Beta', category: 'el-aletleri' },
+                'bosch': { brand: 'Bosch', category: 'elektrikli-el-aletleri' },
+                'makita': { brand: 'Makita', category: 'elektrikli-el-aletleri' },
+                'knipex': { brand: 'Knipex', category: 'el-aletleri' },
+                'dewalt': { brand: 'DeWalt', category: 'elektrikli-el-aletleri' },
+                'blackdecker': { brand: 'Black+Decker', category: 'elektrikli-el-aletleri' }
+            };
+
+            const target = mapping[val];
+            if (target) {
+                // Markayı seç
+                for (let i = 0; i < brandSelect.options.length; i++) {
+                    if (brandSelect.options[i].value.toLowerCase() === target.brand.toLowerCase()) {
+                        brandSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+
+                // Kategoriyi seç
+                categorySelect.value = target.category;
+
+                // Kullanıcıya görsel geri bildirim ver
+                brandSelect.style.borderColor = '#22c55e';
+                categorySelect.style.borderColor = '#22c55e';
+                setTimeout(() => {
+                    brandSelect.style.borderColor = '';
+                    categorySelect.style.borderColor = '';
+                }, 2000);
+            }
         }
 
         // Initial load
