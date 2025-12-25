@@ -135,11 +135,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ============================================
-    // BAKIM MODU KONTROLÜ
+    // BAKIM MODU ARTIK maintenance-config.json İLE YÖNETİLİYOR
+    // Bu sebeple eski backend kontrolü kaldırıldı
     // ============================================
-
-    // Sayfa yüklendiğinde bakım modunu kontrol et
-    checkMaintenanceMode();
 
     // ============================================
     // DASHBOARD VERİLERİNİ YÜKLE
@@ -148,20 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Sayfa yüklendiğinde gerçek verileri çek
     loadDashboardData();
 
-    // Listen for updates from other tabs
-    try {
-        const bc = new BroadcastChannel('admin_settings_channel');
-        bc.onmessage = (event) => {
-            if (event.data && event.data.type === 'maintenance_updated') {
-                console.log('📡 Senkronizasyon mesajı alındı:', event.data);
-                checkMaintenanceMode(); // Re-fetch status
-            }
-        };
-    } catch (e) {
-        console.log('BroadcastChannel not supported');
-    }
-
 });
+
 
 // Dashboard verilerini backend'den çek
 async function loadDashboardData() {
@@ -322,77 +308,12 @@ function showErrorState() {
     });
 }
 
-// Bakım modunu kontrol et ve UI güncelle
-async function checkMaintenanceMode() {
-    try {
-        const response = await ADMIN_API.getSettings();
-        const isMaintenanceMode = response.success ? response.data.isMaintenanceMode : false;
 
-        const toggle = document.getElementById('maintenanceToggle');
-        const card = document.getElementById('maintenanceCard');
-        const status = document.getElementById('maintenanceStatus');
+// ============================================
+// ESKİ BAKIM MODU FONKSİYONLARI KALDIRILDI
+// Bakım modu artık maintenance-config.json ile yönetiliyor
+// ============================================
 
-        if (toggle && card && status) {
-            console.log('🔄 Dashboard Bakım Modu Senkronizasyonu:', isMaintenanceMode);
-            toggle.checked = isMaintenanceMode;
-
-            if (isMaintenanceMode) {
-                card.classList.add('maintenance-active');
-                status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
-            } else {
-                card.classList.remove('maintenance-active');
-                status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
-            }
-        }
-    } catch (error) {
-        console.error('Maintenance mode check error:', error);
-    }
-}
-
-// Bakım modunu aç/kapat
-async function toggleMaintenanceMode() {
-    const toggle = document.getElementById('maintenanceToggle');
-    const card = document.getElementById('maintenanceCard');
-    const status = document.getElementById('maintenanceStatus');
-
-    const isMaintenanceMode = toggle.checked;
-
-    try {
-        const response = await ADMIN_API.updateMaintenanceMode(isMaintenanceMode);
-
-        if (response.success) {
-            // UI güncelle
-            if (isMaintenanceMode) {
-                card.classList.add('maintenance-active');
-                status.innerHTML = 'Site şu an <strong>bakımda</strong>. Ziyaretçiler bakım sayfasını görüyor.';
-                showNotification('🔧 Bakım modu aktif edildi!', 'warning');
-                // alert('Bakım modu AÇILDI. Lütfen ana sayfayı (index.html) yenileyerek kontrol edin.');
-            } else {
-                card.classList.remove('maintenance-active');
-                status.innerHTML = 'Site şu an <strong>açık</strong> ve ziyaretçiler erişebilir.';
-                showNotification('✅ Site tekrar açıldı!', 'success');
-                // alert('Bakım modu KAPATILDI. Site tekrar ziyarete açıldı.');
-            }
-
-            // Broadcast the change
-            try {
-                const bc = new BroadcastChannel('admin_settings_channel');
-                bc.postMessage({ type: 'maintenance_updated', isMaintenanceMode: isMaintenanceMode });
-            } catch (e) { }
-        } else {
-            // Hata durumunda toggle'ı geri al
-            toggle.checked = !isMaintenanceMode;
-            const errorMsg = response.message || response.error || 'Bilinmeyen bir hata oluştu';
-            showNotification('❌ Hata: ' + errorMsg, 'error');
-        }
-    } catch (error) {
-        console.error('Maintenance mode toggle error:', error);
-        toggle.checked = !isMaintenanceMode;
-        const msg = error.message || 'Sunucuya ulaşılamıyor (Bağlantı Engellendi)';
-        showNotification('❌ Hata: ' + msg, 'error');
-        alert('Bakım modu değiştirilemedi: ' + msg);
-    }
-}
 
 // Bildirim göster
 function showNotification(message, type) {
