@@ -75,46 +75,23 @@ const BRAND_SHOWCASE = {
 
         if (!container) return;
 
-        // Bu marka için ürünleri filtrele (büyük/küçük harf duyarsız)
+        // Bu marka için ürünleri filtrele (Daha esnek filtreleme)
         const brandProducts = (products || []).filter(p => {
-            const showcaseValue = (p.brandShowcase || '').toLowerCase();
-            return showcaseValue === brandKey.toLowerCase();
+            const showcaseValue = (p.brandShowcase || '').toLowerCase().trim();
+            const productBrand = (p.brand || '').toLowerCase().trim();
+
+            // 1. Öncelik: BrandShowcase alanı eşleşiyorsa
+            if (showcaseValue === brandKey.toLowerCase()) return true;
+
+            // 2. Öncelik: BrandShowcase alanı boşsa ama ürünün markası bu marka ile aynıysa (Yedek Plan)
+            if (showcaseValue === '' && productBrand === brandKey.toLowerCase()) return true;
+
+            return false;
         }).slice(0, 3);
 
         if (brandProducts.length > 0) {
             container.innerHTML = brandProducts.map(p => this.createProductCard(p)).join('');
             console.log(`✅ ${brandKey} vitrini güncellendi: ${brandProducts.length} ürün`);
-        } else {
-            // Ürün yoksa ŞIK BOŞ ÇERÇEVELERİ GÖSTER (Kullanıcı talebi)
-            container.innerHTML = `
-                <div class="madeniyat-product-card placeholder-card">
-                    <div class="madeniyat-product-image" style="background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
-                        <i class="fa-solid fa-image fa-2x"></i>
-                    </div>
-                    <div class="madeniyat-product-info">
-                        <div style="height:12px; background:#f0f0f0; width:80%; margin-bottom:8px; border-radius:2px;"></div>
-                        <div style="height:15px; background:#f0f0f0; width:40%; border-radius:2px;"></div>
-                    </div>
-                </div>
-                <div class="madeniyat-product-card placeholder-card">
-                    <div class="madeniyat-product-image" style="background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
-                        <i class="fa-solid fa-image fa-2x"></i>
-                    </div>
-                    <div class="madeniyat-product-info">
-                        <div style="height:12px; background:#f0f0f0; width:80%; margin-bottom:8px; border-radius:2px;"></div>
-                        <div style="height:15px; background:#f0f0f0; width:40%; border-radius:2px;"></div>
-                    </div>
-                </div>
-                <div class="madeniyat-product-card placeholder-card">
-                    <div class="madeniyat-product-image" style="background: #f0f0f0; display:flex; align-items:center; justify-content:center; color:#ccc;">
-                        <i class="fa-solid fa-image fa-2x"></i>
-                    </div>
-                    <div class="madeniyat-product-info">
-                        <div style="height:12px; background:#f0f0f0; width:80%; margin-bottom:8px; border-radius:2px;"></div>
-                        <div style="height:15px; background:#f0f0f0; width:40%; border-radius:2px;"></div>
-                    </div>
-                </div>
-            `;
         }
     },
 
