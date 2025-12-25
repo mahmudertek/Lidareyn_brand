@@ -868,6 +868,9 @@
                     }
                     renderProducts();
                     console.log('✅ Ürünler yüklendi:', products.length);
+
+                    // Sunucu aktif - yerel ürünleri senkronize et
+                    await syncLocalProducts();
                 } else {
                     // API boş döndü, localStorage'dan yükle
                     products = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
@@ -888,6 +891,37 @@
 
             isLoading = false;
         }
+
+        // Yerel ürünleri sunucuya senkronize et
+        async function syncLocalProducts() {
+            const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+            if (localProducts.length === 0) return;
+
+            console.log('🔄 Yerel ürünler senkronize ediliyor...', localProducts.length);
+            let syncedCount = 0;
+
+            for (const product of localProducts) {
+                try {
+                    // Sunucuya ekle
+                    const response = await ADMIN_API.createProduct(product);
+                    if (response.success) {
+                        syncedCount++;
+                        console.log('✅ Senkronize edildi:', product.name);
+                    }
+                } catch (err) {
+                    console.error('Senkronizasyon hatası:', product.name, err);
+                }
+            }
+
+            if (syncedCount > 0) {
+                // Başarılı senkronizasyon - localStorage'ı temizle
+                localStorage.removeItem('galatacarsi_products');
+                alert(`🎉 ${syncedCount} yerel ürün sunucuya aktarıldı!`);
+                // Listeyi yenile
+                await loadProducts();
+            }
+        }
+
 
 
         // Show loading state
