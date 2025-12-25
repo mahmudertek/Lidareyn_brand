@@ -78,12 +78,12 @@ const BRAND_SHOWCASE = {
             .slice(0, 3);
 
         if (brandProducts.length === 0) {
-            // Ürün yoksa mevcut statik içeriği koru
-            console.log(`${brandKey} için vitrin ürünü bulunamadı, statik içerik korunuyor.`);
+            // Ürün yoksa placeholder göster
+            console.log(`${brandKey} için vitrin ürünü bulunamadı.`);
             return;
         }
 
-        // Ürünleri render et
+        // Ürünleri render et (placeholder otomatik kaybolur)
         container.innerHTML = brandProducts.map(p => this.createProductCard(p)).join('');
         console.log(`✅ ${brandKey} vitrini güncellendi: ${brandProducts.length} ürün`);
     },
