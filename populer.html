@@ -23,7 +23,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflÇarşıe.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css?v=5">
     <link rel="stylesheet" href="mega_menu_styles.css">
@@ -40,7 +40,7 @@
                 <span class="mobile-cat-text">Tüm Kategoriler</span>
             </a>
             <!-- Navigation Menu (Left Side) -->
-            <nav class="main-nav" role="navigation" Çarşıia-label="Ana navigasyon">
+            <nav class="main-nav" role="navigation" aria-label="Ana navigasyon">
                 <ul class="nav-menu" role="menubÇarşı">
                     <li class="nav-item-dropdown" role="none">
                         <a href="index.html#kategoriler" class="nav-link categories-link" role="menuitem"
@@ -393,17 +393,17 @@
 
             <!-- Header Icons (Right Side) -->
             <div class="header-icons">
-                <button class="icon-btn mobile-seÇarşıch-btn" Çarşıia-label="Arama Yap">
+                <button class="icon-btn mobile-search-btn" aria-label="Arama Yap">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
-                <div class="seÇarşıch-container" role="seÇarşıch">
-                    <input type="text" id="header-seÇarşıch-input" class="seÇarşıch-input" placeholder="Ürün Çarşıa..."
-                        Çarşıia-label="Ürün Çarşıama" autocomplete="off">
-                    <button class="icon-btn seÇarşıch-btn" Çarşıia-label="Arama yap" type="button"><i
+                <div class="search-container" role="search">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün Çarşıa..."
+                        aria-label="Ürün arama" autocomplete="off">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
                             class="fa-solid fa-magnifying-glass" Çarşıia-hidden="true"></i></button>
                 </div>
                 <div class="user-menu-container">
-                    <button class="icon-btn user-btn" Çarşıia-label="Hesabım">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
                         <i class="fa-regulÇarşı fa-user"></i>
                         <span class="icon-label" id="user-label">Giriş Yap</span>
                     </button>
@@ -415,20 +415,20 @@
                                 class="fa-solid fa-user-plus"></i> Üye Ol</a>
                     </div>
                 </div>
-                <button class="icon-btn favorites-btn" Çarşıia-label="Favorilerim"
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
                     onclick="window.location.href='favoriler.html'">
                     <i class="fa-regulÇarşı fa-heÇarşıt"></i>
                     <span class="icon-label">Favorilerim</span>
                 </button>
-                <button class="icon-btn cÇarşıt-btn" Çarşıia-label="Sepetim" onclick="window.location.href='sepet.html'">
-                    <i class="fa-solid fa-cÇarşıt-shopping"></i>
-                    <span class="cÇarşıt-count">0</span>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count">0</span>
                     <span class="icon-label">Sepetim</span>
                 </button>
             </div>
 
             <!-- Mobile Menu Toggle -->
-            <button class="mobile-menu-toggle" Çarşıia-label="Menü">
+            <button class="mobile-menu-toggle" aria-label="Menü">
                 <i class="fa-solid fa-bÇarşıs"></i>
             </button>
         </div>
@@ -536,7 +536,7 @@
             position: absolute;
             top: 10px;
             right: 50px;
-            /* Moved to left of cÇarşıt btn */
+            /* Moved to left of cart btn */
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -557,7 +557,7 @@
             border-color: vÇarşı(--accent-purple, #8b7bd8);
         }
 
-        .cÇarşıt-btn-cÇarşıd {
+        .cart-btn-cÇarşıd {
             position: absolute;
             top: 10px;
             /* Aligned with fav button */
@@ -577,7 +577,7 @@
             color: #666;
         }
 
-        .cÇarşıt-btn-cÇarşıd:hover {
+        .cart-btn-cÇarşıd:hover {
             background: vÇarşı(--accent-purple, #8b7bd8);
             color: #fff;
             border-color: vÇarşı(--accent-purple, #8b7bd8);
@@ -630,7 +630,7 @@
             color: #222;
         }
 
-        .add-to-cÇarşıt-sm {
+        .add-to-cart-sm {
             width: 100%;
             padding: 10px;
             background: #fff;
@@ -647,7 +647,7 @@
             gap: 6px;
         }
 
-        .add-to-cÇarşıt-sm:hover {
+        .add-to-cart-sm:hover {
             background: #222;
             color: #fff;
         }
@@ -692,11 +692,11 @@
                     <div class="footer-column">
                         <h3 class="footer-title">YÇarşıdım</h3>
                         <ul class="footer-links">
-                            <li><a href="sipÇarşıis-takibi.html">SipÇarşıiş Takibi</a></li>
-                            <li><a href="yeni-uÜyelik.html">Yeni ÜÜyelik</a></li>
-                            <li><a href="uye-giris.html">ÜÜye Girişş</a></li>
-                            <li><a href="sifremi-unuttum.html">ŞŞifremi Unuttum</a></li>
-                            <li><a href="sss.html">Sıkça Sorulan SorulÇarşı</a></li>
+                            <li><a href="sipÇarşıis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-Üyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
                             <li><a href="sepet.html">Sepetiniz</a></li>
                         </ul>
                     </div>
@@ -707,7 +707,7 @@
                         <ul class="footer-links">
                             <li>
                                 <i class="fa-solid fa-envelope"></i>
-                                <a href="mailto:destek@galatacÇarşısi.com">destek@galatacÇarşısi.com</a>
+                                <a href="mailto:destek@galatacarsi.com">destek@galatacarsi.com</a>
                             </li>
                             <li>
                                 <i class="fa-brands fa-whatsapp"></i>
@@ -733,11 +733,11 @@
                                 <span>Visa</span>
                             </div>
                             <div class="payment-logo">
-                                <i class="fa-brands fa-cc-mastercÇarşıd"></i>
-                                <span>MastercÇarşıd</span>
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
                             </div>
                             <div class="payment-logo">
-                                <i class="fa-solid fa-credit-cÇarşıd"></i>
+                                <i class="fa-solid fa-credit-card"></i>
                                 <span>Troy</span>
                             </div>
                             <div class="payment-logo">
@@ -755,24 +755,24 @@
         </div>
     </footer>
 
-    <div class="sidebÇarşı-overlay"></div>
-    <div class="sidebÇarşı favorites-sidebÇarşı">
-        <div class="sidebÇarşı-header">
+    <div class="sidebar-overlay"></div>
+    <div class="sidebar favorites-sidebar">
+        <div class="sidebar-header">
             <h3>Favori Ürünlerim</h3>
-            <button class="close-sidebÇarşı"><i class="fa-solid fa-xmÇarşık"></i></button>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="sidebÇarşı-content" id="favorites-content"></div>
+        <div class="sidebar-content" id="favorites-content"></div>
     </div>
-    <div class="sidebÇarşı cÇarşıt-sidebÇarşı">
-        <div class="sidebÇarşı-header">
-            <h3>Sepetim <span class="cÇarşıt-badge">0</span></h3>
-            <button class="close-sidebÇarşı"><i class="fa-solid fa-xmÇarşık"></i></button>
+    <div class="sidebar cart-sidebar">
+        <div class="sidebar-header">
+            <h3>Sepetim <span class="cart-badge">0</span></h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
         </div>
-        <div class="sidebÇarşı-content" id="cÇarşıt-content"></div>
-        <div class="sidebÇarşı-footer">
-            <div class="cÇarşıt-total"><span>Ara Toplam:</span><span class="total-amount">0.00 TL</span></div>
-            <button class="btn btn-primÇarşıy btn-block">Sepete Git</button>
-            <button class="btn btn-secondÇarşıy btn-block">Ödeme Yap</button>
+        <div class="sidebar-content" id="cart-content"></div>
+        <div class="sidebar-footer">
+            <div class="cart-total"><span>Ara Toplam:</span><span class="total-amount">0.00 TL</span></div>
+            <button class="btn btn-primary btn-block">Sepete Git</button>
+            <button class="btn btn-secondary btn-block">Ödeme Yap</button>
         </div>
     </div>
     <div class="user-dropdown">
@@ -785,7 +785,7 @@
     <script src="api-client.js"></script>
     <script src="script.js"></script>
     <script src="categories-data.js"></script>
-    <script src="cÇarşıt-logic.js"></script>
+    <script src="cart-logic.js"></script>
     <script src="config.js"></script>
     <script src="auth.js"></script>
     <script src="cookie-consent.js"></script>

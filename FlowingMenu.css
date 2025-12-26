@@ -1,8 +1,8 @@
 /* FlowingMenu.css - Compact Version (75% Scale) */
 .flowing-menu-container {
     position: relative;
-    width: 94%;
-    max-width: 94%;
+    width: 100%;
+    max-width: 100%;
     height: 420px;
     /* 210 * 2 = 420 */
     margin: 0 auto;
@@ -157,8 +157,8 @@
 
 @media (max-width: 768px) {
     .flowing-menu-container {
-        width: 94%;
-        max-width: 94%;
+        width: 100%;
+        max-width: 100%;
         height: 330px;
         /* 165 * 2 = 330 */
     }
