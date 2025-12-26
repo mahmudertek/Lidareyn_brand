@@ -1,1 +1,1 @@
-window.BAKIM_MODU_AKTIF = true; 
+window.BAKIM_MODU_AKTIF = false; 

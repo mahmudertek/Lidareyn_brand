@@ -1,19 +1,18 @@
-/* FlowingMenu.css - Compact Version (75% Scale) */
+/* FlowingMenu.css - Unified Layout Compatible */
 .flowing-menu-container {
     position: relative;
-    width: 94%;
-    max-width: 94%;
+    width: 80% !important;
+    max-width: 1500px !important;
     height: 420px;
-    /* 210 * 2 = 420 */
-    margin: 0 auto;
+    margin: 40px auto !important;
     overflow: hidden;
     background: #f5f5f5;
     color: #333;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-radius: 14px;
-    /* 20 * 0.7 = 14 */
+    border-radius: 24px;
+    /* Match Grid Motion Radius */
 }
 
 .flowing-menu-scroll-wrapper {

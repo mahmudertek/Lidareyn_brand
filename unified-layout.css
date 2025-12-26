@@ -45,9 +45,25 @@
     padding: 0 !important;
 }
 
-/* Popüler liste genişliğini fulle */
 .popular-list {
     max-width: 100% !important;
+}
+
+/* 5. FOOTER FIXES (Remove Inner Gray Box) */
+.footer-grid-wrapper {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+/* Ensure Footer container allows full width of content but constrained if needed */
+.footer-container {
+    max-width: 1920px;
+    /* Keep outer wide */
+    padding: 0 40px;
 }
 
 /* RESPONSIVE ADJUSTMENTS */
@@ -80,7 +96,6 @@
         grid-template-columns: 1fr;
     }
 
-    /* Mobil'de carousel ve diğerleri tam genişliğe yakın olsun */
     .product-carousel-container,
     .future-content,
     .popular-container {
