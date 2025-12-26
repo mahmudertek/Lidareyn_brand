@@ -10,9 +10,9 @@
 .popular-container {
     max-width: 1200px;
     margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    display: flex;
+    justify-content: center;
+    padding: 0 20px;
 }
 
 /* Column Styling */
@@ -22,6 +22,8 @@
     border-radius: 16px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
 }
 
 .popular-column:hover {
@@ -38,16 +40,18 @@
     color: #1a1a1a;
     padding-bottom: 15px;
     border-bottom: 3px solid #8b7bd8;
+    display: inline-block;
 }
 
 /* List Styling */
 .popular-list {
     list-style: none;
     padding: 0;
-    margin: 0;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 12px 20px;
+    max-width: 1000px;
 }
 
 .popular-list li {
