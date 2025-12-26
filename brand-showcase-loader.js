@@ -1,6 +1,10 @@
 
+
 document.addEventListener('DOMContentLoaded', async function () {
-    const API_URL = 'https://galatacarsi-backend-api.onrender.com/api/products';
+    // Dynamic API URL from config or fallback
+    const API_URL = (window.ENV && window.ENV.API_URL)
+        ? `${window.ENV.API_URL}/products`
+        : 'https://galatacarsi-backend-api.onrender.com/api/products';
 
     // Brand Config: Maps CSS theme classes to Brand Names in DB
     const brandMap = {

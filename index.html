@@ -2,21 +2,18 @@
 <html lang="tr">
 
 <head>
-    <!-- Bakım Modu Sistemi -->
-    <style id="bakim-blocking-style">
-        html {
-            display: none !important;
-        }
-    </style>
-    <script src="bakim-ayari.js?v=2"></script>
+    <!-- Bakım Modu Sistemi (JS Only) -->
+    <script src="bakim-ayari.js?v=3"></script>
     <script>
         (function () {
             if (window.location.pathname.includes('bakimda.html')) return;
-            const isAuthorized = localStorage.getItem('admin_session') || localStorage.getItem('adminToken') || localStorage.getItem('token');
-            const hasBypass = new URLSearchParams(window.location.search).has('lidareyn_ozel_girisKask12121O');
-            if (hasBypass) { localStorage.setItem('admin_session', 'active_' + Date.now()); window.history.replaceState(null, '', window.location.pathname); document.getElementById('bakim-blocking-style').remove(); return; }
-            if (window.BAKIM_MODU_AKTIF && !isAuthorized) { window.location.href = 'bakimda.html'; return; }
-            const s = document.getElementById('bakim-blocking-style'); if (s) s.remove();
+            // Yetki kontrolü
+            const auth = localStorage.getItem('admin_session') || localStorage.getItem('adminToken');
+            // Bakım aktifse ve yetki yoksa yönlendir
+            if (window.BAKIM_MODU_AKTIF && !auth) {
+                document.documentElement.style.display = 'none';
+                window.location.href = 'bakimda.html';
+            }
         })();
     </script>
     <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
@@ -65,7 +62,7 @@
     <!-- Preload Critical Resources -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
         as="style">
-    <link rel="preload" href="style.css?v=1766778214" as="style">
+    <link rel="preload" href="style.css?v=1766779735" as="style">
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -80,24 +77,24 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </noscript>
 
-    <link rel="stylesheet" href="style.css?v=1766778214">
-    <link rel="stylesheet" href="mobile.css?v=1766778214">
-    <link rel="stylesheet" href="grid-motion.css?v=1766778214">
+    <link rel="stylesheet" href="style.css?v=1766779735">
+    <link rel="stylesheet" href="mobile.css?v=1766779735">
+    <link rel="stylesheet" href="grid-motion.css?v=1766779735">
 
 
 
 
     <link rel="stylesheet" href="slider.css">
-    <link rel="stylesheet" href="mega_menu_styles.css?v=1766778214">
+    <link rel="stylesheet" href="mega_menu_styles.css?v=1766779735">
     <link rel="stylesheet" href="categories-carousel.css">
-    <link rel="stylesheet" href="brands-single-row.css?v=1766778214">
+    <link rel="stylesheet" href="brands-single-row.css?v=1766779735">
 
     <link rel="stylesheet" href="popular-section.css">
     <link rel="stylesheet" href="unified-layout.css">
 
-    <link rel="stylesheet" href="madeniyat-hero.css?v=1766778214">
+    <link rel="stylesheet" href="madeniyat-hero.css?v=1766779735">
 
-    <link rel="stylesheet" href="product-carousel.css?v=1766778214">
+    <link rel="stylesheet" href="product-carousel.css?v=1766779735">
 
 
 
@@ -1005,8 +1002,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <!-- Component Stylesheet -->
-    <link rel="stylesheet" href="ChromaGrid.css?v=1766778214">
-    <link rel="stylesheet" href="FlowingMenu.css?v=1766778214">
+    <link rel="stylesheet" href="ChromaGrid.css?v=1766779735">
+    <link rel="stylesheet" href="FlowingMenu.css?v=1766779735">
 
     <!-- Pre-compiled React Components (No Babel needed - much faster!) -->
     <script src="react-components.js?v=1"></script>

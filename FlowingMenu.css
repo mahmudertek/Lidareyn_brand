@@ -1,6 +1,7 @@
 /* FlowingMenu.css - Unified Layout Compatible */
 .flowing-menu-container {
     position: relative;
+    /* GRID MOTION REPLICATION */
     width: 80% !important;
     max-width: 1500px !important;
     height: 420px;
@@ -11,8 +12,8 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    border-radius: 24px;
-    /* Match Grid Motion Radius */
+    border-radius: 24px !important;
+    box-sizing: border-box !important;
 }
 
 .flowing-menu-scroll-wrapper {
