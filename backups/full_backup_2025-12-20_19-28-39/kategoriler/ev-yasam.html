@@ -2,6 +2,44 @@
 <html lang="tr">
 
 <head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        html {
+            display: none !important;
+        }
+    </style>
+    <script src="../../../bakim-ayari.js?v=1766770434"></script>
+    <script>
+        (function () {
+            // Bakım sayfası ise kontrol etme
+            if (window.location.pathname.includes('bakimda.html')) return;
+
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                const cleanUrl = window.location.pathname; 
+                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
+                document.getElementById('bakim-blocking-style').remove();
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = '../../../bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            const style = document.getElementById('bakim-blocking-style');
+            if (style) style.remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
+        })();
+    </script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ev & Yaşam - Galata Çarşı</title>
@@ -12,9 +50,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../style.css?v=1766761164">
-    <link rel="stylesheet" href="../mobile.css?v=1766761164">
-    <link rel="stylesheet" href="../mega_menu_styles.css?v=1766761164">
+    <link rel="stylesheet" href="../style.css?v=1766771683">
+    <link rel="stylesheet" href="../mobile.css?v=1766771683">
+    <link rel="stylesheet" href="../mega_menu_styles.css?v=1766771683">
     <link rel="stylesheet" href="../breadcrumb.css">
     <link rel="stylesheet" href="../category-hero.css">
     <link rel="icon" type="image/png" href="../../../gorseller/logo.png">

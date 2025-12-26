@@ -2203,10 +2203,10 @@ img[loading="lazy"].loaded {
 }
 
 /* Main Footer Grid (Gray Box) */
+/* Main Footer Grid (Simplified) */
 .footer-grid-wrapper {
-    background: #222;
-    border-radius: 24px;
-    padding: 60px;
+    background: transparent;
+    padding: 0;
     margin-bottom: 0;
 }
 

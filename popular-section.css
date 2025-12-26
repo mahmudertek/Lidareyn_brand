@@ -9,6 +9,7 @@
 
 .popular-container {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
     display: flex;
     justify-content: center;
@@ -51,7 +52,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 12px 20px;
-    max-width: 1000px;
+    max-width: 100%;
 }
 
 .popular-list li {
@@ -83,12 +84,6 @@
 }
 
 /* Responsive Design */
-@media (max-width: 992px) {
-    .popular-container {
-        grid-template-columns: 1fr;
-        gap: 40px;
-    }
-}
 
 @media (max-width: 768px) {
     .popular-column {

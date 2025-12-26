@@ -1,0 +1,90 @@
+/* ============================================
+   UNIFIED ALIGNMENT RULES (MATCHING GRID MOTION)
+   Target Width: 80% | Max-Width: 1500px 
+   ============================================ */
+
+/* 1. KATEGORİLER (Categories) */
+.categories-section {
+    width: 80% !important;
+    max-width: 1500px !important;
+    margin: 40px auto !important;
+    padding: 0 !important;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+/* 2. ÖNE ÇIKANLAR (Product Carousel) */
+.product-carousel-container {
+    width: 80% !important;
+    max-width: 1500px !important;
+    margin: 40px auto !important;
+    padding: 0 !important;
+    display: block;
+}
+
+/* 3. TÜM MARKALAR (Flowing Menu) */
+.future-content {
+    width: 80% !important;
+    max-width: 1500px !important;
+    margin: 40px auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+}
+
+/* 4. POPÜLER MARKALAR (Popular Section Override) */
+.popular-container {
+    width: 80% !important;
+    max-width: 1500px !important;
+    margin: 40px auto !important;
+    padding: 0 !important;
+}
+
+/* Popüler liste genişliğini fulle */
+.popular-list {
+    max-width: 100% !important;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 1200px) {
+
+    .categories-section,
+    .product-carousel-container,
+    .future-content,
+    .popular-container {
+        width: 90% !important;
+    }
+}
+
+@media (max-width: 992px) {
+
+    .categories-section,
+    .product-carousel-container,
+    .future-content,
+    .popular-container {
+        width: 95% !important;
+    }
+
+    .categories-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Mobil'de carousel ve diğerleri tam genişliğe yakın olsun */
+    .product-carousel-container,
+    .future-content,
+    .popular-container {
+        width: 95% !important;
+        margin: 20px auto !important;
+    }
+}
