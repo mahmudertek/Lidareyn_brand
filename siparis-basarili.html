@@ -2,22 +2,35 @@
 <html lang="tr">
 
 <head>
-        <!-- BAKIM MODU KONTROLU (V6 - Config File Based) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">html { display: none !important; }</style>
+    <script src="bakim-ayari.js?v=4"></script>
     <script>
-    (function(){
-        if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
-        fetch('/maintenance-config.json?t='+Date.now())
-        .then(r=>r.json())
-        .then(config=>{if(config&&config.enabled)location.href='/maintenance.html';})
-        .catch(()=>{});
-    })();
+        (function () {
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            document.getElementById('bakim-blocking-style').remove();
+        })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siparişiniz Alındı - Galata Çarşı</title>
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <link rel="apple-touch-icon" href="assets/favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mega_menu_styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -136,6 +149,8 @@
             }
         }
     </style>
+    <link rel="icon" type="image/png" href="gorseller/logo.png">
+    <meta property="og:image" content="gorseller/sosyal_medya_gorseli.png">
 </head>
 
 <body>

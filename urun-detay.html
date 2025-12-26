@@ -2,22 +2,9 @@
 <html lang="tr">
 
 <head>
-    <!-- BAKIM MODU KONTROLU (V6 - Config File Based) -->
-    <script>
-        (function () {
-            if (location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
-            fetch('/maintenance-config.json?t=' + Date.now())
-                .then(r => r.json())
-                .then(config => { if (config && config.enabled) location.href = '/maintenance.html'; })
-                .catch(() => { });
-        })();
-    </script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Siyah Dokulu Premium Ceket - Galata Çarşı</title>
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <link rel="apple-touch-icon" href="assets/favicon.png">
 
     <!-- Using existing styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,6 +16,33 @@
     <link rel="stylesheet" href="mobile.css?v=5">
     <link rel="stylesheet" href="mega_menu_styles.css">
     <link rel="stylesheet" href="product-detail.css">
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">html { display: none !important; }</style>
+    <script src="bakim-ayari.js?v=4"></script>
+    <script>
+        (function () {
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            document.getElementById('bakim-blocking-style').remove();
+        })();
+    </script>
+    <link rel="icon" type="image/png" href="gorseller/logo.png">
+    <meta property="og:image" content="gorseller/sosyal_medya_gorseli.png">
 </head>
 
 <body>
@@ -92,7 +106,7 @@
                                         <div class="sub-menu-column">
                                             <h4>Diğer Makineler</h4>
                                             <ul>
-                                                <li><a href="#">Kaynak Makineleri (Inverter, Gazaltıı)</a></li>
+                                                <li><a href="#">Kaynak Makineleri (Inverter, Gazaltı)</a></li>
                                                 <li><a href="#">Akülü Alet Setleri</a></li>
                                             </ul>
                                         </div>
@@ -289,7 +303,7 @@
                                             <h4>Sarf Malzemeleri</h4>
                                             <ul>
                                                 <li><a href="#">Elektrotlar (Rutil, Bazik)</a></li>
-                                                <li><a href="#">Kaynak Telleri (Gazaltıı, Tig)</a></li>
+                                                <li><a href="#">Kaynak Telleri (Gazaltı, Tig)</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -385,7 +399,6 @@
                     </li>
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
                     <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
-                    <li><a href="juvex.html" class="nav-link">Juvex</a></li>
                 </ul>
             </nav>
 
@@ -441,8 +454,7 @@
     <main style="padding-top: 20px;">
 
         <!-- Breadcrumb -->
-        <div class="product-breadcrumb"
-            style="max-width: 1200px; margin: 0 auto; padding: 0 20px; font-size: 13px; color: #666;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; font-size: 13px; color: #666;">
             <a href="index.html">Anasayfa</a> <span style="margin: 0 8px;">/</span>
             <a href="#" id="bread-category">Erkek Giyim</a> <span style="margin: 0 8px;">/</span>
             <span style="color: #333;" id="bread-name">Siyah Dokulu Premium Ceket</span>
@@ -726,161 +738,71 @@
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
+        document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
-            const API_URL = window.API_URL || 'https://galatacarsi-backend-api.onrender.com/api';
 
-            if (!productId) return;
+            if (productId && window.getProductById) {
+                const product = window.getProductById(productId);
 
-            // Yükleniyor durumu
-            document.getElementById('product-title').textContent = 'Yükleniyor...';
+                if (product) {
+                    // Update Text Content
+                    document.getElementById('product-title').textContent = product.name;
+                    document.getElementById('product-price').textContent = product.price;
+                    document.getElementById('bread-name').textContent = product.name;
+                    document.getElementById('bread-category').textContent = product.category;
 
-            let product = null;
-
-            // 1. Önce window.getProductById (Eski Statik Veri) kontrolü
-            if (window.getProductById) {
-                product = window.getProductById(productId);
-            }
-
-            // 2. Eğer yerelde yoksa API'den çek
-            if (!product) {
-                try {
-                    const response = await fetch(`${API_URL}/products/${productId}`);
-                    const result = await response.json();
-                    if (result.success) {
-                        product = result.data;
+                    if (product.description) {
+                        document.getElementById('desc-text').textContent = product.description;
                     }
-                } catch (error) {
-                    console.error('Ürün detay hatası:', error);
-                }
-            }
 
-            if (product) {
-                // --- İÇERİK GÜNCELLEME ---
+                    // Update Images
+                    const mainImage = document.getElementById('mainImage');
+                    if (product.image) mainImage.src = product.image;
 
-                // Başlık ve Fiyat
-                document.getElementById('product-title').textContent = product.name;
-
-                // Fiyat Formatlama
-                const priceVal = product.salePrice || product.price || 0;
-                const formattedPrice = priceVal.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' TL';
-                document.getElementById('product-price').textContent = formattedPrice;
-
-                // Eski Fiyat (Varsa)
-                const originalPriceEl = document.querySelector('.original-price');
-                if (product.price && product.salePrice && product.price > product.salePrice) {
-                    originalPriceEl.textContent = product.price.toLocaleString('tr-TR') + ' TL';
-                    originalPriceEl.style.display = 'inline';
-
-                    // İndirim Oranı
-                    const discount = Math.round(((product.price - product.salePrice) / product.price) * 100);
-                    const badge = document.querySelector('.discount-badge');
-                    if (badge) {
-                        badge.textContent = `%${discount} İndirim`;
-                        badge.style.display = 'inline-block';
+                    const thumbnailsContainer = document.querySelector('.gallery-thumbnails');
+                    if (product.images && product.images.length > 0) {
+                        thumbnailsContainer.innerHTML = ''; // Clear existing
+                        product.images.forEach((imgSrc, index) => {
+                            const div = document.createElement('div');
+                            div.className = `thumbnail-wrapper ${index === 0 ? 'active' : ''}`;
+                            div.onclick = function () { changeImage(this, imgSrc) };
+                            div.innerHTML = `<img src="${imgSrc}" alt="${product.name} - ${index + 1}">`;
+                            thumbnailsContainer.appendChild(div);
+                        });
+                        // ensure main image matches first thumb
+                        mainImage.src = product.images[0];
                     }
-                } else {
-                    if (originalPriceEl) originalPriceEl.style.display = 'none';
-                    const badge = document.querySelector('.discount-badge');
-                    if (badge) badge.style.display = 'none';
-                }
 
-                // Marka
-                const brandEl = document.querySelector('.product-brand');
-                if (brandEl) brandEl.textContent = product.brand || 'Galata Çarşı';
+                    // Update Specs
+                    if (product.specs && product.specs.length > 0) {
+                        const specsList = document.getElementById('specs-list');
+                        specsList.innerHTML = '';
+                        product.specs.forEach(spec => {
+                            const div = document.createElement('div');
+                            div.className = 'spec-item';
+                            div.innerHTML = `<span class="spec-label">•</span> ${spec}`;
+                            specsList.appendChild(div);
+                        });
+                    }
 
-                // --- BREADCRUMB (Kullanıcı Tavsiyesi: Marka > Ürün) ---
-                // "Beta Vitrini" yerine direkt "Beta" yazmak daha profesyonel.
-                // Yapı: Anasayfa / [Marka] / [Ürün Adı]
-                const breadCategory = document.getElementById('bread-category');
-                const breadName = document.getElementById('bread-name');
-
-                if (product.brand) {
-                    breadCategory.textContent = product.brand;
-                    // Marka sayfasına yönlendirme (opsiyonel, şimdilik #)
-                    breadCategory.href = `markalar.html?marka=${product.brand.toLowerCase()}`;
-                } else {
-                    breadCategory.textContent = product.category || 'Ürünler';
-                    breadCategory.href = '#';
-                }
-                breadName.textContent = product.name;
-
-
-                // Açıklama
-                if (product.description) {
-                    document.getElementById('desc-text').textContent = product.description;
-                }
-
-                // Görseller
-                const mainImage = document.getElementById('mainImage');
-                // API'den gelen görsel tam URL olmayabilir veya base64 olabilir
-                const imgSrc = product.mainImage || product.image || 'https://placehold.co/600x600?text=Gorsel+Yok';
-                if (mainImage) mainImage.src = imgSrc;
-
-                // Küçük Resimler (Varsa)
-                // API şu an genelde tek resim dönüyor ama dizi desteği varsa:
-                const thumbnailsContainer = document.querySelector('.gallery-thumbnails');
-                if (thumbnailsContainer && product.images && product.images.length > 0) {
-                    thumbnailsContainer.innerHTML = '';
-                    product.images.forEach((img, index) => {
-                        const div = document.createElement('div');
-                        div.className = `thumbnail-wrapper ${index === 0 ? 'active' : ''}`;
-                        div.onclick = function () { changeImage(this, img) };
-                        div.innerHTML = `<img src="${img}" alt="${product.name}">`;
-                        thumbnailsContainer.appendChild(div);
-                    });
-                } else {
-                    // Tek resim varsa gallery'i temizle veya tekli bırak
-                    if (thumbnailsContainer) thumbnailsContainer.innerHTML = `
-                        <div class="thumbnail-wrapper active" onclick="changeImage(this, '${imgSrc}')">
-                            <img src="${imgSrc}" alt="${product.name}">
-                        </div>
-                     `;
-                }
-
-                // Özellikler (Specs)
-                // API'den gelen özellikler string array veya object olabilir, kontrol et
-                const specsList = document.getElementById('specs-list');
-                if (specsList) {
-                    specsList.innerHTML = ''; // Temizle
-                    // Barkod ve SKU ekle
-                    if (product.sku) specsList.innerHTML += `<div class="spec-item"><span class="spec-label">SKU:</span> ${product.sku}</div>`;
-                    if (product.barcode) specsList.innerHTML += `<div class="spec-item"><span class="spec-label">Barkod:</span> ${product.barcode}</div>`;
-                    if (product.stock) specsList.innerHTML += `<div class="spec-item"><span class="spec-label">Stok Durumu:</span> ${product.stock > 0 ? 'Stokta Var' : 'Tükendi'}</div>`;
-                }
-
-
-                // Sepete Ekle Butonu
-                const addToCartBtn = document.getElementById('add-to-cart-btn');
-                if (addToCartBtn) {
+                    // Update Add to Cart Button
+                    const addToCartBtn = document.getElementById('add-to-cart-btn');
                     addToCartBtn.onclick = function () {
-                        // Cart Logic
-                        const cartItem = {
-                            id: product._id || product.id,
-                            name: product.name,
-                            price: product.salePrice || product.price,
-                            image: imgSrc,
-                            variant: document.querySelector('.size-option.active')?.textContent || 'Standart'
-                        };
-
                         if (typeof window.addToCart === 'function') {
-                            window.addToCart(cartItem);
-                        } else {
-                            // Fallback
-                            console.log('Sepete eklendi:', cartItem);
-                            alert('Ürün sepete eklendi!');
+                            window.addToCart({
+                                id: product.id,
+                                name: product.name,
+                                price: product.price,
+                                image: product.image,
+                                variant: document.querySelector('.size-option.active')?.textContent || 'Standart'
+                            });
                         }
                     };
+
+                    // Update Page Title
+                    document.title = `${product.name} - Galata Çarşı`;
                 }
-
-                // Sayfa Başlığı
-                document.title = `${product.name} - Galata Çarşı`;
-
-            } else {
-                document.getElementById('product-title').textContent = 'Ürün Bulunamadı';
-                document.querySelector('.product-price-container').style.display = 'none';
-                document.querySelector('.product-actions').style.display = 'none';
             }
         });
     </script>

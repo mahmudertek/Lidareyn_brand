@@ -164,25 +164,25 @@
 @media (max-width: 768px) {
     #grid-motion-container {
         width: 95%;
-        height: 280px;
+        height: 400px;
         margin: 20px auto;
         border-radius: 16px;
     }
 
     .grid-rows-container {
-        gap: 6px;
+        gap: 12px;
         transform: rotate(-5deg) scale(1.1);
     }
 
     .grid-row-track {
-        gap: 6px;
+        gap: 12px;
     }
 
     .grid-card {
-        height: 60px;
-        width: 100px !important;
-        border-radius: 8px;
-        opacity: 0.8;
+        height: 100px;
+        width: 30% !important;
+        border-radius: 10px;
+        opacity: 0.7;
     }
 
     /* Mobile content overlay */
@@ -197,7 +197,7 @@
     }
 
     .grid-content-overlay p {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         margin-bottom: 0.8rem;
         line-height: 1.3;
     }
@@ -205,11 +205,12 @@
     .grid-content-overlay a.btn-explore {
         padding: 8px 24px;
         font-size: 0.85rem;
+        background: white;
+        color: black;
     }
 
     .grid-overlay-gradient {
         background: radial-gradient(circle, transparent 30%, rgba(0, 0, 0, 0.85) 100%);
-        border-radius: 16px;
     }
 }
 

@@ -2,23 +2,10 @@
 <html lang="tr">
 
 <head>
-        <!-- BAKIM MODU KONTROLU (V6 - Config File Based) -->
-    <script>
-    (function(){
-        if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
-        fetch('/maintenance-config.json?t='+Date.now())
-        .then(r=>r.json())
-        .then(config=>{if(config&&config.enabled)location.href='/maintenance.html';})
-        .catch(()=>{});
-    })();
-    </script>
-
-    <meta chÇarşıset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Yeni Gelenler - Galata ÇÇarşışı</title>
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <link rel="apple-touch-icon" href="assets/favicon.png">
-    <meta name="description" content="Galata ÇÇarşışı'e yeni eklenen en son ürünleri keşfedin.">
+    <title>Yeni Gelenler - Galata Çarşı</title>
+    <meta name="description" content="Galata Çarşı'e yeni eklenen en son ürünleri keşfedin.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,11 +14,38 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="mobile.css?v=5">
     <link rel="stylesheet" href="mega_menu_styles.css">
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">html { display: none !important; }</style>
+    <script src="bakim-ayari.js?v=4"></script>
+    <script>
+        (function () {
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            document.getElementById('bakim-blocking-style').remove();
+        })();
+    </script>
     <link rel="stylesheet" href="card-actions.css">
+    <link rel="icon" type="image/png" href="gorseller/logo.png">
+    <meta property="og:image" content="gorseller/sosyal_medya_gorseli.png">
 </head>
 
 <body>
-    <!-- ModeÜrün Premium Header (Solid White) -->
+    <!-- Modern Premium Header (Solid White) -->
     <header class="main-header" role="banner">
         <div class="header-container">
             <!-- Mobile Categories Button -->
@@ -62,10 +76,10 @@
                                         <div class="sub-menu-column">
                                             <h4>Delme & Vidalama</h4>
                                             <ul>
-                                                <li><a href="#">MatkaplÇarşı (DÇarşıbeli, DÇarşıbesiz)</a></li>
-                                                <li><a href="#">VidalayıcılÇarşı (Akülü, Elektrikli)</a></li>
+                                                <li><a href="#">Matkaplar (Darbeli, Darbesiz)</a></li>
+                                                <li><a href="#">Vidalayıcılar (Akülü, Elektrikli)</a></li>
                                                 <li><a href="#">Kırıcı-Deliciler (SDS Max, SDS Plus)</a></li>
-                                                <li><a href="#">KÇarşıot Makineleri</a></li>
+                                                <li><a href="#">Karot Makineleri</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -80,23 +94,23 @@
                                         <div class="sub-menu-column">
                                             <h4>Yüzey İşleme</h4>
                                             <ul>
-                                                <li><a href="#">ZımpÇarşıalÇarşı (Titreşim, Eksantrik, ŞŞerit)</a></li>
-                                                <li><a href="#">PlanyalÇarşı</a></li>
+                                                <li><a href="#">Zımparalar (Titreşim, Eksantrik, Şerit)</a></li>
+                                                <li><a href="#">Planyalar</a></li>
                                                 <li><a href="#">Frezeler</a></li>
-                                                <li><a href="#">Sıcak Hava Tabancalarıı</a></li>
+                                                <li><a href="#">Sıcak Hava Tabancaları</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Diğer Makineler</h4>
                                             <ul>
-                                                <li><a href="#">Kaynak Makineleri (Inverter, Gazaltıı)</a></li>
+                                                <li><a href="#">Kaynak Makineleri (Inverter, Gazaltı)</a></li>
                                                 <li><a href="#">Akülü Alet Setleri</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="kategoriler/oÖlçme-ve-kontrol-aletleri.html">
+                                    <a href="kategoriler/olcme-ve-kontrol-aletleri.html">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-ruler-combined"></i>
                                             <span>Ölçme & Kontrol Aletleri</span>
@@ -107,31 +121,31 @@
                                         <div class="sub-menu-column">
                                             <h4>Lazerli Ölçüm</h4>
                                             <ul>
-                                                <li><a href="#">Lazerli Ölçüm CihazlÇarşıı (Mesafe Ölçer)</a></li>
-                                                <li><a href="#">Lazer HizalamalÇarşı (Çizgi, Nokta)</a></li>
+                                                <li><a href="#">Lazerli Ölçüm Cihazları (Mesafe Ölçer)</a></li>
+                                                <li><a href="#">Lazer Hizalamalar (Çizgi, Nokta)</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Mekanik Ölçüm</h4>
                                             <ul>
-                                                <li><a href="#">ŞŞŞerit Metreler</a></li>
-                                                <li><a href="#">ÇÇelik Metreler</a></li>
-                                                <li><a href="#">KumpaslÇarşı (Dijital, Analog)</a></li>
+                                                <li><a href="#">Şerit Metreler</a></li>
+                                                <li><a href="#">Çelik Metreler</a></li>
+                                                <li><a href="#">Kumpaslar (Dijital, Analog)</a></li>
                                                 <li><a href="#">Mikrometreler</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
-                                            <h4>Terazi & Açıçı</h4>
+                                            <h4>Terazi & Açı</h4>
                                             <ul>
                                                 <li><a href="#">Su Terazileri (Dijital, Klasik)</a></li>
                                                 <li><a href="#">Açı Ölçerler</a></li>
-                                                <li><a href="#">Dijital TÇarşıtılÇarşı</a></li>
+                                                <li><a href="#">Dijital Tartılar</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Görüntüleme</h4>
                                             <ul>
-                                                <li><a href="#">EndoskoplÇarşı</a></li>
+                                                <li><a href="#">Endoskoplar</a></li>
                                             </ul>
                                         </div>
 
@@ -147,26 +161,26 @@
                                     </a>
                                     <div class="sub-menu">
                                         <div class="sub-menu-column">
-                                            <h4>AnahtÇarşılÇarşı & Vidalama</h4>
+                                            <h4>Anahtarlar & Vidalama</h4>
                                             <ul>
-                                                <li><a href="#">AnahtÇarşı TakımlÇarşıı (Lokma, Kombine, Alyen)</a></li>
-                                                <li><a href="#">TornavidalÇarşı (Düz, Yıldız, Tork)</a></li>
+                                                <li><a href="#">Anahtar Takımları (Lokma, Kombine, Alyen)</a></li>
+                                                <li><a href="#">Tornavidalar (Düz, Yıldız, Tork)</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Kesme & Şekillendirme</h4>
                                             <ul>
                                                 <li><a href="#">Pense ve Yan Keski Çeşitleri</a></li>
-                                                <li><a href="#">Maket BıçaklÇarşıı ve Yedekleri</a></li>
+                                                <li><a href="#">Maket Bıçakları ve Yedekleri</a></li>
                                                 <li><a href="#">Testereler (El, Budama)</a></li>
-                                                <li><a href="#">Eğeler ve RaspalÇarşı</a></li>
+                                                <li><a href="#">Eğeler ve Raspalar</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Vurma & Sabitleme</h4>
                                             <ul>
                                                 <li><a href="#">Çekiçler (Demirci, Lastik, Kaya)</a></li>
-                                                <li><a href="#">Keski ve ZımbalÇarşı</a></li>
+                                                <li><a href="#">Keski ve Zımbalar</a></li>
                                                 <li><a href="#">Mengene ve Kelepçeler</a></li>
                                             </ul>
                                         </div>
@@ -185,14 +199,14 @@
                                             <h4>Kimyasal & Yapıştırıcı</h4>
                                             <ul>
                                                 <li><a href="#">Silikon, Mastik ve Köpükler</a></li>
-                                                <li><a href="#">YapıştırıcılÇarşı (Epoksi, Japon, Poliüretan)</a></li>
-                                                <li><a href="#">HÇarşıç ve Beton Malzemeleri</a></li>
+                                                <li><a href="#">Yapıştırıcılar (Epoksi, Japon, Poliüretan)</a></li>
+                                                <li><a href="#">Harç ve Beton Malzemeleri</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Boya & İzolasyon</h4>
                                             <ul>
-                                                <li><a href="#">BoyalÇarşı ve Boya Malzemeleri (Fırça, Rulo, Tiner)</a>
+                                                <li><a href="#">Boyalar ve Boya Malzemeleri (Fırça, Rulo, Tiner)</a>
                                                 </li>
                                                 <li><a href="#">İzolasyon Malzemeleri</a></li>
                                             </ul>
@@ -209,7 +223,7 @@
                                     <a href="kategoriler/asindirici-kesici.html">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-compact-disc"></i>
-                                            <span>Aşındırıcı ve Kesici UçlÇarşı</span>
+                                            <span>Aşındırıcı ve Kesici Uçlar</span>
                                         </div>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </a>
@@ -217,9 +231,9 @@
                                         <div class="sub-menu-column">
                                             <h4>Delici & Vidalama</h4>
                                             <ul>
-                                                <li><a href="#">Matkap UçlÇarşıı (Metal, Ahşap, Beton)</a></li>
-                                                <li><a href="#">Freze UçlÇarşıı</a></li>
-                                                <li><a href="#">KÇarşıot UçlÇarşıı</a></li>
+                                                <li><a href="#">Matkap Uçları (Metal, Ahşap, Beton)</a></li>
+                                                <li><a href="#">Freze Uçları</a></li>
+                                                <li><a href="#">Karot Uçları</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -230,9 +244,9 @@
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
-                                            <h4>Aşındırma ve ZımpÇarşıa</h4>
+                                            <h4>Aşındırma ve Zımpara</h4>
                                             <ul>
-                                                <li><a href="#">ZımpÇarşıa KağıtlÇarşıı ve BantlÇarşıı</a></li>
+                                                <li><a href="#">Zımpara Kağıtları ve Bantları</a></li>
                                             </ul>
                                         </div>
 
@@ -240,16 +254,16 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="kategoriler/yapi-kimyasallÇarşıi.html">
+                                    <a href="kategoriler/yapi-kimyasallari.html">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-flask"></i>
-                                            <span>Yapıştırıcı, Dolgu ve KimyasallÇarşı</span>
+                                            <span>Yapıştırıcı, Dolgu ve Kimyasallar</span>
                                         </div>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </a>
                                     <div class="sub-menu">
                                         <div class="sub-menu-column">
-                                            <h4>YapıştırıcılÇarşı</h4>
+                                            <h4>Yapıştırıcılar</h4>
                                             <ul>
                                                 <li><a href="#">Silikon, Mastik ve Akrilikler</a></li>
                                                 <li><a href="#">Yapıştırıcı Çeşitleri (Epoksi, Japon, Ahşap)</a></li>
@@ -257,15 +271,15 @@
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
-                                            <h4>Dolgu ve HÇarşıçlÇarşı</h4>
+                                            <h4>Dolgu ve Harçlar</h4>
                                             <ul>
-                                                <li><a href="#">Çimento Esaslı HÇarşıçlÇarşı</a></li>
+                                                <li><a href="#">Çimento Esaslı Harçlar</a></li>
                                                 <li><a href="#">Alçı ve Alçı Ürünleri</a></li>
-                                                <li><a href="#">Derz DolgulÇarşı</a></li>
+                                                <li><a href="#">Derz Dolgular</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
-                                            <h4>KimyasallÇarşı</h4>
+                                            <h4>Kimyasallar</h4>
                                             <ul>
                                                 <li><a href="#">Tiner ve Çözücüler</a></li>
                                             </ul>
@@ -283,10 +297,10 @@
                                     </a>
                                     <div class="sub-menu">
                                         <div class="sub-menu-column">
-                                            <h4>SÇarşıf Malzemeleri</h4>
+                                            <h4>Sarf Malzemeleri</h4>
                                             <ul>
-                                                <li><a href="#">ElektrotlÇarşı (Rutil, Bazik)</a></li>
-                                                <li><a href="#">Kaynak Telleri (Gazaltıı, Tig)</a></li>
+                                                <li><a href="#">Elektrotlar (Rutil, Bazik)</a></li>
+                                                <li><a href="#">Kaynak Telleri (Gazaltı, Tig)</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -296,9 +310,9 @@
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
-                                            <h4>Makine ve AksesuÇarşı</h4>
+                                            <h4>Makine ve Aksesuar</h4>
                                             <ul>
-                                                <li><a href="#">Kaynak Makineleri ve AksesuÇarşılÇarşıı</a></li>
+                                                <li><a href="#">Kaynak Makineleri ve Aksesuarları</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -322,13 +336,13 @@
                                         <div class="sub-menu-column">
                                             <h4>Kesici & Delici</h4>
                                             <ul>
-                                                <li><a href="#">Testere, Matkap UçlÇarşıı</a></li>
+                                                <li><a href="#">Testere, Matkap Uçları</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Sıkıştırma & Tutma</h4>
                                             <ul>
-                                                <li><a href="#">Pense, İngiliz AnahtÇarşıı</a></li>
+                                                <li><a href="#">Pense, İngiliz Anahtarı</a></li>
                                                 <li><a href="#">Mengene</a></li>
                                             </ul>
                                         </div>
@@ -342,10 +356,10 @@
                                 </li>
 
                                 <li>
-                                    <a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlÇarşıi.html">
+                                    <a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-helmet-safety"></i>
-                                            <span>İş Güvenliği ve Çalışma EkipmanlÇarşıı</span>
+                                            <span>İş Güvenliği ve Çalışma Ekipmanları</span>
                                         </div>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </a>
@@ -359,17 +373,17 @@
                                         <div class="sub-menu-column">
                                             <h4>Ayak & Baş Koruma</h4>
                                             <ul>
-                                                <li><a href="#">BÇarşıet, Çelik Burunlu Ayakkabı</a></li>
+                                                <li><a href="#">Baret, Çelik Burunlu Ayakkabı</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Göz & Kulak Koruma</h4>
                                             <ul>
-                                                <li><a href="#">Göz ve Kulak KoruyuculÇarşıı</a></li>
+                                                <li><a href="#">Göz ve Kulak Koruyucuları</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
-                                            <h4>Çalışma EkipmanlÇarşıı</h4>
+                                            <h4>Çalışma Ekipmanları</h4>
                                             <ul>
                                                 <li><a href="#">İş İskelesi ve Merdivenler</a></li>
                                             </ul>
@@ -382,13 +396,12 @@
                     </li>
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
                     <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
-                    <li><a href="juvex.html" class="nav-link">Juvex</a></li>
                 </ul>
             </nav>
 
             <!-- Logo (Centered) -->
             <div class="logo">
-                <a href="index.html">Galata ÇÇarşışı</a>
+                <a href="index.html">Galata Çarşı</a>
             </div>
 
             <!-- Header Icons (Right Side) -->
@@ -397,7 +410,7 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
                 <div class="search-container" role="search">
-                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün Çarşıa..."
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
                         aria-label="Ürün arama" autocomplete="off">
                     <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
                             class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
@@ -434,7 +447,7 @@
         </div>
     </header>
 
-    <div class="container" style="mÇarşıgin-top: 30px; mÇarşıgin-bottom: 20px;">
+    <div class="container" style="margin-top: 30px; margin-bottom: 20px;">
         <h1 class="page-main-title">
             YENİ GELENLER</h1>
     </div>
@@ -450,7 +463,7 @@
             grid-template-columns: repeat(6, 1fr);
             grid-template-rows: repeat(8, auto);
             gap: 25px;
-            mÇarşıgin: 40px 0;
+            margin: 40px 0;
             padding: 0 20px;
             min-height: 3200px;
         }
@@ -463,7 +476,7 @@
             transition: all 0.3s ease;
             position: relative;
             text-decoration: none;
-            color: inhŞerit;
+            color: inherit;
             display: block;
         }
 
@@ -487,7 +500,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: #111;
-            mÇarşıgin-bottom: 12px;
+            margin-bottom: 12px;
             min-height: 52px;
             line-height: 1.4;
         }
@@ -496,7 +509,7 @@
             font-size: 1.3rem;
             font-weight: 700;
             color: #111;
-            mÇarşıgin-bottom: 10px;
+            margin-bottom: 10px;
         }
     </style>
 
@@ -509,7 +522,7 @@
             const container = document.getElementById('products-container');
             if (!container) return;
 
-            container.innerHTML = '<div style="text-align: center; padding: 100px 0; grid-column: 1/-1;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 40px; color: #6366f1;"></i><p style="mÇarşıgin-top: 15px; color: #64748b;">Yeni ürünler yükleniyor...</p></div>';
+            container.innerHTML = '<div style="text-align: center; padding: 100px 0; grid-column: 1/-1;"><i class="fa-solid fa-spinner fa-spin" style="font-size: 40px; color: #6366f1;"></i><p style="margin-top: 15px; color: #64748b;">Yeni ürünler yükleniyor...</p></div>';
 
             let products = [];
             try {
@@ -532,14 +545,14 @@
             grid.className = 'products-grid';
 
             products.forEach(product => {
-                const card = createProductCÇarşıd(product);
+                const card = createProductCard(product);
                 grid.appendChild(card);
             });
 
             container.appendChild(grid);
         });
 
-        function createProductCÇarşıd(product) {
+        function createProductCard(product) {
             const card = document.createElement('a');
             const priceStr = typeof product.price === 'number' ? product.price.toLocaleString('tr-TR') + ' TL' : product.price;
             const image = product.images && product.images[0] ? product.images[0] : 'https://placehold.co/400x400?text=Urun';
@@ -563,7 +576,7 @@
                 </div>
             `;
 
-            retuÜrün card;
+            return card;
         }
 
         function handleAddToCart(event, productId) {
@@ -579,7 +592,7 @@
                     name: product.name,
                     price: product.price,
                     image: product.image,
-                    vÇarşıiant: 'StandÇarşıt'
+                    variant: 'Standart'
                 });
             }
         }
@@ -597,14 +610,14 @@
                     name: product.name,
                     price: product.price,
                     image: product.image,
-                    vÇarşıiant: 'StandÇarşıt'
+                    variant: 'Standart'
                 });
             }
         }
 
         function generateSampleProducts() {
             const products = [];
-            const categories = ['Elektrikli El Aletleri', 'Ölçme Aletleri', 'El Aletleri', 'Bağlantı ElemanlÇarşıı'];
+            const categories = ['Elektrikli El Aletleri', 'Ölçme Aletleri', 'El Aletleri', 'Bağlantı Elemanları'];
 
             for (let i = 1; i <= 48; i++) {
                 products.push({
@@ -612,10 +625,10 @@
                     name: `${categories[i % categories.length]} - Ürün ${i}`,
                     price: `${(Math.random() * 500 + 100).toFixed(2)} TL`,
                     image: `https://via.placeholder.com/320x320/111111/ffffff?text=Urun+${i}`,
-                    vÇarşıiant: 'StandÇarşıt'
+                    variant: 'Standart'
                 });
             }
-            retuÜrün products;
+            return products;
         }
     </script>
 
@@ -633,7 +646,7 @@
                             <li><a href="hakkimizda.html">Hakkımızda</a></li>
                             <li><a href="iletisim.html">İletişim</a></li>
 
-                            <li><a href="magazalÇarşı.html">MağazalÇarşıımız</a></li>
+                            <li><a href="magazalar.html">Mağazalarımız</a></li>
                         </ul>
                     </div>
 
@@ -644,16 +657,16 @@
                             <li><a href="kvkk.html">KVKK Aydınlatma Metni</a></li>
                             <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
                             <li><a href="gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
-                            <li><a href="iade-iptal.html">İade ve İptal KoşullÇarşıı</a></li>
+                            <li><a href="iade-iptal.html">İade ve İptal Koşulları</a></li>
                         </ul>
                     </div>
 
-                    <!-- YÇarşıdım Column -->
+                    <!-- Yardım Column -->
                     <div class="footer-column">
-                        <h3 class="footer-title">YÇarşıdım</h3>
+                        <h3 class="footer-title">Yardım</h3>
                         <ul class="footer-links">
-                            <li><a href="sipÇarşıis-takibi.html">Sipariş Takibi</a></li>
-                            <li><a href="yeni-Üyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
                             <li><a href="uye-giris.html">Üye Giriş</a></li>
                             <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
                             <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>

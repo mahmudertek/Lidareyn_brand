@@ -245,6 +245,10 @@
         display: none;
     }
 
+    /* --- 4. DISABLE GRID MOTION ON MOBILE --- */
+    #grid-motion-container {
+        display: none !important;
+    }
 
     /* --- COMPONENTS --- */
     .grid-container,
@@ -713,7 +717,149 @@
     }
 }
 
+/* Enable Grid Motion on Mobile (Override) */
+@media (max-width: 768px) {
+    #grid-motion-container {
+        display: block !important;
+        height: 250px !important;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        overflow: hidden;
+        position: relative;
+        z-index: 1;
+    }
 
+    #grid-motion-container canvas {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+}
+
+/* Mobile Grid Motion Content Tweaks */
+@media (max-width: 768px) {
+    .grid-content-overlay h1 {
+        font-size: 1.8rem !important;
+        margin-bottom: 5px !important;
+    }
+
+    .grid-content-overlay p {
+        font-size: 0.9rem !important;
+        margin-bottom: 15px !important;
+    }
+
+    .grid-content-overlay a {
+        padding: 8px 16px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .grid-card {
+        border-width: 1px !important;
+        /* Thinner border for smaller appearance */
+        transform: scale(0.9);
+        /* Slightly shrink cards */
+    }
+}
+
+/* Mobile Grid Motion Landscape Cards */
+@media (max-width: 768px) {
+    .grid-rows-container {
+        gap: 10px !important;
+        width: 150% !important;
+        /* Increase width to allow more horizontal sliding space */
+        margin-left: -25% !important;
+        /* Center the wider container */
+    }
+
+    .grid-row-track {
+        gap: 10px !important;
+    }
+
+    .grid-card {
+        height: 70px !important;
+        width: 110px !important;
+        /* Force fixed width to ensure landscape 110x70 */
+        border-radius: 8px !important;
+        opacity: 0.9 !important;
+        /* Improve visibility */
+    }
+
+    #grid-motion-container {
+        height: 260px !important;
+        /* Slightly increased to fit 3 rows comfortably */
+    }
+}
+
+/* Mobile Grid Motion 4 Rows Tight Spacing */
+@media (max-width: 768px) {
+    .grid-rows-container {
+        gap: 6px !important;
+        /* Reduced vertical gap between rows */
+    }
+
+    .grid-row-track {
+        gap: 6px !important;
+        /* Reduced horizontal gap between cards */
+    }
+
+    .grid-card {
+        height: 60px !important;
+        /* Reduced height to fit 4 rows */
+        width: 100px !important;
+        /* Slightly smaller width */
+    }
+
+    #grid-motion-container {
+        height: 280px !important;
+        /* Adjusted container height for 4 rows */
+    }
+}
+
+/* Mobile Grid Motion Centering Fix */
+@media (max-width: 768px) {
+    .grid-rows-container {
+        width: 150% !important;
+        height: 140% !important;
+        /* Increase height to cover top gap */
+        margin-left: -25% !important;
+        margin-top: -15% !important;
+        /* Pull up rows to hide top gap */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+    }
+
+    #grid-motion-container {
+        align-items: center !important;
+        /* Ensure vertical centering */
+        display: flex !important;
+    }
+}
+
+/* Mobile Grid Motion Perfect Centering (Final) */
+@media (max-width: 768px) {
+    #grid-motion-container {
+        height: 280px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .grid-rows-container {
+        width: 150% !important;
+        height: auto !important;
+        /* Let content dictate height */
+        margin: 0 !important;
+        /* Reset margins */
+        margin-left: -25% !important;
+        /* Keep horizontal centering */
+        padding: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
+}
 
 /* Mobile Search Overlay */
 .mobile-search-overlay {

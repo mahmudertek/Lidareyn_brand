@@ -398,47 +398,12 @@ body {
 }
 
 .captcha-checkbox {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     border: 2px solid #c1c1c1;
     border-radius: 2px;
     background: white;
     cursor: pointer;
-    display: flex;
-    /* Flex required for centering check */
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-}
-
-.captcha-checkbox:hover {
-    border-color: #b0b0b0;
-}
-
-.captcha-checkbox.active {
-    border-color: #4caf50;
-}
-
-.captcha-checkbox.active::after {
-    content: '\f00c';
-    /* Font Awesome Check */
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-    color: #4caf50;
-    font-size: 18px;
-    animation: scaleIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes scaleIn {
-    from {
-        transform: scale(0);
-        opacity: 0;
-    }
-
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
 }
 
 .captcha-label {

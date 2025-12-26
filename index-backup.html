@@ -2,16 +2,30 @@
 <html lang="tr">
 
 <head>
-    <!-- BAKIM MODU KONTROLU (INLINE - V6) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">html { display: none !important; }</style>
+    <script src="bakim-ayari.js?v=4"></script>
     <script>
-    (function(){
-        if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
-        if(localStorage.getItem('adminToken')) return;
-        fetch('/maintenance-config.json?t='+Date.now())
-        .then(r=>r.json())
-        .then(config=>{if(config&&config.enabled)location.href='/maintenance.html';})
-        .catch(()=>{});
-    })();
+        (function () {
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                window.location.href = window.location.pathname;
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            document.getElementById('bakim-blocking-style').remove();
+        })();
     </script>
 
     <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
@@ -32,8 +46,6 @@
         }
     </script>
     <title>Galata Çarşı - Premium E-Ticaret | Kaliteli Ürünler Uygun Fiyatlar</title>
-    <link rel="icon" type="image/png" href="assets/favicon.png">
-    <link rel="apple-touch-icon" href="assets/favicon.png">
     <meta name="description"
         content="Galata Çarşı - En kaliteli ürünleri en uygun fiyatlarla satın alın. Elektronik, moda, ev & yaşam ve daha fazlası.">
 
@@ -48,7 +60,7 @@
     <meta property="og:description" content="En kaliteli ürünleri en uygun fiyatlarla satın alın.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://galatacarsi.com">
-    <meta property="og:image" content="./assets/hero-banner-1.png">
+    <meta property="og:image" content="gorseller/sosyal_medya_gorseli.png">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
@@ -121,6 +133,7 @@
         }
     }
     </script>
+    <link rel="icon" type="image/png" href="gorseller/logo.png">
 </head>
 
 <body>
@@ -185,7 +198,7 @@
                                         <div class="sub-menu-column">
                                             <h4>Diğer Makineler</h4>
                                             <ul>
-                                                <li><a href="#">Kaynak Makineleri (Inverter, Gazaltıı)</a></li>
+                                                <li><a href="#">Kaynak Makineleri (Inverter, Gazaltı)</a></li>
                                                 <li><a href="#">Akülü Alet Setleri</a></li>
                                             </ul>
                                         </div>
@@ -382,7 +395,7 @@
                                             <h4>Sarf Malzemeleri</h4>
                                             <ul>
                                                 <li><a href="#">Elektrotlar (Rutil, Bazik)</a></li>
-                                                <li><a href="#">Kaynak Telleri (Gazaltıı, Tig)</a></li>
+                                                <li><a href="#">Kaynak Telleri (Gazaltı, Tig)</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -480,7 +493,6 @@
 
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
                     <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
-                    <li><a href="juvex.html" class="nav-link">Juvex</a></li>
                 </ul>
             </nav>
 
@@ -1038,7 +1050,51 @@
         <section class="popular-section">
             <div class="popular-container">
                 <!-- Popular Brands Column (Left) -->
-                
+                <div class="popular-column">
+                    <h2 class="popular-title">Popüler Markalar</h2>
+                    <ul class="popular-list">
+                        <li><a href="markalar/beta.html">Beta</a></li>
+                        <li><a href="markalar/bosch.html">Bosch</a></li>
+                        <li><a href="markalar/makita.html">Makita</a></li>
+                        <li><a href="markalar/knipex.html">Knipex</a></li>
+                        <li><a href="markalar/wd-40.html">WD-40</a></li>
+                        <li><a href="markalar/fisco.html">Fisco</a></li>
+                        <li><a href="markalar/einhell.html">Einhell</a></li>
+                        <li><a href="markalar/black-decker.html">Black+Decker</a></li>
+                        <li><a href="markalar/dewalt.html">Dewalt</a></li>
+                        <li><a href="markalar/izeltas.html">İzeltaş</a></li>
+                        <li><a href="markalar/stanley.html">Stanley</a></li>
+                        <li><a href="markalar/gedore.html">Gedore</a></li>
+                        <li><a href="markalar/metabo.html">Metabo</a></li>
+                        <li><a href="markalar/milwaukee.html">Milwaukee</a></li>
+                        <li><a href="markalar/kama.html">Kama</a></li>
+                        <li><a href="markalar/proxxon.html">Proxxon</a></li>
+                        <li><a href="markalar/karbosan.html">Karbosan</a></li>
+                        <li><a href="markalar/kristal.html">Kristal</a></li>
+                        <li><a href="markalar/osaka.html">Osaka</a></li>
+                        <li><a href="markalar/gison.html">Gison</a></li>
+                    </ul>
+                </div>
+
+                <!-- Popular Pages Column (Right) -->
+                <div class="popular-column">
+                    <h2 class="popular-title">Popüler Sayfalar</h2>
+                    <ul class="popular-list">
+                        <li><a href="yeni-gelenler.html">Yeni Gelenler</a></li>
+                        <li><a href="cok-satanlar.html">Çok Satanlar</a></li>
+                        <li><a href="populer.html">Popüler Ürünler</a></li>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <li><a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">İş Güvenliği ve Çalışma
+                                Ekipmanları</a></li>
+                    </ul>
+                </div>
             </div>
         </section>
     </main>

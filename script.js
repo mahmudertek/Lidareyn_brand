@@ -842,19 +842,4 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 
-    // ============================================
-    // CATEGORY PAGE PRODUCT COUNT
-    // ============================================
-    function updateCategoryProductCount() {
-        const productCountSpan = document.querySelector('.category-filter-bar .product-count');
-        if (productCountSpan) {
-            // Count cards that do NOT have the class 'cloned' (if any cloning exists)
-            const visibleProducts = document.querySelectorAll('.category-products-section .product-card:not(.cloned)').length;
-            // Update the text safely
-            productCountSpan.textContent = `${visibleProducts} Ürün`;
-        }
-    }
-    // Run immediately
-    updateCategoryProductCount();
-
 });
