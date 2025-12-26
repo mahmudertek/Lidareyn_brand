@@ -2,15 +2,15 @@
 <html lang="tr">
 
 <head>
-        <!-- BAKIM MODU KONTROLU (V6 - Config File Based) -->
+    <!-- BAKIM MODU KONTROLU (V6 - Config File Based) -->
     <script>
-    (function(){
-        if(location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
-        fetch('/maintenance-config.json?t='+Date.now())
-        .then(r=>r.json())
-        .then(config=>{if(config&&config.enabled)location.href='/maintenance.html';})
-        .catch(()=>{});
-    })();
+        (function () {
+            if (location.pathname.includes('maintenance.html') || location.pathname.includes('/admin/')) return;
+            fetch('/maintenance-config.json?t=' + Date.now())
+                .then(r => r.json())
+                .then(config => { if (config && config.enabled) location.href = '/maintenance.html'; })
+                .catch(() => { });
+        })();
     </script>
 
     <meta charset="UTF-8">
@@ -52,7 +52,7 @@
 <body>
 
     <!-- Modern Premium Header (Solid White) -->
-        <header class="main-header" role="banner">
+    <header class="main-header" role="banner">
         <div class="header-container">
             <!-- Mobile Categories Button -->
             <a href="index.html#kategoriler" class="mobile-categories-btn">
@@ -400,7 +400,7 @@
                             </ul>
                         </div>
                     </li>
-                    
+
 
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
                     <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
@@ -554,7 +554,7 @@
                         </div>
 
                         <!-- Captcha Placeholder -->
-                        <div class="captcha-box">
+                        <div class="captcha-box" onclick="toggleCaptcha()">
                             <div class="captcha-content">
                                 <div class="captcha-checkbox"></div>
                                 <span class="captcha-label">Ben robot değilim</span>
@@ -725,8 +725,32 @@
             }
         }
 
+        // Global Captcha State
+        let isCaptchaVerified = false;
+
+        function toggleCaptcha() {
+            const checkbox = document.querySelector('.captcha-checkbox');
+            if (checkbox) {
+                // Toggle state
+                isCaptchaVerified = !isCaptchaVerified;
+
+                if (isCaptchaVerified) {
+                    checkbox.classList.add('active');
+                } else {
+                    checkbox.classList.remove('active');
+                }
+            }
+        }
+
         async function handleRegister(e) {
             e.preventDefault();
+
+            // Captcha Check
+            if (!isCaptchaVerified) {
+                alert('Lütfen robot olmadığınızı doğrulayın.');
+                return;
+            }
+
             const form = e.target;
             const email = form.email.value;
             const password = form.password.value;
