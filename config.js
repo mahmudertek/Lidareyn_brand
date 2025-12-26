@@ -8,11 +8,9 @@ const ENV = {
         window.location.protocol === 'file:',
 
     // API URL'leri
-    API_URL: window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1' ||
-        window.location.protocol === 'file:'
-        ? 'http://localhost:5000/api'  // Development
-        : 'https://galatacarsi-backend-api.onrender.com/api',  // Production - Render Backend
+    // API URL'leri - HER ZAMAN CANLI (PRODUCTION) KULLAN
+    // Kullanıcı web panelinden veri girdiği için, localden bile açılsa veriyi oradan çekmelidir.
+    API_URL: 'https://galatacarsi-backend-api.onrender.com/api',
 
     // Site URL'leri
     SITE_URL: window.location.hostname === 'localhost' ||

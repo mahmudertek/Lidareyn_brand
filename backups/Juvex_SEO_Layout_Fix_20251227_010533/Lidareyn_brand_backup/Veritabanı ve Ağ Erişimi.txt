@@ -1,0 +1,41 @@
+Veritabanı ve Ağ Erişimi
+Veritabanına Erişim
+Veritabanı Kullanıcıları
+Özel Roller
+Ağ Erişimi
+IP Erişim Listesi
+Göz göze gelme
+Özel Uç Nokta
+Gelişmiş
+Organizasyon
+Juvex
+Proje
+Proje 0
+M
+IP Erişim Listesi
+IP Adresi Ekle
+Kümenize yalnızca aşağıdaki IP adresleri listesinden bağlanabileceksiniz:
+IP Adresi
+Yorum
+Durum
+Eylemler
+46.1.195.222/32
+(Mevcut IP adresinizi içerir)
+Otomatik Kurulum sürecinin bir parçası olarak oluşturuldu.
+Aktif
+Düzenlemek
+Silmek
+Sistem Durumu
+Sistem Durumu Alınıyor
+©
+2025
+MongoDB, Inc.
+Durum
+Şartlar
+Mahremiyet
+Atlas
+Blog
+Satış Temsilcisiyle İletişime Geçin
+[0]<div aria-label='Open Intercom Messenger' class='intercom-lightweight-app-launcher intercom-launcher' role='button' />
+	[1]<div  />
+		[2]<img  />

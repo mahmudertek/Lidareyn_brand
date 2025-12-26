@@ -507,15 +507,21 @@ document.addEventListener('DOMContentLoaded', function () {
     function updateCartCount() {
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-        if (elements.cartCount) {
-            elements.cartCount.textContent = totalItems;
-            elements.cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
 
-            // Add bounce animation when count changes
-            elements.cartCount.classList.add('updated');
-            setTimeout(() => {
-                elements.cartCount.classList.remove('updated');
-            }, 600);
+        if (elements.cartCount) {
+            // Sadece 0'dan büyükse göster
+            if (totalItems > 0) {
+                elements.cartCount.textContent = totalItems;
+                elements.cartCount.style.display = 'flex';
+
+                // Add bounce animation when count changes
+                elements.cartCount.classList.add('updated');
+                setTimeout(() => {
+                    elements.cartCount.classList.remove('updated');
+                }, 600);
+            } else {
+                elements.cartCount.style.display = 'none';
+            }
         }
     }
 

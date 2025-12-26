@@ -3,9 +3,7 @@
 <head>
     <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
-        html {
-            display: none !important;
-        }
+        
     </style>
     <script src="../../bakim-ayari.js?v=1766778190"></script>
     <script>
@@ -39,38 +37,8 @@
         })();
     </script>
 
-        html {
-            display: none !important;
-        }
-    </style>
-    <script>
-        (function () {
-            // Bakım sayfası ise kontrol etme
-            if (window.location.pathname.includes('bakimda.html')) return;
-
-            const isAuthorized = localStorage.getItem('admin_session') ||
-                localStorage.getItem('adminToken') ||
-                localStorage.getItem('token');
-            const urlParams = new URLSearchParams(window.location.search);
-
-            if (hasBypass) {
-                localStorage.setItem('admin_session', 'active_' + Date.now());
-                const cleanUrl = window.location.pathname; 
-                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
-                return;
-            }
-
-                window.location.href = '../../bakimda.html';
-                return;
-            }
-
-            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
-            if (style) style.remove();
-            console.log('🔧 Bakım Modu: Erişim onaylandı.');
-        })();
-    </script>
-
     <title>Image Test</title>
+    <link rel="shortcut icon" href="/favicon.ico">
     <link rel="icon" type="image/png" href="../../gorseller/logo.png">
     <meta property="og:image" content="../../gorseller/sosyal_medya_gorseli.png">
 </head>
