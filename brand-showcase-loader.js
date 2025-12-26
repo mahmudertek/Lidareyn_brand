@@ -39,9 +39,24 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // 3. Find products for this brand
             // Flexible matching: case insensitive includes
-            const brandProducts = allProducts.filter(p =>
-                p.brand && p.brand.toLowerCase().includes(targetBrand.toLowerCase())
-            ).slice(0, 3); // Take top 3
+            // 3. Find products for this brand
+            // Enhanced fuzzy matching
+            const brandProducts = allProducts.filter(p => {
+                if (!p.brand) return false;
+                const dbBrand = p.brand.toLowerCase().trim();
+                const target = targetBrand.toLowerCase().trim();
+
+                // 1. Direct includes match
+                if (dbBrand.includes(target)) return true;
+
+                // 2. Reverse includes (Target inside DB brand)
+                if (target.includes(dbBrand)) return true;
+
+                // 3. Special handling for multi-word brands
+                // e.g. "Black+Decker" vs "Black Decker" vs "Black&Decker"
+                const normalize = (s) => s.replace(/[^a-z0-9]/g, '');
+                return normalize(dbBrand).includes(normalize(target));
+            }).slice(0, 3);
 
             // 4. Update the container
             const productsContainer = section.querySelector('.madeniyat-products-section');
