@@ -388,8 +388,9 @@
                 <!-- Filters -->
                 <div class="products-filters">
                     <div class="filter-group">
-                        <label>Ara</label>
-                        <input type="text" class="filter-input" placeholder="Ürün adı ara..." id="searchInput">
+                        <label>Ara (Ad, SKU, Barkod)</label>
+                        <input type="text" class="filter-input" placeholder="Ürün adı, SKU veya Barkod..."
+                            id="searchInput">
                     </div>
                     <div class="filter-group">
                         <label>Marka</label>
@@ -455,8 +456,24 @@
                             <input type="text" id="productName" required placeholder="Ürün adını girin">
                         </div>
                         <div class="form-group">
-                            <label>SKU / Ürün Kodu</label>
+                            <label>SKU (Ürün Kodu)</label>
                             <input type="text" id="productSku" placeholder="Örn: BOS-GSR18V">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Barkod No</label>
+                            <input type="text" id="productBarcode" placeholder="EAN-13 veya Barkod no">
+                        </div>
+                        <div class="form-group">
+                            <label>Birim</label>
+                            <select id="productUnit">
+                                <option value="adet">Adet</option>
+                                <option value="paket">Paket</option>
+                                <option value="kutu">Kutu</option>
+                                <option value="set">Set</option>
+                            </select>
                         </div>
                     </div>
 
@@ -604,15 +621,6 @@
                         <div class="form-group">
                             <label>Stok Adedi *</label>
                             <input type="number" id="productStock" required placeholder="0" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>Birim</label>
-                            <select id="productUnit">
-                                <option value="adet">Adet</option>
-                                <option value="paket">Paket</option>
-                                <option value="kutu">Kutu</option>
-                                <option value="set">Set</option>
-                            </select>
                         </div>
                     </div>
 
@@ -1039,6 +1047,7 @@
                 document.getElementById('productUnit').value = product.unit || 'adet';
                 document.getElementById('productDescription').value = product.description || '';
                 document.getElementById('productSku').value = product.sku || '';
+                document.getElementById('productBarcode').value = product.barcode || '';
 
                 // Tüm etiketleri yükle
                 document.getElementById('tagPopular').checked = product.isPopular || false;
@@ -1092,6 +1101,7 @@
             const category = document.getElementById('productCategory').value;
             const description = document.getElementById('productDescription').value;
             const sku = document.getElementById('productSku').value;
+            const barcode = document.getElementById('productBarcode').value;
             const unit = document.getElementById('productUnit').value;
 
             // Tüm etiketleri oku
@@ -1122,6 +1132,7 @@
                 unit,
                 description: description || `${brand} ${name} - Galata Çarşı kalitesiyle.`,
                 sku,
+                barcode,
                 // Tüm etiketler
                 isPopular,      // Popüler Ürünler sayfasında görünsün
                 isBestSeller,   // Çok Satan badge'i
@@ -1203,11 +1214,23 @@
         function filterProducts() {
             const search = document.getElementById('searchInput').value.toLowerCase();
             const brand = document.getElementById('brandFilter').value;
+            const category = document.getElementById('categoryFilter').value;
+            const stockStatus = document.getElementById('stockFilter').value;
 
             const filtered = products.filter(p => {
-                const matchSearch = !search || p.name.toLowerCase().includes(search);
+                const matchSearch = !search ||
+                    p.name.toLowerCase().includes(search) ||
+                    (p.sku && p.sku.toLowerCase().includes(search)) ||
+                    (p.barcode && p.barcode.toString().toLowerCase().includes(search));
                 const matchBrand = !brand || p.brand === brand;
-                return matchSearch && matchBrand;
+                const matchCategory = !category || (p.categorySlug === category || p.category === category);
+
+                let matchStock = true;
+                if (stockStatus === 'high') matchStock = p.stock >= 15;
+                else if (stockStatus === 'low') matchStock = p.stock > 0 && p.stock < 15;
+                else if (stockStatus === 'out') matchStock = p.stock === 0;
+
+                return matchSearch && matchBrand && matchCategory && matchStock;
             });
 
             // Temporarily show filtered products

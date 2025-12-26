@@ -56,10 +56,22 @@ const BRAND_SHOWCASE = {
         const container = document.querySelector(this.brands[brandKey]);
         if (!container) return;
 
-        // KRİTİK: Sadece sizin admin panelinden işaretlediğiniz (brandShowcase eşleşen) ürünleri al
+        // KRİTİK: Sadece sizin admin panelinden işaretlediğiniz ürünleri al
         const brandProducts = (products || []).filter(p => {
             const val = (p.brandShowcase || '').toLowerCase().trim();
-            return val === brandKey.toLowerCase();
+            const productBrand = (p.brand || '').toLowerCase().trim();
+            const targetKey = brandKey.toLowerCase().trim();
+
+            // 1. Öncelik: BrandShowcase tam eşleşiyorsa (Manuel Kontrol)
+            if (val === targetKey) return true;
+
+            // 2. Öncelik: GÜVENLİ MOD - Eğer veri 'None' ise ama marka eşleşiyorsa göster
+            // Bu sayede test ürünü gibi markası belli ama vitrin verisi tam oturmamış ürünler görünür.
+            if (!val || val === 'none' || val === '') {
+                if (productBrand === targetKey) return true;
+            }
+
+            return false;
         }).slice(0, 3); // Maksimum 3 tane göster
 
         if (brandProducts.length > 0) {
