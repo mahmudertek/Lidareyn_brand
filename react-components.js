@@ -75,7 +75,7 @@
             const activeBrandId = _useState[0];
             const setActiveBrandId = _useState[1];
 
-            // 20 Brand Names
+            // 21 Brand Names
             const brands = [
                 { id: 1, name: 'Beta', slug: 'beta' },
                 { id: 2, name: 'Bosch', slug: 'bosch' },
@@ -96,7 +96,8 @@
                 { id: 17, name: 'Karbosan', slug: 'karbosan' },
                 { id: 18, name: 'Kristal', slug: 'kristal' },
                 { id: 19, name: 'Osaka', slug: 'osaka' },
-                { id: 20, name: 'Gison', slug: 'gison' }
+                { id: 20, name: 'Gison', slug: 'gison' },
+                { id: 21, name: 'Rtrmax', slug: 'rtrmax' }
             ];
 
             return React.createElement('div', { className: 'flowing-menu-container' },
