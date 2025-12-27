@@ -7,7 +7,7 @@ import datetime
 SOURCE_DIR = 'c:\\Users\\pc\\Desktop\\Lidareyn_brand'
 BACKUP_ROOT = os.path.join(SOURCE_DIR, 'backups')
 TIMESTAMP = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-BACKUP_NAME = f"Favicon_BetaVitrin_Dinamik_{TIMESTAMP}"
+BACKUP_NAME = f"Footer_Markalar_Rtrmax_{TIMESTAMP}"
 TARGET_DIR = os.path.join(BACKUP_ROOT, BACKUP_NAME)
 
 # Create backup directory

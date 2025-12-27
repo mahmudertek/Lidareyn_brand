@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        
+    </style>
+    <script src="../bakim-ayari.js?v=1766778190"></script>
+    <script>
+        (function () {
+            // Bakım sayfası ise kontrol etme
+            if (window.location.pathname.includes('bakimda.html')) return;
+
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                const cleanUrl = window.location.pathname; 
+                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
+                document.getElementById('bakim-blocking-style').remove();
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = '../bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            const style = document.getElementById('bakim-blocking-style');
+            if (style) style.remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
+        })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kategori Yönetimi - Galata Çarşı Admin</title>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../favicon.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .categories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .category-icon-wrapper {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            font-size: 40px;
+            color: white;
+        }
+
+        .category-info {
+            padding: 20px;
+        }
+
+        .category-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0 0 8px;
+        }
+
+        .category-slug {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .category-stats {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .category-stat {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+
+        .category-stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #6366f1;
+        }
+
+        .category-stat-label {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .category-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .category-action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-view {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .btn-view:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-edit {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .btn-edit:hover {
+            background: #374151;
+            color: white;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            padding: 12px 24px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-save {
+            padding: 12px 24px;
+            border: none;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style><meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <!-- Sidebar - Dynamically loaded by admin-sidebar.js -->
+        <aside class="sidebar"></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="page-title">Kategori Yönetimi</div>
+                <div class="topbar-right">
+                    <div class="admin-profile">
+                        <div class="admin-info">
+                            <span class="admin-name">Admin User</span>
+                            <span class="admin-role">Süper Yönetici</span>
+                        </div>
+                        <div class="admin-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div class="categories-header">
+                    <h2 style="margin: 0; color: #1f2937;">Kategoriler</h2>
+                    <button class="btn-save btn-add" style="display:flex; align-items:center; gap:8px;">
+                        <i class="fa-solid fa-plus"></i>
+                        Yeni Kategori Ekle
+                    </button>
+                </div>
+
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Category Modal -->
+    <div class="modal-overlay" id="categoryModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Kategori Düzenle</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="categoryForm">
+                    <input type="hidden" id="categoryId">
+                    <div class="form-group">
+                        <label>Kategori Adı</label>
+                        <input type="text" id="categoryName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Slug</label>
+                        <input type="text" id="categorySlug">
+                    </div>
+                    <div class="form-group">
+                        <label>Açıklama</label>
+                        <textarea id="categoryDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>İkon (Font Awesome)</label>
+                        <input type="text" id="categoryIcon" placeholder="fa-solid fa-bolt">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">İptal</button>
+                <button class="btn-save" onclick="saveCategory()">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin API -->
+    <script src="admin-api.js"></script>
+    <script src="admin-sidebar.js"></script>
+    <script>
+        // Auth check - redirect if not logged in
+        if (!ADMIN_API.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
+        let allCategories = [];
+
+        async function loadCategories() {
+            try {
+                const response = await ADMIN_API.getCategories();
+                if (response.success && response.data) {
+                    allCategories = response.data;
+                    renderCategories();
+                    console.log('✅ Kategoriler yüklendi:', allCategories.length);
+                }
+            } catch (error) {
+                console.error('Load categories error:', error);
+            }
+        }
+
+        function renderCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            if (allCategories.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #6b7280;">Henüz kategori bulunmuyor.</div>';
+                return;
+            }
+
+            grid.innerHTML = allCategories.map(cat => `
+                <div class="category-card" id="category-${cat._id}">
+                    <div class="category-icon-wrapper">
+                        <i class="${cat.icon || 'fa-solid fa-folder'}"></i>
+                    </div>
+                    <div class="category-info">
+                        <h3 class="category-name">${cat.name}</h3>
+                        <div class="category-slug">/${cat.slug}</div>
+                        <div class="category-stats">
+                            <div class="category-stat">
+                                <div class="category-stat-value">${cat.productCount || 0}</div>
+                                <div class="category-stat-label">Ürün</div>
+                            </div>
+                            <div class="category-stat">
+                                <div class="category-stat-value">${cat.brandCount || 0}</div>
+                                <div class="category-stat-label">Marka</div>
+                            </div>
+                        </div>
+                        <div class="category-actions">
+                            <button class="category-action-btn btn-view" onclick="viewCategory('${cat.slug}')">
+                                <i class="fa-solid fa-eye"></i>
+                                Görüntüle
+                            </button>
+                            <button class="category-action-btn btn-edit" onclick="editCategory('${cat._id}')">
+                                <i class="fa-solid fa-pen"></i>
+                                Düzenle
+                            </button>
+                            <button class="category-action-btn btn-delete" onclick="deleteCategory('${cat._id}')" style="background: #fee2e2; color: #dc2626;">
+                                <i class="fa-solid fa-trash"></i>
+                                Sil
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function viewCategory(slug) {
+            window.open(`../kategoriler/${slug}.html`, '_blank');
+        }
+
+        function editCategory(id) {
+            const cat = allCategories.find(c => c._id === id);
+            if (cat) {
+                document.getElementById('categoryId').value = cat._id;
+                document.getElementById('categoryName').value = cat.name;
+                document.getElementById('categorySlug').value = cat.slug;
+                document.getElementById('categoryIcon').value = cat.icon || '';
+                document.getElementById('categoryDescription').value = cat.description || '';
+
+                document.querySelector('.modal-title').textContent = 'Kategoriyi Düzenle';
+                document.getElementById('categoryModal').classList.add('active');
+            }
+        }
+
+        function openAddModal() {
+            document.getElementById('categoryForm').reset();
+            document.getElementById('categoryId').value = '';
+            document.querySelector('.modal-title').textContent = 'Yeni Kategori Ekle';
+            document.getElementById('categoryModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('categoryModal').classList.remove('active');
+        }
+
+        async function saveCategory() {
+            const id = document.getElementById('categoryId').value;
+            const data = {
+                name: document.getElementById('categoryName').value,
+                slug: document.getElementById('categorySlug').value,
+                icon: document.getElementById('categoryIcon').value,
+                description: document.getElementById('categoryDescription').value,
+                isActive: true
+            };
+
+            if (!data.name) {
+                alert('Lütfen kategori adını girin');
+                return;
+            }
+
+            try {
+                let response;
+                if (id) {
+                    // Update
+                    response = await ADMIN_API.updateCategory(id, data);
+                } else {
+                    // Create
+                    response = await ADMIN_API.createCategory(data);
+                }
+
+                if (response.success) {
+                    alert(id ? 'Kategori güncellendi!' : 'Kategori oluşturuldu!');
+                    closeModal();
+                    loadCategories();
+                } else {
+                    alert('Hata: ' + response.message);
+                }
+            } catch (error) {
+                console.error('Save category error:', error);
+                alert('Bir hata oluştu');
+            }
+        }
+
+        async function deleteCategory(id) {
+            if (confirm('Bu kategoriyi silmek istediğinize emin misiniz?')) {
+                try {
+                    const response = await ADMIN_API.deleteCategory(id);
+                    if (response.success) {
+                        alert('Kategori silindi!');
+                        loadCategories();
+                    } else {
+                        alert('Hata: ' + response.message);
+                    }
+                } catch (error) {
+                    console.error('Delete category error:', error);
+                    alert('Bir hata oluştu');
+                }
+            }
+        }
+
+        // Add Category Button Click
+        document.querySelector('.btn-add').onclick = openAddModal;
+
+        // Initial Load
+        loadCategories();
+    </script>
+</body>
+
+</html>

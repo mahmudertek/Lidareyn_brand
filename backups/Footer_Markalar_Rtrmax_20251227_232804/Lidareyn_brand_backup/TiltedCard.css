@@ -1,0 +1,63 @@
+/* TiltedCard.css */
+
+.tilted-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    padding: 40px 0;
+}
+
+.tilted-card-wrapper {
+    position: relative;
+    width: 100%;
+    height: 280px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.tilted-card-inner {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    /* Smooth interaction */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.tilted-card-inner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+    display: block;
+}
+
+.tilted-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    transform: translateZ(20px);
+    /* Push overlay slightly forward */
+    pointer-events: none;
+}
+
+.tilted-card-caption {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.tilted-card-sub {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
