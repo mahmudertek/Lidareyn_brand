@@ -20,7 +20,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         // 1. Fetch all products (or filter via API if supported)
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error('API Error');
-        const allProducts = await response.json();
+
+        const jsonResponse = await response.json();
+        // API yapısı: { success: true, data: [...] }
+        const allProducts = Array.isArray(jsonResponse) ? jsonResponse : (jsonResponse.data || []);
 
         // 2. Iterate over hero sections
         const heroSections = document.querySelectorAll('.madeniyat-hero');
