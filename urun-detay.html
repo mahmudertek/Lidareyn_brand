@@ -4,7 +4,7 @@
 <head>
     <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
-        
+
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
@@ -20,7 +20,7 @@
 
             if (hasBypass) {
                 localStorage.setItem('admin_session', 'active_' + Date.now());
-                const cleanUrl = window.location.pathname; 
+                const cleanUrl = window.location.pathname;
                 window.history.replaceState(null, '', cleanUrl); // URL'i temizle
                 document.getElementById('bakim-blocking-style').remove();
                 return;
@@ -40,15 +40,15 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Siyah Dokulu Premium Ceket - Galata Çarşı</title>
+    <title>Ürün Detayı - Galata Çarşı</title>
 
-    
+
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
-<!-- Using existing styles -->
+    <!-- Using existing styles -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -57,7 +57,8 @@
     <link rel="stylesheet" href="style.css?v=1766859876">
     <link rel="stylesheet" href="mobile.css?v=1766859876">
     <link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
-    <link rel="stylesheet" href="product-detail.css"><meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+    <link rel="stylesheet" href="product-detail.css">
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
 </head>
 
 <body>
@@ -472,8 +473,8 @@
         <!-- Breadcrumb -->
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; font-size: 13px; color: #666;">
             <a href="index.html">Anasayfa</a> <span style="margin: 0 8px;">/</span>
-            <a href="#" id="bread-category">Erkek Giyim</a> <span style="margin: 0 8px;">/</span>
-            <span style="color: #333;" id="bread-name">Siyah Dokulu Premium Ceket</span>
+            <a href="#" id="bread-category">Kategori</a> <span style="margin: 0 8px;">/</span>
+            <span style="color: #333;" id="bread-name">Ürün Yükleniyor...</span>
         </div>
 
         <div class="product-detail-container">
@@ -481,31 +482,19 @@
             <!-- Left: Gallery -->
             <div class="product-gallery">
                 <div class="gallery-thumbnails">
-                    <div class="thumbnail-wrapper active" onclick="changeImage(this, 'assets/product-1.jpg')">
-                        <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop"
-                            alt="Thumbnail 1">
-                    </div>
-                    <div class="thumbnail-wrapper" onclick="changeImage(this, 'assets/product-2.jpg')">
-                        <img src="https://images.unsplash.com/photo-1617137968427-85924c809a29?q=80&w=1000&auto=format&fit=crop"
-                            alt="Thumbnail 2">
-                    </div>
-                    <div class="thumbnail-wrapper" onclick="changeImage(this, 'assets/product-3.jpg')">
-                        <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?q=80&w=1000&auto=format&fit=crop"
-                            alt="Thumbnail 3">
-                    </div>
+                    <!-- Thumbnails will be dynamically loaded -->
                 </div>
 
                 <div class="main-image-wrapper">
-                    <img id="mainImage"
-                        src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop"
-                        alt="Siyah Ceket">
+                    <img id="mainImage" src="https://placehold.co/600x600/f0f0f0/999?text=Ürün+Görseli"
+                        alt="Ürün Görseli">
                 </div>
             </div>
 
             <!-- Right: Info -->
             <div class="product-info">
-                <a href="#" class="product-brand">KARAKÖY TÜCCARI COLLECTION</a>
-                <h1 class="product-title" id="product-title">Siyah Dokulu Slim Fit Premium Erkek Ceket</h1>
+                <a href="#" class="product-brand" id="product-brand">Marka Yükleniyor...</a>
+                <h1 class="product-title" id="product-title">Ürün Adı Yükleniyor...</h1>
 
                 <div class="product-rating">
                     <div class="stars">
@@ -519,33 +508,14 @@
                 </div>
 
                 <div class="product-price-container">
-                    <span class="current-price" id="product-price">₺2.499,90</span>
-                    <span class="original-price">₺3.250,00</span>
-                    <span class="discount-badge">%23 İndirim</span>
+                    <span class="current-price" id="product-price">--- TL</span>
+                    <span class="original-price" id="original-price" style="display: none;"></span>
+                    <span class="discount-badge" id="discount-badge" style="display: none;"></span>
                 </div>
 
-                <div class="variant-group">
-                    <label class="variant-label">Renk: <span>Siyah</span></label>
-                    <div class="color-options">
-                        <div class="color-option active" style="background-color: #000;" title="Siyah"></div>
-                        <div class="color-option" style="background-color: #1a365d;" title="Lacivert"></div>
-                        <div class="color-option" style="background-color: #555;" title="Antrasit"></div>
-                    </div>
-                </div>
-
-                <div class="variant-group">
-                    <label class="variant-label">Beden: <span>Seçiniz</span></label>
-                    <div class="size-options">
-                        <div class="size-option" onclick="selectSize(this)">46</div>
-                        <div class="size-option active" onclick="selectSize(this)">48</div>
-                        <div class="size-option" onclick="selectSize(this)">50</div>
-                        <div class="size-option" onclick="selectSize(this)">52</div>
-                        <div class="size-option disabled">54</div>
-                        <div class="size-option disabled">56</div>
-                    </div>
-                    <a href="#"
-                        style="font-size: 12px; color: #666; text-decoration: underline; margin-top: 8px; display: block;">Beden
-                        Tablosu</a>
+                <!-- Variant options will be dynamically loaded if available -->
+                <div class="variant-group" id="variant-container" style="display: none;">
+                    <!-- Dynamic variants here -->
                 </div>
 
                 <div class="product-actions">
@@ -553,12 +523,7 @@
                         <i class="fa-solid fa-cart-plus"></i>
                         SEPETE EKLE
                     </button>
-                    <button class="favorite-btn" onclick="window.toggleFavorite({
-                        id: 'siyah-dokulu-ceket',
-                        name: 'Siyah Dokulu Slim Fit Premium Erkek Ceket',
-                        price: '₺2.499,90',
-                        image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=1000&auto=format&fit=crop'
-                    })">
+                    <button class="favorite-btn" id="favorite-btn">
                         <i class="fa-regular fa-heart"></i>
                     </button>
                 </div>
@@ -594,21 +559,12 @@
                 </div>
 
                 <div class="tab-content active" id="tab-desc">
-                    <p id="desc-text">Galata Çarşı Collection Siyah Dokulu Slim Fit Ceket, modern erkeğin gardırobunun
-                        vazgeçilmez bir
-                        parçasıdır. Özel dokulu kumaşı sayesinde hem iş hayatında hem de özel davetlerde şıklığınızı
-                        tamamlar. Slim fit kesimi ile vücudunuza tam oturur ve dinamik bir görünüm sağlar.</p>
+                    <p id="desc-text">Ürün açıklaması yükleniyor...</p>
                 </div>
 
                 <div class="tab-content" id="tab-specs">
                     <div class="spec-list" id="specs-list">
-                        <div class="spec-item"><span class="spec-label">Kumaş Tipi:</span> %65 Viskoz, %35 Polyester
-                        </div>
-                        <div class="spec-item"><span class="spec-label">Kalıp:</span> Slim Fit</div>
-                        <div class="spec-item"><span class="spec-label">Yaka Tipi:</span> Mono Yaka</div>
-                        <div class="spec-item"><span class="spec-label">Desen:</span> Kendinden Dokulu</div>
-                        <div class="spec-item"><span class="spec-label">Kol Boyu:</span> Uzun Kol</div>
-                        <div class="spec-item"><span class="spec-label">Üretim Yeri:</span> Türkiye</div>
+                        <p>Ürün özellikleri yükleniyor...</p>
                     </div>
                 </div>
 
@@ -667,10 +623,12 @@
                         <h3 class="footer-title">Müşteri Hizmetleri</h3>
                         <ul class="footer-links">
                             <li>
-                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i> mail@galatacarsi.com</a>
+                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i>
+                                    mail@galatacarsi.com</a>
                             </li>
                             <li>
-                                <a href="https://wa.me/905550501374" target="_blank"><i class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
+                                <a href="https://wa.me/905550501374" target="_blank"><i
+                                        class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
                             </li>
                             <li>
                                 <a href="tel:+905550501374"><i class="fa-solid fa-phone"></i> 0555 050 13 74</a>
@@ -763,10 +721,21 @@
                     document.getElementById('product-title').textContent = product.name;
                     document.getElementById('product-price').textContent = product.price;
                     document.getElementById('bread-name').textContent = product.name;
-                    document.getElementById('bread-category').textContent = product.category;
+                    document.getElementById('bread-category').textContent = product.category || 'Ürünler';
+
+                    // Update Brand
+                    const brandEl = document.getElementById('product-brand');
+                    if (brandEl && product.brand) {
+                        brandEl.textContent = product.brand;
+                        brandEl.href = `markalar/${product.brand.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-')}.html`;
+                    } else if (brandEl) {
+                        brandEl.textContent = 'Galata Çarşı';
+                    }
 
                     if (product.description) {
                         document.getElementById('desc-text').textContent = product.description;
+                    } else {
+                        document.getElementById('desc-text').textContent = 'Bu ürün için detaylı açıklama henüz eklenmemiştir.';
                     }
 
                     // Update Images
@@ -785,6 +754,9 @@
                         });
                         // ensure main image matches first thumb
                         mainImage.src = product.images[0];
+                    } else if (product.image) {
+                        // Single image - create one thumbnail
+                        thumbnailsContainer.innerHTML = `<div class="thumbnail-wrapper active"><img src="${product.image}" alt="${product.name}"></div>`;
                     }
 
                     // Update Specs
@@ -797,6 +769,8 @@
                             div.innerHTML = `<span class="spec-label">•</span> ${spec}`;
                             specsList.appendChild(div);
                         });
+                    } else {
+                        document.getElementById('specs-list').innerHTML = '<p>Bu ürün için özellik bilgisi henüz eklenmemiştir.</p>';
                     }
 
                     // Update Add to Cart Button
@@ -813,9 +787,40 @@
                         }
                     };
 
+                    // Update Favorite Button
+                    const favBtn = document.getElementById('favorite-btn');
+                    if (favBtn && typeof window.toggleFavorite === 'function') {
+                        favBtn.onclick = function () {
+                            window.toggleFavorite({
+                                id: product.id,
+                                name: product.name,
+                                price: product.price,
+                                image: product.image
+                            });
+                        };
+                    }
+
                     // Update Page Title
                     document.title = `${product.name} - Galata Çarşı`;
+                } else {
+                    // Product not found
+                    document.getElementById('product-title').textContent = 'Ürün Bulunamadı';
+                    document.getElementById('bread-name').textContent = 'Ürün Bulunamadı';
+                    document.getElementById('product-brand').textContent = '';
+                    document.getElementById('product-price').textContent = '';
+                    document.getElementById('desc-text').textContent = 'Aradığınız ürün bulunamadı veya kaldırılmış olabilir.';
+                    document.getElementById('specs-list').innerHTML = '';
+                    document.getElementById('add-to-cart-btn').style.display = 'none';
                 }
+            } else {
+                // No product ID provided
+                document.getElementById('product-title').textContent = 'Ürün Seçilmedi';
+                document.getElementById('bread-name').textContent = 'Ürün Yok';
+                document.getElementById('product-brand').textContent = '';
+                document.getElementById('product-price').textContent = '';
+                document.getElementById('desc-text').textContent = 'Lütfen ana sayfadan bir ürün seçin.';
+                document.getElementById('specs-list').innerHTML = '';
+                document.getElementById('add-to-cart-btn').style.display = 'none';
             }
         });
     </script>
