@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        
+    </style>
+    <script src="bakim-ayari.js?v=1766778190"></script>
+    <script>
+        (function () {
+            // Bakım sayfası ise kontrol etme
+            if (window.location.pathname.includes('bakimda.html')) return;
+
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                const cleanUrl = window.location.pathname; 
+                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
+                document.getElementById('bakim-blocking-style').remove();
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            const style = document.getElementById('bakim-blocking-style');
+            if (style) style.remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
+        })();
+    </script>
+
+    
+
+    <meta charset="UTF-8">
+    <title>Basit Görsel Test</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+</head>
+
+<body style="background: #000; color: #fff; padding: 20px;">
+    <h1>Basit Görsel Test</h1>
+    <p>Aşağıda görseller görünüyor mu?</p>
+
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <div>
+            <h3>Bebek (JPG)</h3>
+            <img src="gorseller/bebek_new_v3.jpg" width="200" style="border: 2px solid red;">
+        </div>
+
+        <div>
+            <h3>Erkek (PNG)</h3>
+            <img src="gorseller/mega_menu_men_products.png" width="200" style="border: 2px solid blue;">
+        </div>
+
+        <div>
+            <h3>Elektronik (PNG)</h3>
+            <img src="gorseller/mega_menu_elektronik.png" width="200" style="border: 2px solid green;">
+        </div>
+    </div>
+
+    <hr style="margin: 30px 0;">
+    <h2>Konsol Kontrol</h2>
+    <div id="results"></div>
+
+    <script>
+        const images = [
+            'gorseller/bebek_new_v3.jpg',
+            'gorseller/mega_menu_men_products.png',
+            'gorseller/mega_menu_elektronik.png'
+        ];
+
+        const results = document.getElementById('results');
+
+        images.forEach(src => {
+            const img = new Image();
+            img.onload = () => {
+                results.innerHTML += `<p style="color: green;">✓ ${src} - BAŞARILI (${img.width}x${img.height})</p>`;
+            };
+            img.onerror = () => {
+                results.innerHTML += `<p style="color: red;">✗ ${src} - BAŞARISIZ</p>`;
+            };
+            img.src = src;
+        });
+    </script>
+    <script src="cookie-consent.js"></script>
+    <script src="mobile-menu.js"></script>
+</body>
+
+</html>

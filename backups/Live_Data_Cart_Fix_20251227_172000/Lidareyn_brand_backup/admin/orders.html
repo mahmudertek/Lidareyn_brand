@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        
+    </style>
+    <script src="../bakim-ayari.js?v=1766778190"></script>
+    <script>
+        (function () {
+            // Bakım sayfası ise kontrol etme
+            if (window.location.pathname.includes('bakimda.html')) return;
+
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                const cleanUrl = window.location.pathname; 
+                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
+                document.getElementById('bakim-blocking-style').remove();
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = '../bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            const style = document.getElementById('bakim-blocking-style');
+            if (style) style.remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
+        })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipariş Yönetimi - Galata Çarşı Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        /* Order Management Specific Styles */
+        .filters-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+
+        .filter-btn:hover {
+            border-color: #667eea;
+        }
+
+        .filter-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.5rem 1rem 0.5rem 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.875rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .orders-table th,
+        .orders-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .orders-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .orders-table tr:hover {
+            background: #f8f9ff;
+        }
+
+        .order-id {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .customer-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .customer-name {
+            font-weight: 500;
+        }
+
+        .customer-email {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .order-items {
+            font-size: 0.875rem;
+            color: #666;
+        }
+
+        .order-total {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .status-select {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        .cargo-select {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            min-width: 120px;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .btn-view {
+            background: #e8f4fd;
+            color: #3b82f6;
+        }
+
+        .btn-ship {
+            background: #e8fdf4;
+            color: #10b981;
+        }
+
+        .btn-email {
+            background: #fef3e8;
+            color: #f59e0b;
+        }
+
+        .btn-cancel {
+            background: #fde8e8;
+            color: #ef4444;
+        }
+
+        .btn-icon:hover {
+            transform: scale(1.1);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-pending {
+            background: #fff7e6;
+            color: #d97706;
+        }
+
+        .status-confirmed {
+            background: #e6f7ff;
+            color: #0284c7;
+        }
+
+        .status-processing {
+            background: #f0e6ff;
+            color: #7c3aed;
+        }
+
+        .status-shipped {
+            background: #e6fff7;
+            color: #059669;
+        }
+
+        .status-delivered {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .status-cancelled {
+            background: #ffe6e6;
+            color: #dc2626;
+        }
+
+        .status-returned {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .order-detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .order-detail-section h4 {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .cargo-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .page-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .page-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Tracking Badge */
+        .tracking-info {
+            display: flex;
+            flex-direction: column;
+            font-size: 0.8rem;
+        }
+
+        .tracking-company {
+            font-weight: 500;
+        }
+
+        .tracking-number {
+            color: #667eea;
+            cursor: pointer;
+        }
+
+        .no-tracking {
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast-success {
+            background: #10b981;
+        }
+
+        .toast-error {
+            background: #ef4444;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+</head>
+
+<body>
+    <div class="admin-container">
+        <!-- Sidebar - Dynamically loaded by admin-sidebar.js -->
+        <aside class="sidebar"></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="page-title">Sipariş Yönetimi</div>
+                <div class="topbar-right">
+                    <button class="notification-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-badge" id="pending-count">5</span>
+                    </button>
+                    <div class="admin-profile">
+                        <div class="admin-info">
+                            <span class="admin-name">Admin User</span>
+                            <span class="admin-role">Süper Yönetici</span>
+                        </div>
+                        <div class="admin-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content-wrapper">
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <button class="filter-btn active" data-status="all">Tümü</button>
+                        <button class="filter-btn" data-status="pending">Bekleyen</button>
+                        <button class="filter-btn" data-status="confirmed">Onaylı</button>
+                        <button class="filter-btn" data-status="processing">Hazırlanıyor</button>
+                        <button class="filter-btn" data-status="shipped">Kargoda</button>
+                        <button class="filter-btn" data-status="delivered">Teslim</button>
+                        <button class="filter-btn" data-status="cancelled">İptal</button>
+                    </div>
+                    <div class="search-box">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" id="search-input" placeholder="Sipariş no, müşteri adı ara...">
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="orders-table">
+                            <thead>
+                                <tr>
+                                    <th>Sipariş No</th>
+                                    <th>Müşteri</th>
+                                    <th>Ürünler</th>
+                                    <th>Tutar</th>
+                                    <th>Durum</th>
+                                    <th>Kargo</th>
+                                    <th>Tarih</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-tbody">
+                                <!-- Orders will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination" id="pagination">
+                        <!-- Pagination will be generated -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal" id="order-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Sipariş Detayı - <span id="modal-order-id"></span></h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+
+            <div class="order-detail-section">
+                <h4>Müşteri Bilgileri</h4>
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">Ad Soyad</span>
+                        <span class="detail-value" id="modal-customer-name"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">E-posta</span>
+                        <span class="detail-value" id="modal-customer-email"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Telefon</span>
+                        <span class="detail-value" id="modal-customer-phone"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-detail-section">
+                <h4>Teslimat Adresi</h4>
+                <p id="modal-address"></p>
+            </div>
+
+            <div class="order-detail-section">
+                <h4>Sipariş Kalemleri</h4>
+                <div id="modal-items"></div>
+            </div>
+
+            <div class="order-detail-section">
+                <h4>Sipariş Durumu</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Durum Değiştir</label>
+                        <select id="modal-status">
+                            <option value="pending">Beklemede</option>
+                            <option value="confirmed">Onaylandı</option>
+                            <option value="processing">Hazırlanıyor</option>
+                            <option value="shipped">Kargoya Verildi</option>
+                            <option value="delivered">Teslim Edildi</option>
+                            <option value="cancelled">İptal Edildi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Not</label>
+                        <input type="text" id="modal-note" placeholder="Durum notu ekle...">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeModal()">İptal</button>
+                <button class="btn-primary" onclick="updateOrderStatus()">
+                    <i class="fa-solid fa-save"></i> Kaydet
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cargo Modal -->
+    <div class="modal" id="cargo-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Kargo Oluştur - <span id="cargo-order-id"></span></h3>
+                <button class="modal-close" onclick="closeCargoModal()">&times;</button>
+            </div>
+
+            <div class="cargo-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kargo Firması</label>
+                        <select id="cargo-provider">
+                            <option value="yurtici">Yurtiçi Kargo</option>
+                            <option value="mng">MNG Kargo</option>
+                            <option value="aras">Aras Kargo</option>
+                            <option value="ptt">PTT Kargo</option>
+                            <option value="surat">Sürat Kargo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Desi</label>
+                        <input type="number" id="cargo-desi" value="1" min="1">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Ağırlık (kg)</label>
+                        <input type="number" id="cargo-weight" value="1" min="0.1" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Tahmini Kargo Ücreti</label>
+                        <input type="text" id="cargo-cost" readonly>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Paket Notu (opsiyonel)</label>
+                    <input type="text" id="cargo-note" placeholder="Kırılacak, dikkatli taşıyın...">
+                </div>
+
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="send-notification" checked>
+                        Müşteriye kargo bildirimi gönder
+                    </label>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeCargoModal()">İptal</button>
+                <button class="btn-primary" onclick="createShipment()">
+                    <i class="fa-solid fa-truck"></i> Kargo Oluştur
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Modal -->
+    <div class="modal" id="email-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">E-posta Gönder</h3>
+                <button class="modal-close" onclick="closeEmailModal()">&times;</button>
+            </div>
+
+            <div class="cargo-form">
+                <div class="form-group">
+                    <label>E-posta Şablonu</label>
+                    <select id="email-template">
+                        <option value="order_confirmed">Sipariş Onayı</option>
+                        <option value="order_shipped">Kargo Bildirimi</option>
+                        <option value="order_delivered">Teslimat Bildirimi</option>
+                        <option value="order_cancelled">İptal Bildirimi</option>
+                        <option value="custom">Özel Mesaj</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Alıcı</label>
+                    <input type="email" id="email-recipient" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Konu</label>
+                    <input type="text" id="email-subject">
+                </div>
+
+                <div class="form-group" id="custom-message-group" style="display: none;">
+                    <label>Mesaj</label>
+                    <textarea id="email-message" rows="5" placeholder="Mesajınızı yazın..."></textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeEmailModal()">İptal</button>
+                <button class="btn-primary" onclick="sendEmail()">
+                    <i class="fa-solid fa-paper-plane"></i> Gönder
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin API -->
+    <script src="admin-api.js"></script>
+    <script src="admin-sidebar.js"></script>
+    <script>
+        // Auth check - redirect if not logged in
+        if (!ADMIN_API.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
+        // Current state
+        let currentOrders = [];
+        let currentFilter = 'all';
+        let currentPage = 1;
+        let selectedOrderId = null;
+
+        // Demo orders data (fallback)
+        const demoOrders = [
+            {
+                _id: '1',
+                orderNumber: 'GC2024001',
+                user: { name: 'Ahmet Yılmaz', email: 'ahmet@example.com' },
+                shippingAddress: { fullName: 'Ahmet Yılmaz', phone: '0532 123 4567', city: 'İstanbul', address: 'Beyoğlu, Taksim Meydanı No:5' },
+                items: [{ name: 'Bosch Matkap', quantity: 1, price: 1250 }],
+                pricing: { total: 1250 },
+                status: 'pending',
+                tracking: null,
+                createdAt: new Date().toISOString()
+            },
+            {
+                _id: '2',
+                orderNumber: 'GC2024002',
+                user: { name: 'Ayşe Demir', email: 'ayse@example.com' },
+                shippingAddress: { fullName: 'Ayşe Demir', phone: '0533 456 7890', city: 'Ankara', address: 'Çankaya, Kültür Cad. No:12' },
+                items: [{ name: 'Makita Taşlama', quantity: 2, price: 450 }],
+                pricing: { total: 900 },
+                status: 'confirmed',
+                tracking: null,
+                createdAt: new Date(Date.now() - 86400000).toISOString()
+            },
+            {
+                _id: '3',
+                orderNumber: 'GC2024003',
+                user: { name: 'Mehmet Kaya', email: 'mehmet@example.com' },
+                shippingAddress: { fullName: 'Mehmet Kaya', phone: '0534 789 0123', city: 'İzmir', address: 'Konak, Alsancak Mah. No:8' },
+                items: [{ name: 'Beta Anahtar Seti', quantity: 1, price: 3400 }],
+                pricing: { total: 3400 },
+                status: 'processing',
+                tracking: null,
+                createdAt: new Date(Date.now() - 172800000).toISOString()
+            },
+            {
+                _id: '4',
+                orderNumber: 'GC2024004',
+                user: { name: 'Zeynep Çelik', email: 'zeynep@example.com' },
+                shippingAddress: { fullName: 'Zeynep Çelik', phone: '0535 012 3456', city: 'Bursa', address: 'Nilüfer, Özlüce Mah. No:15' },
+                items: [{ name: 'Knipex Pense', quantity: 3, price: 297 }],
+                pricing: { total: 890 },
+                status: 'shipped',
+                tracking: { company: 'Yurtiçi Kargo', trackingNumber: 'YK12345678901', url: 'https://yurticikargo.com/track/YK12345678901' },
+                createdAt: new Date(Date.now() - 259200000).toISOString()
+            },
+            {
+                _id: '5',
+                orderNumber: 'GC2024005',
+                user: { name: 'Caner Erkin', email: 'caner@example.com' },
+                shippingAddress: { fullName: 'Caner Erkin', phone: '0536 345 6789', city: 'Antalya', address: 'Muratpaşa, Lara Cad. No:22' },
+                items: [{ name: 'Hilti Kırıcı', quantity: 1, price: 2100 }],
+                pricing: { total: 2100 },
+                status: 'delivered',
+                tracking: { company: 'MNG Kargo', trackingNumber: 'MNG98765432101', url: 'https://mngkargo.com/track/MNG98765432101' },
+                createdAt: new Date(Date.now() - 345600000).toISOString()
+            }
+        ];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadOrders();
+            setupFilters();
+            setupSearch();
+            setupCargoCalculation();
+            setupEmailTemplate();
+        });
+
+        // Show loading state
+        function showLoading() {
+            const tbody = document.getElementById('orders-tbody');
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" style="text-align: center; padding: 40px; color: #6b7280;">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <p style="margin: 10px 0 0;">Siparişler yükleniyor...</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Load orders from API
+        async function loadOrders() {
+            showLoading();
+            try {
+                const response = await ADMIN_API.getOrders({ status: currentFilter !== 'all' ? currentFilter : '', page: currentPage });
+                if (response.success && response.data) {
+                    currentOrders = response.data;
+                    console.log('✅ API\'den siparişler yüklendi:', currentOrders.length);
+                } else {
+                    console.log('⚠️ API yanıtı boş, demo veriler kullanılıyor');
+                    currentOrders = demoOrders;
+                }
+            } catch (error) {
+                console.log('❌ API hatası, demo veriler kullanılıyor:', error.message);
+                currentOrders = demoOrders;
+            }
+
+            renderOrders();
+            updatePendingCount();
+        }
+
+        // Render orders table
+        function renderOrders() {
+            const tbody = document.getElementById('orders-tbody');
+            let filteredOrders = currentOrders;
+
+            if (currentFilter !== 'all') {
+                filteredOrders = currentOrders.filter(o => o.status === currentFilter);
+            }
+
+            if (filteredOrders.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" style="text-align: center; padding: 2rem; color: #999;">
+                            <i class="fa-solid fa-inbox" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
+                            Bu filtrede sipariş bulunmuyor
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredOrders.map(order => `
+                <tr>
+                    <td><span class="order-id">${order.orderNumber}</span></td>
+                    <td>
+                        <div class="customer-info">
+                            <span class="customer-name">${order.user?.name || order.shippingAddress?.fullName || 'Misafir'}</span>
+                            <span class="customer-email">${order.user?.email || '-'}</span>
+                        </div>
+                    </td>
+                    <td class="order-items">${order.items?.map(i => `${i.name} x${i.quantity}`).join(', ') || '-'}</td>
+                    <td class="order-total">₺${order.pricing?.total?.toLocaleString('tr-TR') || 0}</td>
+                    <td><span class="status-badge status-${order.status}">${getStatusText(order.status)}</span></td>
+                    <td>
+                        ${order.tracking ? `
+                            <div class="tracking-info">
+                                <span class="tracking-company">${order.tracking.company}</span>
+                                <a href="${order.tracking.url}" target="_blank" class="tracking-number">${order.tracking.trackingNumber}</a>
+                            </div>
+                        ` : '<span class="no-tracking">Kargo yok</span>'}
+                    </td>
+                    <td>${formatDate(order.createdAt)}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon btn-view" title="Detay" onclick="viewOrder('${order._id}')">
+                                <i class="fa-solid fa-eye"></i>
+                            </button>
+                            ${!order.tracking && order.status !== 'cancelled' && order.status !== 'delivered' ? `
+                                <button class="btn-icon btn-ship" title="Kargo Oluştur" onclick="openCargoModal('${order._id}')">
+                                    <i class="fa-solid fa-truck"></i>
+                                </button>
+                            ` : ''}
+                            <button class="btn-icon btn-email" title="E-posta Gönder" onclick="openEmailModal('${order._id}')">
+                                <i class="fa-solid fa-envelope"></i>
+                            </button>
+                            ${order.status === 'pending' ? `
+                                <button class="btn-icon btn-cancel" title="İptal Et" onclick="cancelOrder('${order._id}')">
+                                    <i class="fa-solid fa-times"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Status text
+        function getStatusText(status) {
+            const statusMap = {
+                pending: 'Beklemede',
+                confirmed: 'Onaylandı',
+                processing: 'Hazırlanıyor',
+                shipped: 'Kargoda',
+                in_transit: 'Yolda',
+                delivered: 'Teslim Edildi',
+                cancelled: 'İptal',
+                returned: 'İade'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Format date
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        // Update pending count
+        function updatePendingCount() {
+            const pendingCount = currentOrders.filter(o => o.status === 'pending' || o.status === 'confirmed').length;
+            document.getElementById('pending-count').textContent = pendingCount;
+        }
+
+        // Setup filters
+        function setupFilters() {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.status;
+                    renderOrders();
+                });
+            });
+        }
+
+        // Setup search
+        function setupSearch() {
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const filtered = demoOrders.filter(o =>
+                    o.orderNumber.toLowerCase().includes(query) ||
+                    (o.user?.name || '').toLowerCase().includes(query) ||
+                    (o.shippingAddress?.fullName || '').toLowerCase().includes(query)
+                );
+                currentOrders = filtered;
+                renderOrders();
+            });
+        }
+
+        // View order detail
+        function viewOrder(orderId) {
+            selectedOrderId = orderId;
+            const order = currentOrders.find(o => o._id === orderId);
+            if (!order) return;
+
+            document.getElementById('modal-order-id').textContent = order.orderNumber;
+            document.getElementById('modal-customer-name').textContent = order.user?.name || order.shippingAddress?.fullName;
+            document.getElementById('modal-customer-email').textContent = order.user?.email || '-';
+            document.getElementById('modal-customer-phone').textContent = order.shippingAddress?.phone || '-';
+            document.getElementById('modal-address').textContent = `${order.shippingAddress?.address}, ${order.shippingAddress?.city}`;
+            document.getElementById('modal-status').value = order.status;
+
+            const itemsHtml = order.items?.map(item => `
+                <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #eee;">
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>₺${(item.price * item.quantity).toLocaleString('tr-TR')}</span>
+                </div>
+            `).join('') || '-';
+            document.getElementById('modal-items').innerHTML = itemsHtml;
+
+            document.getElementById('order-modal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('order-modal').classList.remove('active');
+            selectedOrderId = null;
+        }
+
+        // Update order status
+        async function updateOrderStatus() {
+            const status = document.getElementById('modal-status').value;
+            const note = document.getElementById('modal-note').value;
+
+            try {
+                const response = await ADMIN_API.updateOrderStatus(selectedOrderId, status);
+
+                if (response.success) {
+                    showToast('Sipariş durumu güncellendi', 'success');
+                    closeModal();
+                    loadOrders();
+                } else {
+                    // Demo mode - update locally
+                    const order = currentOrders.find(o => o._id === selectedOrderId);
+                    if (order) order.status = status;
+                    showToast('Sipariş durumu güncellendi (Demo)', 'success');
+                    closeModal();
+                    renderOrders();
+                }
+            } catch (error) {
+                // Demo mode
+                const order = currentOrders.find(o => o._id === selectedOrderId);
+                if (order) order.status = status;
+                showToast('Sipariş durumu güncellendi (Demo)', 'success');
+                closeModal();
+                renderOrders();
+            }
+        }
+
+        // Open cargo modal
+        function openCargoModal(orderId) {
+            selectedOrderId = orderId;
+            const order = currentOrders.find(o => o._id === orderId);
+            document.getElementById('cargo-order-id').textContent = order?.orderNumber || '';
+            calculateCargoCost();
+            document.getElementById('cargo-modal').classList.add('active');
+        }
+
+        // Close cargo modal
+        function closeCargoModal() {
+            document.getElementById('cargo-modal').classList.remove('active');
+            selectedOrderId = null;
+        }
+
+        // Setup cargo calculation
+        function setupCargoCalculation() {
+            ['cargo-provider', 'cargo-desi', 'cargo-weight'].forEach(id => {
+                document.getElementById(id)?.addEventListener('change', calculateCargoCost);
+            });
+        }
+
+        // Calculate cargo cost
+        async function calculateCargoCost() {
+            const provider = document.getElementById('cargo-provider').value;
+            const desi = parseInt(document.getElementById('cargo-desi').value) || 1;
+            const weight = parseFloat(document.getElementById('cargo-weight').value) || 1;
+
+            // Simple calculation (demo)
+            const basePrices = { yurtici: 32, mng: 30, aras: 31, ptt: 28, surat: 29 };
+            const basePrice = basePrices[provider] || 30;
+            const cost = basePrice + (Math.max(desi, weight) - 1) * 5;
+
+            document.getElementById('cargo-cost').value = `₺${(cost * 1.2).toFixed(2)} (KDV dahil)`;
+        }
+
+        // Create shipment
+        async function createShipment() {
+            const provider = document.getElementById('cargo-provider').value;
+            const desi = document.getElementById('cargo-desi').value;
+            const weight = document.getElementById('cargo-weight').value;
+            const sendNotification = document.getElementById('send-notification').checked;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/cargo/create-shipment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        orderId: selectedOrderId,
+                        provider,
+                        packageInfo: { desi, weight }
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showToast(`Kargo oluşturuldu: ${data.data.tracking.trackingNumber}`, 'success');
+
+                    if (sendNotification) {
+                        // Send email notification
+                        sendCargoNotification(selectedOrderId, data.data.tracking);
+                    }
+
+                    closeCargoModal();
+                    loadOrders();
+                } else {
+                    // Demo mode
+                    const order = currentOrders.find(o => o._id === selectedOrderId);
+                    if (order) {
+                        order.status = 'shipped';
+                        order.tracking = {
+                            company: getProviderName(provider),
+                            trackingNumber: generateDemoTracking(provider),
+                            url: '#'
+                        };
+                    }
+                    showToast('Kargo oluşturuldu (Demo)', 'success');
+                    closeCargoModal();
+                    renderOrders();
+                }
+            } catch (error) {
+                // Demo mode
+                const order = currentOrders.find(o => o._id === selectedOrderId);
+                if (order) {
+                    order.status = 'shipped';
+                    order.tracking = {
+                        company: getProviderName(document.getElementById('cargo-provider').value),
+                        trackingNumber: generateDemoTracking(document.getElementById('cargo-provider').value),
+                        url: '#'
+                    };
+                }
+                showToast('Kargo oluşturuldu (Demo)', 'success');
+                closeCargoModal();
+                renderOrders();
+            }
+        }
+
+        // Get provider name
+        function getProviderName(id) {
+            const names = { yurtici: 'Yurtiçi Kargo', mng: 'MNG Kargo', aras: 'Aras Kargo', ptt: 'PTT Kargo', surat: 'Sürat Kargo' };
+            return names[id] || id;
+        }
+
+        // Generate demo tracking
+        function generateDemoTracking(provider) {
+            const prefixes = { yurtici: 'YK', mng: 'MNG', aras: 'AR', ptt: 'PTT', surat: 'SK' };
+            return `${prefixes[provider] || 'KG'}${Date.now().toString().slice(-8)}${Math.floor(Math.random() * 1000)}`;
+        }
+
+        // Open email modal
+        function openEmailModal(orderId) {
+            selectedOrderId = orderId;
+            const order = currentOrders.find(o => o._id === orderId);
+            document.getElementById('email-recipient').value = order?.user?.email || '';
+            document.getElementById('email-subject').value = `Siparişiniz Hakkında - ${order?.orderNumber}`;
+            document.getElementById('email-modal').classList.add('active');
+        }
+
+        // Close email modal
+        function closeEmailModal() {
+            document.getElementById('email-modal').classList.remove('active');
+            selectedOrderId = null;
+        }
+
+        // Setup email template
+        function setupEmailTemplate() {
+            document.getElementById('email-template')?.addEventListener('change', (e) => {
+                const template = e.target.value;
+                const order = currentOrders.find(o => o._id === selectedOrderId);
+                const customGroup = document.getElementById('custom-message-group');
+
+                if (template === 'custom') {
+                    customGroup.style.display = 'block';
+                    return;
+                }
+
+                customGroup.style.display = 'none';
+
+                const subjects = {
+                    order_confirmed: `Siparişiniz Onaylandı - ${order?.orderNumber}`,
+                    order_shipped: `Siparişiniz Kargoya Verildi - ${order?.orderNumber}`,
+                    order_delivered: `Siparişiniz Teslim Edildi - ${order?.orderNumber}`,
+                    order_cancelled: `Siparişiniz İptal Edildi - ${order?.orderNumber}`
+                };
+
+                document.getElementById('email-subject').value = subjects[template] || '';
+            });
+        }
+
+        // Send email
+        async function sendEmail() {
+            const template = document.getElementById('email-template').value;
+            const recipient = document.getElementById('email-recipient').value;
+            const subject = document.getElementById('email-subject').value;
+            const message = document.getElementById('email-message')?.value || '';
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/email/send`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        orderId: selectedOrderId,
+                        template,
+                        recipient,
+                        subject,
+                        message
+                    })
+                });
+
+                if (response.ok) {
+                    showToast('E-posta gönderildi', 'success');
+                } else {
+                    showToast('E-posta gönderildi (Demo)', 'success');
+                }
+            } catch {
+                showToast('E-posta gönderildi (Demo)', 'success');
+            }
+
+            closeEmailModal();
+        }
+
+        // Send cargo notification
+        async function sendCargoNotification(orderId, tracking) {
+            try {
+                await fetch(`${API_BASE_URL}/email/send`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        orderId,
+                        template: 'order_shipped',
+                        tracking
+                    })
+                });
+            } catch (e) {
+                console.log('Demo mode - email notification skipped');
+            }
+        }
+
+        // Cancel order
+        async function cancelOrder(orderId) {
+            if (!confirm('Bu siparişi iptal etmek istediğinize emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/orders/${orderId}/cancel`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ reason: 'Admin tarafından iptal edildi' })
+                });
+
+                if (response.ok) {
+                    showToast('Sipariş iptal edildi', 'success');
+                    loadOrders();
+                } else {
+                    const order = currentOrders.find(o => o._id === orderId);
+                    if (order) order.status = 'cancelled';
+                    showToast('Sipariş iptal edildi (Demo)', 'success');
+                    renderOrders();
+                }
+            } catch {
+                const order = currentOrders.find(o => o._id === orderId);
+                if (order) order.status = 'cancelled';
+                showToast('Sipariş iptal edildi (Demo)', 'success');
+                renderOrders();
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `<i class="fa-solid fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i> ${message}`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

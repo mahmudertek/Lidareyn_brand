@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        
+    </style>
+    <script src="../bakim-ayari.js?v=1766778190"></script>
+    <script>
+        (function () {
+            // Bakım sayfası ise kontrol etme
+            if (window.location.pathname.includes('bakimda.html')) return;
+
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                const cleanUrl = window.location.pathname; 
+                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
+                document.getElementById('bakim-blocking-style').remove();
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = '../bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            const style = document.getElementById('bakim-blocking-style');
+            if (style) style.remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
+        })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayarlar - Galata Çarşı Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <style>
+        .settings-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 24px;
+        }
+
+        .settings-nav {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            height: fit-content;
+            position: sticky;
+            top: 24px;
+        }
+
+        .settings-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            color: #4b5563;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .settings-nav-item:hover {
+            background: #f3f4f6;
+        }
+
+        .settings-nav-item.active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+
+        .settings-nav-item i {
+            width: 20px;
+        }
+
+        .settings-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        .settings-section h2 {
+            margin: 0 0 8px;
+            font-size: 22px;
+            color: #1f2937;
+        }
+
+        .settings-section>p {
+            margin: 0 0 24px;
+            color: #6b7280;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-save {
+            padding: 14px 32px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .toggle-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .toggle-info h4 {
+            margin: 0 0 4px;
+            font-size: 15px;
+            color: #1f2937;
+        }
+
+        .toggle-info p {
+            margin: 0;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: 0.4s;
+            border-radius: 28px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.toggle-slider {
+            background-color: #6366f1;
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(24px);
+        }
+
+        .api-key-display {
+            display: flex;
+            gap: 10px;
+        }
+
+        .api-key-display input {
+            flex: 1;
+        }
+
+        .api-key-display button {
+            padding: 12px 20px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .api-key-display button:hover {
+            background: #e5e7eb;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .color-picker input[type="color"] {
+            width: 50px;
+            height: 50px;
+            padding: 0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .section-divider {
+            border: none;
+            border-top: 1px solid #e5e7eb;
+            margin: 30px 0;
+        }
+
+        .danger-zone {
+            border: 2px solid #fee2e2;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .danger-zone h3 {
+            color: #dc2626;
+            margin: 0 0 12px;
+            font-size: 16px;
+        }
+
+        .danger-zone p {
+            color: #6b7280;
+            margin: 0 0 16px;
+            font-size: 14px;
+        }
+
+        .btn-danger {
+            padding: 12px 24px;
+            background: #fee2e2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            color: white;
+        }
+    </style>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+</head>
+
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="sidebar"></aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="page-title">Ayarlar</div>
+                <div class="topbar-right">
+                    <div class="admin-profile">
+                        <div class="admin-info">
+                            <span class="admin-name">Admin User</span>
+                            <span class="admin-role">Süper Yönetici</span>
+                        </div>
+                        <div class="admin-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <div class="settings-container">
+                    <!-- Settings Navigation -->
+                    <nav class="settings-nav">
+                        <div class="settings-nav-item active" onclick="showSection('general')">
+                            <i class="fa-solid fa-store"></i>
+                            <span>Genel</span>
+                        </div>
+                        <div class="settings-nav-item" onclick="showSection('payment')">
+                            <i class="fa-solid fa-credit-card"></i>
+                            <span>Ödeme</span>
+                        </div>
+                        <div class="settings-nav-item" onclick="showSection('shipping')">
+                            <i class="fa-solid fa-truck"></i>
+                            <span>Kargo</span>
+                        </div>
+                        <div class="settings-nav-item" onclick="showSection('notifications')">
+                            <i class="fa-solid fa-bell"></i>
+                            <span>Bildirimler</span>
+                        </div>
+                        <div class="settings-nav-item" onclick="showSection('seo')">
+                            <i class="fa-solid fa-search"></i>
+                            <span>SEO</span>
+                        </div>
+                        <div class="settings-nav-item" onclick="showSection('analytics')">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <span>Analitik</span>
+                        </div>
+                        <div class="settings-nav-item" onclick="showSection('security')">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <span>Güvenlik</span>
+                        </div>
+                    </nav>
+
+                    <!-- Settings Content -->
+                    <div class="settings-content">
+                        <!-- General Settings -->
+                        <div id="general" class="settings-section active">
+                            <h2>Genel Ayarlar</h2>
+                            <p>Mağaza bilgilerinizi ve temel ayarları yönetin.</p>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Mağaza Adı</label>
+                                    <input type="text" value="Galata Çarşı" id="storeName">
+                                </div>
+                                <div class="form-group">
+                                    <label>E-posta Adresi</label>
+                                    <input type="email" value="info@galatacarsi.com" id="storeEmail">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Telefon</label>
+                                    <input type="tel" value="+90 212 XXX XX XX" id="storePhone">
+                                </div>
+                                <div class="form-group">
+                                    <label>WhatsApp</label>
+                                    <input type="tel" value="+90 5XX XXX XX XX" id="storeWhatsapp">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Adres</label>
+                                <textarea rows="3" id="storeAddress">Galata, İstanbul, Türkiye</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Tema Rengi</label>
+                                <div class="color-picker">
+                                    <input type="color" value="#6366f1" id="themeColor">
+                                    <span>Mağazanızın ana tema rengi</span>
+                                </div>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <h3 style="margin-bottom: 16px;">Site Ayarları</h3>
+
+                            <div class="toggle-row" style="background: #dbeafe; border: 1px solid #93c5fd;">
+                                <div class="toggle-info">
+                                    <h4>Bakım Modu</h4>
+                                    <p>Bakım modu artık <strong>maintenance-config.json</strong> dosyası ile
+                                        yönetiliyor. VS Code'dan dosyayı düzenleyip push edin.</p>
+                                </div>
+                                <a href="https://github.com" target="_blank"
+                                    style="padding: 8px 16px; background: #3b82f6; color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">
+                                    <i class="fa-brands fa-github"></i> GitHub
+                                </a>
+                            </div>
+
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Yeni Üyelik</h4>
+                                    <p>Yeni kullanıcı kayıtlarına izin ver</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="allowRegistration" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <button class="btn-save" onclick="saveGeneralSettings()">
+                                <i class="fa-solid fa-check"></i> Kaydet
+                            </button>
+                        </div>
+
+                        <!-- Payment Settings -->
+                        <div id="payment" class="settings-section">
+                            <h2>Ödeme Ayarları</h2>
+                            <p>Ödeme yöntemlerini ve entegrasyonları yönetin.</p>
+
+                            <h3 style="margin-bottom: 16px;">Sipay Entegrasyonu</h3>
+
+                            <div class="form-group">
+                                <label>Merchant ID</label>
+                                <input type="text" placeholder="Sipay Merchant ID" id="sipayMerchantId">
+                            </div>
+
+                            <div class="form-group">
+                                <label>API Key</label>
+                                <div class="api-key-display">
+                                    <input type="password" placeholder="API Anahtarı" id="sipayApiKey">
+                                    <button onclick="toggleApiKey('sipayApiKey')">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Secret Key</label>
+                                <div class="api-key-display">
+                                    <input type="password" placeholder="Secret Anahtarı" id="sipaySecretKey">
+                                    <button onclick="toggleApiKey('sipaySecretKey')">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Test Modu</h4>
+                                    <p>Gerçek ödeme almadan test yapın</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="sipayTestMode" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <h3 style="margin-bottom: 16px;">Ödeme Yöntemleri</h3>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Kredi Kartı</h4>
+                                    <p>Kredi/Banka kartı ile ödeme</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Havale/EFT</h4>
+                                    <p>Banka havalesi ile ödeme</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Kapıda Ödeme</h4>
+                                    <p>Teslimat sırasında ödeme</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <button class="btn-save" onclick="savePaymentSettings()">
+                                <i class="fa-solid fa-check"></i> Kaydet
+                            </button>
+                        </div>
+
+                        <!-- Shipping Settings -->
+                        <div id="shipping" class="settings-section">
+                            <h2>Kargo Ayarları</h2>
+                            <p>Kargo firmalarını ve teslimat seçeneklerini yönetin.</p>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Varsayılan Kargo Firması</label>
+                                    <select id="defaultCarrier">
+                                        <option value="yurtici">Yurtiçi Kargo</option>
+                                        <option value="mng">MNG Kargo</option>
+                                        <option value="aras">Aras Kargo</option>
+                                        <option value="ptt">PTT Kargo</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ücretsiz Kargo Limiti (₺)</label>
+                                    <input type="number" value="500" id="freeShippingLimit">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Sabit Kargo Ücreti (₺)</label>
+                                <input type="number" value="29.90" id="flatShippingRate">
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <h3 style="margin-bottom: 16px;">Kargo API Bilgileri</h3>
+
+                            <div class="form-group">
+                                <label>Yurtiçi Kargo API Key</label>
+                                <input type="text" placeholder="API Anahtarı" id="yurticiApiKey">
+                            </div>
+
+                            <button class="btn-save" onclick="saveShippingSettings()">
+                                <i class="fa-solid fa-check"></i> Kaydet
+                            </button>
+                        </div>
+
+                        <!-- Notifications Settings -->
+                        <div id="notifications" class="settings-section">
+                            <h2>Bildirim Ayarları</h2>
+                            <p>E-posta ve SMS bildirimlerini yönetin.</p>
+
+                            <h3 style="margin-bottom: 16px;">E-posta Bildirimleri</h3>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Yeni Sipariş</h4>
+                                    <p>Yeni sipariş geldiğinde bildirim al</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Düşük Stok Uyarısı</h4>
+                                    <p>Ürün stoğu azaldığında bildirim al</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Yeni Müşteri</h4>
+                                    <p>Yeni üyelik olduğunda bildirim al</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <h3 style="margin-bottom: 16px;">SMTP Ayarları</h3>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>SMTP Host</label>
+                                    <input type="text" placeholder="smtp.example.com" id="smtpHost">
+                                </div>
+                                <div class="form-group">
+                                    <label>Port</label>
+                                    <input type="number" value="587" id="smtpPort">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Kullanıcı Adı</label>
+                                    <input type="text" placeholder="user@example.com" id="smtpUser">
+                                </div>
+                                <div class="form-group">
+                                    <label>Şifre</label>
+                                    <input type="password" placeholder="••••••••" id="smtpPass">
+                                </div>
+                            </div>
+
+                            <button class="btn-save" onclick="saveNotificationSettings()">
+                                <i class="fa-solid fa-check"></i> Kaydet
+                            </button>
+                        </div>
+
+                        <!-- SEO Settings -->
+                        <div id="seo" class="settings-section">
+                            <h2>SEO Ayarları</h2>
+                            <p>Arama motoru optimizasyonu için meta bilgilerini düzenleyin.</p>
+
+                            <div class="form-group">
+                                <label>Site Başlığı</label>
+                                <input type="text" value="Galata Çarşı - Profesyonel Hırdavat & El Aletleri"
+                                    id="seoTitle">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Meta Açıklama</label>
+                                <textarea rows="3"
+                                    id="seoDescription">Bosch, Makita, Beta, Knipex ve daha fazla marka ile profesyonel el aletleri ve hırdavat ürünleri. Ücretsiz kargo ve güvenli alışveriş.</textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Anahtar Kelimeler</label>
+                                <input type="text" value="hırdavat, el aletleri, bosch, makita, matkap, taşlama"
+                                    id="seoKeywords">
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <h3 style="margin-bottom: 16px;">Sosyal Medya</h3>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label><i class="fa-brands fa-facebook"></i> Facebook</label>
+                                    <input type="url" placeholder="https://facebook.com/..." id="socialFacebook">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-brands fa-instagram"></i> Instagram</label>
+                                    <input type="url" placeholder="https://instagram.com/..." id="socialInstagram">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label><i class="fa-brands fa-twitter"></i> Twitter/X</label>
+                                    <input type="url" placeholder="https://twitter.com/..." id="socialTwitter">
+                                </div>
+                                <div class="form-group">
+                                    <label><i class="fa-brands fa-youtube"></i> YouTube</label>
+                                    <input type="url" placeholder="https://youtube.com/..." id="socialYoutube">
+                                </div>
+                            </div>
+
+                            <button class="btn-save" onclick="saveSeoSettings()">
+                                <i class="fa-solid fa-check"></i> Kaydet
+                            </button>
+                        </div>
+
+                        <!-- Analytics Settings -->
+                        <div id="analytics" class="settings-section">
+                            <h2>Analitik Ayarları</h2>
+                            <p>Google Analytics ve diğer izleme araçlarını yapılandırın.</p>
+
+                            <div class="form-group">
+                                <label>Google Analytics 4 - Measurement ID</label>
+                                <input type="text" placeholder="G-XXXXXXXXXX" id="ga4Id">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Google Tag Manager - Container ID</label>
+                                <input type="text" placeholder="GTM-XXXXXXX" id="gtmId">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Facebook Pixel ID</label>
+                                <input type="text" placeholder="XXXXXXXXXXXXXXX" id="fbPixelId">
+                            </div>
+
+                            <hr class="section-divider">
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>E-ticaret Takibi</h4>
+                                    <p>Satış ve dönüşüm verilerini izle</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Sayfa Görüntüleme</h4>
+                                    <p>Her sayfa ziyaretini kaydet</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <button class="btn-save" onclick="saveAnalyticsSettings()">
+                                <i class="fa-solid fa-check"></i> Kaydet
+                            </button>
+                        </div>
+
+                        <!-- Security Settings -->
+                        <div id="security" class="settings-section">
+                            <h2>Güvenlik Ayarları</h2>
+                            <p>Hesap güvenliği ve erişim kontrollerini yönetin.</p>
+
+                            <h3 style="margin-bottom: 16px;">Şifre Değiştir</h3>
+
+                            <div class="form-group">
+                                <label>Mevcut Şifre</label>
+                                <input type="password" placeholder="••••••••" id="currentPassword">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Yeni Şifre</label>
+                                    <input type="password" placeholder="••••••••" id="newPassword">
+                                </div>
+                                <div class="form-group">
+                                    <label>Yeni Şifre (Tekrar)</label>
+                                    <input type="password" placeholder="••••••••" id="confirmPassword">
+                                </div>
+                            </div>
+
+                            <button class="btn-save" onclick="changePassword()">
+                                <i class="fa-solid fa-key"></i> Şifreyi Değiştir
+                            </button>
+
+                            <hr class="section-divider">
+
+                            <h3 style="margin-bottom: 16px;">Güvenlik Seçenekleri</h3>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>İki Faktörlü Doğrulama</h4>
+                                    <p>Giriş için ek güvenlik katmanı</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="toggle-row">
+                                <div class="toggle-info">
+                                    <h4>Oturum Zaman Aşımı</h4>
+                                    <p>30 dakika hareketsizlik sonrası çıkış yap</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="danger-zone">
+                                <h3><i class="fa-solid fa-triangle-exclamation"></i> Tehlikeli Bölge</h3>
+                                <p>Bu işlemler geri alınamaz. Dikkatli olun.</p>
+                                <button class="btn-danger" onclick="clearAllData()">
+                                    <i class="fa-solid fa-trash"></i> Tüm Verileri Sil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="admin-api.js"></script>
+    <script src="admin-sidebar.js"></script>
+    <script>
+        // Auth check
+        if (!ADMIN_API.isLoggedIn()) {
+            window.location.href = 'login.html';
+        }
+
+        // Show section
+        function showSection(sectionId) {
+            // Update nav
+            document.querySelectorAll('.settings-nav-item').forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.settings-section').forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Toggle API key visibility
+        function toggleApiKey(inputId) {
+            const input = document.getElementById(inputId);
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        // Save functions
+        // Save general settings
+        async function saveGeneralSettings() {
+            const btn = document.querySelector('.btn-save');
+            const originalContent = btn.innerHTML;
+
+            try {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...';
+
+                const maintenanceMode = document.getElementById('maintenanceMode').checked;
+
+                // 1. Update maintenance mode
+                const maintenanceRes = await ADMIN_API.updateMaintenanceMode(maintenanceMode);
+
+                if (!maintenanceRes.success) {
+                    throw new Error(maintenanceRes.message || 'Bakım modu güncellenemedi');
+                }
+
+                // Notify other tabs/windows
+                try {
+                    const bc = new BroadcastChannel('admin_settings_channel');
+                    bc.postMessage({ type: 'maintenance_updated', isMaintenanceMode: maintenanceMode });
+                } catch (e) { console.log('BroadcastChannel error', e); }
+
+                alert('Genel ayarlar başarıyla kaydedildi!');
+            } catch (error) {
+                console.error('Save settings error:', error);
+                alert('Hata: ' + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }
+
+        function savePaymentSettings() {
+            alert('Ödeme ayarları kaydedildi!');
+        }
+
+        function saveShippingSettings() {
+            alert('Kargo ayarları kaydedildi!');
+        }
+
+        function saveNotificationSettings() {
+            alert('Bildirim ayarları kaydedildi!');
+        }
+
+        function saveSeoSettings() {
+            alert('SEO ayarları kaydedildi!');
+        }
+
+        function saveAnalyticsSettings() {
+            const ga4Id = document.getElementById('ga4Id').value;
+            if (ga4Id) {
+                localStorage.setItem('ga4Id', ga4Id);
+            }
+            alert('Analitik ayarları kaydedildi!');
+        }
+
+        function changePassword() {
+            const current = document.getElementById('currentPassword').value;
+            const newPass = document.getElementById('newPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (!current || !newPass || !confirm) {
+                alert('Lütfen tüm alanları doldurun.');
+                return;
+            }
+
+            if (newPass !== confirm) {
+                alert('Yeni şifreler eşleşmiyor.');
+                return;
+            }
+
+            if (newPass.length < 6) {
+                alert('Şifre en az 6 karakter olmalıdır.');
+                return;
+            }
+
+            alert('Şifre başarıyla değiştirildi!');
+        }
+
+        function clearAllData() {
+            if (confirm('TÜM VERİLERİ SİLMEK İSTEDİĞİNİZDEN EMİN MİSİZ?\n\nBu işlem geri alınamaz!')) {
+                if (confirm('Son kez onaylayın: Tüm veriler silinecek!')) {
+                    alert('Bu işlem için backend desteği gereklidir.');
+                }
+            }
+        }
+
+        // Load saved settings
+        async function loadSettings() {
+            try {
+                const response = await ADMIN_API.getSettings();
+                if (response.success && response.data) {
+                    const settings = response.data;
+                    document.getElementById('maintenanceMode').checked = settings.isMaintenanceMode || false;
+
+                    if (settings.siteName) document.getElementById('storeName').value = settings.siteName;
+                    if (settings.contactEmail) document.getElementById('storeEmail').value = settings.contactEmail;
+                    if (settings.phoneNumber) document.getElementById('storePhone').value = settings.phoneNumber;
+                    if (settings.address) document.getElementById('storeAddress').value = settings.address;
+                }
+            } catch (error) {
+                console.error('Load settings error:', error);
+            }
+
+            const ga4Id = localStorage.getItem('ga4Id');
+            if (ga4Id) document.getElementById('ga4Id').value = ga4Id;
+        }
+
+        loadSettings();
+
+        // Listen for updates from other tabs (Dashboard)
+        try {
+            const bc = new BroadcastChannel('admin_settings_channel');
+            bc.onmessage = (event) => {
+                if (event.data && event.data.type === 'maintenance_updated') {
+                    console.log('📡 [Ayarlar] Senkronizasyon mesajı alındı:', event.data);
+                    const checkbox = document.getElementById('maintenanceMode');
+                    if (checkbox) {
+                        checkbox.checked = event.data.isMaintenanceMode;
+                    }
+                }
+            };
+        } catch (e) {
+            console.log('BroadcastChannel not supported');
+        }
+    </script>
+</body>
+
+</html>

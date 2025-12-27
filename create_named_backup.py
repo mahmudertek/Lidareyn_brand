@@ -7,7 +7,7 @@ import datetime
 SOURCE_DIR = 'c:\\Users\\pc\\Desktop\\Lidareyn_brand'
 BACKUP_ROOT = os.path.join(SOURCE_DIR, 'backups')
 TIMESTAMP = datetime.datetime.now().strftime('%Y%m%d_%H%M%S')
-BACKUP_NAME = f"Juvex_SEO_Layout_Fix_{TIMESTAMP}"
+BACKUP_NAME = f"Live_Data_Cart_Fix_{TIMESTAMP}"
 TARGET_DIR = os.path.join(BACKUP_ROOT, BACKUP_NAME)
 
 # Create backup directory

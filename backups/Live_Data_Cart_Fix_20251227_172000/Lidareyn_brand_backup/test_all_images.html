@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        
+    </style>
+    <script src="bakim-ayari.js?v=1766778190"></script>
+    <script>
+        (function () {
+            // Bakım sayfası ise kontrol etme
+            if (window.location.pathname.includes('bakimda.html')) return;
+
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                const cleanUrl = window.location.pathname; 
+                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
+                document.getElementById('bakim-blocking-style').remove();
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            const style = document.getElementById('bakim-blocking-style');
+            if (style) style.remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
+        })();
+    </script>
+
+    
+
+    <meta charset="UTF-8">
+    <title>Tüm Kategori Görselleri Test</title>
+    <style>
+        body {
+            background: #111;
+            color: #fff;
+            font-family: Arial;
+            padding: 20px;
+        }
+
+        .test-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .test-card {
+            background: #222;
+            padding: 10px;
+            border-radius: 8px;
+            width: 200px;
+        }
+
+        .test-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .test-card h3 {
+            margin: 10px 0 5px;
+            font-size: 14px;
+        }
+
+        .test-card p {
+            font-size: 10px;
+            color: #888;
+            word-break: break-all;
+        }
+
+        .success {
+            border: 2px solid green;
+        }
+
+        .error {
+            border: 2px solid red;
+        }
+    </style>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+</head>
+
+<body>
+    <h1>Kategori Görselleri Test</h1>
+    <p>Yeşil = Yüklendi | Kırmızı = Yüklenemedi</p>
+
+    <div class="test-container">
+        <div class="test-card">
+            <img src="gorseller/mega_menu_men_products.png" alt="Erkek"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Erkek</h3>
+            <p>mega_menu_men_products.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_women_products.png" alt="Kadın"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Kadın</h3>
+            <p>mega_menu_women_products.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/bebek_new_v3.jpg" alt="Bebek" onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Bebek & Çocuk</h3>
+            <p>bebek_new_v3.jpg</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_elektronik.png" alt="Elektronik"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Elektronik</h3>
+            <p>mega_menu_elektronik.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_fragrance_products.png" alt="Parfüm"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Koku & Parfüm</h3>
+            <p>mega_menu_fragrance_products.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_hardware_products.png" alt="Hırdavat"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Hırdavat</h3>
+            <p>mega_menu_hardware_products.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_yapi_market.png" alt="Yapı"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Yapı Malzemeleri</h3>
+            <p>mega_menu_yapi_market.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_mobilya.png" alt="Mobilya"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Ev & Mobilya</h3>
+            <p>mega_menu_mobilya.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_kozmetik.png" alt="Kozmetik"
+                onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Kozmetik</h3>
+            <p>mega_menu_kozmetik.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_canta.png" alt="Çanta" onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Ayakkabı & Çanta</h3>
+            <p>mega_menu_canta.png</p>
+        </div>
+
+        <div class="test-card">
+            <img src="gorseller/mega_menu_oto_moto.png" alt="Oto" onload="this.parentElement.classList.add('success')"
+                onerror="this.parentElement.classList.add('error')">
+            <h3>Otomobil</h3>
+            <p>mega_menu_oto_moto.png</p>
+        </div>
+    </div>
+    <script src="cookie-consent.js"></script>
+    <script src="mobile-menu.js"></script>
+</body>
+
+</html>
