@@ -1,0 +1,31 @@
+# robots.txt for Galata Çarşı E-commerce Site
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# Disallow private pages
+Disallow: /admin/
+Disallow: /backend/
+Disallow: /backups/
+Disallow: /*.py$
+Disallow: /*.bat$
+
+# Disallow user-specific pages
+Disallow: /profil.html
+Disallow: /siparis-detay.html
+Disallow: /odeme.html
+
+# Allow important pages
+Allow: /index.html
+Allow: /populer.html
+Allow: /yeni-gelenler.html
+Allow: /cok-satanlar.html
+Allow: /markalar.html
+Allow: /hakkimizda.html
+Allow: /iletisim.html
+
+# Crawl-delay (optional, prevents aggressive crawling)
+Crawl-delay: 1
