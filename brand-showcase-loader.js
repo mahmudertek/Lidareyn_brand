@@ -17,6 +17,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
 
     try {
+        console.log('🔄 Brand Showcase Loader: Starting...');
+        console.log('📡 API URL:', API_URL);
+
         // 1. Fetch all products (or filter via API if supported)
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error('API Error');
@@ -24,6 +27,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         const jsonResponse = await response.json();
         // API yapısı: { success: true, data: [...] }
         const allProducts = Array.isArray(jsonResponse) ? jsonResponse : (jsonResponse.data || []);
+
+        console.log('✅ Products fetched:', allProducts.length);
+        console.log('📦 All products:', allProducts);
 
         // 2. Iterate over hero sections
         const heroSections = document.querySelectorAll('.madeniyat-hero');
