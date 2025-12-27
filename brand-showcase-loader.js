@@ -62,19 +62,19 @@ document.addEventListener('DOMContentLoaded', async function () {
             }).slice(0, 3);
 
             // 4. Update the container
+            // 5. Update the container
             const productsContainer = section.querySelector('.madeniyat-products-section');
             if (!productsContainer) return;
 
-            // CLEAR DEMO CONTENT
-            productsContainer.innerHTML = '';
-
             if (brandProducts.length === 0) {
-                // If no products fond, we can either leave it empty or show a placeholder message. 
-                // Leaving empty removes the demos.
-                // Or we can create "Empty Slots" to keep layout structure if needed.
-                // For now, let's leave it empty or show a "Coming Soon" card if desired.
+                // Ürün yoksa placeholderları koru (silme)
+                // İsterseniz burada "Ürün Bulunamadı" mesajı ekleyebilirsiniz ama şimdilik çerçeveleri tutmak daha estetik.
+                console.log(`No products found for ${targetBrand} - Keeping placeholders.`);
                 return;
             }
+
+            // CLEAR DEMO CONTENT ONLY IF WE HAVE DATA
+            productsContainer.innerHTML = '';
 
             // 5. Render Cards
             brandProducts.forEach(product => {
