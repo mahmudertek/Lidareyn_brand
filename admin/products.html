@@ -1084,23 +1084,44 @@
                 document.getElementById('productName').value = product.name || '';
                 document.getElementById('productBrand').value = product.brand || '';
 
-                // Kategori eşleştirmesi - slug veya ad'dan slug'a dönüşüm
-                let categoryValue = product.categorySlug || '';
-                if (!categoryValue && product.category) {
-                    // Kategori adından slug'a dönüşüm
-                    const categoryToSlug = {
-                        'Elektrikli El Aletleri': 'elektrikli-el-aletleri',
-                        'Ölçme & Kontrol Aletleri': 'olcme-ve-kontrol-aletleri',
-                        'El Aletleri': 'el-aletleri',
-                        'Yapı ve İnşaat Malzemeleri': 'nalbur-yapi-malzemeleri',
-                        'Aşındırıcı ve Kesici Uçlar': 'asindirici-kesici',
-                        'Yapıştırıcı, Dolgu ve Kimyasallar': 'yapi-kimyasallari',
-                        'Kaynak Malzemeleri': 'kaynak-malzemeleri',
-                        'Hırdavat ve El Aletleri': 'hirdavat-el-aletleri',
-                        'İş Güvenliği ve Çalışma Ekipmanları': 'is-guvenligi-ve-calisma-ekipmanlari'
-                    };
-                    categoryValue = categoryToSlug[product.category] || product.category;
-                }
+                // Kategori eşleştirmesi - slug veya ad'dan dropdown'daki slug'a dönüşüm
+                let categoryValue = '';
+                const categoryInput = product.categorySlug || product.category || '';
+
+                // Kapsamlı kategori eşleştirme haritası
+                const categoryMapping = {
+                    // Kategori adları -> dropdown slug
+                    'Elektrikli El Aletleri': 'elektrikli-el-aletleri',
+                    'Ölçme & Kontrol Aletleri': 'olcme-ve-kontrol-aletleri',
+                    'Ölçme ve Kontrol Aletleri': 'olcme-ve-kontrol-aletleri',
+                    'El Aletleri': 'el-aletleri',
+                    'Yapı ve İnşaat Malzemeleri': 'nalbur-yapi-malzemeleri',
+                    'Aşındırıcı ve Kesici Uçlar': 'asindirici-kesici',
+                    'Yapıştırıcı, Dolgu ve Kimyasallar': 'yapi-kimyasallari',
+                    'Kaynak Malzemeleri': 'kaynak-malzemeleri',
+                    'Hırdavat ve El Aletleri': 'hirdavat-el-aletleri',
+                    'İş Güvenliği ve Çalışma Ekipmanları': 'is-guvenligi-ve-calisma-ekipmanlari',
+
+                    // Alternatif slug'lar -> dropdown slug (backend'den farklı gelebilir)
+                    'elektrikli-el-aletleri': 'elektrikli-el-aletleri',
+                    'olcme-ve-kontrol-aletleri': 'olcme-ve-kontrol-aletleri',
+                    'olcme-kontrol-aletleri': 'olcme-ve-kontrol-aletleri',
+                    'el-aletleri': 'el-aletleri',
+                    'nalbur-yapi-malzemeleri': 'nalbur-yapi-malzemeleri',
+                    'yapi-ve-insaat-malzemeleri': 'nalbur-yapi-malzemeleri',
+                    'yapi-ve-i-nsaat-malzemeleri': 'nalbur-yapi-malzemeleri',
+                    'asindirici-kesici': 'asindirici-kesici',
+                    'asindirici-ve-kesici-uclar': 'asindirici-kesici',
+                    'yapi-kimyasallari': 'yapi-kimyasallari',
+                    'yapistirici-dolgu-kimyasallar': 'yapi-kimyasallari',
+                    'kaynak-malzemeleri': 'kaynak-malzemeleri',
+                    'hirdavat-el-aletleri': 'hirdavat-el-aletleri',
+                    'is-guvenligi-ve-calisma-ekipmanlari': 'is-guvenligi-ve-calisma-ekipmanlari',
+                    'i-s-guvenligi-ve-calisma-ekipmanlari': 'is-guvenligi-ve-calisma-ekipmanlari'
+                };
+
+                categoryValue = categoryMapping[categoryInput] || categoryInput;
+                console.log('📂 Kategori eşleştirme:', categoryInput, '->', categoryValue);
                 document.getElementById('productCategory').value = categoryValue;
                 document.getElementById('productPrice').value = product.price || '';
                 document.getElementById('productSalePrice').value = product.salePrice || '';
@@ -1204,13 +1225,28 @@
                 return;
             }
 
+            // Kategori kontrolü
+            if (!category) {
+                alert('Lütfen bir kategori seçin.');
+                return;
+            }
+
+            // Kategori ismini al
+            const categoryName = getCategoryName(category);
+            console.log('💾 Kaydediliyor - Kategori slug:', category, '-> Kategori adı:', categoryName);
+
+            // Eğer kategori hâlâ slug formatındaysa (mapping bulunamadı), uyar
+            if (categoryName === category && !categoryName.includes(' ')) {
+                console.warn('⚠️ Kategori mapping bulunamadı:', category);
+            }
+
             // Yüklenen görseli al veya placeholder kullan
             const imageToUse = uploadedImageBase64 || `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`;
 
             const productData = {
                 name,
                 brand,
-                category: getCategoryName(category),
+                category: categoryName,
                 categorySlug: category,
                 price,
                 salePrice,
