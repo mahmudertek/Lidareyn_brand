@@ -473,7 +473,7 @@
         <!-- Breadcrumb -->
         <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; font-size: 13px; color: #666;">
             <a href="index.html">Anasayfa</a> <span style="margin: 0 8px;">/</span>
-            <a href="#" id="bread-category">Kategori</a> <span style="margin: 0 8px;">/</span>
+            <a href="#" id="bread-category">Marka</a> <span style="margin: 0 8px;">/</span>
             <span style="color: #333;" id="bread-name">Ürün Yükleniyor...</span>
         </div>
 
@@ -564,7 +564,6 @@
                 <div class="tab-headers">
                     <div class="tab-btn active" onclick="switchTab('desc')">Ürün Açıklaması</div>
                     <div class="tab-btn" onclick="switchTab('specs')">Ürün Özellikleri</div>
-                    <div class="tab-btn" onclick="switchTab('reviews')">Yorumlar (128)</div>
                 </div>
 
                 <div class="tab-content active" id="tab-desc">
@@ -575,10 +574,6 @@
                     <div class="spec-list" id="specs-list">
                         <p>Ürün özellikleri yükleniyor...</p>
                     </div>
-                </div>
-
-                <div class="tab-content" id="tab-reviews">
-                    <p>Müşteri yorumları bu alanda listelenecek...</p>
                 </div>
             </div>
         </div>
@@ -718,6 +713,8 @@
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
+        const API_URL = 'https://galatacarsi-backend-api.onrender.com/api';
+
         document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
@@ -726,31 +723,76 @@
             // ID veya Slug ile ürünü bul
             let product = null;
 
-            if ((productId || productSlug) && window.getProductById) {
+            if (productId || productSlug) {
                 // Show loading state
                 document.getElementById('product-title').textContent = 'Ürün yükleniyor...';
 
-                // Async olarak ürünleri çek
-                await window.fetchProductsFromAPI();
+                try {
+                    if (productId) {
+                        // Doğrudan API'den tek ürün çek (ÇOK HIZLI)
+                        console.log('⚡ Ürün doğrudan API\'den çekiliyor:', productId);
+                        const response = await fetch(`${API_URL}/products/${productId}`);
+                        const data = await response.json();
 
-                if (productId) {
-                    // ID ile ara
-                    product = await window.getProductById(productId);
-                } else if (productSlug) {
-                    // Slug ile ara
-                    const allProducts = window.getAllProductsSync ? window.getAllProductsSync() : [];
-                    product = allProducts.find(p => {
-                        // Slug'ı ürün adından oluştur ve karşılaştır
-                        const nameSlug = (p.name || '').toLowerCase()
-                            .replace(/[ğ]/g, 'g').replace(/[ü]/g, 'u').replace(/[ş]/g, 's')
-                            .replace(/[ı]/g, 'i').replace(/[ö]/g, 'o').replace(/[ç]/g, 'c')
-                            .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+                        if (data.success && data.data) {
+                            const p = data.data;
+                            product = {
+                                id: p._id || p.id,
+                                name: p.name,
+                                price: p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Fiyat için arayınız',
+                                priceRaw: p.price,
+                                image: p.mainImage || p.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                                images: p.images || [],
+                                brand: p.brand,
+                                category: p.category,
+                                description: p.description,
+                                stockCode: p.stockCode || p.sku || p._id,
+                                barcode: p.barcode || p.ean || '',
+                                stock: p.stock || 0,
+                                specs: p.specs || p.features || []
+                            };
+                            console.log('✅ Ürün yüklendi:', product.name);
+                        }
+                    } else if (productSlug) {
+                        // Slug ile ara - tüm ürünleri çekip filtrele
+                        console.log('🔍 Ürün slug ile aranıyor:', productSlug);
+                        const response = await fetch(`${API_URL}/products?limit=500`);
+                        const data = await response.json();
 
-                        return p.id === productSlug ||
-                            p.stockCode === productSlug ||
-                            nameSlug === productSlug ||
-                            (p.name || '').toLowerCase().includes(decodeURIComponent(productSlug).toLowerCase());
-                    });
+                        if (data.success && data.data) {
+                            const found = data.data.find(p => {
+                                const nameSlug = (p.name || '').toLowerCase()
+                                    .replace(/[ğ]/g, 'g').replace(/[ü]/g, 'u').replace(/[ş]/g, 's')
+                                    .replace(/[ı]/g, 'i').replace(/[ö]/g, 'o').replace(/[ç]/g, 'c')
+                                    .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+
+                                return p._id === productSlug ||
+                                    p.stockCode === productSlug ||
+                                    nameSlug === productSlug ||
+                                    (p.name || '').toLowerCase().includes(decodeURIComponent(productSlug).toLowerCase());
+                            });
+
+                            if (found) {
+                                product = {
+                                    id: found._id || found.id,
+                                    name: found.name,
+                                    price: found.price ? `₺${parseFloat(found.price).toLocaleString('tr-TR')}` : 'Fiyat için arayınız',
+                                    priceRaw: found.price,
+                                    image: found.mainImage || found.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                                    images: found.images || [],
+                                    brand: found.brand,
+                                    category: found.category,
+                                    description: found.description,
+                                    stockCode: found.stockCode || found.sku || found._id,
+                                    barcode: found.barcode || found.ean || '',
+                                    stock: found.stock || 0,
+                                    specs: found.specs || found.features || []
+                                };
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('❌ Ürün yüklenirken hata:', error);
                 }
 
                 if (product) {
