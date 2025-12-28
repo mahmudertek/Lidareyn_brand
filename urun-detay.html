@@ -718,12 +718,16 @@
     <script src="auth.js"></script>
     <script src="script.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
 
             if (productId && window.getProductById) {
-                const product = window.getProductById(productId);
+                // Show loading state
+                document.getElementById('product-title').textContent = 'Ürün yükleniyor...';
+
+                // Async olarak ürünü çek
+                const product = await window.getProductById(productId);
 
                 if (product) {
                     // Update Text Content
