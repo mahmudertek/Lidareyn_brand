@@ -66,12 +66,9 @@ function updateCartCount() {
     document.querySelectorAll('.cart-count').forEach(el => {
         el.textContent = count;
         if (count > 0) {
-            el.style.display = 'flex';
-            el.style.removeProperty('display'); // Remove inline style to let CSS handling flex/etc or just set flex
-            el.style.display = 'flex';
+            el.classList.add('show-badge');
         } else {
-            // Force hide with !important
-            el.style.setProperty('display', 'none', 'important');
+            el.classList.remove('show-badge');
         }
     });
 }
