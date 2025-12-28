@@ -8,10 +8,26 @@ let galataProductsData = [];
 let productsLoaded = false;
 let loadingPromise = null;
 
-// API'den tüm ürünleri çek
+// HIZLI BAŞLANGIÇ: Önce localStorage'dan yükle
+(function loadFromCache() {
+    try {
+        const cached = localStorage.getItem('galata_products_cache');
+        if (cached) {
+            galataProductsData = JSON.parse(cached);
+            productsLoaded = galataProductsData.length > 0;
+            console.log('⚡ Cache\'den hızlı yükleme:', galataProductsData.length, 'ürün');
+        }
+    } catch (e) {
+        console.warn('Cache okuma hatası:', e);
+    }
+})();
+
+// API'den tüm ürünleri çek (arka planda günceller)
 async function fetchProductsFromAPI() {
-    // Zaten yüklendiyse tekrar yükleme
+    // Zaten yüklendiyse ve cache varsa, arka planda güncelle
     if (productsLoaded && galataProductsData.length > 0) {
+        // Arka planda güncelleme başlat ama bekletme
+        updateFromAPIBackground();
         return galataProductsData;
     }
 
@@ -76,6 +92,40 @@ async function fetchProductsFromAPI() {
     })();
 
     return loadingPromise;
+}
+
+// Arka planda API'den güncelle (kullanıcıyı bekletmez)
+async function updateFromAPIBackground() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/products?limit=1000`);
+        const data = await response.json();
+
+        if (data.success && data.data) {
+            const newData = data.data.map(product => ({
+                id: product._id || product.id,
+                name: product.name,
+                price: product.price ? `₺${parseFloat(product.price).toLocaleString('tr-TR')}` : '---',
+                priceRaw: product.price,
+                image: product.mainImage || product.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                images: product.images || [],
+                brand: product.brand,
+                category: product.category,
+                description: product.description,
+                stockCode: product.stockCode || product.sku || product._id,
+                barcode: product.barcode || product.ean || '',
+                stock: product.stock || 0,
+                specs: product.specs || product.features || [],
+                tags: product.tags || [],
+                brandShowcase: product.brandShowcase || false
+            }));
+
+            galataProductsData = newData;
+            localStorage.setItem('galata_products_cache', JSON.stringify(newData));
+            console.log('🔄 Arka planda güncellendi:', newData.length, 'ürün');
+        }
+    } catch (error) {
+        console.warn('Arka plan güncelleme hatası:', error);
+    }
 }
 
 // ID ile ürün bul

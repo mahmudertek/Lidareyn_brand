@@ -62,6 +62,14 @@
 </head>
 
 <body>
+    <!-- Geliştirme Aşaması Bildirimi -->
+    <div class="development-notice">
+        <div class="notice-content">
+            <i class="fa-solid fa-circle-info"></i>
+            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya
+                <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
+        </div>
+    </div>
 
     <!-- Header (Same as index.html) -->
     <!-- Modern Premium Header (Solid White) -->
@@ -720,236 +728,203 @@
             const productId = urlParams.get('id');
             const productSlug = urlParams.get('slug');
 
-            // ID veya Slug ile ürünü bul
+            // Show initial loading state
+            document.getElementById('product-title').textContent = 'Ürün yükleniyor...';
+
             let product = null;
 
-            if (productId || productSlug) {
-                // Show loading state
-                document.getElementById('product-title').textContent = 'Ürün yükleniyor...';
-
-                try {
-                    if (productId) {
-                        // Doğrudan API'den tek ürün çek (ÇOK HIZLI)
-                        console.log('⚡ Ürün doğrudan API\'den çekiliyor:', productId);
-                        const response = await fetch(`${API_URL}/products/${productId}`);
-                        const data = await response.json();
-
-                        if (data.success && data.data) {
-                            const p = data.data;
-                            product = {
-                                id: p._id || p.id,
-                                name: p.name,
-                                price: p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Fiyat için arayınız',
-                                priceRaw: p.price,
-                                image: p.mainImage || p.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
-                                images: p.images || [],
-                                brand: p.brand,
-                                category: p.category,
-                                description: p.description,
-                                stockCode: p.stockCode || p.sku || p._id,
-                                barcode: p.barcode || p.ean || '',
-                                stock: p.stock || 0,
-                                specs: p.specs || p.features || []
-                            };
-                            console.log('✅ Ürün yüklendi:', product.name);
-                        }
-                    } else if (productSlug) {
-                        // Slug ile ara - tüm ürünleri çekip filtrele
-                        console.log('🔍 Ürün slug ile aranıyor:', productSlug);
-                        const response = await fetch(`${API_URL}/products?limit=500`);
-                        const data = await response.json();
-
-                        if (data.success && data.data) {
-                            const found = data.data.find(p => {
-                                const nameSlug = (p.name || '').toLowerCase()
-                                    .replace(/[ğ]/g, 'g').replace(/[ü]/g, 'u').replace(/[ş]/g, 's')
-                                    .replace(/[ı]/g, 'i').replace(/[ö]/g, 'o').replace(/[ç]/g, 'c')
-                                    .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
-
-                                return p._id === productSlug ||
-                                    p.stockCode === productSlug ||
-                                    nameSlug === productSlug ||
-                                    (p.name || '').toLowerCase().includes(decodeURIComponent(productSlug).toLowerCase());
-                            });
-
-                            if (found) {
-                                product = {
-                                    id: found._id || found.id,
-                                    name: found.name,
-                                    price: found.price ? `₺${parseFloat(found.price).toLocaleString('tr-TR')}` : 'Fiyat için arayınız',
-                                    priceRaw: found.price,
-                                    image: found.mainImage || found.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
-                                    images: found.images || [],
-                                    brand: found.brand,
-                                    category: found.category,
-                                    description: found.description,
-                                    stockCode: found.stockCode || found.sku || found._id,
-                                    barcode: found.barcode || found.ean || '',
-                                    stock: found.stock || 0,
-                                    specs: found.specs || found.features || []
-                                };
-                            }
-                        }
-                    }
-                } catch (error) {
-                    console.error('❌ Ürün yüklenirken hata:', error);
+            try {
+                // Ensure products are loaded (from cache or API)
+                // products-data.js içindeki fonksiyonları kullanıyoruz
+                if (typeof fetchProductsFromAPI !== 'function') {
+                    console.error('products-data.js yüklenemedi!');
+                    throw new Error('Veri kaynağına erişilemiyor.');
                 }
 
-                if (product) {
-                    // Update Text Content
-                    document.getElementById('product-title').textContent = product.name;
-                    document.getElementById('product-price').textContent = product.price;
-                    document.getElementById('bread-name').textContent = product.name;
+                // Öncelik cache'den yüklemede
+                await fetchProductsFromAPI();
 
-                    // Update Breadcrumb - önce marka, yoksa kategori
-                    const breadCategory = document.getElementById('bread-category');
-                    if (product.brand) {
-                        breadCategory.textContent = product.brand;
-                        breadCategory.href = `markalar/${product.brand.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-')}.html`;
-                    } else if (product.category) {
-                        breadCategory.textContent = product.category;
-                        breadCategory.href = '#';
-                    } else {
-                        breadCategory.textContent = 'Ürünler';
-                        breadCategory.href = '#';
-                    }
+                // Ürün bulma mantığı
+                if (productId) {
+                    console.log('⚡ ID ile ürün aranıyor:', productId);
+                    product = galataProductsData.find(p => p.id === productId || p.stockCode === productId);
+                }
 
-                    // Update Meta Info - Marka
-                    const brandLink = document.getElementById('product-brand-link');
-                    if (brandLink && product.brand) {
-                        brandLink.textContent = product.brand;
-                        brandLink.href = `markalar/${product.brand.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-')}.html`;
-                    } else if (brandLink) {
-                        brandLink.textContent = 'Belirtilmemiş';
-                        brandLink.removeAttribute('href');
-                        brandLink.classList.remove('meta-link');
-                    }
+                if (!product && productSlug) {
+                    console.log('🔍 Slug ile ürün aranıyor:', productSlug);
+                    product = galataProductsData.find(p => {
+                        const nameSlug = (p.name || '').toLowerCase()
+                            .replace(/[ğ]/g, 'g').replace(/[ü]/g, 'u').replace(/[ş]/g, 's')
+                            .replace(/[ı]/g, 'i').replace(/[ö]/g, 'o').replace(/[ç]/g, 'c')
+                            .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
 
-                    // Update Meta Info - Kategori
-                    const categoryLink = document.getElementById('product-category-link');
-                    if (categoryLink && product.category) {
-                        categoryLink.textContent = product.category;
-                        categoryLink.href = '#';
-                    } else if (categoryLink) {
-                        categoryLink.textContent = 'Belirtilmemiş';
-                        categoryLink.removeAttribute('href');
-                        categoryLink.classList.remove('meta-link');
-                    }
+                        return p._id === productSlug ||
+                            p.stockCode === productSlug ||
+                            nameSlug === productSlug ||
+                            (p.name || '').toLowerCase().includes(decodeURIComponent(productSlug).toLowerCase());
+                    });
+                }
 
-                    // Update Meta Info - Stok Kodu
-                    const stockCodeEl = document.getElementById('product-stock-code');
-                    if (stockCodeEl) {
-                        stockCodeEl.textContent = product.stockCode || product.sku || product.id || '---';
-                    }
-
-                    // Update Meta Info - Barkod
-                    const barcodeEl = document.getElementById('product-barcode');
-                    if (barcodeEl) {
-                        barcodeEl.textContent = product.barcode || product.ean || '---';
-                    }
-
-                    // Update Brand (header area - hidden now)
-                    const brandEl = document.getElementById('product-brand');
-                    if (brandEl && product.brand) {
-                        brandEl.textContent = product.brand;
-                        brandEl.href = `markalar/${product.brand.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-')}.html`;
-                    } else if (brandEl) {
-                        brandEl.style.display = 'none';
-                    }
-
-                    if (product.description) {
-                        document.getElementById('desc-text').textContent = product.description;
-                    } else {
-                        document.getElementById('desc-text').textContent = 'Bu ürün için detaylı açıklama henüz eklenmemiştir.';
-                    }
-
-                    // Update Images
-                    const mainImage = document.getElementById('mainImage');
-                    if (product.image) mainImage.src = product.image;
-
-                    const thumbnailsContainer = document.querySelector('.gallery-thumbnails');
-                    if (product.images && product.images.length > 0) {
-                        thumbnailsContainer.innerHTML = ''; // Clear existing
-                        product.images.forEach((imgSrc, index) => {
-                            const div = document.createElement('div');
-                            div.className = `thumbnail-wrapper ${index === 0 ? 'active' : ''}`;
-                            div.onclick = function () { changeImage(this, imgSrc) };
-                            div.innerHTML = `<img src="${imgSrc}" alt="${product.name} - ${index + 1}">`;
-                            thumbnailsContainer.appendChild(div);
-                        });
-                        // ensure main image matches first thumb
-                        mainImage.src = product.images[0];
-                    } else if (product.image) {
-                        // Single image - create one thumbnail
-                        thumbnailsContainer.innerHTML = `<div class="thumbnail-wrapper active"><img src="${product.image}" alt="${product.name}"></div>`;
-                    }
-
-                    // Update Specs
-                    if (product.specs && product.specs.length > 0) {
-                        const specsList = document.getElementById('specs-list');
-                        specsList.innerHTML = '';
-                        product.specs.forEach(spec => {
-                            const div = document.createElement('div');
-                            div.className = 'spec-item';
-                            div.innerHTML = `<span class="spec-label">•</span> ${spec}`;
-                            specsList.appendChild(div);
-                        });
-                    } else {
-                        document.getElementById('specs-list').innerHTML = '<p>Bu ürün için özellik bilgisi henüz eklenmemiştir.</p>';
-                    }
-
-                    // Update Add to Cart Button
-                    const addToCartBtn = document.getElementById('add-to-cart-btn');
-                    addToCartBtn.onclick = function () {
-                        if (typeof window.addToCart === 'function') {
-                            window.addToCart({
-                                id: product.id,
-                                name: product.name,
-                                price: product.price,
-                                image: product.image,
-                                variant: document.querySelector('.size-option.active')?.textContent || 'Standart'
-                            });
-                        }
-                    };
-
-                    // Update Favorite Button
-                    const favBtn = document.getElementById('favorite-btn');
-                    if (favBtn && typeof window.toggleFavorite === 'function') {
-                        favBtn.onclick = function () {
-                            window.toggleFavorite({
-                                id: product.id,
-                                name: product.name,
-                                price: product.price,
-                                image: product.image
-                            });
+                // Eğer hala bulunamadıysa ve ID varsa, son çare doğrudan tekil istek at
+                if (!product && productId) {
+                    console.log('⚠️ Cache\'de bulunamadı, API\'den tekil çekiliyor...');
+                    const response = await fetch(`${API_URL}/products/${productId}`);
+                    const data = await response.json();
+                    if (data.success && data.data) {
+                        const p = data.data;
+                        // Format product to match our stricture
+                        product = {
+                            id: p._id || p.id,
+                            name: p.name,
+                            price: p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Fiyat için arayınız',
+                            priceRaw: p.price,
+                            image: p.mainImage || p.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                            images: p.images || [],
+                            brand: p.brand,
+                            category: p.category,
+                            description: p.description,
+                            stockCode: p.stockCode || p.sku || p._id,
+                            barcode: p.barcode || p.ean || '',
+                            stock: p.stock || 0,
+                            specs: p.specs || p.features || []
                         };
                     }
-
-                    // Update Page Title
-                    document.title = `${product.name} - Galata Çarşı`;
-                } else {
-                    // Product not found
-                    document.getElementById('product-title').textContent = 'Ürün Bulunamadı';
-                    document.getElementById('bread-name').textContent = 'Ürün Bulunamadı';
-                    document.getElementById('product-brand').style.display = 'none';
-                    document.getElementById('product-price').textContent = '';
-                    document.getElementById('desc-text').textContent = 'Aradığınız ürün bulunamadı veya kaldırılmış olabilir.';
-                    document.getElementById('specs-list').innerHTML = '';
-                    document.getElementById('add-to-cart-btn').style.display = 'none';
-                    document.querySelector('.product-meta-info').style.display = 'none';
                 }
+
+            } catch (error) {
+                console.error('❌ Ürün yükleme hatası:', error);
+            }
+
+            // Render Product or Not Found
+            if (product) {
+                renderProductDetails(product);
             } else {
-                // No product ID provided
-                document.getElementById('product-title').textContent = 'Ürün Seçilmedi';
-                document.getElementById('bread-name').textContent = 'Ürün Yok';
-                document.getElementById('product-brand').style.display = 'none';
-                document.getElementById('product-price').textContent = '';
-                document.getElementById('desc-text').textContent = 'Lütfen ana sayfadan bir ürün seçin.';
-                document.getElementById('specs-list').innerHTML = '';
-                document.getElementById('add-to-cart-btn').style.display = 'none';
-                document.querySelector('.product-meta-info').style.display = 'none';
+                renderNotFound();
             }
         });
+
+        // Yardımcı Render Fonksiyonları
+        function renderProductDetails(product) {
+            console.log('✅ Ürün Ekrana Basılıyor:', product.name);
+
+            document.getElementById('product-title').textContent = product.name;
+            document.getElementById('product-price').textContent = product.price;
+            document.getElementById('bread-name').textContent = product.name;
+
+            // Breadcrumb & Links
+            updateLink('bread-category', product.brand || product.category || 'Ürünler', product.brand ? `markalar/${slugify(product.brand)}.html` : '#');
+            updateLink('product-brand-link', product.brand || 'Belirtilmemiş', product.brand ? `markalar/${slugify(product.brand)}.html` : null);
+            updateLink('product-category-link', product.category || 'Belirtilmemiş', '#');
+            updateLink('product-brand', product.brand || '', product.brand ? `markalar/${slugify(product.brand)}.html` : null);
+            if (!product.brand) document.getElementById('product-brand').style.display = 'none';
+
+            setText('product-stock-code', product.stockCode || '---');
+            setText('product-barcode', product.barcode || '---');
+            setText('desc-text', product.description || 'Bu ürün için detaylı açıklama henüz eklenmemiştir.');
+
+            // Images
+            const mainImage = document.getElementById('mainImage');
+            if (product.image) mainImage.src = product.image;
+
+            const thumbnailsContainer = document.querySelector('.gallery-thumbnails');
+            if (thumbnailsContainer) {
+                thumbnailsContainer.innerHTML = '';
+                const images = (product.images && product.images.length) ? product.images : [product.image];
+
+                images.forEach((imgSrc, index) => {
+                    if (!imgSrc) return;
+                    const div = document.createElement('div');
+                    div.className = `thumbnail-wrapper ${index === 0 ? 'active' : ''}`;
+                    div.onclick = function () {
+                        document.querySelectorAll('.thumbnail-wrapper').forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        mainImage.src = imgSrc;
+                    };
+                    div.innerHTML = `<img src="${imgSrc}" alt="${product.name}">`;
+                    thumbnailsContainer.appendChild(div);
+                });
+            }
+
+            // Specs
+            const specsList = document.getElementById('specs-list');
+            if (specsList) {
+                specsList.innerHTML = '';
+                if (product.specs && product.specs.length > 0) {
+                    product.specs.forEach(spec => {
+                        const div = document.createElement('div');
+                        div.className = 'spec-item';
+                        div.innerHTML = `<span class="spec-label">•</span> ${spec}`;
+                        specsList.appendChild(div);
+                    });
+                } else {
+                    specsList.innerHTML = '<p>Bu ürün için özellik bilgisi henüz eklenmemiştir.</p>';
+                }
+            }
+
+            // Buttons
+            const addToCartBtn = document.getElementById('add-to-cart-btn');
+            if (addToCartBtn) {
+                addToCartBtn.onclick = function () {
+                    // cart-logic.js defines addToCart(product)
+                    if (typeof addToCart === 'function') {
+                        addToCart({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: product.image,
+                            variant: document.querySelector('.size-option.active')?.textContent || 'Standart'
+                        });
+                    }
+                };
+            }
+
+            const favBtn = document.getElementById('favorite-btn');
+            if (favBtn) {
+                favBtn.onclick = function () {
+                    if (typeof toggleFavorite === 'function') {
+                        toggleFavorite({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            image: product.image
+                        });
+                    }
+                };
+            }
+
+            document.title = `${product.name} - Galata Çarşı`;
+        }
+
+        function renderNotFound() {
+            document.getElementById('product-title').textContent = 'Ürün Bulunamadı';
+            document.getElementById('bread-name').textContent = 'Bulunamadı';
+            if (document.getElementById('product-brand')) document.getElementById('product-brand').style.display = 'none';
+            document.getElementById('product-price').textContent = '';
+            document.getElementById('desc-text').textContent = 'Aradığınız ürün bulunamadı veya kaldırılmış olabilir.';
+            if (document.getElementById('add-to-cart-btn')) document.getElementById('add-to-cart-btn').style.display = 'none';
+            if (document.querySelector('.product-meta-info')) document.querySelector('.product-meta-info').style.display = 'none';
+        }
+
+        function setText(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        }
+
+        function updateLink(id, text, href) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.textContent = text;
+            if (href) {
+                el.href = href;
+            } else {
+                el.removeAttribute('href');
+                el.classList.remove('meta-link'); // Remove link styling if class exists
+            }
+        }
+
+        function slugify(text) {
+            return text.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-').replace(/[^a-z0-9-]/g, '');
+        }
     </script>
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>

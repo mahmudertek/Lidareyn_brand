@@ -63,7 +63,14 @@ function toggleFavorite(product) {
 function updateCartCount() {
     const cart = Storage.getCart();
     const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.querySelectorAll('.cart-count').forEach(el => el.textContent = count);
+    document.querySelectorAll('.cart-count').forEach(el => {
+        el.textContent = count;
+        if (count > 0) {
+            el.style.display = 'flex'; // Show if has items
+        } else {
+            el.style.display = 'none'; // Hide if empty
+        }
+    });
 }
 
 /* ============================================
