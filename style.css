@@ -36,14 +36,14 @@
 
 /* Header ve Body Ayarlamaları - Bildirim Çubuğu İçin */
 body {
-    /* Varsayılan 30px, JS ile güncellenecek */
-    padding-top: var(--notice-height, 30px) !important;
+    /* Sabit 30px bildirim çubuğu */
+    padding-top: 30px !important;
 }
 
 /* Header'ı bildirim çubuğunun altına it */
 .main-header,
 header {
-    top: var(--notice-height, 30px) !important;
+    top: 30px !important;
 }
 
 /* Sepet sayacını varsayılan olarak gizle (CSS ile zorla) */

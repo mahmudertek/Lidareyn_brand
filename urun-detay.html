@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- CACHE BUST: 2024-12-28T23:10:00 - Son güncelleme -->
 <html lang="tr">
 
 <head>
@@ -736,23 +737,94 @@
     <script src="auth.js?v=999"></script>
     <script src="script.js?v=999"></script>
     <script>
-        // ========================================
-        // ULTRA BASIT TEST - API yok, sadece çalışıyor mu?
-        // ========================================
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('Script çalıştı!');
+        const API_URL = 'https://galatacarsi-backend-api.onrender.com/api';
 
-            var title = document.getElementById('product-title');
-            if (title) {
-                title.textContent = 'SAYFA BAŞARIYLA YÜKLENDİ';
-                title.style.color = 'green';
+        document.addEventListener('DOMContentLoaded', async function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+
+            const titleEl = document.getElementById('product-title');
+            const priceEl = document.getElementById('product-price');
+            const breadName = document.getElementById('bread-name');
+
+            // URL'de ID yoksa hemen bildir
+            if (!productId) {
+                if (titleEl) {
+                    titleEl.textContent = 'Ürün Seçilmedi';
+                    titleEl.style.color = '#999';
+                }
+                if (priceEl) priceEl.textContent = '';
+                if (breadName) breadName.textContent = 'Ürün yok';
+                console.warn('URL parametresi ?id=... eksik');
+                return;
             }
 
-            var price = document.getElementById('product-price');
-            if (price) price.textContent = 'Test Fiyat: ₺123';
+            // Yükleniyor göster
+            if (titleEl) titleEl.textContent = 'Yükleniyor...';
 
-            var bread = document.getElementById('bread-name');
-            if (bread) bread.textContent = 'Test Ürün';
+            try {
+                // API'den ürün çek
+                const response = await fetch(`${API_URL}/products/${productId}`);
+
+                if (!response.ok) {
+                    throw new Error('API yanıt vermedi');
+                }
+
+                const data = await response.json();
+
+                if (data.success && data.data) {
+                    const p = data.data;
+
+                    // Başlık ve Fiyat
+                    if (titleEl) titleEl.textContent = p.name || 'İsimsiz Ürün';
+                    if (priceEl) priceEl.textContent = p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Fiyat Yok';
+                    if (breadName) breadName.textContent = p.name || '';
+
+                    // Marka
+                    const brandEl = document.getElementById('product-brand');
+                    if (brandEl) brandEl.textContent = p.brand || '';
+
+                    const brandLink = document.getElementById('product-brand-link');
+                    if (brandLink) brandLink.textContent = p.brand || 'Belirtilmemiş';
+
+                    // Kategori
+                    const catLink = document.getElementById('product-category-link');
+                    if (catLink) catLink.textContent = p.category || 'Belirtilmemiş';
+
+                    // Stok & Barkod
+                    const stockEl = document.getElementById('product-stock-code');
+                    if (stockEl) stockEl.textContent = p.stockCode || '-';
+
+                    const barcodeEl = document.getElementById('product-barcode');
+                    if (barcodeEl) barcodeEl.textContent = p.barcode || '-';
+
+                    // Açıklama
+                    const descEl = document.getElementById('desc-text');
+                    if (descEl) descEl.textContent = p.description || 'Açıklama bulunmuyor.';
+
+                    // Görsel
+                    const mainImg = document.getElementById('mainImage');
+                    if (mainImg && p.mainImage) mainImg.src = p.mainImage;
+
+                    // Breadcrumb
+                    const breadCat = document.getElementById('bread-category');
+                    if (breadCat) breadCat.textContent = p.brand || p.category || 'Ürünler';
+
+                    console.log('Ürün yüklendi:', p.name);
+
+                } else {
+                    throw new Error('Ürün bulunamadı');
+                }
+
+            } catch (error) {
+                console.error('Hata:', error);
+                if (titleEl) {
+                    titleEl.textContent = 'Ürün Bulunamadı';
+                    titleEl.style.color = 'red';
+                }
+                if (priceEl) priceEl.textContent = '';
+                if (breadName) breadName.textContent = 'Hata';
+            }
         });
     </script>
     <script src="cookie-consent.js"></script>
