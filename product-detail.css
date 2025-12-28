@@ -52,7 +52,8 @@
     overflow: hidden;
     background: #f8f9fa;
     position: relative;
-    aspect-ratio: 3/4;
+    aspect-ratio: 1/1;
+    max-width: 500px;
 }
 
 .main-image-wrapper img {
