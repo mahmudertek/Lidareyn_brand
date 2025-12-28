@@ -1083,7 +1083,25 @@
                 document.getElementById('productId').value = id;
                 document.getElementById('productName').value = product.name || '';
                 document.getElementById('productBrand').value = product.brand || '';
-                document.getElementById('productCategory').value = product.categorySlug || product.category || '';
+
+                // Kategori eşleştirmesi - slug veya ad'dan slug'a dönüşüm
+                let categoryValue = product.categorySlug || '';
+                if (!categoryValue && product.category) {
+                    // Kategori adından slug'a dönüşüm
+                    const categoryToSlug = {
+                        'Elektrikli El Aletleri': 'elektrikli-el-aletleri',
+                        'Ölçme & Kontrol Aletleri': 'olcme-ve-kontrol-aletleri',
+                        'El Aletleri': 'el-aletleri',
+                        'Yapı ve İnşaat Malzemeleri': 'nalbur-yapi-malzemeleri',
+                        'Aşındırıcı ve Kesici Uçlar': 'asindirici-kesici',
+                        'Yapıştırıcı, Dolgu ve Kimyasallar': 'yapi-kimyasallari',
+                        'Kaynak Malzemeleri': 'kaynak-malzemeleri',
+                        'Hırdavat ve El Aletleri': 'hirdavat-el-aletleri',
+                        'İş Güvenliği ve Çalışma Ekipmanları': 'is-guvenligi-ve-calisma-ekipmanlari'
+                    };
+                    categoryValue = categoryToSlug[product.category] || product.category;
+                }
+                document.getElementById('productCategory').value = categoryValue;
                 document.getElementById('productPrice').value = product.price || '';
                 document.getElementById('productSalePrice').value = product.salePrice || '';
                 document.getElementById('productStock').value = product.stock || 0;
