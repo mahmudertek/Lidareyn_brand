@@ -4,7 +4,7 @@
 <head>
     <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
-        
+
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
@@ -20,7 +20,7 @@
 
             if (hasBypass) {
                 localStorage.setItem('admin_session', 'active_' + Date.now());
-                const cleanUrl = window.location.pathname; 
+                const cleanUrl = window.location.pathname;
                 window.history.replaceState(null, '', cleanUrl); // URL'i temizle
                 document.getElementById('bakim-blocking-style').remove();
                 return;
@@ -41,13 +41,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ürün Yönetimi - Galata Çarşı Admin</title>
-    
+
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
     <link rel="apple-touch-icon" sizes="180x180" href="../favicon.png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
     <style>
         /* Product Management Styles */
@@ -385,7 +385,8 @@
             font-weight: 600;
             cursor: pointer;
         }
-    </style><meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+    </style>
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
 </head>
 
 <body>
@@ -1100,8 +1101,27 @@
                 // Marka vitrini seçimi
                 document.getElementById('brandShowcase').value = product.brandShowcase || '';
 
-                document.getElementById('productModal').classList.add('active');
+                // Mevcut görseli önizleme olarak göster
+                if (product.mainImage && product.mainImage.startsWith('data:')) {
+                    // Base64 görsel
+                    uploadedImageBase64 = product.mainImage;
+                    document.getElementById('productImageBase64').value = product.mainImage;
+                    document.getElementById('previewImg').src = product.mainImage;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('imagePlaceholder').style.display = 'none';
+                } else if (product.mainImage && !product.mainImage.includes('placehold.co')) {
+                    // URL görsel
+                    uploadedImageBase64 = product.mainImage;
+                    document.getElementById('productImageBase64').value = product.mainImage;
+                    document.getElementById('previewImg').src = product.mainImage;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('imagePlaceholder').style.display = 'none';
+                } else {
+                    // Görsel yok veya placeholder
+                    resetImageUpload();
+                }
 
+                document.getElementById('productModal').classList.add('active');
             }
         }
 
