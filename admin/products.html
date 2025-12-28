@@ -1102,23 +1102,29 @@
                 document.getElementById('brandShowcase').value = product.brandShowcase || '';
 
                 // Mevcut görseli önizleme olarak göster
-                if (product.mainImage && product.mainImage.startsWith('data:')) {
-                    // Base64 görsel
-                    uploadedImageBase64 = product.mainImage;
-                    document.getElementById('productImageBase64').value = product.mainImage;
-                    document.getElementById('previewImg').src = product.mainImage;
-                    document.getElementById('imagePreview').style.display = 'block';
-                    document.getElementById('imagePlaceholder').style.display = 'none';
-                } else if (product.mainImage && !product.mainImage.includes('placehold.co')) {
-                    // URL görsel
-                    uploadedImageBase64 = product.mainImage;
-                    document.getElementById('productImageBase64').value = product.mainImage;
-                    document.getElementById('previewImg').src = product.mainImage;
-                    document.getElementById('imagePreview').style.display = 'block';
-                    document.getElementById('imagePlaceholder').style.display = 'none';
+                const existingImage = product.mainImage || product.image;
+                console.log('📷 Mevcut görsel:', existingImage ? existingImage.substring(0, 50) + '...' : 'YOK');
+
+                if (existingImage && existingImage.length > 10) {
+                    // Placeholder kontrolü - sadece placehold.co içerenleri atla
+                    const isPlaceholder = existingImage.includes('placehold.co') ||
+                        existingImage.includes('placeholder') ||
+                        existingImage.includes('text=');
+
+                    if (!isPlaceholder) {
+                        uploadedImageBase64 = existingImage;
+                        document.getElementById('productImageBase64').value = existingImage;
+                        document.getElementById('previewImg').src = existingImage;
+                        document.getElementById('imagePreview').style.display = 'block';
+                        document.getElementById('imagePlaceholder').style.display = 'none';
+                        console.log('✅ Görsel önizlemeye yüklendi');
+                    } else {
+                        resetImageUpload();
+                        console.log('⚠️ Placeholder görsel, önizleme sıfırlandı');
+                    }
                 } else {
-                    // Görsel yok veya placeholder
                     resetImageUpload();
+                    console.log('⚠️ Görsel bulunamadı, önizleme sıfırlandı');
                 }
 
                 document.getElementById('productModal').classList.add('active');
