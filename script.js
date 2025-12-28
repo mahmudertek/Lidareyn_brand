@@ -850,3 +850,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 });
+
+// --- DYNAMIC LAYOUT: Adjust Header Top based on Notice Bar height ---
+(function () {
+    function updateLayoutOffsets() {
+        const notice = document.querySelector('.development-notice');
+        if (notice) {
+            const height = notice.offsetHeight;
+            document.documentElement.style.setProperty('--notice-height', height + 'px');
+        } else {
+            document.documentElement.style.setProperty('--notice-height', '0px');
+        }
+    }
+
+    window.addEventListener('load', updateLayoutOffsets);
+    window.addEventListener('resize', updateLayoutOffsets);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateLayoutOffsets);
+    } else {
+        updateLayoutOffsets();
+    }
+
+    // Polling to catch late layout changes
+    setInterval(updateLayoutOffsets, 500);
+})();
