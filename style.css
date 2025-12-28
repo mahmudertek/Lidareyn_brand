@@ -7,39 +7,43 @@
    ============================================ */
 /* development-notice styles */
 /* development-notice styles */
+/* development-notice styles */
 .development-notice {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 0 10px;
+    padding: 5px 10px;
     text-align: center;
-    font-size: 11px;
-    /* Yazı küçültüldü */
+    font-size: 10px;
+    /* Daha da küçültüldü */
     font-weight: 500;
     position: fixed !important;
     /* En tepeye sabitlendi */
     top: 0;
     left: 0;
     width: 100%;
-    height: 30px;
-    /* Sabit yükseklik */
+    min-height: 35px;
+    /* Minimum yükseklik */
+    height: auto !important;
+    /* İçeriğe göre uzasın */
     z-index: 2147483647 !important;
     /* En üst katman */
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    line-height: 1.3;
 }
 
 /* Header ve Body Ayarlamaları - Bildirim Çubuğu İçin */
 body {
-    padding-top: 30px !important;
-    /* İçeriği aşağı it */
+    padding-top: 45px !important;
+    /* Ortalama yükseklik */
 }
 
 /* Header'ı bildirim çubuğunun altına it */
 .main-header,
 header {
-    top: 30px !important;
+    top: 45px !important;
 }
 
 /* Sepet sayacını varsayılan olarak gizle (CSS ile zorla) */
@@ -57,9 +61,10 @@ header {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    flex-wrap: nowrap;
-    /* Tek satırda kalsın */
-    white-space: nowrap;
+    flex-wrap: wrap;
+    /* Satır atlat */
+    white-space: normal !important;
+    /* 2 satıra izin ver */
     overflow: hidden;
     text-overflow: ellipsis;
 }

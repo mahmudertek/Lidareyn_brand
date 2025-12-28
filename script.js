@@ -505,24 +505,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCartCount() {
-        // Fallback or duplicate logic removal
-        // Better to delegate to cart-logic.js if possible, but consistent implementation here:
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
         if (elements.cartCount) {
-            elements.cartCount.textContent = totalItems;
-
             if (totalItems > 0) {
+                elements.cartCount.textContent = totalItems;
                 elements.cartCount.classList.add('show-badge');
 
-                // Add bounce animation when count changes
+                // Add bounce animation
                 elements.cartCount.classList.add('updated');
                 setTimeout(() => {
                     elements.cartCount.classList.remove('updated');
                 }, 600);
             } else {
+                elements.cartCount.textContent = ''; // Clear text to avoid '0' ghosting
                 elements.cartCount.classList.remove('show-badge');
+                elements.cartCount.style.display = ''; // Clear any inline styles
             }
         }
     }

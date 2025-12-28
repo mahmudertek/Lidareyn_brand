@@ -14,8 +14,8 @@
     }
 
     body {
-        /* Header (60px) + Sub-Nav (45px) + Notice (30px) = 135px space needed */
-        padding-top: 135px !important;
+        /* Header (60px) + Sub-Nav (45px) + Notice (45px) = 150px space needed */
+        padding-top: 150px !important;
     }
 
     /* Minimal container padding to push items to edges */
@@ -29,8 +29,8 @@
     .main-header {
         height: 60px;
         position: fixed;
-        /* Notice bar is 30px */
-        top: 30px !important;
+        /* Notice bar is ~45px */
+        top: 45px !important;
         left: 0;
         width: 100%;
         background: #fff;
@@ -172,7 +172,8 @@
     }
 
     .cart-btn .cart-count {
-        display: flex !important;
+        display: none !important;
+        /* Default hidden */
         font-size: 8px !important;
         width: 12px !important;
         height: 12px !important;
@@ -186,13 +187,17 @@
         justify-content: center;
     }
 
+    .cart-btn .cart-count.show-badge {
+        display: flex !important;
+    }
+
 
     /* --- 3. SUB-NAV (BOTTOM ROW) --- */
     .main-nav {
         display: block !important;
         position: fixed;
-        /* Header (60) + Notice (30) */
-        top: 90px !important;
+        /* Header (60) + Notice (45) */
+        top: 105px !important;
         left: 0;
         width: 100%;
         height: 45px;
@@ -281,10 +286,11 @@
         display: block !important;
         position: fixed !important;
         /* Header (60) + Notice (30) */
-        top: 90px !important;
+        /* Header (60) + Notice (45) */
+        top: 105px !important;
         left: 0 !important;
         width: 100% !important;
-        height: calc(100vh - 90px) !important;
+        height: calc(100vh - 105px) !important;
         background: #fff !important;
         z-index: 2000 !important;
         overflow-y: auto !important;

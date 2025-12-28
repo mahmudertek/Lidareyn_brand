@@ -737,11 +737,22 @@
 
             // Show initial loading state
             const titleEl = document.getElementById('product-title');
-            if (titleEl) titleEl.textContent = 'Ürün yükleniyor...';
+            const loadingText = 'Ürün yükleniyor...';
+            if (titleEl) titleEl.textContent = loadingText;
+
+            // --- SAFETY TIMER (NUCLEAR OPTION) ---
+            // 7 saniye içinde hala yükleniyor yazıyorsa zorla durdur.
+            setTimeout(() => {
+                if (titleEl && titleEl.textContent === loadingText) {
+                    console.error("🚨 ZORUNLU ZAMAN AŞIMI: Sayfa 7 saniyedir yüklenemedi.");
+                    titleEl.textContent = 'Ürün Yüklenemedi (Bağlantı Hatası)';
+                    renderNotFound();
+                }
+            }, 7000);
 
             let product = null;
 
-            // Timeout Mechanism: 5 saniye içinde yüklenmezse iptal et
+            // Timeout Mechanism: 5 saniye içinde yüklenmezse iptal et (Promise Race için)
             const timeoutPromise = new Promise((_, reject) =>
                 setTimeout(() => reject(new Error('Zaman aşımı')), 5000)
             );
@@ -754,17 +765,17 @@
                         const localData = localStorage.getItem('galata_products_cache');
                         if (localData) {
                             const parsed = JSON.parse(localData);
-                            if (parsed && parsed.length > 0) {
+                            if (parsed && Array.isArray(parsed) && parsed.length > 0) {
                                 console.log('⚡ LocalStorage\'dan veri alındı.');
                                 // ID veya Slug ile ara
-                                if (productId) product = parsed.find(p => p.id === productId || p.stockCode === productId);
+                                if (productId) product = parsed.find(p => p.id == productId || p.stockCode == productId || p._id == productId);
                                 if (!product && productSlug) {
                                     product = parsed.find(p => {
                                         const nameSlug = (p.name || '').toLowerCase()
                                             .replace(/[ğ]/g, 'g').replace(/[ü]/g, 'u').replace(/[ş]/g, 's')
                                             .replace(/[ı]/g, 'i').replace(/[ö]/g, 'o').replace(/[ç]/g, 'c')
                                             .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
-                                        return p._id === productSlug || p.stockCode === productSlug || nameSlug === productSlug;
+                                        return p._id == productSlug || p.stockCode == productSlug || nameSlug == productSlug;
                                     });
                                 }
                             }
@@ -784,45 +795,25 @@
                             if (json.success && json.data) {
                                 // Dönüştür
                                 const p = json.data;
-                                product = {
-                                    id: p._id || p.id,
-                                    name: p.name,
-                                    price: p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Belirsiz',
-                                    priceRaw: p.price,
-                                    image: p.mainImage || p.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
-                                    images: p.images || [],
-                                    brand: p.brand,
-                                    category: p.category,
-                                    description: p.description,
-                                    stockCode: p.stockCode || p.sku,
-                                    barcode: p.barcode || p.ean,
-                                    specs: p.specs || p.features
-                                };
+                                product = normalizeProductData(p);
                             }
                         }
-                        // Eğer sadece Slug varsa, mecburen tüm listeyi veya aramayı kullan
+                        // Eğer sadece Slug varsa ve ID yoksa
                         else if (productSlug) {
                             console.log('🌐 API\'den liste çekiliyor (Slug için)...');
-                            // products-data.js fonksiyonunu dene, yoksa fetch at
-                            if (typeof fetchProductsFromAPI === 'function') {
-                                await fetchProductsFromAPI(); // Global array'i doldurur
-                                if (window.galataProductsData) {
-                                    product = window.galataProductsData.find(p => {
-                                        // Slug match logic... (basitleştirilmiş)
-                                        return (p.name || '').toLowerCase().includes(productSlug.replace(/-/g, ' '));
-                                    });
+                            // products-data.js içindekini dene
+                            if (typeof window.fetchProductsFromAPI === 'function') {
+                                await window.fetchProductsFromAPI();
+                                if (window.galataProductsData && Array.isArray(window.galataProductsData)) {
+                                    product = window.galataProductsData.find(p => (p.name || '').toLowerCase().includes(productSlug.replace(/-/g, ' ')));
                                 }
                             } else {
                                 // Fallback manual fetch
                                 const res = await fetch(`${API_URL}/products?limit=100`);
                                 const json = await res.json();
-                                if (json.success) {
+                                if (json.success && Array.isArray(json.data)) {
                                     product = json.data.find(p => (p.name || '').toLowerCase().includes(productSlug.replace(/-/g, ' ')));
-                                    // Dönüştürme gerekebilir
-                                    if (product) {
-                                        product.id = product._id || product.id;
-                                        product.image = product.mainImage || product.image;
-                                    }
+                                    if (product) product = normalizeProductData(product);
                                 }
                             }
                         }
@@ -834,8 +825,7 @@
 
             } catch (error) {
                 console.error('❌ Ürün yükleme hatası veya zaman aşımı:', error);
-                // Hata durumunda kullanıcıyı bilgilendir
-                if (titleEl) titleEl.textContent = 'Ürün Yüklenemedi';
+                if (titleEl) titleEl.textContent = 'Ürün Bulunamadı veya Yüklenemedi';
             }
 
             // Render aşaması
@@ -845,6 +835,26 @@
                 renderNotFound();
             }
         });
+
+        // Veri Normalleştirme Yardımcısı
+        function normalizeProductData(p) {
+            return {
+                id: p._id || p.id,
+                name: p.name,
+                price: p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Belirsiz',
+                priceRaw: p.price,
+                image: p.mainImage || p.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                images: p.images || [],
+                brand: p.brand || 'Marka Belirsiz',
+                category: p.category || 'Genel',
+                description: p.description || 'Açıklama yok.',
+                stockCode: p.stockCode || p.sku || '',
+                barcode: p.barcode || p.ean || '',
+                specs: p.specs || p.features || []
+            };
+        }
+
+
 
         // Yardımcı Render Fonksiyonları
         function renderProductDetails(product) {
