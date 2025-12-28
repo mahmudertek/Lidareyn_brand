@@ -2,12 +2,13 @@
 <html lang="tr">
 
 <head>
+    <!-- Standardized Favicons (Relative) -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico?v=999">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=999">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png?v=999">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png?v=999">
+
     <!-- Standardized Favicons (Auto-Injected) -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=99">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=99">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png?v=99">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png?v=99">
-    <link rel="shortcut icon" href="favicon.ico?v=99">
 
 
     <!-- Bakım Modu Sistemi (En Tepede) -->
@@ -747,254 +748,157 @@
             const loadingText = 'Ürün yükleniyor...';
             if (titleEl) titleEl.textContent = loadingText;
 
-            // --- SAFETY TIMER (NUCLEAR OPTION) ---
-            // 6 saniye içinde hala yükleniyor yazıyorsa zorla durdur.
-            setTimeout(() => {
-                const currentTitle = document.getElementById('product-title');
-                if (currentTitle && (currentTitle.textContent === loadingText || currentTitle.textContent === 'Ürün Adı Yükleniyor...')) {
-                    console.error("🚨 ZORUNLU ZAMAN AŞIMI: Sayfa yanıt vermedi.");
-                    currentTitle.textContent = 'Ürün Bulunamadı (Zaman Aşımı)';
-                    renderNotFound();
-                }
-            }, 6000);
-
-            let product = null;
-
-            // Timeout Mechanism (Promise Race)
-            const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Zaman aşımı')), 5000)
-            );
+            let foundProduct = null;
 
             try {
-                // Veri yükleme işlemini başlat
-                const loadProduct = async () => {
-                    // 1. Önce LocalStorage (Cache) Kontrolü
-                    try {
-                        const localData = localStorage.getItem('galata_products_cache');
-                        if (localData) {
-                            const parsed = JSON.parse(localData);
-                            if (parsed && Array.isArray(parsed) && parsed.length > 0) {
-                                console.log('⚡ LocalStorage cache kullanılıyor.');
-                                if (productId) product = parsed.find(p => p.id == productId || p.stockCode == productId || p._id == productId);
-                                if (!product && productSlug) {
-                                    product = parsed.find(p => {
-                                        const nameSlug = (p.name || '').toLowerCase()
-                                            .replace(/[ğ]/g, 'g').replace(/[ü]/g, 'u').replace(/[ş]/g, 's')
-                                            .replace(/[ı]/g, 'i').replace(/[ö]/g, 'o').replace(/[ç]/g, 'c')
-                                            .replace(/[^a-z0-9\s-]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
-                                        return p._id == productSlug || p.stockCode == productSlug || nameSlug == productSlug;
-                                    });
-                                }
-                            }
-                        }
-                    } catch (e) {
-                        console.warn('Cache okuma hatası:', e);
-                    }
-
-                    // 2. Eğer Cache'den bulunamadıysa API'ye sor
-                    if (!product) {
-                        if (productId) {
-                            console.log('🌐 API request: ID', productId);
-                            const res = await fetch(`${API_URL}/products/${productId}`);
-                            if (!res.ok) throw new Error('API Error');
-                            const json = await res.json();
-                            if (json.success && json.data) {
-                                product = normalizeProductData(json.data);
-                            }
-                        }
-                        else if (productSlug) {
-                            console.log('🌐 API request: Slug', productSlug);
-                            if (typeof window.fetchProductsFromAPI === 'function') {
-                                await window.fetchProductsFromAPI();
-                                if (window.galataProductsData && Array.isArray(window.galataProductsData)) {
-                                    product = window.galataProductsData.find(p => (p.name || '').toLowerCase().includes(productSlug.replace(/-/g, ' ')));
-                                }
-                            } else {
-                                const res = await fetch(`${API_URL}/products?limit=100`);
-                                const json = await res.json();
-                                if (json.success && Array.isArray(json.data)) {
-                                    product = json.data.find(p => (p.name || '').toLowerCase().includes(productSlug.replace(/-/g, ' ')));
-                                    if (product) product = normalizeProductData(product);
-                                }
-                            }
+                // 1. Önce API'den ID ile çekmeyi dene (En garantisi)
+                if (productId) {
+                    console.log('Fetching by ID:', productId);
+                    const res = await fetch(`${API_URL}/products/${productId}`);
+                    if (res.ok) {
+                        const json = await res.json();
+                        if (json.success && json.data) {
+                            foundProduct = normalizeProductData(json.data);
                         }
                     }
-                };
+                }
 
-                await Promise.race([loadProduct(), timeoutPromise]);
+                // 2. Eğer API'den bulunamadıysa veya Slug varsa products-data.js (Yerel Veri) kontrol et
+                if (!foundProduct && (productId || productSlug)) {
+                    console.log('Checking local data...');
+                    // products-data.js yüklü mü?
+                    if (typeof window.galataProductsData !== 'undefined' && Array.isArray(window.galataProductsData)) {
+                        foundProduct = window.galataProductsData.find(p =>
+                            p.id == productId ||
+                            p.stockCode == productId ||
+                            (productSlug && slugify(p.name) == productSlug)
+                        );
+                    }
+                }
 
             } catch (error) {
-                console.error('❌ Error loading product:', error);
-                if (titleEl) titleEl.textContent = 'Ürün Yüklenemedi';
+                console.error("Veri çekme hatası:", error);
             }
 
-            // Render aşaması
-            if (product) {
-                renderProductDetails(product);
+            if (foundProduct) {
+                renderProductDetails(foundProduct);
             } else {
                 renderNotFound();
             }
         });
 
-        // Veri Normalleştirme Yardımcısı
         function normalizeProductData(p) {
+            // API veya Yerel veriyi standart formata çevir
             return {
                 id: p._id || p.id,
                 name: p.name,
-                price: p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Belirsiz',
-                priceRaw: p.price,
-                image: p.mainImage || p.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                price: p.price ? (typeof p.price === 'number' ? `₺${p.price.toLocaleString('tr-TR')}` : p.price) : 'Fiyat Belirtilmedi',
+                image: p.mainImage || p.image || 'https://placehold.co/500x500?text=Resim+Yok',
                 images: p.images || [],
                 brand: p.brand || 'Marka Belirsiz',
-                category: p.category || 'Genel',
-                description: p.description || 'Açıklama yok.',
-                stockCode: p.stockCode || p.sku || '',
-                barcode: p.barcode || p.ean || '',
+                category: p.category || 'Diğer',
+                description: p.description || '',
+                stockCode: p.stockCode || '',
+                barcode: p.barcode || '',
                 specs: p.specs || p.features || []
             };
         }
 
-        // Yardımcı Render Fonksiyonları
         function renderProductDetails(product) {
-            console.log('✅ Rendering:', product.name);
-
+            // Title & Price
             const titleEl = document.getElementById('product-title');
             if (titleEl) titleEl.textContent = product.name;
 
             const priceEl = document.getElementById('product-price');
             if (priceEl) priceEl.textContent = product.price;
 
+            // Breadcrumb
             const breadName = document.getElementById('bread-name');
             if (breadName) breadName.textContent = product.name;
 
-            // Breadcrumb & Links
-            updateLink('bread-category', product.brand || product.category || 'Ürünler', product.brand ? `markalar/${slugify(product.brand)}.html` : '#');
-            updateLink('product-brand-link', product.brand || 'Belirtilmemiş', product.brand ? `markalar/${slugify(product.brand)}.html` : null);
-            updateLink('product-category-link', product.category || 'Belirtilmemiş', '#');
-            updateLink('product-brand', product.brand || '', product.brand ? `markalar/${slugify(product.brand)}.html` : null);
+            updateLink('bread-category', product.brand || 'Ürünler', '#');
 
-            const pBrand = document.getElementById('product-brand');
-            if (pBrand && !product.brand) pBrand.style.display = 'none';
+            // Brand Link
+            updateLink('product-brand', product.brand, `markalar.html?marka=${slugify(product.brand)}`);
+            updateLink('product-brand-link', product.brand, `markalar.html?marka=${slugify(product.brand)}`);
+            updateLink('product-category-link', product.category, '#');
 
-            setText('product-stock-code', product.stockCode || '---');
-            setText('product-barcode', product.barcode || '---');
-            setText('desc-text', product.description || 'Bu ürün için detaylı açıklama henüz eklenmemiştir.');
-
-            // Images
-            const mainImage = document.getElementById('mainImage');
-            if (mainImage && product.image) mainImage.src = product.image;
-
-            const thumbnailsContainer = document.querySelector('.gallery-thumbnails');
-            if (thumbnailsContainer) {
-                thumbnailsContainer.innerHTML = '';
-                const images = (product.images && product.images.length) ? product.images : [product.image];
-
-                images.forEach((imgSrc, index) => {
-                    if (!imgSrc) return;
-                    const div = document.createElement('div');
-                    div.className = `thumbnail-wrapper ${index === 0 ? 'active' : ''}`;
-                    div.onclick = function () {
-                        document.querySelectorAll('.thumbnail-wrapper').forEach(t => t.classList.remove('active'));
-                        this.classList.add('active');
-                        if (mainImage) mainImage.src = imgSrc;
-                    };
-                    div.innerHTML = `<img src="${imgSrc}" alt="${product.name}">`;
-                    thumbnailsContainer.appendChild(div);
-                });
-            }
+            // Meta
+            setText('product-stock-code', product.stockCode);
+            setText('product-barcode', product.barcode);
+            setText('desc-text', product.description || 'Açıklama bulunmuyor.');
 
             // Specs
             const specsList = document.getElementById('specs-list');
             if (specsList) {
                 specsList.innerHTML = '';
-                if (product.specs && product.specs.length > 0) {
-                    product.specs.forEach(spec => {
-                        const div = document.createElement('div');
-                        div.className = 'spec-item';
-                        div.innerHTML = `<span class="spec-label">•</span> ${spec}`;
-                        specsList.appendChild(div);
+                if (product.specs.length > 0) {
+                    product.specs.forEach(s => {
+                        specsList.innerHTML += `<div class="spec-item">• ${s}</div>`;
                     });
                 } else {
-                    specsList.innerHTML = '<p>Bu ürün için özellik bilgisi henüz eklenmemiştir.</p>';
+                    specsList.innerHTML = 'Özellik belirtilmemiş.';
                 }
             }
 
-            // Buttons
-            const addToCartBtn = document.getElementById('add-to-cart-btn');
-            if (addToCartBtn) {
-                addToCartBtn.onclick = function () {
-                    // cart-logic.js defines addToCart(product)
-                    if (typeof addToCart === 'function') {
-                        addToCart({
-                            id: product.id,
-                            name: product.name,
-                            price: product.price,
-                            image: product.image,
-                            variant: document.querySelector('.size-option.active')?.textContent || 'Standart'
-                        });
-                    }
-                };
+            // Image
+            const mainImg = document.getElementById('mainImage');
+            if (mainImg) mainImg.src = product.image;
+
+            // Thumbnails
+            const thumbContainer = document.querySelector('.gallery-thumbnails');
+            if (thumbContainer) {
+                thumbContainer.innerHTML = '';
+                const imgs = (product.images.length > 0) ? product.images : [product.image];
+                imgs.forEach((src, idx) => {
+                    const div = document.createElement('div');
+                    div.className = `thumbnail-wrapper ${idx === 0 ? 'active' : ''}`;
+                    div.innerHTML = `<img src="${src}">`;
+                    div.onclick = () => {
+                        if (mainImg) mainImg.src = src;
+                        document.querySelectorAll('.thumbnail-wrapper').forEach(t => t.classList.remove('active'));
+                        div.classList.add('active');
+                    };
+                    thumbContainer.appendChild(div);
+                });
             }
 
-            const favBtn = document.getElementById('favorite-btn');
-            if (favBtn) {
-                favBtn.onclick = function () {
-                    if (typeof toggleFavorite === 'function') {
-                        toggleFavorite({
-                            id: product.id,
-                            name: product.name,
-                            price: product.price,
-                            image: product.image
-                        });
-                    }
+            // Sepet Butonu
+            const cartBtn = document.getElementById('add-to-cart-btn');
+            if (cartBtn) {
+                cartBtn.onclick = () => {
+                    if (typeof addToCart === 'function') addToCart(product);
                 };
             }
-
-            document.title = `${product.name} - Galata Çarşı`;
         }
 
         function renderNotFound() {
-            const title = document.getElementById('product-title');
-            if (title) title.textContent = 'Ürün Bulunamadı';
-
-            const bread = document.getElementById('bread-name');
-            if (bread) bread.textContent = 'Bulunamadı';
-
-            const pBrand = document.getElementById('product-brand');
-            if (pBrand) pBrand.style.display = 'none';
-
-            const price = document.getElementById('product-price');
-            if (price) price.textContent = '';
-
-            const desc = document.getElementById('desc-text');
-            if (desc) desc.textContent = 'Aradığınız ürün bulunamadı veya kaldırılmış olabilir.';
-
-            const btn = document.getElementById('add-to-cart-btn');
-            if (btn) btn.style.display = 'none';
-
-            const meta = document.querySelector('.product-meta-info');
-            if (meta) meta.style.display = 'none';
-        }
-
-        function setText(id, text) {
-            const el = document.getElementById(id);
-            if (el) el.textContent = text;
+            const t = document.getElementById('product-title');
+            if (t) t.textContent = 'Ürün Bulunamadı';
+            const b = document.getElementById('add-to-cart-btn');
+            if (b) b.style.display = 'none';
         }
 
         function updateLink(id, text, href) {
             const el = document.getElementById(id);
-            if (!el) return;
-            el.textContent = text;
-            if (href) {
-                el.href = href;
-            } else {
-                el.removeAttribute('href');
-                el.classList.remove('meta-link');
+            if (el) {
+                el.textContent = text || '';
+                if (href) el.href = href;
+                if (!text) el.parentElement.style.display = 'none';
             }
         }
-
+        function setText(id, txt) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = txt || '-';
+        }
         function slugify(text) {
-            return text.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-').replace(/[^a-z0-9-]/g, '');
+            if (!text) return '';
+            return text.toString().toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/[^\w\-]+/g, '')
+                .replace(/\-\-+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '');
         }
     </script>
     <script src="cookie-consent.js"></script>
