@@ -505,14 +505,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCartCount() {
+        // Fallback or duplicate logic removal
+        // Better to delegate to cart-logic.js if possible, but consistent implementation here:
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
         if (elements.cartCount) {
-            // Sadece 0'dan büyükse göster
+            elements.cartCount.textContent = totalItems;
+
             if (totalItems > 0) {
-                elements.cartCount.textContent = totalItems;
-                elements.cartCount.style.display = 'flex';
+                elements.cartCount.classList.add('show-badge');
 
                 // Add bounce animation when count changes
                 elements.cartCount.classList.add('updated');
@@ -520,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     elements.cartCount.classList.remove('updated');
                 }, 600);
             } else {
-                elements.cartCount.style.display = 'none';
+                elements.cartCount.classList.remove('show-badge');
             }
         }
     }
