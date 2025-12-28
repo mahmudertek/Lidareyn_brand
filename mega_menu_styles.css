@@ -37,13 +37,18 @@
     opacity: 0;
     visibility: hidden;
     z-index: 1001;
-    display: block;
-    transition: 0.2s ease;
+    display: none;
+    /* Completely hidden by default */
+    transition: none;
+    /* No animation */
 }
 
+/* Hover disabled - Mega menu will NOT open on hover */
 .nav-item-dropdown:hover .mega-menu {
-    opacity: 1;
-    visibility: visible;
+    /* Keep hidden - no dropdown animation */
+    opacity: 0;
+    visibility: hidden;
+    display: none;
 }
 
 /* Left Sidebar: Category List */
