@@ -86,21 +86,28 @@ document.addEventListener('DOMContentLoaded', async function () {
             brandProducts.forEach(product => {
                 const card = document.createElement('article');
                 card.className = 'madeniyat-product-card';
+                card.style.cursor = 'pointer';
 
                 // Image handling
                 const imgSource = product.mainImage || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
+                const productUrl = `urun-detay.html?id=${product._id}`;
 
                 card.innerHTML = `
-                    <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle" onclick="toggleFavorite(${JSON.stringify(product).replace(/"/g, '&quot;')})">
+                    <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle" onclick="event.stopPropagation(); toggleFavorite(${JSON.stringify(product).replace(/"/g, '&quot;')})">
                         <i class="fa-regular fa-heart"></i>
                     </button>
-                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image" 
-                         onclick="window.location.href='urun-detay.html?id=${product._id}'" style="cursor:pointer">
+                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image">
                     <div class="madeniyat-product-info">
                         <h3 class="madeniyat-product-name">${product.name}</h3>
-                        <p class="madeniyat-product-price">${product.price.toLocaleString('tr-TR')} TL</p>
+                        <p class="madeniyat-product-price">${product.price ? product.price.toLocaleString('tr-TR') + ' TL' : 'Fiyat için arayınız'}</p>
                     </div>
                 `;
+
+                // Tüm karta tıklama eventi
+                card.onclick = function () {
+                    window.location.href = productUrl;
+                };
+
                 productsContainer.appendChild(card);
             });
         });
