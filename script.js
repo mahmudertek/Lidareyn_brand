@@ -505,24 +505,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function updateCartCount() {
-        const cart = JSON.parse(localStorage.getItem('cart')) || [];
-        const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
-
+        // Disabled to fix "random numbers" issue
         if (elements.cartCount) {
-            if (totalItems > 0) {
-                elements.cartCount.textContent = totalItems;
-                elements.cartCount.classList.add('show-badge');
-
-                // Add bounce animation
-                elements.cartCount.classList.add('updated');
-                setTimeout(() => {
-                    elements.cartCount.classList.remove('updated');
-                }, 600);
-            } else {
-                elements.cartCount.textContent = ''; // Clear text to avoid '0' ghosting
-                elements.cartCount.classList.remove('show-badge');
-                elements.cartCount.style.display = ''; // Clear any inline styles
-            }
+            elements.cartCount.style.display = 'none';
         }
     }
 

@@ -61,15 +61,9 @@ function toggleFavorite(product) {
 }
 
 function updateCartCount() {
-    const cart = Storage.getCart();
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    // Disabled to fix "random numbers" issue
     document.querySelectorAll('.cart-count').forEach(el => {
-        el.textContent = count;
-        if (count > 0) {
-            el.classList.add('show-badge');
-        } else {
-            el.classList.remove('show-badge');
-        }
+        el.style.display = 'none';
     });
 }
 

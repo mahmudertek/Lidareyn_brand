@@ -11,39 +11,31 @@
 .development-notice {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    padding: 5px 10px;
     text-align: center;
+    min-height: 22px;
+    padding: 2px 20px;
     font-size: 10px;
-    /* Daha da küçültüldü */
     font-weight: 500;
     position: fixed !important;
-    /* En tepeye sabitlendi */
     top: 0;
     left: 0;
     width: 100%;
-    min-height: 35px;
-    /* Minimum yükseklik */
-    height: auto !important;
-    /* İçeriğe göre uzasın */
     z-index: 2147483647 !important;
-    /* En üst katman */
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    line-height: 1.3;
+    line-height: 1;
 }
 
 /* Header ve Body Ayarlamaları - Bildirim Çubuğu İçin */
 body {
-    /* Sabit 30px bildirim çubuğu */
-    padding-top: 30px !important;
+    padding-top: 22px !important;
 }
 
-/* Header'ı bildirim çubuğunun altına it */
 .main-header,
 header {
-    top: 30px !important;
+    top: 22px !important;
 }
 
 /* Sepet sayacını varsayılan olarak gizle (CSS ile zorla) */
@@ -139,7 +131,7 @@ body {
     --font-primary: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
     /* Spacing */
-    --header-height: 80px;
+    --header-height: 36px;
     --container-padding: 40px;
 }
 
@@ -203,8 +195,8 @@ body {
 
 .logo a {
     font-family: var(--font-primary);
-    font-size: 20px;
-    font-weight: 900;
+    font-size: 14px;
+    font-weight: 700;
     color: var(--text-primary);
     /* Dark text */
     text-decoration: none;
@@ -241,7 +233,7 @@ body {
 }
 
 .nav-link {
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 500;
     color: var(--text-primary);
     /* Dark text */
@@ -308,7 +300,7 @@ body {
 
 .icon-btn {
     position: relative;
-    height: 36px;
+    height: 24px;
     padding: 0 4px;
     /* Buton içi boşluk azaltıldı */
     display: flex;
@@ -366,7 +358,7 @@ body {
     /* Başlangıçta kapalı */
     opacity: 0;
     visibility: hidden;
-    height: 36px;
+    height: 24px;
     padding: 0;
     border: 1px solid transparent;
     border-radius: 6px;
@@ -400,8 +392,8 @@ body {
     background: transparent;
     border: none;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -565,10 +557,9 @@ body {
     display: flex;
     align-items: center;
     gap: 4px;
-    height: 32px;
-    width: auto;
-    padding: 0 6px;
-    border-radius: 16px;
+    height: 22px;
+    padding: 0 4px;
+    font-size: 10px;
 }
 
 .icon-btn .icon-label {
@@ -719,7 +710,7 @@ body {
 
 .qty-btn {
     width: 28px;
-    height: 28px;
+    height: 24px;
     border: none;
     background: white;
     border-radius: 6px;

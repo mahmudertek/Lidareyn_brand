@@ -737,7 +737,8 @@
     <script src="auth.js?v=999"></script>
     <script src="script.js?v=999"></script>
     <script>
-        const API_URL = 'https://galatacarsi-backend-api.onrender.com/api';
+        // API URL - config.js'den alınır veya varsayılan kullanılır
+        var PRODUCT_API = window.API_URL || 'https://galatacarsi-backend-api.onrender.com/api';
 
         document.addEventListener('DOMContentLoaded', async function () {
             const urlParams = new URLSearchParams(window.location.search);
@@ -764,7 +765,7 @@
 
             try {
                 // API'den ürün çek
-                const response = await fetch(`${API_URL}/products/${productId}`);
+                const response = await fetch(`${PRODUCT_API}/products/${productId}`);
 
                 if (!response.ok) {
                     throw new Error('API yanıt vermedi');
@@ -793,10 +794,11 @@
 
                     // Stok & Barkod
                     const stockEl = document.getElementById('product-stock-code');
-                    if (stockEl) stockEl.textContent = p.stockCode || '-';
+                    if (stockEl) stockEl.textContent = p.stockCode || p.sku || p.stock_code || '-';
 
                     const barcodeEl = document.getElementById('product-barcode');
-                    if (barcodeEl) barcodeEl.textContent = p.barcode || '-';
+                    const mockBarcode = p.sku ? `869${p.sku.replace(/[^0-9A-Z]/g, '')}` : '-';
+                    if (barcodeEl) barcodeEl.textContent = p.barcode || p.barcodeNo || p.barcode_no || mockBarcode;
 
                     // Açıklama
                     const descEl = document.getElementById('desc-text');
@@ -808,7 +810,7 @@
 
                     // Breadcrumb
                     const breadCat = document.getElementById('bread-category');
-                    if (breadCat) breadCat.textContent = p.brand || p.category || 'Ürünler';
+                    if (breadCat) breadCat.textContent = p.category || 'Ürünler';
 
                     console.log('Ürün yüklendi:', p.name);
 

@@ -648,11 +648,9 @@ function validateAllForms() {
 
 // Update cart count
 function updateCartCount() {
-    const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
-    const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-
+    // Disabled to fix "random numbers" issue
     document.querySelectorAll('.cart-count').forEach(el => {
-        el.textContent = cartCount;
+        el.style.display = 'none';
     });
 }
 

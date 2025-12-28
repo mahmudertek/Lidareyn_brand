@@ -43,23 +43,27 @@
 .thumbnail-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background: #fff;
 }
 
 .main-image-wrapper {
     flex: 1;
     border-radius: 16px;
     overflow: hidden;
-    background: #f8f9fa;
+    background: #ffffff;
     position: relative;
     aspect-ratio: 1/1;
     max-width: 500px;
+    border: 1px solid #eee;
+    padding: 20px;
+    /* Görsele çerçeve içinde nefes alanı */
 }
 
 .main-image-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
