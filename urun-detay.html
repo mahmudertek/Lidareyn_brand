@@ -496,15 +496,24 @@
                 <a href="#" class="product-brand" id="product-brand">Marka Yükleniyor...</a>
                 <h1 class="product-title" id="product-title">Ürün Adı Yükleniyor...</h1>
 
-                <div class="product-rating">
-                    <div class="stars">
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star"></i>
-                        <i class="fa-solid fa-star-half-stroke"></i>
+                <!-- Ürün Detay Bilgileri -->
+                <div class="product-meta-info">
+                    <div class="meta-item">
+                        <span class="meta-label"><i class="fa-solid fa-tag"></i> Marka:</span>
+                        <a href="#" class="meta-value meta-link" id="product-brand-link">Yükleniyor...</a>
                     </div>
-                    <span class="review-count">128 Değerlendirme</span>
+                    <div class="meta-item">
+                        <span class="meta-label"><i class="fa-solid fa-folder"></i> Kategori:</span>
+                        <a href="#" class="meta-value meta-link" id="product-category-link">Yükleniyor...</a>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label"><i class="fa-solid fa-box"></i> Stok Kodu:</span>
+                        <span class="meta-value" id="product-stock-code">---</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label"><i class="fa-solid fa-barcode"></i> Barkod:</span>
+                        <span class="meta-value" id="product-barcode">---</span>
+                    </div>
                 </div>
 
                 <div class="product-price-container">
@@ -735,13 +744,47 @@
                         breadCategory.href = '#';
                     }
 
-                    // Update Brand
+                    // Update Meta Info - Marka
+                    const brandLink = document.getElementById('product-brand-link');
+                    if (brandLink && product.brand) {
+                        brandLink.textContent = product.brand;
+                        brandLink.href = `markalar/${product.brand.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-')}.html`;
+                    } else if (brandLink) {
+                        brandLink.textContent = 'Belirtilmemiş';
+                        brandLink.removeAttribute('href');
+                        brandLink.classList.remove('meta-link');
+                    }
+
+                    // Update Meta Info - Kategori
+                    const categoryLink = document.getElementById('product-category-link');
+                    if (categoryLink && product.category) {
+                        categoryLink.textContent = product.category;
+                        categoryLink.href = '#';
+                    } else if (categoryLink) {
+                        categoryLink.textContent = 'Belirtilmemiş';
+                        categoryLink.removeAttribute('href');
+                        categoryLink.classList.remove('meta-link');
+                    }
+
+                    // Update Meta Info - Stok Kodu
+                    const stockCodeEl = document.getElementById('product-stock-code');
+                    if (stockCodeEl) {
+                        stockCodeEl.textContent = product.stockCode || product.sku || product.id || '---';
+                    }
+
+                    // Update Meta Info - Barkod
+                    const barcodeEl = document.getElementById('product-barcode');
+                    if (barcodeEl) {
+                        barcodeEl.textContent = product.barcode || product.ean || '---';
+                    }
+
+                    // Update Brand (header area - hidden now)
                     const brandEl = document.getElementById('product-brand');
                     if (brandEl && product.brand) {
                         brandEl.textContent = product.brand;
                         brandEl.href = `markalar/${product.brand.toLowerCase().replace(/\+/g, '-').replace(/\s/g, '-')}.html`;
                     } else if (brandEl) {
-                        brandEl.textContent = 'Galata Çarşı';
+                        brandEl.style.display = 'none';
                     }
 
                     if (product.description) {
@@ -818,21 +861,23 @@
                     // Product not found
                     document.getElementById('product-title').textContent = 'Ürün Bulunamadı';
                     document.getElementById('bread-name').textContent = 'Ürün Bulunamadı';
-                    document.getElementById('product-brand').textContent = '';
+                    document.getElementById('product-brand').style.display = 'none';
                     document.getElementById('product-price').textContent = '';
                     document.getElementById('desc-text').textContent = 'Aradığınız ürün bulunamadı veya kaldırılmış olabilir.';
                     document.getElementById('specs-list').innerHTML = '';
                     document.getElementById('add-to-cart-btn').style.display = 'none';
+                    document.querySelector('.product-meta-info').style.display = 'none';
                 }
             } else {
                 // No product ID provided
                 document.getElementById('product-title').textContent = 'Ürün Seçilmedi';
                 document.getElementById('bread-name').textContent = 'Ürün Yok';
-                document.getElementById('product-brand').textContent = '';
+                document.getElementById('product-brand').style.display = 'none';
                 document.getElementById('product-price').textContent = '';
                 document.getElementById('desc-text').textContent = 'Lütfen ana sayfadan bir ürün seçin.';
                 document.getElementById('specs-list').innerHTML = '';
                 document.getElementById('add-to-cart-btn').style.display = 'none';
+                document.querySelector('.product-meta-info').style.display = 'none';
             }
         });
     </script>
