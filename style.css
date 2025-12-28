@@ -5,6 +5,7 @@
 /* ============================================
    DEVELOPMENT NOTICE BAR
    ============================================ */
+/* development-notice styles */
 .development-notice {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -13,8 +14,18 @@
     font-size: 13px;
     font-weight: 500;
     position: relative;
-    z-index: 1001;
+    /* Sticky veya fixed değil, akışta kalsın */
+    z-index: 99999 !important;
+    /* Header'ın üstünde olması için çok yüksek değer */
+    display: block;
+    /* Her zaman görünür */
 }
+
+/* Sepet sayacını varsayılan olarak gizle - JS açacak */
+.cart-count {
+    display: none;
+}
+
 
 .development-notice .notice-content {
     display: flex;

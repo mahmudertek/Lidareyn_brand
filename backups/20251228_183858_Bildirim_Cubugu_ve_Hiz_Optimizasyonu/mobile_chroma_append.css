@@ -1,0 +1,52 @@
+/* --- CATEGORY CARDS (Main Page) - 50/50 Layout on Mobile --- */
+.chroma-card {
+    flex-direction: row !important;
+    /* Force Horizontal */
+    height: auto !important;
+    /* Allow growing */
+    min-height: 100px !important;
+    align-items: stretch !important;
+}
+
+/* Left Side: Image (50%) */
+.chroma-img-wrapper {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    min-width: unset !important;
+    /* Override explicit pixel width */
+    height: auto !important;
+    min-height: 100px !important;
+}
+
+.chroma-img-wrapper img {
+    object-fit: cover !important;
+    height: 100% !important;
+}
+
+/* Right Side: Text (50%) */
+.chroma-info {
+    width: 50% !important;
+    flex: 0 0 50% !important;
+    max-width: 50% !important;
+    padding: 10px 15px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+}
+
+.chroma-info .name {
+    font-size: 14px !important;
+    line-height: 1.3 !important;
+    font-weight: 600 !important;
+    white-space: normal !important;
+    /* Allow wrapping */
+    text-align: left !important;
+}
+
+/* Ensure subtitle (if exists) is hidden or small */
+.chroma-info .subtitle {
+    display: none !important;
+    /* Hide subtitle for cleaner 50/50 view */
+}

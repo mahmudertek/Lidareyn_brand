@@ -1,0 +1,305 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <!-- Bakım Modu Sistemi (En Tepede) -->
+    <style id="bakim-blocking-style">
+        
+    </style>
+    <script src="bakim-ayari.js?v=1766778190"></script>
+    <script>
+        (function () {
+            // Bakım sayfası ise kontrol etme
+            if (window.location.pathname.includes('bakimda.html')) return;
+
+            const isAuthorized = localStorage.getItem('admin_session') ||
+                localStorage.getItem('adminToken') ||
+                localStorage.getItem('token');
+            const urlParams = new URLSearchParams(window.location.search);
+            const hasBypass = urlParams.has('lidareyn_ozel_girisKask12121O');
+
+            if (hasBypass) {
+                localStorage.setItem('admin_session', 'active_' + Date.now());
+                const cleanUrl = window.location.pathname; 
+                window.history.replaceState(null, '', cleanUrl); // URL'i temizle
+                document.getElementById('bakim-blocking-style').remove();
+                return;
+            }
+
+            if (window.BAKIM_MODU_AKTIF === true && !isAuthorized) {
+                window.location.href = 'bakimda.html';
+                return;
+            }
+
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
+            const style = document.getElementById('bakim-blocking-style');
+            if (style) style.remove();
+            console.log('🔧 Bakım Modu: Erişim onaylandı.');
+        })();
+    </script>
+
+    
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galata Çarşı - Premium E-Ticaret</title>
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png">
+<meta name="description"
+        content="Galata Çarşı - En kaliteli Ã¼rÃ¼nleri en uygun fiyatlarla satÄ±n alÄ±n. Elektronik, moda, ev & yaÅŸam ve daha fazlasÄ±.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="style.css?v=1766859876">
+    <link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
+    <link rel="stylesheet" href="icon-fix.css">
+    <link rel="stylesheet" href="slider.css">
+    <section class="hero-slider">
+        <div class="slider-container">
+            <div class="slide active">
+                <img src="assets/hero-banner-1.png" alt="Galata Çarşı Hero Banner 1">
+            </div>
+            <div class="slide">
+                <img src="assets/hero-banner-2.png" alt="Galata Çarşı Hero Banner 2">
+            </div>
+            <div class="slide">
+                <img src="assets/hero-banner-3.png" alt="Galata Çarşı Hero Banner 3">
+            </div>
+        </div>
+        <!-- Slider Navigation -->
+        <button class="slider-btn prev" onclick="changeSlide(-1)">â®</button>
+        <button class="slider-btn next" onclick="changeSlide(1)">â¯</button>
+        <!-- Slider Dots -->
+        <div class="slider-dots">
+            <span class="dot active" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Categories Section -->
+        <section class="categories-section" id="kategoriler">
+            <div class="container">
+                <h2 class="section-title">TÃ¼m Kategoriler</h2>
+                <div class="categories-grid">
+                    <!-- Nalbur & YapÄ± Malzemeleri -->
+                    <a href="kategoriler/nalbur-yapi-malzemeleri.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-hammer"></i>
+                        </div>
+                        <h3>Nalbur & YapÄ± Malzemeleri</h3>
+                        <p>El aletleri, vida, Ã§ivi, silikon ve tamir malzemeleri</p>
+                    </a>
+
+                    <!-- HÄ±rdavat & Teknik Malzemeler -->
+                    <a href="kategoriler/hirdavat-teknik-malzemeler.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                        </div>
+                        <h3>HÄ±rdavat & Teknik Malzemeler</h3>
+                        <p>Elektrik, tesisat, boya ekipmanlarÄ± ve profesyonel aletler</p>
+                    </a>
+
+                    <!-- Ev GereÃ§leri & ZÃ¼ccaciye -->
+                    <a href="kategoriler/ev-gerecleri-zuccaciye.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-kitchen-set"></i>
+                        </div>
+                        <h3>Ev GereÃ§leri & ZÃ¼ccaciye</h3>
+                        <p>Mutfak, banyo ve saklama Ã§Ã¶zÃ¼mleri</p>
+                    </a>
+
+                    <!-- Evcil Hayvan ÃœrÃ¼nleri -->
+                    <a href="kategoriler/evcil-hayvan-urunleri.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-paw"></i>
+                        </div>
+                        <h3>Evcil Hayvan ÃœrÃ¼nleri</h3>
+                        <p>Mama kaplarÄ±, oyuncaklar, tasmalar ve bakÄ±m malzemeleri</p>
+                    </a>
+
+                    <!-- Ev & YaÅŸam -->
+                    <a href="kategoriler/ev-yasam.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-house"></i>
+                        </div>
+                        <h3>Ev & YaÅŸam</h3>
+                        <p>Dekoratif Ã¼rÃ¼nler, LED aydÄ±nlatma ve organizer</p>
+                    </a>
+
+                    <!-- Temizlik & Hijyen -->
+                    <a href="kategoriler/temizlik-hijyen.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-spray-can-sparkles"></i>
+                        </div>
+                        <h3>Temizlik & Hijyen</h3>
+                        <p>Mop, bez, sÃ¼nger ve doÄŸal temizlik malzemeleri</p>
+                    </a>
+
+                    <!-- KÄ±rtasiye & Ofis -->
+                    <a href="kategoriler/kirtasiye-ofis.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-pen"></i>
+                        </div>
+                        <h3>KÄ±rtasiye & Ofis Malzemeleri</h3>
+                        <p>Kalem, defter, dosyalama ve masaÃ¼stÃ¼ organizerleri</p>
+                    </a>
+
+                    <!-- Elektronik Aksesuar -->
+                    <a href="kategoriler/elektronik-aksesuar.html" class="category-card">
+                        <div class="category-icon">
+                            <i class="fa-solid fa-mobile-screen"></i>
+                        </div>
+                        <h3>Elektronik Aksesuar</h3>
+                        <p>Telefon kÄ±lÄ±flarÄ±, ÅŸarj kablolarÄ± ve Bluetooth hoparlÃ¶rler</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Sidebars and Overlays -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Favorites Sidebar -->
+    <div class="sidebar favorites-sidebar">
+        <div class="sidebar-header">
+            <h3>Favori ÃœrÃ¼nlerim</h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-content" id="favorites-content">
+            <!-- Content injected by JS -->
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="sidebar cart-sidebar">
+        <div class="sidebar-header">
+            <h3>Sepetim <span class="cart-badge">0</span></h3>
+            <button class="close-sidebar"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="sidebar-content" id="cart-content">
+            <!-- Content injected by JS -->
+        </div>
+        <div class="sidebar-footer">
+            <div class="cart-total">
+                <span>Ara Toplam:</span>
+                <span class="total-amount">0.00 TL</span>
+            </div>
+            <button class="btn btn-primary btn-block">Sepete Git</button>
+            <button class="btn btn-secondary btn-block">Ã–deme Yap</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="iletisim.html">İletişim</a></li>
+
+                            <li><a href="magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column (Restored) -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="kvkk.html">KVKK Aydınlatma Metni</a></li>
+                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
+                            <li><a href="iade-iptal.html">İade ve İptal Koşulları</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardım Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardım</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-uyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i> mail@galatacarsi.com</a>
+                            </li>
+                            <li>
+                                <a href="https://wa.me/905550501374" target="_blank"><i class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
+                            </li>
+                            <li>
+                                <a href="tel:+905550501374"><i class="fa-solid fa-phone"></i> 0555 050 13 74</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Section -->
+
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="slider.js"></script>
+        <script src="cookie-consent.js"></script>
+    <script src="mobile-menu.js"></script>
+</body>
+
+</html>

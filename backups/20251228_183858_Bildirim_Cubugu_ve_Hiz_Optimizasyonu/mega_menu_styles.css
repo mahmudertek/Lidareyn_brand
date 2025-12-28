@@ -1,0 +1,229 @@
+/* ============================================
+   MEGA MENU DROPDOWN - ULTRA COMPACT
+   ============================================ */
+
+.nav-item-dropdown {
+    position: static;
+}
+
+.categories-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 100%;
+    position: relative;
+    z-index: 1002;
+    cursor: pointer;
+}
+
+.categories-link i {
+    font-size: 18px;
+}
+
+/* Mega Menu Container */
+.mega-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95vw;
+    max-width: 1400px;
+    height: 600px;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1001;
+    display: block;
+    transition: 0.2s ease;
+}
+
+.nav-item-dropdown:hover .mega-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Left Sidebar: Category List */
+.mega-menu-list {
+    width: 260px;
+    /* Increased width to accommodate scrollbar */
+    height: 100%;
+    background: #fafafa;
+    border-right: 1px solid #eee;
+    padding: 10px 0;
+    /* Vertical padding */
+    padding-right: 10px;
+    /* Space for scrollbar inside content area if needed, though scrollbar takes its own space usually */
+    margin: 0;
+    list-style: none;
+    overflow-y: scroll;
+    /* Force vertical scrollbar */
+    float: left;
+    direction: rtl;
+    /* Move scrollbar to the left */
+}
+
+/* Reset direction for list items so text reads correctly */
+.mega-menu-list li {
+    direction: ltr;
+    display: block;
+    width: 100%;
+    position: static;
+}
+
+/* Custom Scrollbar for Mega Menu List */
+.mega-menu-list::-webkit-scrollbar {
+    width: 10px;
+    /* Wider for visibility */
+    background-color: #f1f1f1;
+    /* Ensure track has bg */
+}
+
+.mega-menu-list::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+    border-left: 1px solid #ddd;
+}
+
+.mega-menu-list::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+    border: 2px solid #f1f1f1;
+    /* Padding effect */
+}
+
+.mega-menu-list::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+
+
+.mega-menu-list li>a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    font-size: 14px;
+    color: #444;
+    text-decoration: none;
+    border-left: 3px solid transparent;
+    transition: all 0.2s;
+}
+
+.mega-menu-list li>a:hover,
+.mega-menu-list li.default-active>a {
+    background: #fff;
+    color: #8b7bd8;
+    border-left-color: #8b7bd8;
+    font-weight: 600;
+}
+
+.menu-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.menu-item-left i {
+    width: 20px;
+    text-align: center;
+    color: #999;
+}
+
+.mega-menu-list li:hover .menu-item-left i,
+.mega-menu-list li.default-active .menu-item-left i {
+    color: #8b7bd8;
+}
+
+/* Right Content Area: Sub Menus */
+.sub-menu {
+    position: absolute;
+    left: 240px;
+    /* Adjusted for wider list (260px - 20px overlap) */
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px 10px 10px 30px;
+    /* Increased left padding accordingly */
+    background: white;
+    overflow-y: auto;
+    z-index: 2000;
+    /* Ensure it is on top of everything */
+    pointer-events: none;
+    /* Default to no interaction to prevent ghost clicks if transparent? No, default display is none so this doesnt matter much, but let's be safe */
+
+    display: none;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    gap: 5px;
+}
+
+/* Show Logic */
+.mega-menu-list li:hover .sub-menu,
+.sub-menu:hover {
+    display: flex !important;
+    pointer-events: auto;
+    /* Enable interaction when shown */
+}
+
+.mega-menu-list li.default-active .sub-menu {
+    display: flex;
+    pointer-events: auto;
+    /* Enable interaction for default active */
+}
+
+.mega-menu-list:hover li.default-active:not(:hover) .sub-menu {
+    display: none;
+}
+
+/* Hover Bridge Fix */
+/* Hover Bridge Fix applied to the Anchor tag */
+
+
+/* Columns */
+.sub-menu-column {
+    flex: 0 0 135px;
+    /* Narrower to fit 8 columns */
+    max-width: 180px;
+}
+
+.sub-menu-column h4 {
+    font-size: 13px;
+    font-weight: 800;
+    color: #222;
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #f0f0f0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sub-menu-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sub-menu-column ul li {
+    margin-bottom: 0;
+    /* Zero margin */
+}
+
+.sub-menu-column ul li a {
+    font-size: 12px;
+    color: #666;
+    text-decoration: none;
+    transition: color 0.2s, transform 0.2s;
+    display: block;
+    line-height: 1.2;
+    /* Tighter line height */
+    padding: 1px 0;
+    /* Minimal vertical padding */
+}
+
+.sub-menu-column ul li a:hover {
+    color: #8b7bd8;
+    transform: translateX(2px);
+}
