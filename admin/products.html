@@ -1539,36 +1539,48 @@
 
             if (selectedCategory && typeof categoriesData !== 'undefined' && categoriesData[selectedCategory]) {
                 const catData = categoriesData[selectedCategory];
-                let subItems = [];
 
                 console.log('📂 Kategori verisi:', catData);
 
                 // Veri yapısı kontrolü: Obje içinde subcategories dizisi
                 if (catData.subcategories && Array.isArray(catData.subcategories)) {
-                    // Sadece grup isimlerini al (name)
                     catData.subcategories.forEach(group => {
                         if (group.name) {
-                            subItems.push(group.name);
+                            // Gruplu dropdown (optgroup) oluştur
+                            const optgroup = document.createElement('optgroup');
+                            optgroup.label = group.name;
+
+                            // Grup içindeki items'ları ekle
+                            if (group.items && Array.isArray(group.items)) {
+                                group.items.forEach(item => {
+                                    const option = document.createElement('option');
+                                    option.value = item;
+                                    option.textContent = item;
+                                    if (selectedSub && selectedSub === item) {
+                                        option.selected = true;
+                                    }
+                                    optgroup.appendChild(option);
+                                });
+                            }
+
+                            subCategoryObj.appendChild(optgroup);
                         }
                     });
+
+                    console.log('📂 Alt kategoriler yüklendi (gruplu)');
                 }
                 // Eski yapı (direkt array) desteği (fallback)
                 else if (Array.isArray(catData)) {
-                    subItems = catData;
+                    catData.forEach(sub => {
+                        const option = document.createElement('option');
+                        option.value = sub;
+                        option.textContent = sub;
+                        if (selectedSub && selectedSub === sub) {
+                            option.selected = true;
+                        }
+                        subCategoryObj.appendChild(option);
+                    });
                 }
-
-                // Dropdown doldur
-                subItems.forEach(sub => {
-                    const option = document.createElement('option');
-                    option.value = sub;
-                    option.textContent = sub;
-                    if (selectedSub && selectedSub === sub) {
-                        option.selected = true;
-                    }
-                    subCategoryObj.appendChild(option);
-                });
-
-                console.log('📂 Alt kategoriler:', subItems);
             }
         }
     </script>
