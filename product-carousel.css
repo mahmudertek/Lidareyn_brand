@@ -229,26 +229,26 @@
 
     .product-carousel-grid {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 130px 130px 130px;
+        grid-template-rows: 260px 260px 260px;
         /* Fixed equal height for all rows */
         gap: 10px;
     }
 
     .carousel-nav-arrow {
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
     }
 
     .carousel-nav-arrow i {
-        font-size: 16px;
+        font-size: 14px;
     }
 
     .carousel-nav-arrow.prev {
-        left: 8px;
+        left: 4px;
     }
 
     .carousel-nav-arrow.next {
-        right: 8px;
+        right: 4px;
     }
 
     .product-carousel-card {
@@ -257,34 +257,38 @@
 
     .product-carousel-name {
         font-size: 11px;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+        margin-bottom: 2px;
     }
 
     .product-carousel-price {
-        font-size: 13px;
+        font-size: 12px;
+        margin-top: auto;
     }
 
     .product-carousel-info {
-        padding: 10px 12px;
+        padding: 8px 10px;
     }
 }
 
 @media (max-width: 480px) {
     .product-carousel-container {
-        padding: 12px 35px 45px;
+        padding: 10px 25px 40px;
     }
 
     .product-carousel-grid {
         grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 120px 120px 120px;
+        grid-template-rows: 240px 240px 240px;
         /* Fixed equal height for all rows */
         gap: 8px;
     }
 
     .product-carousel-name {
-        font-size: 10px;
+        font-size: 11px;
     }
 
     .product-carousel-price {
-        font-size: 12px;
+        font-size: 13px;
     }
 }

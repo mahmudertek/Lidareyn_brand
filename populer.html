@@ -559,11 +559,19 @@
             position: relative;
             width: 100%;
             padding-top: 133%;
-            /* 3:4 Aspect Ratio */
+            /* 3:4 Aspect Ratio Default */
             overflow: hidden;
             border-radius: 6px;
             margin-bottom: 12px;
             background: #f9f9f9;
+        }
+
+        @media (max-width: 768px) {
+            .product-img-wrapper {
+                padding-top: 100%;
+                /* Mobile: Square 1:1 Aspect Ratio */
+                margin-bottom: 8px;
+            }
         }
 
         .product-img-wrapper img {

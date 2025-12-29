@@ -116,18 +116,72 @@ document.addEventListener('DOMContentLoaded', function () {
     // ============================================
     // USER DROPDOWN
     // ============================================
-    if (elements.userBtn) {
+    // USER DROPDOWN LOGIC (Body Append Fix for Mobile)
+    if (elements.userBtn && elements.userDropdown) {
+        let originalParent = elements.userDropdown.parentElement;
+        const dropdown = elements.userDropdown;
+
         elements.userBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             state.isUserMenuOpen = !state.isUserMenuOpen;
 
-            if (elements.userDropdown) {
-                elements.userDropdown.classList.toggle('active', state.isUserMenuOpen);
+            if (state.isUserMenuOpen) {
+                // OPEN
+                if (window.innerWidth <= 768) {
+                    // Move to Body to avoid stacking context issues
+                    if (dropdown.parentElement !== document.body) {
+                        document.body.appendChild(dropdown);
+                    }
 
-                if (state.isUserMenuOpen) {
-                    closeSearch();
-                    closeSidebar();
+                    dropdown.style.cssText = `
+                        display: block !important;
+                        position: fixed !important;
+                        top: 65px !important;
+                        right: 15px !important;
+                        left: auto !important;
+                        z-index: 2147483647 !important;
+                        background: #fff !important;
+                        width: 200px !important;
+                        border-radius: 12px !important;
+                        box-shadow: 0 10px 40px rgba(0,0,0,0.3) !important;
+                        padding: 10px 0 !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    `;
                 }
+                dropdown.classList.add('active');
+
+                closeSearch();
+                closeSidebar();
+            } else {
+                // CLOSE
+                dropdown.classList.remove('active');
+
+                if (window.innerWidth <= 768) {
+                    dropdown.style.display = 'none';
+                    // We don't move it back immediately to avoid flickering, handled in resize
+                } else {
+                    dropdown.style.cssText = '';
+                }
+            }
+        });
+
+        // Restore on resize (Desktop View Fix)
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && dropdown.parentElement === document.body) {
+                if (originalParent) originalParent.appendChild(dropdown);
+                dropdown.style.cssText = '';
+                dropdown.classList.remove('active');
+                state.isUserMenuOpen = false;
+            }
+        });
+
+        // Close when clicking outside (Body Append Fix)
+        document.addEventListener('click', (e) => {
+            if (state.isUserMenuOpen && !dropdown.contains(e.target) && !elements.userBtn.contains(e.target)) {
+                state.isUserMenuOpen = false;
+                dropdown.classList.remove('active');
+                if (window.innerWidth <= 768) dropdown.style.display = 'none';
             }
         });
     }

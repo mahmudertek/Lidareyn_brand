@@ -550,8 +550,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Kategori *</label>
-                            <select id="productCategory" required>
+                            <label>Üst Kategori *</label>
+                            <select id="productCategory" required onchange="updateSubCategories()">
                                 <option value="">Kategori Seçin</option>
                                 <option value="elektrikli-el-aletleri">Elektrikli El Aletleri</option>
                                 <option value="olcme-ve-kontrol-aletleri">Ölçme & Kontrol Aletleri</option>
@@ -563,6 +563,15 @@
                                 <option value="hirdavat-el-aletleri">Hırdavat ve El Aletleri</option>
                                 <option value="is-guvenligi-ve-calisma-ekipmanlari">İş Güvenliği ve Çalışma Ekipmanları
                                 </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Alt Kategori</label>
+                            <select id="productSubCategory">
+                                <option value="">Önce Üst Kategori Seçiniz</option>
                             </select>
                         </div>
                     </div>
@@ -1126,6 +1135,8 @@
                 categoryValue = categoryMapping[categoryInput] || categoryInput;
                 console.log('📂 Kategori eşleştirme:', categoryInput, '->', categoryValue);
                 document.getElementById('productCategory').value = categoryValue;
+                updateSubCategories(product.subCategory);
+
                 document.getElementById('productPrice').value = product.price || '';
                 document.getElementById('productSalePrice').value = product.salePrice || '';
                 document.getElementById('productStock').value = product.stock || 0;
@@ -1213,14 +1224,13 @@
             const sku = document.getElementById('productSku').value;
             const barcode = document.getElementById('productBarcode').value;
             const unit = document.getElementById('productUnit').value;
+            const subCategory = document.getElementById('productSubCategory').value;
 
             // Tüm etiketleri oku
             const isPopular = document.getElementById('tagPopular').checked;      // Popüler Ürünler sayfası
             const isBestSeller = document.getElementById('tagBestSeller').checked; // Çok Satan etiketi
             const isNew = document.getElementById('tagNew').checked;               // Yeni Gelenler sayfası
             const isFeatured = document.getElementById('tagFeatured').checked;     // Öne Çıkan
-
-            // Marka vitrini
             const brandShowcase = document.getElementById('brandShowcase').value;  // Ana sayfa marka vitrini
 
             if (!name || !brand) {
@@ -1251,6 +1261,8 @@
                 brand,
                 category: categoryName,
                 categorySlug: category,
+                subCategory: subCategory,
+
                 price,
                 salePrice,
                 stock,
@@ -1414,6 +1426,58 @@
             loadProducts();
         }
         initPage();
+
+        // MEGA MENU CATEGORY DATA
+        const categoriesData = {
+            'elektrikli-el-aletleri': [
+                'Delme & Vidalama', 'Kesme & Taşlama', 'Yüzey İşleme', 'Diğer Makineler'
+            ],
+            'olcme-ve-kontrol-aletleri': [
+                'Lazerli Ölçüm', 'Mekanik Ölçüm', 'Terazi & Açı', 'Görüntüleme'
+            ],
+            'el-aletleri': [
+                'Anahtarlar & Vidalama', 'Kesme & Şekillendirme', 'Vurma & Sabitleme'
+            ],
+            'nalbur-yapi-malzemeleri': [
+                'Kimyasal & Yapıştırıcı', 'Boya & İzolasyon', 'Donanım'
+            ],
+            'asindirici-kesici': [
+                'Delici & Vidalama', 'Kesme & Taşlama', 'Aşındırma ve Zımpara'
+            ],
+            'yapi-kimyasallari': [
+                'Yapıştırıcılar', 'Dolgu ve Harçlar', 'Kimyasallar'
+            ],
+            'kaynak-malzemeleri': [
+                'Sarf Malzemeleri', 'Koruyucu Ekipman', 'Makine ve Aksesuar'
+            ],
+            'hirdavat-el-aletleri': [
+                'Ölçü Aletleri', 'Kesici & Delici', 'Sıkıştırma & Tutma', 'Vurucu Aletler'
+            ],
+            'is-guvenligi-ve-calisma-ekipmanlari': [
+                'Koruyucu Giyim', 'Ayak & Baş Koruma', 'Göz & Kulak Koruma', 'Çalışma Ekipmanları'
+            ]
+        };
+
+        function updateSubCategories(selectedSub = null) {
+            const categoryObj = document.getElementById('productCategory');
+            const subCategoryObj = document.getElementById('productSubCategory');
+            const selectedCategory = categoryObj.value;
+
+            // Clear options
+            subCategoryObj.innerHTML = '<option value="">Alt Kategori Seçin</option>';
+
+            if (selectedCategory && categoriesData[selectedCategory]) {
+                categoriesData[selectedCategory].forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub;
+                    option.textContent = sub;
+                    if (selectedSub && selectedSub === sub) {
+                        option.selected = true;
+                    }
+                    subCategoryObj.appendChild(option);
+                });
+            }
+        }
     </script>
 </body>
 

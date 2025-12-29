@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             // Flexible matching: case insensitive includes
             // 3. Find products for this brand
             // Enhanced fuzzy matching
-            const brandProducts = allProducts.filter(p => {
+            let brandProducts = allProducts.filter(p => {
                 if (!p.brand) return false;
                 const dbBrand = p.brand.toLowerCase().trim();
                 const target = targetBrand.toLowerCase().trim();
@@ -65,7 +65,27 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // e.g. "Black+Decker" vs "Black Decker" vs "Black&Decker"
                 const normalize = (s) => s.replace(/[^a-z0-9]/g, '');
                 return normalize(dbBrand).includes(normalize(target));
-            }).slice(0, 3);
+            });
+
+            // 4. SORT BY SHOWCASE PRIORITY (Admin Selection)
+            // Admin panelinden "Vitrini Seç" yapılan ürünler en üste çıkar
+            const normalizedTarget = targetBrand.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+            brandProducts.sort((a, b) => {
+                // Admin panel value: "beta", "bosch", etc.
+                const aVal = (a.brandShowcase || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+                const bVal = (b.brandShowcase || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+
+                const aExact = aVal === normalizedTarget;
+                const bExact = bVal === normalizedTarget;
+
+                if (aExact && !bExact) return -1; // a önce gelir
+                if (!aExact && bExact) return 1;  // b önce gelir
+                return 0; // Sıralamayı bozma
+            });
+
+            // Take top 3
+            brandProducts = brandProducts.slice(0, 3);
 
             // 4. Update the container
             // 5. Update the container
