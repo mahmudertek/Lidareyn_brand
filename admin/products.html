@@ -915,17 +915,30 @@
 
         // Load products from API or localStorage
         async function loadProducts() {
+            // Kritik API Kontrolü
+            if (typeof ADMIN_API === 'undefined') {
+                console.error('ADMIN_API is missing!');
+                showError('Sistem Hatası: API bağlantısı kurulamadı. Lütfen internet bağlantınızı kontrol edin ve sayfayı yenileyin (Ctrl+F5).');
+                return;
+            }
+
             isLoading = true;
             showLoading();
 
             try {
-                const response = await ADMIN_API.getProducts({ limit: 100 });
+                // Timeout için basit yaklaşım: Promise.race
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('İstek zaman aşımına uğradı (Timeout)')), 20000)
+                );
+
+                const apiPromise = ADMIN_API.getProducts({ limit: 100 });
+                const response = await Promise.race([apiPromise, timeoutPromise]);
+
                 if (response.success && response.data) {
                     products = response.data;
                     // Yerel ürünleri de ekle
                     const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
                     if (localProducts.length > 0) {
-                        // Sadece API'de olmayan yerel ürünleri ekle
                         localProducts.forEach(lp => {
                             if (!products.find(p => (p._id || p.id) === (lp._id || lp.id))) {
                                 products.push(lp);
@@ -935,27 +948,43 @@
                     renderProducts();
                     console.log('✅ Ürünler yüklendi:', products.length);
 
-                    // Sunucu aktif - yerel ürünleri senkronize et
                     await syncLocalProducts();
                 } else {
-                    // API boş döndü, localStorage'dan yükle
-                    products = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
-                    renderProducts();
-                    console.warn('⚠️ API boş, localStorage kullanılıyor');
+                    console.warn('API yanıtı başarısız:', response);
+                    throw new Error(response.error || 'Sunucudan veri alınamadı');
                 }
             } catch (error) {
                 console.error('Load products error:', error);
-                // Sunucu bağlantısı yok, localStorage'dan yükle
-                products = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
-                if (products.length > 0) {
-                    renderProducts();
-                    console.log('📦 Yerel ürünler yüklendi:', products.length);
-                } else {
-                    showError('Sunucu bağlantısı yok ve yerel ürün bulunamadı.');
-                }
-            }
 
-            isLoading = false;
+                const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                if (localProducts.length > 0) {
+                    products = localProducts;
+                    renderProducts();
+
+                    // Bildirim ekle
+                    const existingBadge = document.getElementById('offline-badge');
+                    if (!existingBadge) {
+                        const errorBadge = document.createElement('div');
+                        errorBadge.id = 'offline-badge';
+                        errorBadge.style.cssText = "background:#fee2e2; color:#b91c1c; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #fca5a5; font-size:14px; text-align:center;";
+                        errorBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Sunucuya erişilemiyor. Yerel (cache) veriler gösteriliyor.`;
+                        document.querySelector('.products-header')?.insertAdjacentElement('afterend', errorBadge);
+                    }
+                } else {
+                    showError(`
+                        <strong style="font-size:16px; color:#dc2626">Sunucu Bağlantısı Kurulamadı</strong><br><br>
+                        Olası Nedenler:<br>
+                        • Sunucu uyku modunda olabilir (Lütfen 1-2 dakika bekleyin).<br>
+                        • İnternet bağlantınız kopuk olabilir.<br>
+                        • API servisi geçici olarak kullanım dışı.<br><br>
+                        <button onclick="location.reload()" style="padding:10px 20px; background:#2563eb; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600;">
+                            <i class="fa-solid fa-rotate-right"></i> Sayfayı Yenile
+                        </button>
+                    `);
+                }
+            } finally {
+                isLoading = false;
+            }
         }
 
         // Yerel ürünleri sunucuya senkronize et
@@ -1216,6 +1245,12 @@
 
         // Save product
         async function saveProduct() {
+            // Kritik API Kontrolü
+            if (typeof ADMIN_API === 'undefined') {
+                alert('Sistem Hatası: ADMIN_API yüklenemedi. Lütfen internet bağlantınızı kontrol edin ve sayfayı yenileyin (Ctrl+F5).');
+                return;
+            }
+
             const id = document.getElementById('productId').value;
             const name = document.getElementById('productName').value;
             const brand = document.getElementById('productBrand').value;
