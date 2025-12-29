@@ -496,11 +496,11 @@
         .products-grid {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 25px;
+            gap: 20px;
+            /* Gap azaltıldı */
             margin: 40px 0;
             padding: 0 20px;
             min-height: 800px;
-            /* Sabit 3200px yerine daha az */
         }
 
         .product-card {
@@ -514,35 +514,39 @@
             color: inherit;
             display: block;
             height: 100%;
-            /* Kart uzunluğunu içeriğe göre ayarla */
         }
 
         .product-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-5px);
+            /* Hover efekti azaltıldı */
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
 
         .product-image {
             width: 100%;
-            height: 280px;
-            object-fit: cover;
-            /* Masaüstünde cover kalsın */
+            height: 220px;
+            /* Masaüstü yüksekliği azaltıldı (280 -> 220) */
+            object-fit: contain;
+            /* Masaüstü için Zoom Out (Sığdırma) */
+            padding: 15px;
+            /* Görsel sıkışmasın diye padding */
             background: #fff;
             transition: transform 0.3s ease;
         }
 
         .product-info {
-            padding: 16px;
+            padding: 12px;
+            /* Padding azaltıldı */
         }
 
         .product-name {
-            font-size: 1rem;
+            font-size: 0.85rem;
+            /* Masaüstü fontu küçültüldü (1rem -> 0.85rem) */
             font-weight: 600;
             color: #111;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             min-height: 2.8em;
             line-height: 1.4;
-            /* 2 satır sınırı */
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -550,7 +554,8 @@
         }
 
         .product-price {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            /* Fiyat küçültüldü (1.2rem -> 1.1rem) */
             font-weight: 700;
             color: #111;
             margin-bottom: 4px;
@@ -561,7 +566,6 @@
             .products-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 10px !important;
-                /* Aralığı azalt */
                 padding: 0 10px !important;
                 margin: 20px 0 !important;
             }
@@ -573,22 +577,17 @@
 
             .product-image {
                 height: 130px !important;
-                /* Çerçeve boyunu kısalt */
                 object-fit: contain !important;
-                /* Zoom Out etkisi (resmi sığdır) */
-                padding: 8px !important;
-                /* Kenar boşluğu (resim sıkışmasın) */
+                padding: 10px !important;
                 background: #fff !important;
             }
 
             .product-info {
                 padding: 10px !important;
-                /* İç boşluğu azalt */
             }
 
             .product-name {
                 font-size: 0.75rem !important;
-                /* Yazıyı %60 küçült */
                 line-height: 1.2 !important;
                 min-height: 2.4em !important;
                 margin-bottom: 4px !important;
@@ -597,11 +596,9 @@
 
             .product-price {
                 font-size: 0.95rem !important;
-                /* Fiyatı küçült */
                 font-weight: 700 !important;
             }
 
-            /* Action butonlarını da küçültelim */
             .action-buttons {
                 transform: scale(0.8);
                 transform-origin: bottom right;
