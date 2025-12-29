@@ -85,25 +85,32 @@ header {
 
 @media (max-width: 768px) {
     .development-notice {
-        font-size: 9px !important;
-        padding: 3px 10px !important;
-        min-height: 22px !important;
-        max-height: 22px !important;
-        height: 22px !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        font-size: 10px !important;
+        padding: 6px 15px !important;
+        min-height: 38px !important;
+        height: auto !important;
+        white-space: normal !important;
+        line-height: 1.4 !important;
     }
 
     .development-notice .notice-content {
-        white-space: nowrap !important;
-        flex-wrap: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        white-space: normal !important;
+        flex-wrap: wrap !important;
     }
 
     .development-notice i {
         display: none !important;
+    }
+
+    /* Mobilde header pozisyonu - 40px notice yüksekliği için */
+    .main-header,
+    header {
+        top: 40px !important;
+    }
+
+    /* Mobilde body padding - notice(40) + header(36) + nav(45) = 121px */
+    body {
+        padding-top: 121px !important;
     }
 }
 
