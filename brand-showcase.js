@@ -33,7 +33,8 @@ const BRAND_SHOWCASE = {
         const badge = product.isBestSeller ? '<span class="madeniyat-product-badge">Çok Satan</span>' :
             product.isNew ? '<span class="madeniyat-product-badge">Yeni</span>' : '';
 
-        const image = product.mainImage || `https://placehold.co/400x400/6366f1/ffffff?text=${(product.brand || 'P').charAt(0)}`;
+        // Try multiple image sources
+        const image = product.mainImage || product.image || (product.images && product.images[0]) || `https://placehold.co/400x400/6366f1/ffffff?text=${(product.brand || 'P').charAt(0)}`;
         const price = product.salePrice || product.price || 0;
         const productUrl = `urun-detay.html?id=${product._id || product.id}`;
 
@@ -42,7 +43,7 @@ const BRAND_SHOWCASE = {
                 ${badge}
                 <button class="madeniyat-favorite-btn"><i class="fa-regular fa-heart"></i></button>
                 <a href="${productUrl}">
-                    <img src="${image}" alt="${product.name}" class="madeniyat-product-image">
+                    <img src="${image}" alt="${product.name}" class="madeniyat-product-image" style="opacity: 1 !important;">
                 </a>
                 <div class="madeniyat-product-info">
                     <h3 class="madeniyat-product-name">${product.name}</h3>

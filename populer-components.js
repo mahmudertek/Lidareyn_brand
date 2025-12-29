@@ -102,7 +102,7 @@
                                     id: p._id,
                                     name: p.name,
                                     price: p.price,
-                                    image: p.images && p.images[0] ? p.images[0] : 'https://placehold.co/300x400?text=Urun',
+                                    image: p.mainImage || p.image || (p.images && p.images[0]) || 'https://placehold.co/300x400?text=Urun',
                                     brand: p.brand,
                                     badge: p.isFeatured ? 'Popüler' : ''
                                 };

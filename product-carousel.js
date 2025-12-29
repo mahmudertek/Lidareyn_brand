@@ -20,14 +20,24 @@ async function initProductCarousel() {
             const response = await window.API.getProducts({ featured: 'true', limit: 24 });
             if (response && response.success && response.data && response.data.length > 0) {
                 console.log('✅ Featured products loaded from API:', response.data.length);
-                products = response.data.map(product => ({
-                    id: product._id,
-                    name: product.name,
-                    price: `₺${product.price.toLocaleString()}`,
-                    image: product.mainImage || 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name),
-                    badge: product.isNew ? 'Yeni' : (product.tags && product.tags[0]) || '',
-                    link: `urun-detay.html?id=${product._id}`
-                }));
+                products = response.data.map(product => {
+                    // Try multiple image sources
+                    let imageUrl = product.mainImage || product.image || (product.images && product.images[0]) || null;
+
+                    // If no image found, use placeholder
+                    if (!imageUrl) {
+                        imageUrl = 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name || 'Ürün');
+                    }
+
+                    return {
+                        id: product._id,
+                        name: product.name,
+                        price: `₺${product.price ? product.price.toLocaleString() : '0'}`,
+                        image: imageUrl,
+                        badge: product.isNew ? 'Yeni' : (product.tags && product.tags[0]) || '',
+                        link: `urun-detay.html?id=${product._id}`
+                    };
+                });
             }
         }
     } catch (error) {
@@ -116,7 +126,7 @@ async function initProductCarousel() {
 
             card.innerHTML = `
                 <div class="product-carousel-image">
-                    <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy" style="opacity: 1 !important;">
                     ${product.badge ? `<span class="product-carousel-badge">${product.badge}</span>` : ''}
                 </div>
                 <div class="product-carousel-info">

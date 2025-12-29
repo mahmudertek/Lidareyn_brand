@@ -13,7 +13,7 @@
 
     <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
-        
+
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
@@ -29,7 +29,7 @@
 
             if (hasBypass) {
                 localStorage.setItem('admin_session', 'active_' + Date.now());
-                const cleanUrl = window.location.pathname; 
+                const cleanUrl = window.location.pathname;
                 window.history.replaceState(null, '', cleanUrl); // URL'i temizle
                 document.getElementById('bakim-blocking-style').remove();
                 return;
@@ -50,12 +50,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Yeni Gelenler - Galata Çarşı</title>
-    
-    
-    
-    
-    
-<meta name="description" content="Galata Çarşı'e yeni eklenen en son ürünleri keşfedin.">
+
+
+
+
+
+    <meta name="description" content="Galata Çarşı'e yeni eklenen en son ürünleri keşfedin.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -64,8 +64,9 @@
     <link rel="stylesheet" href="style.css?v=1766859876">
     <link rel="stylesheet" href="mobile.css?v=1766859876">
     <link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
-    
-    <link rel="stylesheet" href="card-actions.css"><meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+
+    <link rel="stylesheet" href="card-actions.css">
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
 </head>
 
 <body>
@@ -73,7 +74,8 @@
     <div class="development-notice">
         <div class="notice-content">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
+            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya
+                <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
         </div>
     </div>
 
@@ -523,6 +525,7 @@
             height: 320px;
             object-fit: cover;
             background: #f5f5f5;
+            opacity: 1 !important;
         }
 
         .product-info {
@@ -588,9 +591,11 @@
         function createProductCard(product) {
             const card = document.createElement('a');
             const priceStr = typeof product.price === 'number' ? product.price.toLocaleString('tr-TR') + ' TL' : product.price;
-            const image = product.images && product.images[0] ? product.images[0] : 'https://placehold.co/400x400?text=Urun';
+            // Görsel için birden fazla kaynak kontrol et
+            const image = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400?text=Urun';
 
-            card.href = `urun-detay.html?slug=${product.slug}`;
+            // Link için id kullan (slug yerine)
+            card.href = `urun-detay.html?id=${product._id || product.id}`;
             card.className = 'product-card';
 
             card.innerHTML = `
@@ -712,10 +717,12 @@
                         <h3 class="footer-title">Müşteri Hizmetleri</h3>
                         <ul class="footer-links">
                             <li>
-                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i> mail@galatacarsi.com</a>
+                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i>
+                                    mail@galatacarsi.com</a>
                             </li>
                             <li>
-                                <a href="https://wa.me/905550501374" target="_blank"><i class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
+                                <a href="https://wa.me/905550501374" target="_blank"><i
+                                        class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
                             </li>
                             <li>
                                 <a href="tel:+905550501374"><i class="fa-solid fa-phone"></i> 0555 050 13 74</a>

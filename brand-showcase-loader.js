@@ -88,8 +88,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 card.className = 'madeniyat-product-card';
                 card.style.cursor = 'pointer';
 
-                // Image handling
-                const imgSource = product.mainImage || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
+                // Image handling - try multiple sources
+                const imgSource = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
                 const productUrl = `urun-detay.html?id=${product._id}`;
 
                 card.innerHTML = `

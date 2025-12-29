@@ -833,5 +833,42 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 3000);
     }
 
+    // ============================================
+    // DYNAMIC HEADER POSITIONING (Mobile Fix)
+    // ============================================
+    function adjustHeaderPositions() {
+        const noticeBar = document.querySelector('.development-notice');
+        const header = document.querySelector('header, .main-header');
+        const mainNav = document.querySelector('.main-nav');
+
+        if (!noticeBar || !header) return;
+
+        // Sadece mobil görünümde çalış
+        if (window.innerWidth > 768) return;
+
+        // Bildirim çubuğu yüksekliğini al
+        const noticeHeight = noticeBar.offsetHeight || 40;
+        const headerHeight = 36; // Sabit header yüksekliği
+
+        // Header pozisyonunu ayarla
+        header.style.top = noticeHeight + 'px';
+
+        // Nav pozisyonunu ayarla
+        if (mainNav) {
+            mainNav.style.top = (noticeHeight + headerHeight) + 'px';
+        }
+
+        // Body padding ayarla
+        const navHeight = 45;
+        document.body.style.paddingTop = (noticeHeight + headerHeight + navHeight) + 'px';
+
+        console.log('📐 Header positions adjusted: notice=' + noticeHeight + 'px');
+    }
+
+    // Sayfa yüklendiğinde ve ekran boyutu değiştiğinde çalıştır
+    adjustHeaderPositions();
+    window.addEventListener('resize', adjustHeaderPositions);
+    // Fontlar yüklendikten sonra tekrar kontrol et (yükseklik değişebilir)
+    document.fonts?.ready?.then(adjustHeaderPositions);
 
 });

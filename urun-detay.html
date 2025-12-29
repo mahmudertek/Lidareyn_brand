@@ -797,16 +797,17 @@
                     if (stockEl) stockEl.textContent = p.stockCode || p.sku || p.stock_code || '-';
 
                     const barcodeEl = document.getElementById('product-barcode');
-                    const mockBarcode = p.sku ? `869${p.sku.replace(/[^0-9A-Z]/g, '')}` : '-';
-                    if (barcodeEl) barcodeEl.textContent = p.barcode || p.barcodeNo || p.barcode_no || mockBarcode;
+                    // Sadece gerçek barkodu göster, sahte barkod üretme
+                    if (barcodeEl) barcodeEl.textContent = p.barcode || '-';
 
                     // Açıklama
                     const descEl = document.getElementById('desc-text');
                     if (descEl) descEl.textContent = p.description || 'Açıklama bulunmuyor.';
 
-                    // Görsel
+                    // Görsel - birden fazla kaynak kontrol et
                     const mainImg = document.getElementById('mainImage');
-                    if (mainImg && p.mainImage) mainImg.src = p.mainImage;
+                    const imageUrl = p.mainImage || p.image || (p.images && p.images[0]) || null;
+                    if (mainImg && imageUrl) mainImg.src = imageUrl;
 
                     // Breadcrumb
                     const breadCat = document.getElementById('bread-category');
