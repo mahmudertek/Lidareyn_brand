@@ -1,0 +1,83 @@
+/* ============================================
+   AGREEMENTS & LEGAL PAGES STYLES
+   ============================================ */
+
+:root {
+    --text-color: #111;
+    --heading-color: #000;
+    --bg-color: #fff;
+    --border-color: #eee;
+    --muted-text: #666;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    line-height: 1.7;
+}
+
+.legal-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* Page Title */
+.legal-title {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--heading-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 20px;
+}
+
+.legal-subtitle {
+    font-size: 14px;
+    color: var(--muted-text);
+    margin-bottom: 40px;
+}
+
+/* Content Typography */
+.legal-content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    color: var(--heading-color);
+}
+
+.legal-content p {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #333;
+    text-align: justify;
+}
+
+.legal-content ul {
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.legal-content li {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.legal-content strong {
+    font-weight: 600;
+}
+
+/* Highlight Box */
+.legal-notice-box {
+    background: #f9f9f9;
+    border-left: 4px solid #000;
+    padding: 20px;
+    margin: 30px 0;
+    font-size: 14px;
+    font-style: italic;
+}

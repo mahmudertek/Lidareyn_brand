@@ -16,7 +16,6 @@
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script src="../config.js"></script>
-    <script src="../categories-data.js"></script>
     <script src="admin-api.js"></script>
     <script>
         (function () {
@@ -1469,27 +1468,8 @@
             // Clear options
             subCategoryObj.innerHTML = '<option value="">Alt Kategori Seçin</option>';
 
-            if (selectedCategory && typeof categoriesData !== 'undefined' && categoriesData[selectedCategory]) {
-                const catData = categoriesData[selectedCategory];
-                let subItems = [];
-
-                // Veri yapısı kontrolü: Obje içinde subcategories dizisi (Yeni Yapı)
-                if (catData.subcategories && Array.isArray(catData.subcategories)) {
-                    catData.subcategories.forEach(group => {
-                        if (group.items && Array.isArray(group.items)) {
-                            subItems.push(...group.items);
-                        } else if (group.name) {
-                            subItems.push(group.name);
-                        }
-                    });
-                }
-                // Eski yapı (direkt array) desteği (fallback)
-                else if (Array.isArray(catData)) {
-                    subItems = catData;
-                }
-
-                // Dropdown doldur
-                subItems.forEach(sub => {
+            if (selectedCategory && categoriesData[selectedCategory]) {
+                categoriesData[selectedCategory].forEach(sub => {
                     const option = document.createElement('option');
                     option.value = sub;
                     option.textContent = sub;
