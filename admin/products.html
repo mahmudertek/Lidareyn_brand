@@ -425,6 +425,54 @@
             <!-- Content -->
             <div class="content-wrapper">
 
+                <!-- API Durum Paneli -->
+                <div id="api-debug-panel"
+                    style="background: #1e293b; color: #fff; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-family: monospace; font-size: 13px;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span id="api-status-icon">⏳</span>
+                        <span id="api-status-text">API durumu kontrol ediliyor...</span>
+                    </div>
+                </div>
+                <script>
+                    (function checkAPIStatus() {
+                        const panel = document.getElementById('api-debug-panel');
+                        const icon = document.getElementById('api-status-icon');
+                        const text = document.getElementById('api-status-text');
+
+                        // 1. ADMIN_API var mı?
+                        if (typeof ADMIN_API === 'undefined') {
+                            icon.textContent = '❌';
+                            panel.style.background = '#dc2626';
+                            text.innerHTML = '<strong>HATA:</strong> admin-api.js yüklenemedi! Sayfa bozuk. Lütfen Ctrl+F5 ile yenileyin.';
+                            return;
+                        }
+
+                        // 2. Sunucuya bağlan
+                        text.textContent = 'Sunucuya bağlanılıyor...';
+
+                        fetch(ADMIN_API.baseUrl + '/products?limit=1', {
+                            method: 'GET',
+                            headers: { 'Content-Type': 'application/json' }
+                        })
+                            .then(res => {
+                                if (res.ok) {
+                                    icon.textContent = '✅';
+                                    panel.style.background = '#16a34a';
+                                    text.innerHTML = '<strong>SUNUCU BAĞLANTISI BAŞARILI!</strong> Ürünler yükleniyor...';
+                                    // 3 saniye sonra paneli gizle
+                                    setTimeout(() => { panel.style.display = 'none'; }, 3000);
+                                } else {
+                                    throw new Error('HTTP ' + res.status);
+                                }
+                            })
+                            .catch(err => {
+                                icon.textContent = '⚠️';
+                                panel.style.background = '#ea580c';
+                                text.innerHTML = '<strong>SUNUCU YANITLAMIYOR!</strong> (' + err.message + ')<br>Sunucu uyku modunda olabilir. 1-2 dk bekleyip yenileyin veya yerel veriler gösterilecek.';
+                            });
+                    })();
+                </script>
+
                 <!-- Header -->
                 <div class="products-header">
                     <h2 style="margin: 0; color: #1f2937;">Tüm Ürünler</h2>
