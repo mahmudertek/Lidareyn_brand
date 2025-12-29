@@ -804,6 +804,49 @@
                     const descEl = document.getElementById('desc-text');
                     if (descEl) descEl.textContent = p.description || 'Açıklama bulunmuyor.';
 
+                    // STOK KONTROLÜ - Added by Antigravity (Safe Wrap)
+                    try {
+                        const stockCount = parseInt(p.stock || 0);
+                        const addToCartBtn = document.getElementById('add-to-cart-btn');
+
+                        if (addToCartBtn) {
+                            if (stockCount <= 0) {
+                                // Stok Tükendi Durumu
+                                addToCartBtn.disabled = true;
+                                addToCartBtn.innerHTML = '<i class="fa-solid fa-ban"></i> STOKLAR TÜKENMİŞTİR';
+                                addToCartBtn.style.backgroundColor = '#95a5a6';
+                                addToCartBtn.style.borderColor = '#95a5a6';
+                                addToCartBtn.style.cursor = 'not-allowed';
+                                addToCartBtn.style.opacity = '0.7';
+
+                                const priceContainer = document.querySelector('.product-price-container');
+                                if (priceContainer) {
+                                    let stockWarning = document.getElementById('stock-warning-badge');
+                                    if (!stockWarning) {
+                                        stockWarning = document.createElement('div');
+                                        stockWarning.id = 'stock-warning-badge';
+                                        stockWarning.style.color = '#e74c3c';
+                                        stockWarning.style.fontWeight = '600';
+                                        stockWarning.style.marginTop = '10px';
+                                        stockWarning.style.fontSize = '14px';
+                                        priceContainer.appendChild(stockWarning);
+                                    }
+                                    stockWarning.textContent = 'Üzgünüz, bu ürünün stokları tükenmiştir.';
+                                }
+                            } else {
+                                // Stok Var Durumu
+                                addToCartBtn.disabled = false;
+                                addToCartBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i> SEPETE EKLE';
+                                addToCartBtn.style = '';
+
+                                const stockWarning = document.getElementById('stock-warning-badge');
+                                if (stockWarning) stockWarning.remove();
+                            }
+                        }
+                    } catch (stockErr) {
+                        console.error('Stok kontrol hatası:', stockErr);
+                    }
+
                     // Görsel - birden fazla kaynak kontrol et
                     const mainImg = document.getElementById('mainImage');
                     const imageUrl = p.mainImage || p.image || (p.images && p.images[0]) || null;
@@ -816,17 +859,23 @@
                     console.log('Ürün yüklendi:', p.name);
 
                 } else {
-                    throw new Error('Ürün bulunamadı');
+                    throw new Error('Ürün bulunamadı (API yanıtı boş)');
                 }
 
             } catch (error) {
-                console.error('Hata:', error);
+                console.error('Kritik Hata:', error);
                 if (titleEl) {
-                    titleEl.textContent = 'Ürün Bulunamadı';
+                    // Hatayı kullanıcıya göstermek yerine konsola yazdık ama geliştirme aşamasında görelim
+                    // titleEl.textContent = 'Ürün Bulunamadı: ' + error.message; 
+                    // Kullanıcı dostu mesaj:
+                    if (!titleEl.textContent || titleEl.textContent === 'Yükleniyor...') {
+                        titleEl.textContent = 'Ürün Yüklenirken Hata Oluştu';
+                    }
                     titleEl.style.color = 'red';
                 }
-                if (priceEl) priceEl.textContent = '';
-                if (breadName) breadName.textContent = 'Hata';
+                // Diğer alanları temizleme ki kısmi veri görünsün
+                // if (priceEl) priceEl.textContent = '';
+                if (breadName && breadName.textContent === 'Yükleniyor...') breadName.textContent = 'Hata';
             }
         });
     </script>
