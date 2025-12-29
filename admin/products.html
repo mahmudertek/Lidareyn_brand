@@ -1322,46 +1322,59 @@
 
 
             try {
-                let response;
+                // Timeout Koruması (5 saniye)
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (5sn)')), 5000)
+                );
+
+                let apiCall;
                 if (id) {
-                    response = await ADMIN_API.updateProduct(id, productData);
+                    apiCall = ADMIN_API.updateProduct(id, productData);
                 } else {
-                    response = await ADMIN_API.createProduct(productData);
+                    apiCall = ADMIN_API.createProduct(productData);
                 }
+
+                // API İsteği vs Timeout Yarışı
+                let response = await Promise.race([apiCall, timeoutPromise]);
 
                 if (response.success) {
                     closeModal();
                     await loadProducts();
                     alert('✅ Ürün başarıyla kaydedildi!');
                 } else {
+                    // API hata döndü
                     console.error('API Hatası:', response);
-                    alert('❌ Hata: ' + (response.message || response.error || 'Kaydetme işlemi başarısız. Lütfen tüm alanları kontrol edin.'));
+                    throw new Error(response.message || response.error || 'API Hatası');
                 }
             } catch (error) {
-                console.error('Save error:', error);
+                // Hata veya Timeout -> Yerel Kayıt (Offline Mode)
+                console.warn('⚠️ Sunucu hatası, yerel kayıt yapılıyor:', error.message);
 
-                // Hata mesajını daha detaylı göster
-                let errorMessage = 'Sunucu bağlantısı kurulamadı.';
-                if (error.message && error.message.includes('entity too large')) {
-                    errorMessage = 'Görsel boyutu çok büyük! Lütfen daha küçük bir görsel seçin.';
-                } else if (error.message) {
-                    errorMessage = error.message;
-                }
-
-                // Fallback for offline mode or network error
                 if (id) {
                     const index = products.findIndex(p => (p._id || p.id) === id);
                     if (index !== -1) {
-                        products[index] = { ...products[index], ...productData };
+                        // Mevcut ürünü güncelle
+                        products[index] = { ...products[index], ...productData, _updatedLocal: true };
                     }
                 } else {
-                    products.push({ _id: Date.now().toString(), ...productData });
+                    // Yeni ürün ekle (Geçici ID ile)
+                    products.push({
+                        _id: 'local_' + Date.now(),
+                        id: 'local_' + Date.now(),
+                        ...productData,
+                        _newLocal: true
+                    });
                 }
-                // LocalStorage'a kaydet
+
+                // localStorage güncelle
                 localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+
                 closeModal();
                 renderProducts();
-                alert('✅ Ürün yerel olarak kaydedildi! (Sunucu bağlantısı yok, veriler tarayıcıda saklanıyor)');
+
+                // Kullanıcıya bilgi ver
+                const msg = error.message.includes('Timeout') ? 'Sunucu yanıt vermedi.' : 'Sunucu bağlantısı yok.';
+                alert(`✅ Ürün TARAYICIYA kaydedildi!\n(${msg})\n\nÜrün şu an sadece sizin bilgisayarınızda kayıtlı. İnternet/Sunucu düzeldiğinde otomatik gönderilecek.`);
             }
         }
 

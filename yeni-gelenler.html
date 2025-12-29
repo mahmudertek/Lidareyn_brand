@@ -667,7 +667,8 @@
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </div>
-                <img src="${image}" alt="${product.name}" class="product-image" loading="lazy">
+                <!-- Görsel görünürlüğünü zorla -->
+                <img src="${image}" alt="${product.name}" class="product-image" loading="lazy" style="opacity: 1 !important; visibility: visible !important; display: block !important; width: 100% !important;">
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
                     <div class="product-price">${priceStr}</div>

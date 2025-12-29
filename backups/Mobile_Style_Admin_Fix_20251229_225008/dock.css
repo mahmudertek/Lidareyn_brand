@@ -1,0 +1,151 @@
+/* ============================================
+   MACOS STYLE DOCK - 2025
+   ============================================ */
+
+.dock-wrapper {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding-bottom: 10px;
+    pointer-events: none;
+    /* Allow clicking through the wrapper area */
+}
+
+.dock {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    pointer-events: auto;
+    /* Re-enable pointer events for the dock itself */
+    transition: width 0.3s ease;
+}
+
+.dock-item {
+    position: relative;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+    text-decoration: none;
+    transition: all 0.1s ease-out;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transform-origin: bottom center;
+}
+
+.dock-item i {
+    font-size: 24px;
+    transition: all 0.1s ease-out;
+    color: #4a4a4a;
+}
+
+/* Specific Colors for Dock Items */
+.dock-item.home {
+    background: linear-gradient(135deg, #a8c0ff, #3f2b96);
+}
+
+.dock-item.categories {
+    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+}
+
+.dock-item.brands {
+    background: linear-gradient(135deg, #84fab0, #8fd3f4);
+}
+
+.dock-item.search {
+    background: linear-gradient(135deg, #e0c3fc, #8ec5fc);
+}
+
+.dock-item.cart {
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+}
+
+.dock-item.profile {
+    background: linear-gradient(135deg, #f6d365, #fda085);
+}
+
+.dock-item i {
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+/* Tooltip */
+.dock-tooltip {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.dock-item:hover .dock-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+    top: -50px;
+}
+
+/* Active Indicator */
+.dock-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    background: #333;
+    border-radius: 50%;
+    opacity: 0.6;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .dock-wrapper {
+        bottom: 10px;
+        width: 90%;
+    }
+
+    .dock {
+        width: 100%;
+        justify-content: space-around;
+        padding: 10px;
+        gap: 5px;
+    }
+
+    .dock-item {
+        width: 40px;
+        height: 40px;
+    }
+
+    .dock-item i {
+        font-size: 18px;
+    }
+}

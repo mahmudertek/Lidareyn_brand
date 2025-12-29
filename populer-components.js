@@ -64,7 +64,8 @@
                     React.createElement('img', {
                         src: product.image,
                         alt: product.name,
-                        loading: 'lazy'
+                        loading: 'lazy',
+                        style: { opacity: 1, visibility: 'visible', display: 'block', width: '100%', height: '100%', objectFit: 'contain' }
                     })
                 ),
                 React.createElement('div', { className: 'product-info' },
