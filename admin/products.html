@@ -1534,16 +1534,20 @@
             // Clear options
             subCategoryObj.innerHTML = '<option value="">Alt Kategori Seçin</option>';
 
+            console.log('📂 Kategori seçildi:', selectedCategory);
+            console.log('📂 categoriesData var mı:', typeof categoriesData !== 'undefined');
+
             if (selectedCategory && typeof categoriesData !== 'undefined' && categoriesData[selectedCategory]) {
                 const catData = categoriesData[selectedCategory];
                 let subItems = [];
 
-                // Veri yapısı kontrolü: Obje içinde subcategories dizisi (Yeni Yapı)
+                console.log('📂 Kategori verisi:', catData);
+
+                // Veri yapısı kontrolü: Obje içinde subcategories dizisi
                 if (catData.subcategories && Array.isArray(catData.subcategories)) {
+                    // Sadece grup isimlerini al (name)
                     catData.subcategories.forEach(group => {
-                        if (group.items && Array.isArray(group.items)) {
-                            subItems.push(...group.items);
-                        } else if (group.name) {
+                        if (group.name) {
                             subItems.push(group.name);
                         }
                     });
@@ -1563,6 +1567,8 @@
                     }
                     subCategoryObj.appendChild(option);
                 });
+
+                console.log('📂 Alt kategoriler:', subItems);
             }
         }
     </script>

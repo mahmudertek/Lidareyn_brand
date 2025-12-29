@@ -43,12 +43,11 @@
     /* No animation */
 }
 
-/* Hover disabled - Mega menu will NOT open on hover */
+/* Hover enabled - Mega menu opens on hover */
 .nav-item-dropdown:hover .mega-menu {
-    /* Keep hidden - no dropdown animation */
-    opacity: 0;
-    visibility: hidden;
-    display: none;
+    opacity: 1;
+    visibility: visible;
+    display: flex;
 }
 
 /* Left Sidebar: Category List */

@@ -4,6 +4,31 @@
 
 const categoriesData = {
 
+    'elektrikli-el-aletleri': {
+        title: 'Elektrikli El Aletleri',
+        description: 'Profesyonel elektrikli el aletleri ve makineler.',
+        icon: 'fa-plug',
+        image: 'gorseller/category_elektrikli.png',
+        subcategories: [
+            { name: 'Delme & Vidalama', items: ['Matkap', 'Vidalama Makinesi', 'Darbeli Matkap'], icon: 'fa-screwdriver' },
+            { name: 'Kesme & Taşlama', items: ['Avuç Taşlama', 'Spiral', 'Testere'], icon: 'fa-compact-disc' },
+            { name: 'Yüzey İşleme', items: ['Zımpara Makinesi', 'Planya', 'Freze'], icon: 'fa-brush' },
+            { name: 'Diğer Makineler', items: ['Dekupaj', 'Sıcak Hava Tabancası', 'Şarjlı Aletler'], icon: 'fa-toolbox' }
+        ]
+    },
+
+    'el-aletleri': {
+        title: 'El Aletleri',
+        description: 'Profesyonel el aletleri ve manuel ekipmanlar.',
+        icon: 'fa-wrench',
+        image: 'gorseller/category_el_aletleri.png',
+        subcategories: [
+            { name: 'Anahtarlar & Vidalama', items: ['Tornavida Setleri', 'Lokma Takımları', 'Allen Anahtar'], icon: 'fa-wrench' },
+            { name: 'Kesme & Şekillendirme', items: ['Pense', 'Keski', 'Eğe'], icon: 'fa-scissors' },
+            { name: 'Vurma & Sabitleme', items: ['Çekiç', 'Balyoz', 'Kerpeten'], icon: 'fa-hammer' }
+        ]
+    },
+
     'olcme-ve-kontrol-aletleri': {
         title: 'Ölçme & Kontrol Aletleri',
         description: 'Hassas ölçüm ve kontrol işlemleri için profesyonel cihazlar.',
