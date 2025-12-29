@@ -79,9 +79,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const aExact = aVal === normalizedTarget;
                 const bExact = bVal === normalizedTarget;
 
-                if (aExact && !bExact) return -1; // a önce gelir
-                if (!aExact && bExact) return 1;  // b önce gelir
-                return 0; // Sıralamayı bozma
+                // 1. Vitrin seçimi olanlar EN ÜSTE
+                if (aExact && !bExact) return -1;
+                if (!aExact && bExact) return 1;
+
+                // 2. Kendi aralarında (veya vitrin seçimi olmayanlarda) YENİDEN ESKİYE
+                // MongoDB ID'si timestamp içerir, string karşılaştırması yeterlidir.
+                // a > b ise (yeni ise) -1 dönecek ve öne geçecek.
+                if ((a._id || a.id) > (b._id || b.id)) return -1;
+                if ((a._id || a.id) < (b._id || b.id)) return 1;
+
+                return 0;
             });
 
             // Take top 3
@@ -116,9 +124,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle" onclick="event.stopPropagation(); toggleFavorite(${JSON.stringify(product).replace(/"/g, '&quot;')})">
                         <i class="fa-regular fa-heart"></i>
                     </button>
-                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image">
+                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image" style="opacity: 1 !important; visibility: visible !important; display: block !important; object-fit: contain;">
                     <div class="madeniyat-product-info">
-                        <h3 class="madeniyat-product-name">${product.name}</h3>
+                        <h3 class="madeniyat-product-name" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; height: 3em;">${product.name}</h3>
                         <p class="madeniyat-product-price">${product.price ? product.price.toLocaleString('tr-TR') + ' TL' : 'Fiyat için arayınız'}</p>
                     </div>
                 `;
