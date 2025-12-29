@@ -19,3 +19,10 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Backups
+backups/
+*.zip
+*.rar
+*.tar.gz
+*.bak
