@@ -1524,36 +1524,7 @@
         }
         initPage();
 
-        // MEGA MENU CATEGORY DATA
-        const categoriesData = {
-            'elektrikli-el-aletleri': [
-                'Delme & Vidalama', 'Kesme & Taşlama', 'Yüzey İşleme', 'Diğer Makineler'
-            ],
-            'olcme-ve-kontrol-aletleri': [
-                'Lazerli Ölçüm', 'Mekanik Ölçüm', 'Terazi & Açı', 'Görüntüleme'
-            ],
-            'el-aletleri': [
-                'Anahtarlar & Vidalama', 'Kesme & Şekillendirme', 'Vurma & Sabitleme'
-            ],
-            'nalbur-yapi-malzemeleri': [
-                'Kimyasal & Yapıştırıcı', 'Boya & İzolasyon', 'Donanım'
-            ],
-            'asindirici-kesici': [
-                'Delici & Vidalama', 'Kesme & Taşlama', 'Aşındırma ve Zımpara'
-            ],
-            'yapi-kimyasallari': [
-                'Yapıştırıcılar', 'Dolgu ve Harçlar', 'Kimyasallar'
-            ],
-            'kaynak-malzemeleri': [
-                'Sarf Malzemeleri', 'Koruyucu Ekipman', 'Makine ve Aksesuar'
-            ],
-            'hirdavat-el-aletleri': [
-                'Ölçü Aletleri', 'Kesici & Delici', 'Sıkıştırma & Tutma', 'Vurucu Aletler'
-            ],
-            'is-guvenligi-ve-calisma-ekipmanlari': [
-                'Koruyucu Giyim', 'Ayak & Baş Koruma', 'Göz & Kulak Koruma', 'Çalışma Ekipmanları'
-            ]
-        };
+        // categoriesData artık ../categories-data.js dosyasından geliyor
 
         function updateSubCategories(selectedSub = null) {
             const categoryObj = document.getElementById('productCategory');
