@@ -16,30 +16,29 @@ async function initProductCarousel() {
 
     // Try to fetch products from API
     try {
-        if (window.API && typeof window.API.getProducts === 'function') {
-            // Limit'i 60 yap (12x5 sayfa için), böylece daha fazla ürün gelir
-            const response = await window.API.getProducts({ isFeatured: true, limit: 60 });
-            if (response && response.success && response.data && response.data.length > 0) {
-                console.log('✅ Featured products loaded from API:', response.data.length);
-                products = response.data.map(product => {
-                    // Try multiple image sources
-                    let imageUrl = product.mainImage || product.image || (product.images && product.images[0]) || null;
+        // Try to fetch products from API
+        // API'den tüm 'featured' etiketli veya isFeatured=true olanları iste
+        const response = await window.API.getProducts({ isFeatured: true, limit: 60 });
 
-                    // If no image found, use placeholder
-                    if (!imageUrl) {
-                        imageUrl = 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name || 'Ürün');
-                    }
+        if (response && response.success && response.data && response.data.length > 0) {
+            console.log('✅ Featured products loaded from API:', response.data.length);
 
-                    return {
-                        id: product._id,
-                        name: product.name,
-                        price: `₺${product.price ? product.price.toLocaleString() : '0'}`,
-                        image: imageUrl,
-                        badge: product.isNew ? 'Yeni' : (product.tags && product.tags[0]) || '',
-                        link: `urun-detay.html?id=${product._id}`
-                    };
-                });
-            }
+            // API zaten filtrelediği için gelenleri direkt kullanıyoruz
+            // Ama yine de client-side bir doğrulama ve veri normalizasyonu yapalım
+            products = response.data.map(product => {
+                // Try multiple image sources
+                let imageUrl = product.mainImage || product.image || (product.images && product.images[0]) || null;
+                if (!imageUrl) imageUrl = 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name || 'Ürün');
+
+                return {
+                    id: product._id || product.id,
+                    name: product.name,
+                    price: `₺${product.price ? product.price.toLocaleString() : '0'}`,
+                    image: imageUrl,
+                    badge: product.isNew ? 'Yeni' : (product.tags && product.tags.includes('new') ? 'Yeni' : ''),
+                    link: `urun-detay.html?id=${product._id || product.id}`
+                };
+            });
         }
     } catch (error) {
         console.error('Failed to fetch featured products from API:', error);
@@ -51,7 +50,14 @@ async function initProductCarousel() {
             const localProducts = localStorage.getItem('galatacarsi_products');
             if (localProducts) {
                 const allProducts = JSON.parse(localProducts);
-                const featuredProducts = allProducts.filter(p => p.isFeatured === true);
+
+                // GÜÇLENDİRİLMİŞ FİLTRELEME:
+                // Hem 'isFeatured' boolean'ına hem de 'tags' dizisine bak
+                const featuredProducts = allProducts.filter(p =>
+                    p.isFeatured === true ||
+                    p.isFeatured === 'true' ||
+                    (p.tags && Array.isArray(p.tags) && p.tags.includes('featured'))
+                );
 
                 if (featuredProducts.length > 0) {
                     console.log('✅ Featured products loaded from localStorage:', featuredProducts.length);
@@ -60,7 +66,7 @@ async function initProductCarousel() {
                         name: product.name,
                         price: `₺${product.price ? parseFloat(product.price).toLocaleString() : '0'}`,
                         image: product.mainImage || product.image || 'https://placehold.co/300x200?text=Ürün',
-                        badge: product.isNew ? 'Yeni' : '',
+                        badge: (product.isNew || (product.tags && product.tags.includes('new'))) ? 'Yeni' : '',
                         link: `urun-detay.html?id=${product._id || product.id}`
                     }));
                 }

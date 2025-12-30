@@ -96,27 +96,57 @@
 
             React.useEffect(function () {
                 if (window.API && typeof window.API.getProducts === 'function') {
-                    window.API.getProducts({ limit: 40 }).then(function (res) {
-                        if (res.success && res.data) {
+                    // isPopular: true ile sadece popüler ürünleri iste
+                    window.API.getProducts({ isPopular: true, limit: 60 }).then(function (res) {
+                        if (res.success && res.data && res.data.length > 0) {
                             var mapped = res.data.map(function (p) {
                                 return {
-                                    id: p._id,
+                                    id: p._id || p.id,
                                     name: p.name,
                                     price: p.price,
                                     image: p.mainImage || p.image || (p.images && p.images[0]) || 'https://placehold.co/300x400?text=Urun',
                                     brand: p.brand,
-                                    badge: p.isFeatured ? 'Popüler' : ''
+                                    badge: (p.isPopular || (p.tags && p.tags.includes('popular'))) ? 'Popüler' : ''
                                 };
                             });
                             setProducts(mapped);
+                        } else {
+                            // API boş dönerse localStorage dene
+                            loadFromLocal();
                         }
-                    });
+                    }).catch(function () { loadFromLocal(); });
                 } else {
-                    var allProducts = window.productsData || [];
-                    if (allProducts.length > 0 && allProducts.length < 20) {
-                        allProducts = allProducts.concat(allProducts).concat(allProducts);
+                    loadFromLocal();
+                }
+
+                function loadFromLocal() {
+                    // LocalStorage'dan dene
+                    var localData = [];
+                    try {
+                        localData = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                    } catch (e) { }
+
+                    var popularProducts = localData.filter(function (p) {
+                        return p.isPopular === true || p.isPopular === 'true' ||
+                            (p.tags && Array.isArray(p.tags) && p.tags.includes('popular'));
+                    });
+
+                    if (popularProducts.length > 0) {
+                        var mapped = popularProducts.map(function (p) {
+                            return {
+                                id: p._id || p.id,
+                                name: p.name,
+                                price: typeof p.price === 'string' ? parseFloat(p.price) : p.price,
+                                image: p.mainImage || p.image || 'https://placehold.co/300x400?text=Urun',
+                                brand: p.brand,
+                                badge: 'Popüler'
+                            };
+                        });
+                        setProducts(mapped);
+                    } else {
+                        // Hiç veri yoksa statik veriyi kullan
+                        setProducts(window.productsData || []);
                     }
-                    setProducts(allProducts);
                 }
             }, []);
 
