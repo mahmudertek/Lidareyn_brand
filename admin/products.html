@@ -1320,7 +1320,15 @@
                         </td>
                         <td><span class="product-brand">${product.brand || '-'}</span></td>
                         <td>${product.category || '-'}</td>
-                        <td><span class="product-price">₺${product.price?.toLocaleString() || '0'}</span></td>
+                        <td>
+                             <div style="display:flex; flex-direction:column; font-weight:600;">
+                                 ${product.salePrice
+                        ? `<span style="text-decoration:line-through; color:#9ca3af; font-size:12px;">₺${product.price?.toLocaleString()}</span>
+                                        <span style="color:#e11d48;">₺${parseFloat(product.salePrice).toLocaleString()}</span>`
+                        : `<span>₺${product.price?.toLocaleString() || '0'}</span>`
+                    }
+                             </div>
+                        </td>
                         <td><span class="product-stock ${stockClass}">${stockText} (${product.stock || 0})</span></td>
                         <td>
                             <div class="action-btns">
@@ -1506,44 +1514,87 @@
                 e.stopPropagation();
             }
 
-            const modal = document.getElementById('productModal');
-            modal.classList.add('minimized');
+            const modalOverlay = document.getElementById('productModal');
+            if (!modalOverlay) return;
+
+            modalOverlay.classList.add('minimized');
+
+            // CSS class yetmezse diye Inline Style ile ZORLA
+            modalOverlay.style.background = 'transparent';
+            modalOverlay.style.pointerEvents = 'none';
+            modalOverlay.style.alignItems = 'flex-end';
+            modalOverlay.style.justifyContent = 'flex-end';
+
+            const modalBox = modalOverlay.querySelector('.modal');
+            if (modalBox) {
+                modalBox.style.width = '320px';
+                modalBox.style.height = '60px';
+                modalBox.style.margin = '0 20px 20px 0';
+                modalBox.style.overflow = 'hidden';
+                modalBox.style.pointerEvents = 'auto'; // Tıklanabilir olsun
+            }
 
             // İkonu değiştir
-            const minimizeBtn = modal.querySelector('.modal-minimize i');
+            const minimizeBtn = modalOverlay.querySelector('.modal-minimize i');
             if (minimizeBtn) {
                 minimizeBtn.className = 'fa-solid fa-window-maximize';
             }
 
-            // Minimize edilmiş modal'a tıklandığında restore et
-            // Gecikmeli ekle ki mevcut tıklama tetiklemesin
-            setTimeout(() => {
-                const modalElement = modal.querySelector('.modal');
-                modalElement.onclick = function (evt) {
-                    // Butonlara tıklayınca restore olmasın (zaten onların kendi event'i var)
-                    if (evt.target.closest('button')) return;
+            // Header ve Body gizlemeyi CSS yapıyor ama garanti olsun
+            const body = modalOverlay.querySelector('.modal-body');
+            const footer = modalOverlay.querySelector('.modal-footer');
+            if (body) body.style.display = 'none';
+            if (footer) footer.style.display = 'none';
 
-                    if (modal.classList.contains('minimized')) {
-                        restoreModal();
-                    }
+            // Gecikmeli restore listener
+            setTimeout(() => {
+                const modalElement = modalOverlay.querySelector('.modal');
+                // Mevcut listener varsa temizle (önemli)
+                modalElement.onclick = null;
+
+                modalElement.onclick = function (evt) {
+                    // Butonlara tıklayınca restore olmasın
+                    if (evt.target.closest('button') || evt.target.closest('.modal-minimize') || evt.target.closest('.modal-close')) return;
+                    restoreModal();
                 };
-            }, 50);
+            }, 100);
         }
 
         // Restore modal
         function restoreModal() {
-            const modal = document.getElementById('productModal');
-            modal.classList.remove('minimized');
+            const modalOverlay = document.getElementById('productModal');
+            if (!modalOverlay) return;
+
+            modalOverlay.classList.remove('minimized');
+
+            // Inline stilleri temizle
+            modalOverlay.style.background = '';
+            modalOverlay.style.pointerEvents = '';
+            modalOverlay.style.alignItems = '';
+            modalOverlay.style.justifyContent = '';
+
+            const modalBox = modalOverlay.querySelector('.modal');
+            if (modalBox) {
+                modalBox.style.width = '';
+                modalBox.style.height = '';
+                modalBox.style.margin = '';
+                modalBox.style.overflow = '';
+            }
+
+            const body = modalOverlay.querySelector('.modal-body');
+            const footer = modalOverlay.querySelector('.modal-footer');
+            if (body) body.style.display = '';
+            if (footer) footer.style.display = '';
 
             // İkonu geri değiştir
-            const minimizeBtn = modal.querySelector('.modal-minimize i');
+            const minimizeBtn = modalOverlay.querySelector('.modal-minimize i');
             if (minimizeBtn) {
                 minimizeBtn.className = 'fa-solid fa-minus';
             }
 
             // onclick handler'ı kaldır
-            const modalElement = modal.querySelector('.modal');
-            modalElement.onclick = null;
+            const modalElement = modalOverlay.querySelector('.modal');
+            if (modalElement) modalElement.onclick = null;
         }
 
         // Save product
