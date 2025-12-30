@@ -17,7 +17,8 @@ async function initProductCarousel() {
     // Try to fetch products from API
     try {
         if (window.API && typeof window.API.getProducts === 'function') {
-            const response = await window.API.getProducts({ isFeatured: true, limit: 24 });
+            // Limit'i 60 yap (12x5 sayfa için), böylece daha fazla ürün gelir
+            const response = await window.API.getProducts({ isFeatured: true, limit: 60 });
             if (response && response.success && response.data && response.data.length > 0) {
                 console.log('✅ Featured products loaded from API:', response.data.length);
                 products = response.data.map(product => {
@@ -98,24 +99,29 @@ async function initProductCarousel() {
     function buildCarousel() {
         container.innerHTML = '';
 
+        // Eğer ürün yoksa gösterme
+        if (products.length === 0) return;
+
         // Create grid
         const grid = document.createElement('div');
         grid.classList.add('product-carousel-grid');
         grid.id = 'product-carousel-grid';
         container.appendChild(grid);
 
-        // Create navigation arrows
-        const prevBtn = document.createElement('button');
-        prevBtn.classList.add('carousel-nav-arrow', 'prev');
-        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
-        prevBtn.onclick = () => changePage(-1);
-        container.appendChild(prevBtn);
+        // Gezinme oklarını sadece birden fazla sayfa varsa göster
+        if (totalPages > 1) {
+            const prevBtn = document.createElement('button');
+            prevBtn.classList.add('carousel-nav-arrow', 'prev');
+            prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            prevBtn.onclick = () => changePage(-1);
+            container.appendChild(prevBtn);
 
-        const nextBtn = document.createElement('button');
-        nextBtn.classList.add('carousel-nav-arrow', 'next');
-        nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
-        nextBtn.onclick = () => changePage(1);
-        container.appendChild(nextBtn);
+            const nextBtn = document.createElement('button');
+            nextBtn.classList.add('carousel-nav-arrow', 'next');
+            nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            nextBtn.onclick = () => changePage(1);
+            container.appendChild(nextBtn);
+        }
 
         // Create page indicators
         const indicators = document.createElement('div');
