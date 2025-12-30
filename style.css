@@ -2916,3 +2916,139 @@ img[loading="lazy"].loaded {
 #clear-filters-btn:active {
     transform: translateY(0);
 }
+
+/* Responsive Search Row */
+.responsive-search-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.responsive-search-input-container {
+    flex: 1;
+    position: relative;
+}
+
+.responsive-sort-buttons {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    padding-top: 28px;
+}
+
+.sort-btn-compact {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 16px;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap; /* Metin taþmasýn */
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .responsive-search-row {
+        flex-direction: column;
+        align-items: stretch; /* Tam geniþlik */
+    }
+
+    .responsive-search-input-container {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .responsive-sort-buttons {
+        margin-left: 0;
+        padding-top: 0;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .sort-btn-compact {
+        flex: 1; /* Butonlar eþit geniþlikte yayýlsýn */
+        justify-content: center;
+    }
+}
+
+/* Mobile Advanced Search Fix - Kökten Çözüm */
+@media (max-width: 768px) {
+    /* Genel Container Taþmasýný Önle */
+    .advanced-search-panel {
+        padding: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow: hidden !important; /* Taþmayý gizle */
+    }
+
+    /* Satýr Yapýsý */
+    .search-option-row, 
+    .search-option-row.full-width {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 15px !important;
+        gap: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Input Wrapper (Input + Button) */
+    .search-input-wrapper {
+        display: flex !important;
+        flex-direction: column !important; /* Alt alta diz */
+        width: 100% !important;
+        gap: 8px !important;
+        border: none !important; /* Wrapper border'ýný kaldýr */
+        padding: 0 !important;
+        background: transparent !important;
+    }
+
+    /* Input Elemaný */
+    .search-input-wrapper input {
+        width: 100% !important;
+        box-sizing: border-box !important; /* Padding dahil hesapla */
+        border: 2px solid #e5e7eb !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
+        min-width: 0 !important;
+    }
+
+    /* Ara Butonu */
+    .search-btn-inline, 
+    .search-input-wrapper button {
+        width: 100% !important;
+        position: static !important; /* Absolute'u iptal et */
+        transform: none !important;
+        border-radius: 8px !important;
+        margin-left: 0 !important;
+        margin-top: 5px !important;
+        justify-content: center !important;
+        padding: 12px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Label */
+    .search-option-label {
+        width: 100% !important;
+        white-space: normal !important; /* Uzun metinler alt satýra geçsin */
+        font-size: 13px !important;
+        line-height: 1.4 !important;
+    }
+    
+    /* Geliþmiþ Arama Baþlýðý */
+    .advanced-search-title {
+        font-size: 18px !important;
+        text-align: center !important;
+    }
+
+    /* Marka arama satýrý */
+    .search-option-row .search-input-wrapper {
+        max-width: none !important;
+    }
+}

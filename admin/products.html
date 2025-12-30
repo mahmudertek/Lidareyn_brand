@@ -448,6 +448,106 @@
             gap: 12px;
         }
 
+        /* Minimize Butonu ve Mod Stili */
+        .modal-minimize {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: #f3f4f6;
+            color: #6b7280;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-minimize:hover {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        /* Minimized Modal - Sağ Alta Küçültme */
+        .modal-overlay.minimized {
+            background: transparent;
+            pointer-events: none;
+            align-items: flex-end;
+            justify-content: flex-end;
+            padding: 0;
+            z-index: 9999;
+            /* En üstte durması için */
+        }
+
+        .modal-overlay.minimized .modal {
+            width: 320px;
+            height: 60px;
+            margin: 0 20px 20px 0;
+            /* Sağ alt köşe */
+            overflow: hidden;
+            pointer-events: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border: 2px solid #4f46e5;
+            animation: slideInBottom 0.3s ease;
+        }
+
+        @keyframes slideInBottom {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-overlay.minimized .modal-body,
+        .modal-overlay.minimized .modal-footer {
+            display: none !important;
+        }
+
+        .modal-overlay.minimized .modal-header {
+            background: #4f46e5;
+            color: white;
+            cursor: pointer;
+            height: 100%;
+            padding: 0 20px;
+            border-bottom: none;
+        }
+
+        .modal-overlay.minimized .modal-header h2 {
+            color: white;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Küçülünce başlığın önüne ikon ekle */
+        .modal-overlay.minimized .modal-header h2::before {
+            content: '\f044';
+            /* fa-edit */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+        }
+
+        .modal-overlay.minimized .modal-close {
+            display: none;
+        }
+
+        .modal-overlay.minimized .modal-minimize {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .modal-overlay.minimized .modal-minimize:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         .btn-cancel {
             padding: 12px 24px;
             border: 1px solid #d1d5db;
@@ -1445,7 +1545,11 @@
             const name = document.getElementById('productName').value;
             const brand = document.getElementById('productBrand').value;
             const price = parseFloat(document.getElementById('productPrice').value) || 0;
-            const salePrice = parseFloat(document.getElementById('productSalePrice').value) || null;
+
+            // İndirimli fiyat mantığını düzelt: 0 girilirse 0 olsun, boş ise null olsun
+            const rawSalePrice = document.getElementById('productSalePrice').value;
+            const salePrice = rawSalePrice !== '' ? parseFloat(rawSalePrice) : null;
+
             const stock = parseInt(document.getElementById('productStock').value) || 0;
             const category = document.getElementById('productCategory').value;
             const description = document.getElementById('productDescription').value;
@@ -1474,15 +1578,16 @@
 
             // Kategori ismini al
             const categoryName = getCategoryName(category);
-            console.log('💾 Kaydediliyor - Kategori slug:', category, '-> Kategori adı:', categoryName);
-
-            // Eğer kategori hâlâ slug formatındaysa (mapping bulunamadı), uyar
-            if (categoryName === category && !categoryName.includes(' ')) {
-                console.warn('⚠️ Kategori mapping bulunamadı:', category);
-            }
 
             // Yüklenen görseli al veya placeholder kullan
             const imageToUse = uploadedImageBase64 || `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`;
+
+            // Tags array oluştur (Backend uyumluluğu için ekstra güvenlik)
+            const tags = [];
+            if (isPopular) tags.push('popular');
+            if (isNew) tags.push('new');
+            if (isFeatured) tags.push('featured');
+            if (isBestSeller) tags.push('bestseller');
 
             const productData = {
                 name,
@@ -1492,33 +1597,52 @@
                 subCategory: subCategory,
 
                 price,
-                salePrice,
+                salePrice, // Düzeltilmiş salePrice
                 stock,
                 unit,
                 description: description || `${brand} ${name} - Galata Çarşı kalitesiyle.`,
-                sku,
-                barcode,
-                // Tüm etiketler
-                isPopular,      // Popüler Ürünler sayfasında görünsün
-                isBestSeller,   // Çok Satan badge'i
-                isNew,          // Yeni Gelenler sayfasında görünsün  
-                isFeatured,     // Öne Çıkan ürün
+                sku: sku || '',         // Boş string olarak gönder
+                barcode: barcode || '', // Boş string olarak gönder
+
+                // Tüm etiketler (Ayrı ayrı)
+                isPopular: !!isPopular,
+                isBestSeller: !!isBestSeller,
+                isNew: !!isNew,
+                isFeatured: !!isFeatured,
+
+                // Tags array (Toplu)
+                tags: tags,
+
                 // Ana sayfa marka vitrini
-                brandShowcase,  // beta, bosch, makita, knipex, dewalt, blackdecker
+                brandShowcase: brandShowcase || '',
                 mainImage: imageToUse
             };
 
-            // Debug: Barkod kontrolü
-            console.log('💾 Kaydedilen Barkod:', barcode || 'BOŞ');
-            console.log('💾 Kaydedilen SKU:', sku || 'BOŞ');
+            // Eğer id varsa güncelleme yapıyoruz, mevcut ürünü bulup bazı alanları koruyalım
+            if (id) {
+                const existingProduct = products.find(p => (p._id || p.id) === id);
+                if (existingProduct) {
+                    // Eğer yeni görsel yüklenmediyse eskisini koru
+                    if (!uploadedImageBase64 && existingProduct.mainImage && !existingProduct.mainImage.includes('placehold.co')) {
+                        productData.mainImage = existingProduct.mainImage;
+                    }
+                }
+            }
 
+            console.log('💾 Kaydedilecek Veri:', {
+                barcode: productData.barcode,
+                salePrice: productData.salePrice,
+                tags: productData.tags,
+                isFeatured: productData.isFeatured,
+                isPopular: productData.isPopular
+            });
 
-
+            showLoading(); // Yükleniyor göster
 
             try {
-                // Timeout Koruması (5 saniye)
+                // Timeout Koruması (10 saniye - görsel yükleme uzun sürebilir)
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (5sn)')), 5000)
+                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (10sn)')), 10000)
                 );
 
                 let apiCall;
@@ -1532,9 +1656,24 @@
                 let response = await Promise.race([apiCall, timeoutPromise]);
 
                 if (response.success) {
+                    console.log('✅ API Yanıtı Başarılı:', response);
+
+                    // Sunucudan dönen veriyi hemen yerel listeye yansıt (Load beklemeden)
+                    if (response.data) {
+                        if (id) {
+                            const index = products.findIndex(p => (p._id || p.id) === id);
+                            if (index !== -1) products[index] = response.data;
+                        } else {
+                            products.push(response.data);
+                        }
+                        renderProducts(); // Hemen tabloyu güncelle
+                    }
+
                     closeModal();
-                    await loadProducts();
                     alert('✅ Ürün başarıyla kaydedildi!');
+
+                    // Arka planda listeyi tazelemek için
+                    setTimeout(() => loadProducts(), 1000);
                 } else {
                     // API hata döndü
                     console.error('API Hatası:', response);
@@ -1547,7 +1686,8 @@
                 if (id) {
                     const index = products.findIndex(p => (p._id || p.id) === id);
                     if (index !== -1) {
-                        // Mevcut ürünü güncelle
+                        // Mevcut ürünü güncelle - DİKKAT: productData'daki boş alanların eskisini ezmesini engellemek için merge ediyoruz
+                        // Ama formdan gelen boş string gerçekten boş olsun istenmiş olabilir, o yüzden productData öncelikli.
                         products[index] = { ...products[index], ...productData, _updatedLocal: true };
                     }
                 } else {
@@ -1569,6 +1709,10 @@
                 // Kullanıcıya bilgi ver
                 const msg = error.message.includes('Timeout') ? 'Sunucu yanıt vermedi.' : 'Sunucu bağlantısı yok.';
                 alert(`✅ Ürün TARAYICIYA kaydedildi!\n(${msg})\n\nÜrün şu an sadece sizin bilgisayarınızda kayıtlı. İnternet/Sunucu düzeldiğinde otomatik gönderilecek.`);
+            } finally {
+                // Her durumda loading state'i kaldır (renderProducts zaten temizler ama nolur nolmaz)
+                const tbody = document.getElementById('productsTableBody');
+                if (tbody.innerHTML.includes('spinner')) renderProducts();
             }
         }
 

@@ -570,8 +570,8 @@
         <!-- Advanced Search Panel / Gelişmiş Arama Bölmesi -->
         <section class="advanced-search-section" aria-label="Gelişmiş Arama">
             <!-- Dış Başlık (Bölme Üstünde) -->
-            <h2
-                style="text-align: center; font-size: 28px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+            <!-- Dış Başlık (Bölme Üstünde) -->
+            <h2 class="our-brands-section-title" style="margin-bottom: 20px;">
                 <i class="fa-solid fa-sliders" style="margin-right: 12px; color: #8b7bd8;"></i>
                 GELİŞMİŞ ARAMA SEÇENEKLERİ
             </h2>
@@ -601,9 +601,9 @@
                     </div>
 
                     <!-- Arama + Sıralama Satırı -->
-                    <div class="search-option-row full-width" style="display: flex; align-items: center; gap: 15px;">
-                        <!-- Arama Kutusu (Sol) - Full Width -->
-                        <div style="flex: 1; position: relative;">
+                    <div class="search-option-row full-width responsive-search-row">
+                        <!-- Arama Kutusu (Sol) -->
+                        <div class="responsive-search-input-container">
                             <span class="search-option-label" style="margin-bottom: 8px; display: block;">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                                 Sayfa, marka, ürün, alt veya üst kategori arayın
@@ -623,14 +623,12 @@
                         </div>
 
                         <!-- Sıralama Butonları (Sağ) -->
-                        <div style="display: flex; gap: 10px; margin-left: auto; padding-top: 28px;">
-                            <button type="button" class="sort-btn-compact" data-sort="price-asc"
-                                style="display: flex; align-items: center; gap: 6px; padding: 12px 16px; background: white; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-weight: 500; color: #4b5563; cursor: pointer; transition: all 0.2s;">
+                        <div class="responsive-sort-buttons">
+                            <button type="button" class="sort-btn-compact" data-sort="price-asc">
                                 <i class="fa-solid fa-arrow-down-short-wide"></i>
                                 <span>Düşük → Yüksek</span>
                             </button>
-                            <button type="button" class="sort-btn-compact" data-sort="price-desc"
-                                style="display: flex; align-items: center; gap: 6px; padding: 12px 16px; background: white; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-weight: 500; color: #4b5563; cursor: pointer; transition: all 0.2s;">
+                            <button type="button" class="sort-btn-compact" data-sort="price-desc">
                                 <i class="fa-solid fa-arrow-up-wide-short"></i>
                                 <span>Yüksek → Düşük</span>
                             </button>

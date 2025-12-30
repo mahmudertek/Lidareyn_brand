@@ -1093,3 +1093,69 @@
         border-bottom: none !important;
     }
 }
+/* --- ADVANCED SEARCH MOBILE FIX (Step 836) --- */
+@media screen and (max-width: 768px) {
+    /* 1. Panel Layout */
+    .advanced-search-section {
+        padding: 10px 0 !important;
+        width: 100% !important;
+        overflow-x: hidden !important;
+    }
+    
+    .advanced-search-panel {
+        width: 96% !important;
+        margin: 0 auto !important;
+        padding: 15px 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 2. Sort Buttons - Stack vertically */
+    .responsive-sort-buttons {
+        display: flex !important;
+        flex-direction: column !important; /* Force stack */
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding-top: 10px !important;
+        gap: 8px !important;
+    }
+
+    .sort-btn-compact {
+        width: 100% !important; /* Full width button */
+        justify-content: center !important;
+        padding: 12px 0 !important;
+        height: auto !important;
+    }
+    
+    /* 3. Search Row & Inputs */
+    .search-option-row,
+    .responsive-search-row {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+        margin-bottom: 20px !important;
+        padding: 0 !important;
+    }
+    
+    .responsive-search-input-container,
+    .search-input-wrapper {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        gap: 8px !important;
+    }
+    
+    .search-input-wrapper input {
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    
+    .search-input-wrapper button.search-btn-inline {
+        width: 100% !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+        border-radius: 8px !important;
+        justify-content: center !important;
+    }
+}
