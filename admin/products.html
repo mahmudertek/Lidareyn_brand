@@ -718,7 +718,7 @@
             <div class="modal-header">
                 <h2 id="modalTitle">Yeni Ürün Ekle</h2>
                 <div style="display: flex; gap: 10px;">
-                    <button class="modal-minimize" onclick="minimizeModal()" title="Küçült">
+                    <button type="button" class="modal-minimize" onclick="minimizeModal(event)" title="Küçült">
                         <i class="fa-solid fa-minus"></i>
                     </button>
                     <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -1500,7 +1500,12 @@
         }
 
         // Minimize modal
-        function minimizeModal() {
+        function minimizeModal(e) {
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
             const modal = document.getElementById('productModal');
             modal.classList.add('minimized');
 
@@ -1511,13 +1516,18 @@
             }
 
             // Minimize edilmiş modal'a tıklandığında restore et
-            const modalElement = modal.querySelector('.modal');
-            modalElement.onclick = function (e) {
-                if (modal.classList.contains('minimized')) {
-                    restoreModal();
-                    e.stopPropagation();
-                }
-            };
+            // Gecikmeli ekle ki mevcut tıklama tetiklemesin
+            setTimeout(() => {
+                const modalElement = modal.querySelector('.modal');
+                modalElement.onclick = function (evt) {
+                    // Butonlara tıklayınca restore olmasın (zaten onların kendi event'i var)
+                    if (evt.target.closest('button')) return;
+
+                    if (modal.classList.contains('minimized')) {
+                        restoreModal();
+                    }
+                };
+            }, 50);
         }
 
         // Restore modal
