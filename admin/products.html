@@ -581,7 +581,7 @@
         <main class="main-content">
             <!-- Topbar -->
             <header class="topbar">
-                <div class="page-title">Ürün Yönetimi</div>
+                <div class="page-title" style="color:red; font-weight:bold;">Ürün Yönetimi v2.0 (DEBUG)</div>
 
                 <div class="topbar-right">
                     <button class="notification-btn">
@@ -1525,13 +1525,19 @@
 
         // Minimize modal
         function minimizeModal(e) {
+            // DEBUG ALERT
+            // alert('Minimize fonksiyonu tetiklendi! Panel sağ alta alınacak.');
+
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
 
             const modalOverlay = document.getElementById('productModal');
-            if (!modalOverlay) return;
+            if (!modalOverlay) {
+                alert('HATA: Modal bulunamadı!');
+                return;
+            }
 
             modalOverlay.classList.add('minimized');
 
@@ -1738,13 +1744,27 @@
                 if (response.success) {
                     console.log('✅ API Yanıtı Başarılı:', response);
 
-                    // Sunucudan dönen veriyi hemen yerel listeye yansıt (Load beklemeden)
-                    if (response.data) {
+                    // --- BAŞLANGIÇ: MERGE VE DÜZELTME ---
+                    // Eğer API yanıtında salePrice/barcode yoksa, gönderdiğimiz productData'dan tamamla!
+                    // Bu çok kritik, çünkü backend bazen bu alanları döndürmeyebilir.
+                    let finalData = response.data || {};
+                    const sentData = productData; // Gönderilen veri
+
+                    if ((finalData.salePrice === undefined || finalData.salePrice === null) && sentData.salePrice) {
+                        finalData.salePrice = sentData.salePrice;
+                    }
+                    if (!finalData.barcode && sentData.barcode) {
+                        finalData.barcode = sentData.barcode;
+                    }
+                    // ------------------------------------
+
+                    // Sunucudan dönen (ve düzelttiğimiz) veriyi hemen yerel listeye yansıt (Load beklemeden)
+                    if (finalData) {
                         if (id) {
                             const index = products.findIndex(p => (p._id || p.id) === id);
-                            if (index !== -1) products[index] = response.data;
+                            if (index !== -1) products[index] = finalData;
                         } else {
-                            products.push(response.data);
+                            products.push(finalData);
                         }
 
                         // ÖNEMLİ: API kaydı başarılı olsa bile localStorage'ı güncelle
@@ -1752,7 +1772,10 @@
                         localStorage.setItem('galatacarsi_products', JSON.stringify(products));
 
                         renderProducts(); // Hemen tabloyu güncelle
+
+                        alert(`✅ BAŞARILI! (v2.0)\n\nÜrün sistemde güncellendi.\n\nİndirimli Fiyat: ${finalData.salePrice || 'Yok'}\nBarkod: ${finalData.barcode || 'Yok'}\n\nYerel veri tabanı da eşitlendi.`);
                     }
+
 
                     closeModal();
                     alert('✅ Ürün başarıyla kaydedildi!');
