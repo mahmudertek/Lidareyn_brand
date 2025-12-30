@@ -46,10 +46,10 @@
     <meta name="description"
         content="Galata Çarşı - En kaliteli ürünleri en uygun fiyatlarla satın alın. Elektronik, moda, ev & yaşam ve daha fazlası.">
 
-    
-    
-    
-    
+
+
+
+
 
     <!-- SEO Meta Tags -->
     <meta name="keywords"
@@ -105,6 +105,7 @@
 
     <link rel="stylesheet" href="popular-section.css">
     <link rel="stylesheet" href="unified-layout.css">
+    <link rel="stylesheet" href="advanced-search.css?v=1766859876">
 
     <link rel="stylesheet" href="madeniyat-hero.css?v=1766859876">
 
@@ -136,8 +137,8 @@
         }
     }
     </script>
-    
-    
+
+
 </head>
 
 <body>
@@ -564,6 +565,118 @@
     <main class="main-content" id="main-content" role="main">
         <!-- Categories Section -->
         <section class="categories-section" id="kategoriler" aria-labelledby="categories-title">
+        </section>
+
+        <!-- Advanced Search Panel / Gelişmiş Arama Bölmesi -->
+        <section class="advanced-search-section" aria-label="Gelişmiş Arama">
+            <!-- Dış Başlık (Bölme Üstünde) -->
+            <h2
+                style="text-align: center; font-size: 28px; font-weight: 700; color: #1a1a1a; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fa-solid fa-sliders" style="margin-right: 12px; color: #8b7bd8;"></i>
+                GELİŞMİŞ ARAMA SEÇENEKLERİ
+            </h2>
+
+            <div class="advanced-search-panel">
+                <!-- İç Başlık (Bölme İçinde - Eski Hali) -->
+                <h2 class="advanced-search-title">
+                    <i class="fa-solid fa-filter"></i>
+                    Filtre Seçenekleriyle Arayın
+                </h2>
+
+                <div class="search-options-grid">
+                    <!-- Marka Araması -->
+                    <div class="search-option-row full-width">
+                        <span class="search-option-label">
+                            <i class="fa-solid fa-tag"></i>
+                            Markaya göre arayın
+                        </span>
+                        <div class="search-input-wrapper">
+                            <input type="text" id="brand-search-input"
+                                placeholder="Marka adı yazın... (örn: Bosch, Makita)">
+                            <button type="button" class="search-btn-inline" id="brand-search-btn">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Ara
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Arama + Sıralama Satırı -->
+                    <div class="search-option-row full-width" style="display: flex; align-items: center; gap: 15px;">
+                        <!-- Arama Kutusu (Sol) - Full Width -->
+                        <div style="flex: 1; position: relative;">
+                            <span class="search-option-label" style="margin-bottom: 8px; display: block;">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Sayfa, marka, ürün, alt veya üst kategori arayın
+                            </span>
+                            <div class="search-input-wrapper">
+                                <input type="text" id="general-search-input" placeholder="Arama yapın..."
+                                    style="width: 100%;" autocomplete="off">
+                                <button type="button" class="search-btn-inline" id="general-search-btn">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    Ara
+                                </button>
+                            </div>
+                            <!-- Live Search Dropdown -->
+                            <div id="live-search-results"
+                                style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                            </div>
+                        </div>
+
+                        <!-- Sıralama Butonları (Sağ) -->
+                        <div style="display: flex; gap: 10px; margin-left: auto; padding-top: 28px;">
+                            <button type="button" class="sort-btn-compact" data-sort="price-asc"
+                                style="display: flex; align-items: center; gap: 6px; padding: 12px 16px; background: white; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-weight: 500; color: #4b5563; cursor: pointer; transition: all 0.2s;">
+                                <i class="fa-solid fa-arrow-down-short-wide"></i>
+                                <span>Düşük → Yüksek</span>
+                            </button>
+                            <button type="button" class="sort-btn-compact" data-sort="price-desc"
+                                style="display: flex; align-items: center; gap: 6px; padding: 12px 16px; background: white; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 13px; font-weight: 500; color: #4b5563; cursor: pointer; transition: all 0.2s;">
+                                <i class="fa-solid fa-arrow-up-wide-short"></i>
+                                <span>Yüksek → Düşük</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Barkod Numarasına Göre Arama -->
+                    <div class="search-option-row">
+                        <span class="search-option-label">
+                            <i class="fa-solid fa-barcode"></i>
+                            Barkod numarasına göre arayın
+                        </span>
+                        <div class="search-input-wrapper">
+                            <input type="text" id="barcode-search-input" placeholder="Barkod numarası girin...">
+                            <button type="button" class="search-btn-inline" id="barcode-search-btn">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Ara
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stok Koduna Göre Arama -->
+                    <div class="search-option-row">
+                        <span class="search-option-label">
+                            <i class="fa-solid fa-box"></i>
+                            Stok koduna göre arayın
+                        </span>
+                        <div class="search-input-wrapper">
+                            <input type="text" id="stock-search-input" placeholder="Stok kodu girin...">
+                            <button type="button" class="search-btn-inline" id="stock-search-btn">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Ara
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filtreleri Temizle Butonu -->
+                    <div class="search-option-row full-width" style="margin-top: 20px;">
+                        <button type="button" id="clear-filters-btn"
+                            style="width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #8b7bd8, #6b5bb8); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(139, 123, 216, 0.3);">
+                            <i class="fa-solid fa-broom"></i>
+                            Filtreleri Temizle
+                        </button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- ÇOK SATAN MARKALAR Section Title -->
@@ -1224,6 +1337,182 @@
 
     <script src="mobile-menu.js"></script>
     <script src="brand-showcase-loader.js?v=1766859999"></script>
+
+    <!-- Live Search Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('general-search-input');
+            const resultsDiv = document.getElementById('live-search-results');
+            let searchTimeout;
+
+            if (!searchInput || !resultsDiv) return;
+
+            // Ürünleri yükle
+            async function loadProducts() {
+                try {
+                    // localStorage'dan dene
+                    const localProducts = localStorage.getItem('galatacarsi_products');
+                    if (localProducts) {
+                        return JSON.parse(localProducts);
+                    }
+
+                    // API'den dene
+                    if (window.API && typeof window.API.getProducts === 'function') {
+                        const response = await window.API.getProducts({ limit: 100 });
+                        if (response && response.success && response.data) {
+                            return response.data;
+                        }
+                    }
+
+                    return [];
+                } catch (error) {
+                    console.error('Ürünler yüklenemedi:', error);
+                    return [];
+                }
+            }
+
+            // Sayfa listesi
+            const pages = [
+                { name: 'Popüler Markalar', url: 'markalar.html', icon: 'fa-star' },
+                { name: 'Yeni Gelenler', url: 'yeni-gelenler.html', icon: 'fa-sparkles' },
+                { name: 'Popüler Ürünler', url: 'populer.html', icon: 'fa-fire' },
+                { name: 'Juwex', url: 'juvex.html', icon: 'fa-gem' },
+                { name: 'Favorilerim', url: 'favoriler.html', icon: 'fa-heart' },
+                { name: 'Sepetim', url: 'sepet.html', icon: 'fa-shopping-cart' },
+                { name: 'Profilim', url: 'profil.html', icon: 'fa-user' },
+                { name: 'Ana Sayfa', url: 'index.html', icon: 'fa-home' }
+            ];
+
+            // Akıllı arama
+            searchInput.addEventListener('input', function () {
+                clearTimeout(searchTimeout);
+                const query = this.value.trim().toLowerCase();
+
+                if (query.length < 2) {
+                    resultsDiv.style.display = 'none';
+                    return;
+                }
+
+                searchTimeout = setTimeout(async () => {
+                    const products = await loadProducts();
+
+                    // Sayfa araması
+                    const pageResults = pages.filter(page =>
+                        page.name.toLowerCase().includes(query)
+                    );
+
+                    // Ürün araması
+                    const productResults = products.filter(p => {
+                        const name = (p.name || '').toLowerCase();
+                        const brand = (p.brand || '').toLowerCase();
+                        const category = (p.category || '').toLowerCase();
+                        const subCategory = (p.subCategory || '').toLowerCase();
+
+                        return name.includes(query) ||
+                            brand.includes(query) ||
+                            category.includes(query) ||
+                            subCategory.includes(query);
+                    }).slice(0, 5); // İlk 5 ürün
+
+                    // Sonuçları birleştir
+                    let html = '';
+
+                    // Sayfa sonuçları
+                    if (pageResults.length > 0) {
+                        html += '<div style="padding: 8px 12px; background: #f9fafb; font-weight: 600; font-size: 12px; color: #6b7280; text-transform: uppercase;">Sayfalar</div>';
+                        html += pageResults.map(page => `
+                            <a href="${page.url}" 
+                               style="display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f3f4f6; text-decoration: none; color: #1f2937; transition: background 0.2s;"
+                               onmouseover="this.style.background='#f9fafb'"
+                               onmouseout="this.style.background='white'">
+                                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #8b7bd8, #6b5bb8); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                                    <i class="fa-solid ${page.icon}" style="color: white; font-size: 18px;"></i>
+                                </div>
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 14px;">${page.name}</div>
+                                    <div style="font-size: 12px; color: #6b7280;">Sayfaya git</div>
+                                </div>
+                                <i class="fa-solid fa-arrow-right" style="color: #9ca3af;"></i>
+                            </a>
+                        `).join('');
+                    }
+
+                    // Ürün sonuçları
+                    if (productResults.length > 0) {
+                        if (pageResults.length > 0) {
+                            html += '<div style="padding: 8px 12px; background: #f9fafb; font-weight: 600; font-size: 12px; color: #6b7280; text-transform: uppercase;">Ürünler</div>';
+                        }
+                        html += productResults.map(p => `
+                            <a href="urun-detay.html?id=${p._id || p.id}" 
+                               style="display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #f3f4f6; text-decoration: none; color: #1f2937; transition: background 0.2s;"
+                               onmouseover="this.style.background='#f9fafb'"
+                               onmouseout="this.style.background='white'">
+                                <img src="${p.mainImage || p.image || 'https://placehold.co/50x50?text=Ürün'}" 
+                                     style="width: 50px; height: 50px; object-fit: contain; border-radius: 4px; margin-right: 12px;">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500; font-size: 14px;">${p.name}</div>
+                                    <div style="font-size: 12px; color: #6b7280;">${p.brand || 'Marka yok'}</div>
+                                </div>
+                                <div style="font-weight: 600; color: #8b7bd8;">₺${p.price ? parseFloat(p.price).toLocaleString('tr-TR') : '0'}</div>
+                            </a>
+                        `).join('');
+                    }
+
+                    // Göster
+                    if (html) {
+                        resultsDiv.innerHTML = html;
+                        resultsDiv.style.display = 'block';
+                    } else {
+                        resultsDiv.innerHTML = '<div style="padding: 20px; text-align: center; color: #9ca3af;">Sonuç bulunamadı</div>';
+                        resultsDiv.style.display = 'block';
+                    }
+                }, 300); // 300ms debounce
+            });
+
+            // Dışarı tıklandığında kapat
+            document.addEventListener('click', function (e) {
+                if (!searchInput.contains(e.target) && !resultsDiv.contains(e.target)) {
+                    resultsDiv.style.display = 'none';
+                }
+            });
+
+            // Filtreleri Temizle Butonu
+            const clearBtn = document.getElementById('clear-filters-btn');
+            if (clearBtn) {
+                clearBtn.addEventListener('click', function () {
+                    // Tüm input alanlarını temizle
+                    document.getElementById('brand-search-input').value = '';
+                    document.getElementById('general-search-input').value = '';
+                    document.getElementById('barcode-search-input').value = '';
+                    document.getElementById('stock-search-input').value = '';
+
+                    // Radio butonları temizle
+                    const radios = document.querySelectorAll('input[name="price-sort"]');
+                    radios.forEach(radio => radio.checked = false);
+
+                    // Sıralama butonlarının active class'ını kaldır
+                    document.querySelectorAll('.sort-btn-compact').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+
+                    // Live search sonuçlarını gizle
+                    resultsDiv.style.display = 'none';
+
+                    // Başarı mesajı
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fa-solid fa-check"></i> Temizlendi!';
+                    this.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+
+                    setTimeout(() => {
+                        this.innerHTML = originalText;
+                        this.style.background = 'linear-gradient(135deg, #8b7bd8, #6b5bb8)';
+                    }, 1500);
+                });
+            }
+        });
+    </script>
+
+    <script src="advanced-search.js?v=1766859876"></script>
 </body>
 
 </html>

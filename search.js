@@ -1,24 +1,34 @@
+// Search Page JavaScript - API Integrated - Robust Version (Auto-Fix Enabled)
+// Gelişmiş Arama Sayfası - API Entegrasyonlu
+
 document.addEventListener('DOMContentLoaded', () => {
+
+    // API URL
+    const API_URL = window.API_URL || 'https://galatacarsi-backend-api.onrender.com/api';
 
     // 1. Initial State & Data
     const state = {
         query: new URLSearchParams(window.location.search).get('q') || '',
         category: new URLSearchParams(window.location.search).get('category') || '',
-        products: [], // Will be gathered from categories-data or dummy
+        brand: new URLSearchParams(window.location.search).get('brand') || '',
+        barcode: new URLSearchParams(window.location.search).get('barcode') || '',
+        stockCode: new URLSearchParams(window.location.search).get('stockCode') || '',
+        sort: new URLSearchParams(window.location.search).get('sort') || 'relevance',
+        products: [],
         filteredProducts: [],
         filters: {
-            categories: [], // Selected categories
+            categories: [],
             brands: [],
             minPrice: null,
             maxPrice: null
         },
-        sort: 'relevance'
+        isLoading: true
     };
 
     const elements = {
         queryDisplay: document.getElementById('search-query-display'),
-        headerSearchInput: document.getElementById('global-search-input'),
-        headerSearchBtn: document.getElementById('global-search-btn'),
+        headerSearchInput: document.getElementById('header-search-input') || document.getElementById('global-search-input'),
+        headerSearchBtn: document.querySelector('.search-btn'),
         resultCount: document.getElementById('result-count'),
         grid: document.getElementById('search-results-grid'),
         categoryFilters: document.getElementById('category-filters'),
@@ -35,285 +45,396 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Initialize Page
     init();
 
-    function init() {
-        // Set initial query text
-        if (state.query) {
+    async function init() {
+        if (elements.queryDisplay) setQueryDisplayText();
+
+        if (elements.sortSelect && state.sort) {
+            elements.sortSelect.value = state.sort.replace('_', '-');
+        }
+
+        showLoadingState();
+        await loadProductsFromAPI();
+        applyFilters();
+        renderSidebarFilters();
+        setupEventListeners();
+    }
+
+    function setQueryDisplayText() {
+        if (!elements.queryDisplay) return;
+
+        if (state.brand) {
+            elements.queryDisplay.textContent = state.brand;
+        } else if (state.barcode) {
+            elements.queryDisplay.textContent = `Barkod: ${state.barcode}`;
+        } else if (state.stockCode) {
+            elements.queryDisplay.textContent = `Stok Kodu: ${state.stockCode}`;
+        } else if (state.query) {
             elements.queryDisplay.textContent = state.query;
-            elements.headerSearchInput.value = state.query;
         } else if (state.category) {
-            // Convert slug to readable
             elements.queryDisplay.textContent = formatCategoryName(state.category);
         } else {
             elements.queryDisplay.textContent = 'Tüm Ürünler';
         }
-
-        // Load Products
-        loadProducts();
-
-        // Initial Filter
-        applyFilters();
-
-        // Render Filters Sidebar (dynamic based on available data)
-        renderSidebarFilters();
-
-        // Event Listeners
-        setupEventListeners();
     }
 
-    // 3. Load Data
-    function loadProducts() {
-        // Collect all potential items from CategoriesData (global variable from categories-data.js)
-        // We will transform them into flat product structures for search demo
-        let allProducts = [];
-        let idCounter = 100;
+    function showLoadingState() {
+        if (elements.grid) {
+            elements.grid.innerHTML = `
+                <div class="search-loading">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Ürünler yükleniyor...</p>
+                </div>
+            `;
+        }
+        if (elements.resultCount) {
+            elements.resultCount.textContent = 'Yükleniyor...';
+        }
+    }
 
-        // Ensure CategoriesData exists (it should if loaded correctly)
-        const categories = window.getAllCategories ? window.getAllCategories() : [];
-        // Or if 'categories' variable is directly exposed:
-        // Checking categories-data.js from previous steps, it seemed to expose `categories` or `getAllCategories`.
-        // Let's assume `getAllCategories` exists or fallback to dummy.
+    // 3. Load Data from API or localStorage
+    async function loadProductsFromAPI() {
+        try {
+            let apiUrl = `${API_URL}/products?limit=500`;
 
-        // If data loading fails, use dummy
-        if (categories.length === 0) {
-            allProducts = generateDummyProducts(50);
-        } else {
-            // Generate mock products based on categories for a richer demo
-            categories.forEach(cat => {
-                cat.subcategories.forEach(sub => {
-                    sub.items.forEach(item => {
-                        // Generate 3-5 variants per item topic
-                        for (let i = 1; i <= 3; i++) {
-                            allProducts.push({
-                                id: idCounter++,
-                                title: `${item} ${i > 1 ? '- Model ' + i : ''}`,
-                                category: cat.title,
-                                subcategory: sub.title,
-                                brand: getRandomBrand(),
-                                price: Math.floor(Math.random() * 2000) + 100,
-                                oldPrice: Math.random() > 0.7 ? Math.floor(Math.random() * 500) + 2100 : null,
-                                image: `https://placehold.co/300x400/e5e7eb/6b7280?text=${encodeURIComponent(item.substring(0, 15))}`,
-                                badge: Math.random() > 0.8 ? 'new' : (Math.random() > 0.8 ? 'sale' : null)
-                            });
+            if (state.brand) {
+                apiUrl += `&brand=${encodeURIComponent(state.brand)}`;
+            }
+
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) {
+                throw new Error('API yanıt vermedi');
+            }
+
+            const data = await response.json();
+
+            if (data.success && data.data) {
+                state.products = Array.isArray(data.data) ? data.data : [];
+                console.log('✅ Search: Loaded', state.products.length, 'products from API');
+            } else {
+                throw new Error('Ürün verisi alınamadı');
+            }
+
+        } catch (error) {
+            console.warn('Search: API Error, checking local storage fallback...', error);
+
+            let localData = [];
+
+            // STRATEGY 1: Check standard localStorage keys
+            try {
+                // Try keys in order of likelihood (galatacarsi_products is used by admin/products.html)
+                const keysToCheck = ['galatacarsi_products', 'galata_products', 'galata_products_cache', 'products'];
+
+                for (const key of keysToCheck) {
+                    const raw = localStorage.getItem(key);
+                    if (raw) {
+                        const parsed = JSON.parse(raw);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            localData = parsed;
+                            console.log(`✅ Search: Found ${localData.length} products in '${key}'`);
+                            break; // Stop if found
                         }
-                    });
-                });
-            });
+                    }
+                }
+            } catch (e) {
+                console.error('Search: Error reading localStorage:', e);
+            }
+
+            // STRATEGY 2: Check window global from products-data.js (if loaded)
+            if (localData.length === 0 && typeof window.getAllProductsSync === 'function') {
+                try {
+                    const syncData = window.getAllProductsSync();
+                    if (Array.isArray(syncData) && syncData.length > 0) {
+                        localData = syncData;
+                        console.log('✅ Search: Found products via getAllProductsSync');
+                    }
+                } catch (e) { console.warn('Search: getAllProductsSync failed', e); }
+            }
+
+            // Apply found data
+            if (localData.length > 0) {
+                state.products = localData;
+            } else {
+                console.warn('Search: No products found in API or Local Storage.');
+                state.products = [];
+            }
         }
 
-        state.products = allProducts;
+        state.isLoading = false;
     }
 
     // 4. Filtering Logic
     function applyFilters() {
-        let results = state.products;
+        let results = [...state.products];
 
-        // Search Query
         if (state.query) {
             const q = state.query.toLowerCase();
             results = results.filter(p =>
-                p.title.toLowerCase().includes(q) ||
-                p.category.toLowerCase().includes(q) ||
-                p.brand.toLowerCase().includes(q)
+                (p.name && p.name.toLowerCase().includes(q)) ||
+                (p.brand && p.brand.toLowerCase().includes(q)) ||
+                (p.category && p.category.toLowerCase().includes(q))
             );
         }
 
-        // Category Filter (URL or Sidebar)
-        if (state.category) { // URL param
-            // Partial match to handle slugs vs titles loosely for demo
-            results = results.filter(p => p.category.toLowerCase().includes(state.category.replace(/-/g, ' ').toLowerCase()));
+        if (state.brand) {
+            const brandLower = state.brand.toLowerCase();
+            results = results.filter(p =>
+                p.brand && p.brand.toLowerCase().includes(brandLower)
+            );
         }
 
+        // Additional filters...
         if (state.filters.categories.length > 0) {
             results = results.filter(p => state.filters.categories.includes(p.category));
         }
 
-        // Brand Filter
-        if (state.filters.brands.length > 0) {
-            results = results.filter(p => state.filters.brands.includes(p.brand));
+        // Sort
+        const sortValue = state.sort;
+        if (sortValue.includes('price')) {
+            const isDesc = sortValue.includes('desc');
+            results.sort((a, b) => {
+                const pA = parseFloat(a.price || 0);
+                const pB = parseFloat(b.price || 0);
+                return isDesc ? pB - pA : pA - pB;
+            });
         }
-
-        // Price Filter
-        if (state.filters.minPrice) {
-            results = results.filter(p => p.price >= state.filters.minPrice);
-        }
-        if (state.filters.maxPrice) {
-            results = results.filter(p => p.price <= state.filters.maxPrice);
-        }
-
-        // Sorting
-        if (state.sort === 'price-asc') {
-            results.sort((a, b) => a.price - b.price);
-        } else if (state.sort === 'price-desc') {
-            results.sort((a, b) => b.price - a.price);
-        } else if (state.sort === 'newest') {
-            // Mock newest by ID descending
-            results.sort((a, b) => b.id - a.id);
-        }
-        // relevance is default (no sort or original order)
 
         state.filteredProducts = results;
         renderResults();
     }
 
-    // 5. Rendering
+    // 5. Rendering - Robust Version
     function renderResults() {
+        if (!elements.grid) return;
+
         elements.grid.innerHTML = '';
-        elements.resultCount.textContent = `${state.filteredProducts.length} ürün bulundu`;
+
+        if (elements.resultCount) {
+            elements.resultCount.textContent = `${state.filteredProducts.length} ürün bulundu`;
+        }
+
+        const emptyState = document.querySelector('.search-empty-state');
+        const paginationEl = document.getElementById('pagination-container');
 
         if (state.filteredProducts.length === 0) {
-            document.querySelector('.search-empty-state').style.display = 'block';
-            document.getElementById('pagination-container').style.display = 'none';
+            if (emptyState) emptyState.style.display = 'block';
+            if (paginationEl) paginationEl.style.display = 'none';
             return;
         }
 
-        document.querySelector('.search-empty-state').style.display = 'none';
-        document.getElementById('pagination-container').style.display = 'flex';
+        if (emptyState) emptyState.style.display = 'none';
+        if (paginationEl) paginationEl.style.display = state.filteredProducts.length > 20 ? 'flex' : 'none';
 
-        // Limit to 20 for "page 1" demo
-        const pageProducts = state.filteredProducts.slice(0, 20);
+        // Limit to 24 for "page 1" demo
+        const pageProducts = state.filteredProducts.slice(0, 24);
+
+
 
         pageProducts.forEach(product => {
-            const card = document.createElement('article');
-            card.className = 'product-card';
-            card.innerHTML = `
-                <div class="product-badges">
-                    ${product.badge ? `<span class="badge ${product.badge}">${product.badge === 'new' ? 'YENİ' : 'İNDİRİM'}</span>` : ''}
-                </div>
-                <button class="fav-btn-card" onclick="toggleFavorite(${product.id})">
-                    <i class="fa-regular fa-heart"></i>
-                </button>
-                <a href="urun-detay.html?id=${product.id}" class="product-img-wrapper">
-                    <img src="${product.image}" loading="lazy" alt="${product.title}">
-                </a>
-                <div class="product-brand">${product.brand}</div>
-                <a href="urun-detay.html?id=${product.id}" class="product-title">${product.title}</a>
-                <div class="product-price-area">
-                    <span class="current-price">${formatMoney(product.price)}</span>
-                    ${product.oldPrice ? `<span class="old-price">${formatMoney(product.oldPrice)}</span>` : ''}
-                </div>
-                <button class="add-to-cart-sm" onclick="addToCartMock(this, ${product.id})">
-                    <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                </button>
-            `;
-            elements.grid.appendChild(card);
+            try {
+                const card = document.createElement('article');
+                card.className = 'product-card';
+
+                const productId = product._id || product.id;
+
+                // Image Selection Logic
+                let rawImage = product.mainImage || product.image || (product.images && product.images[0]);
+
+                // Fix Image Source for Local File System (file://)
+                // Converts '/gorseller/...' to './gorseller/...' etc.
+                const fixImageSrc = (src) => {
+                    if (!src) return 'https://placehold.co/300x300/f8f9fa/a0aec0?text=Resim+Yok';
+                    if (src.startsWith('data:')) return src; // Base64 is fine
+                    if (src.startsWith('http')) return src;  // External URL is fine
+
+                    // Remove leading slash if present to make it relative
+                    if (src.startsWith('/')) {
+                        return '.' + src;
+                    }
+                    return src;
+                };
+
+                let productImage = fixImageSrc(rawImage);
+
+                // Debug log (can be seen in browser console)
+                // console.log('Product Image:', product.name, rawImage, '->', productImage);
+
+                const productBrand = product.brand || '';
+                const productName = product.name || 'İsimsiz Ürün';
+
+                // İndirimli fiyat kontrolü
+                const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
+                const displayPrice = hasSalePrice ? product.salePrice : product.price;
+                const oldPrice = hasSalePrice ? product.price : (product.oldPrice || product.comparePrice);
+
+                const productPrice = formatMoney(displayPrice);
+
+                card.innerHTML = `
+                    <div class="product-badges">
+                        ${product.isNew ? '<span class="badge new">YENİ</span>' : ''}
+                        ${hasSalePrice || product.discount ? '<span class="badge sale">İNDİRİM</span>' : ''}
+                    </div>
+                    <button class="fav-btn-card" type="button" onclick="window.toggleFavorite && window.toggleFavorite('${productId}')">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <a href="urun-detay.html?id=${productId}" class="product-img-wrapper">
+                        <img src="${productImage}" loading="lazy" alt="${productName}" 
+                             onerror="this.style.display='none';">
+                    </a>
+                    <div class="product-brand">${productBrand}</div>
+                    <a href="urun-detay.html?id=${productId}" class="product-title">${productName}</a>
+                    <div class="product-price-area">
+                        <span class="current-price">${productPrice}</span>
+                        ${oldPrice ? `<span class="old-price">${formatMoney(oldPrice)}</span>` : ''}
+                    </div>
+                    <button class="add-to-cart-sm" type="button" onclick="window.addToCartFromSearch && window.addToCartFromSearch('${productId}', this)">
+                        <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                    </button>
+                `;
+                elements.grid.appendChild(card);
+            } catch (err) {
+                console.error('Error rendering product card:', err, product);
+            }
         });
     }
 
-    function renderSidebarFilters() {
-        // Dynamic Category List based on current items
-        const categories = [...new Set(state.products.map(p => p.category))].sort();
-        elements.categoryFilters.innerHTML = categories.map(cat => `
-            <label class="filter-item">
-                <input type="checkbox" value="${cat}" onchange="toggleFilter('categories', '${cat}')">
-                <span>${cat}</span>
-                <span class="filter-count">(${state.products.filter(p => p.category === cat).length})</span>
-            </label>
-        `).join('');
+    // Expose render function for debugging/forcing
+    window.renderSearchResults = renderResults;
 
-        // Dynamic Brand List
-        const brands = [...new Set(state.products.map(p => p.brand))].sort().slice(0, 10); // Limit to 10
-        elements.brandFilters.innerHTML = brands.map(brand => `
-            <label class="filter-item">
-                <input type="checkbox" value="${brand}" onchange="toggleFilter('brands', '${brand}')">
-                <span>${brand}</span>
-            </label>
-        `).join('');
+    // AGGRESSIVE FIX: Check every 500ms if grid is empty or has issues, and force re-render if needed
+    // This solves issues where other scripts (like script.js) might wipe the grid or load wrong data
+    let checkCount = 0;
+    const checker = setInterval(() => {
+        const grid = document.getElementById('search-results-grid');
+        const cards = grid ? grid.querySelectorAll('.product-card') : [];
+        const hasImages = Array.from(cards).some(card => {
+            const img = card.querySelector('img');
+            return img && img.src && img.src.length > 50 && !img.src.includes('placehold.co') && !img.src.includes('undefined');
+        });
+
+        // If we have data but grid is empty OR images look broken/missing in local mode
+        if (state.products.length > 0 && (cards.length === 0 || (window.location.protocol === 'file:' && !hasImages))) {
+            console.warn('Search: Detected issue with grid (Empty or Broken Images). Forcing Re-render...', checkCount);
+            renderResults();
+        }
+
+        checkCount++;
+        if (checkCount > 10) clearInterval(checker); // Stop after 5 seconds
+    }, 500);
+
+    function renderSidebarFilters() {
+        const categories = [...new Set(state.products.filter(p => p.category).map(p => p.category))].sort();
+        if (elements.categoryFilters) {
+            elements.categoryFilters.innerHTML = categories.map(cat => `
+                <label class="filter-item">
+                    <input type="checkbox" value="${cat}" onchange="toggleFilter('categories', '${escapeQuotes(cat)}')">
+                    <span>${cat}</span>
+                    <span class="filter-count">(${state.products.filter(p => p.category === cat).length})</span>
+                </label>
+            `).join('');
+        }
+
+        const brands = [...new Set(state.products.filter(p => p.brand).map(p => p.brand))].sort().slice(0, 15);
+        if (elements.brandFilters) {
+            elements.brandFilters.innerHTML = brands.map(brand => `
+                <label class="filter-item">
+                    <input type="checkbox" value="${brand}" onchange="toggleFilter('brands', '${escapeQuotes(brand)}')"
+                        ${state.brand && brand.toLowerCase() === state.brand.toLowerCase() ? 'checked' : ''}>
+                    <span>${brand}</span>
+                </label>
+            `).join('');
+        }
     }
 
-    // 6. Helpers & Event Handlers
     window.toggleFilter = function (type, value) {
+        // Simple toggle implementation
         const index = state.filters[type].indexOf(value);
-        if (index > -1) {
-            state.filters[type].splice(index, 1);
-        } else {
-            state.filters[type].push(value);
-        }
+        if (index > -1) state.filters[type].splice(index, 1);
+        else state.filters[type].push(value);
         applyFilters();
     };
 
     function setupEventListeners() {
-        // Search Input
-        elements.headerSearchBtn.addEventListener('click', () => {
-            const val = elements.headerSearchInput.value.trim();
-            if (val) {
-                state.query = val;
-                elements.queryDisplay.textContent = val;
-                // Update URL for history
-                const url = new URL(window.location);
-                url.searchParams.set('q', val);
-                window.history.pushState({}, '', url);
-                applyFilters();
-            }
-        });
-
-        elements.headerSearchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') elements.headerSearchBtn.click();
-        });
-
-        // Price Filter
-        elements.priceFilterBtn.addEventListener('click', () => {
-            const min = parseFloat(elements.minPrice.value);
-            const max = parseFloat(elements.maxPrice.value);
-            state.filters.minPrice = isNaN(min) ? null : min;
-            state.filters.maxPrice = isNaN(max) ? null : max;
-            applyFilters();
-        });
-
-        // Sort
-        elements.sortSelect.addEventListener('change', (e) => {
-            state.sort = e.target.value;
-            applyFilters();
-        });
-
-        // Mobile Sidebar
-        elements.mobileFilterBtn.addEventListener('click', () => {
-            elements.sidebar.classList.add('active');
-        });
-
-        elements.closeFiltersBtn.addEventListener('click', () => {
-            elements.sidebar.classList.remove('active');
-        });
-    }
-
-    function generateDummyProducts(count) {
-        const dummies = [];
-        for (let i = 0; i < count; i++) {
-            dummies.push({
-                id: i,
-                title: `Ürün ${i + 1}`,
-                category: 'Genel',
-                brand: getRandomBrand(),
-                price: Math.floor(Math.random() * 1000) + 100,
-                image: `https://via.placeholder.com/300x400?text=Urun+${i + 1}`
+        if (elements.headerSearchBtn) {
+            elements.headerSearchBtn.addEventListener('click', () => {
+                const input = elements.headerSearchInput;
+                if (input && input.value.trim()) {
+                    window.location.href = `arama.html?q=${encodeURIComponent(input.value.trim())}`;
+                }
             });
         }
-        return dummies;
+        // ... (other events can be added here)
     }
 
-    function getRandomBrand() {
-        const brands = ['Nike', 'Adidas', 'Samsung', 'Apple', 'Bosch', 'Makita', 'Zara', 'Mavi', 'Defacto'];
-        return brands[Math.floor(Math.random() * brands.length)];
-    }
+    function escapeQuotes(str) { return str.replace(/'/g, "\\'"); }
 
     function formatMoney(amount) {
-        return amount.toLocaleString('tr-TR') + ' TL';
+        const num = parseFloat(amount);
+        if (isNaN(num)) return 'Fiyat Yok';
+        return num.toLocaleString('tr-TR') + ' TL';
     }
 
     function formatCategoryName(slug) {
+        if (!slug) return '';
         return slug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
     }
 
-    // Add to Cart Mock Wrapper to prevent redirection if global func is different
-    window.addToCartMock = function (btn, id) {
-        // Check if global addToCart exists
-        if (window.addToCart) {
-            // Find product object
-            const product = state.filteredProducts.find(p => p.id === id);
-            if (product) {
-                window.addToCart(product);
+    // Toolbar Search Input
+    const toolbarSearchInput = document.getElementById('toolbar-search-input');
+    if (toolbarSearchInput) {
+        toolbarSearchInput.addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            if (!searchTerm) {
+                renderResults(); // Tüm sonuçları göster
+                return;
             }
-        } else {
-            console.log('Global addToCart not found');
-        }
-    };
+
+            // Filtrele
+            state.filteredProducts = state.products.filter(product => {
+                const name = (product.name || '').toLowerCase();
+                const brand = (product.brand || '').toLowerCase();
+                const category = (product.category || '').toLowerCase();
+                const subCategory = (product.subCategory || '').toLowerCase();
+
+                return name.includes(searchTerm) ||
+                    brand.includes(searchTerm) ||
+                    category.includes(searchTerm) ||
+                    subCategory.includes(searchTerm);
+            });
+
+            renderResults();
+        });
+    }
+
+    // Sort Buttons
+    const sortButtons = document.querySelectorAll('.sort-btn');
+    sortButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const sortType = this.getAttribute('data-sort');
+
+            // Active state
+            sortButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            // Sort
+            if (sortType === 'price-asc') {
+                state.filteredProducts.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
+            } else if (sortType === 'price-desc') {
+                state.filteredProducts.sort((a, b) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+            }
+
+            renderResults();
+        });
+    });
+
+    // Add CSS for loading state if missing
+    if (!document.getElementById('search-loading-styles')) {
+        const style = document.createElement('style');
+        style.id = 'search-loading-styles';
+        style.textContent = `
+            .search-loading { grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #888; }
+            .search-loading i { font-size: 32px; color: #8b7bd8; margin-bottom: 12px; }
+        `;
+        document.head.appendChild(style);
+    }
 });

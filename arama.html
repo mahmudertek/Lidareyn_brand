@@ -13,7 +13,7 @@
 
     <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
-        
+
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
@@ -29,7 +29,7 @@
 
             if (hasBypass) {
                 localStorage.setItem('admin_session', 'active_' + Date.now());
-                const cleanUrl = window.location.pathname; 
+                const cleanUrl = window.location.pathname;
                 window.history.replaceState(null, '', cleanUrl); // URL'i temizle
                 document.getElementById('bakim-blocking-style').remove();
                 return;
@@ -47,18 +47,18 @@
         })();
     </script>
 
-    
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Arama Sonuçları - Galata Çarşı</title>
 
-    
-    
-    
-    
-    
-<!-- Shared Head Resources -->
+
+
+
+
+
+    <!-- Shared Head Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
@@ -68,15 +68,128 @@
     <link rel="stylesheet" href="style.css?v=1766859876">
     <link rel="stylesheet" href="mobile.css?v=1766859876">
     <link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
-    <link rel="stylesheet" href="search.css"><meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+    <link rel="stylesheet" href="search.css?v=1767126000">
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+
+    <!-- INLINE CSS FOR TOOLBAR - CACHE BYPASS -->
+    <style>
+        .results-toolbar {
+            display: flex !important;
+            align-items: center !important;
+            gap: 15px !important;
+            margin-bottom: 20px !important;
+            padding: 15px !important;
+            background: white !important;
+            border-radius: 8px !important;
+            border: 1px solid #e5e7eb !important;
+        }
+
+        .toolbar-search {
+            flex: 1 !important;
+            max-width: 500px !important;
+            display: flex !important;
+            align-items: center !important;
+            background: white !important;
+            border: 2px solid #e5e7eb !important;
+            border-radius: 8px !important;
+            padding: 0 12px !important;
+        }
+
+        .toolbar-search i {
+            color: #9ca3af !important;
+            margin-right: 8px !important;
+        }
+
+        .toolbar-search input {
+            flex: 1 !important;
+            border: none !important;
+            outline: none !important;
+            padding: 10px 0 !important;
+            font-size: 14px !important;
+        }
+
+        .sort-buttons {
+            display: flex !important;
+            gap: 8px !important;
+            margin-left: auto !important;
+        }
+
+        .sort-btn {
+            display: flex !important;
+            align-items: center !important;
+            gap: 6px !important;
+            padding: 10px 14px !important;
+            background: white !important;
+            border: 2px solid #e5e7eb !important;
+            border-radius: 8px !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            color: #4b5563 !important;
+            cursor: pointer !important;
+        }
+
+        .sort-btn:hover {
+            border-color: #6366f1 !important;
+            color: #6366f1 !important;
+            background: #f5f7ff !important;
+        }
+
+        .sort-btn.active {
+            background: #6366f1 !important;
+            border-color: #6366f1 !important;
+            color: white !important;
+        }
+    </style>
 </head>
 
 <body>
+    <!-- DEBUG: Force Toolbar Styles -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🔍 Toolbar Debug Başladı');
+
+            // Toolbar'ı bul
+            const toolbar = document.querySelector('.results-toolbar');
+            if (toolbar) {
+                console.log('✅ Toolbar bulundu:', toolbar);
+
+                // Inline style ile zorla
+                toolbar.style.cssText = 'display: flex !important; align-items: center !important; gap: 15px !important; padding: 15px !important; background: white !important; border-radius: 8px !important; border: 1px solid #e5e7eb !important; margin-bottom: 20px !important;';
+
+                // Arama kutusunu bul
+                const searchBox = toolbar.querySelector('.toolbar-search');
+                if (searchBox) {
+                    console.log('✅ Arama kutusu bulundu');
+                    searchBox.style.cssText = 'flex: 1 !important; max-width: 500px !important; display: flex !important; align-items: center !important; background: white !important; border: 2px solid #e5e7eb !important; border-radius: 8px !important; padding: 0 12px !important;';
+                } else {
+                    console.error('❌ Arama kutusu bulunamadı!');
+                }
+
+                // Sıralama butonlarını bul
+                const sortButtons = toolbar.querySelector('.sort-buttons');
+                if (sortButtons) {
+                    console.log('✅ Sıralama butonları bulundu');
+                    sortButtons.style.cssText = 'display: flex !important; gap: 8px !important; margin-left: auto !important;';
+
+                    // Her butona stil uygula
+                    sortButtons.querySelectorAll('.sort-btn').forEach(btn => {
+                        btn.style.cssText = 'display: flex !important; align-items: center !important; gap: 6px !important; padding: 10px 14px !important; background: white !important; border: 2px solid #e5e7eb !important; border-radius: 8px !important; font-size: 13px !important; font-weight: 500 !important; color: #4b5563 !important; cursor: pointer !important;';
+                    });
+                } else {
+                    console.error('❌ Sıralama butonları bulunamadı!');
+                }
+            } else {
+                console.error('❌ Toolbar bulunamadı! HTML yapısını kontrol edin.');
+            }
+        });
+    </script>
+
     <!-- Geliştirme Aşaması Bildirimi -->
     <div class="development-notice">
         <div class="notice-content">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
+            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya
+                <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
         </div>
     </div>
 
@@ -431,7 +544,7 @@
                             </ul>
                         </div>
                     </li>
-                    
+
 
                     <li><a href="yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
                     <li><a href="populer.html" class="nav-link">Popüler Ürünler</a></li>
@@ -503,6 +616,15 @@
                     <button id="close-filters"><i class="fa-solid fa-xmark"></i></button>
                 </div>
 
+                <!-- Gelişmiş Arama Başlığı -->
+                <div style="padding: 20px 20px 10px; border-bottom: 2px solid #e5e7eb;">
+                    <h2
+                        style="margin: 0; font-size: 18px; font-weight: 700; color: #1f2937; text-transform: uppercase; letter-spacing: 0.5px;">
+                        <i class="fa-solid fa-sliders" style="margin-right: 8px; color: #6366f1;"></i>
+                        GELİŞMİŞ ARAMA SEÇENEKLERİ
+                    </h2>
+                </div>
+
                 <!-- Category Filter -->
                 <div class="filter-group expanded">
                     <h3 class="filter-title">Kategoriler <i class="fa-solid fa-chevron-down"></i></h3>
@@ -544,13 +666,23 @@
                         <i class="fa-solid fa-filter"></i> Filtrele
                     </button>
 
-                    <div class="sort-dropdown">
-                        <select id="sort-select">
-                            <option value="relevance">Önerilen Sıralama</option>
-                            <option value="price-asc">En Düşük Fiyat</option>
-                            <option value="price-desc">En Yüksek Fiyat</option>
-                            <option value="newest">En Yeniler</option>
-                        </select>
+                    <!-- Arama Kutusu -->
+                    <div class="toolbar-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="toolbar-search-input"
+                            placeholder="Sayfa, alt veya üst kategori, marka veya ürün arayın">
+                    </div>
+
+                    <!-- Sıralama Butonları (Kısaltılmış) -->
+                    <div class="sort-buttons">
+                        <button class="sort-btn" data-sort="price-asc" title="En Düşükten En Yükseğe">
+                            <i class="fa-solid fa-arrow-down-short-wide"></i>
+                            <span class="sort-text">Düşük → Yüksek</span>
+                        </button>
+                        <button class="sort-btn" data-sort="price-desc" title="En Yüksekten En Düşüğe">
+                            <i class="fa-solid fa-arrow-up-wide-short"></i>
+                            <span class="sort-text">Yüksek → Düşük</span>
+                        </button>
                     </div>
                 </div>
 
@@ -626,10 +758,12 @@
                         <h3 class="footer-title">Müşteri Hizmetleri</h3>
                         <ul class="footer-links">
                             <li>
-                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i> mail@galatacarsi.com</a>
+                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i>
+                                    mail@galatacarsi.com</a>
                             </li>
                             <li>
-                                <a href="https://wa.me/905550501374" target="_blank"><i class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
+                                <a href="https://wa.me/905550501374" target="_blank"><i
+                                        class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
                             </li>
                             <li>
                                 <a href="tel:+905550501374"><i class="fa-solid fa-phone"></i> 0555 050 13 74</a>
@@ -677,8 +811,9 @@
     <script src="cart-logic.js"></script>
     <script src="config.js"></script>
     <script src="auth.js"></script>
+    <script src="products-data.js"></script>
     <script src="script.js"></script>
-    <script src="search.js"></script>
+    <script src="search.js?v=1767125100"></script>
 
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>

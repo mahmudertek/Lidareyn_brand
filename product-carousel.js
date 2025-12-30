@@ -17,7 +17,7 @@ async function initProductCarousel() {
     // Try to fetch products from API
     try {
         if (window.API && typeof window.API.getProducts === 'function') {
-            const response = await window.API.getProducts({ featured: 'true', limit: 24 });
+            const response = await window.API.getProducts({ isFeatured: true, limit: 24 });
             if (response && response.success && response.data && response.data.length > 0) {
                 console.log('✅ Featured products loaded from API:', response.data.length);
                 products = response.data.map(product => {
@@ -42,6 +42,31 @@ async function initProductCarousel() {
         }
     } catch (error) {
         console.error('Failed to fetch featured products from API:', error);
+    }
+
+    // Fallback: Try localStorage
+    if (products.length === 0) {
+        try {
+            const localProducts = localStorage.getItem('galatacarsi_products');
+            if (localProducts) {
+                const allProducts = JSON.parse(localProducts);
+                const featuredProducts = allProducts.filter(p => p.isFeatured === true);
+
+                if (featuredProducts.length > 0) {
+                    console.log('✅ Featured products loaded from localStorage:', featuredProducts.length);
+                    products = featuredProducts.map(product => ({
+                        id: product._id || product.id,
+                        name: product.name,
+                        price: `₺${product.price ? parseFloat(product.price).toLocaleString() : '0'}`,
+                        image: product.mainImage || product.image || 'https://placehold.co/300x200?text=Ürün',
+                        badge: product.isNew ? 'Yeni' : '',
+                        link: `urun-detay.html?id=${product._id || product.id}`
+                    }));
+                }
+            }
+        } catch (e) {
+            console.warn('localStorage fallback failed:', e);
+        }
     }
 
     // Configuration - Responsive

@@ -2882,3 +2882,37 @@ img[loading="lazy"].loaded {
         font-size: 16px;
     }
 }
+/* Ana Sayfa - Sýralama Butonlarý Hover */
+.sort-btn-compact:hover {
+    border-color: #8b7bd8 !important;
+    color: #8b7bd8 !important;
+    background: #f5f3ff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(139, 123, 216, 0.2);
+}
+
+.sort-btn-compact:active {
+    transform: translateY(0);
+}
+
+/* Filtreleri Temizle Butonu Hover */
+#clear-filters-btn:hover {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4) !important;
+}
+
+#clear-filters-btn:active {
+    transform: translateY(0);
+}
+
+/* Filtreleri Temizle Butonu Hover (Mor) */
+#clear-filters-btn:hover {
+    background: linear-gradient(135deg, #6b5bb8, #5a4aa6) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 123, 216, 0.4) !important;
+}
+
+#clear-filters-btn:active {
+    transform: translateY(0);
+}

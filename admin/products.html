@@ -272,6 +272,81 @@
             cursor: pointer;
         }
 
+        .modal-close:hover {
+            color: #dc2626;
+        }
+
+        .modal-minimize {
+            background: none;
+            border: none;
+            font-size: 18px;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        .modal-minimize:hover {
+            color: #2563eb;
+            background: #eff6ff;
+            border-radius: 4px;
+        }
+
+        /* Minimized modal state */
+        .modal-overlay.minimized {
+            background: transparent;
+            pointer-events: none;
+        }
+
+        .modal-overlay.minimized .modal {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            top: auto;
+            left: auto;
+            width: 350px;
+            max-width: 350px;
+            max-height: 60px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            pointer-events: all;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.minimized .modal:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-overlay.minimized .modal-body,
+        .modal-overlay.minimized .modal-footer {
+            display: none;
+        }
+
+        .modal-overlay.minimized .modal-header {
+            border-bottom: none;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+        }
+
+        .modal-overlay.minimized .modal-header h2 {
+            color: white;
+            font-size: 14px;
+        }
+
+        .modal-overlay.minimized .modal-minimize,
+        .modal-overlay.minimized .modal-close {
+            color: white;
+        }
+
+        .modal-overlay.minimized .modal-minimize:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-overlay.minimized .modal-close:hover {
+            background: rgba(220, 38, 38, 0.3);
+        }
+
         .modal-body {
             padding: 24px;
         }
@@ -541,7 +616,12 @@
         <div class="modal">
             <div class="modal-header">
                 <h2 id="modalTitle">Yeni Ürün Ekle</h2>
-                <button class="modal-close" onclick="closeModal()">&times;</button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="modal-minimize" onclick="minimizeModal()" title="Küçült">
+                        <i class="fa-solid fa-minus"></i>
+                    </button>
+                    <button class="modal-close" onclick="closeModal()">&times;</button>
+                </div>
             </div>
             <div class="modal-body">
                 <form id="productForm">
@@ -561,7 +641,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Barkod No</label>
-                            <input type="text" id="productBarcode" placeholder="EAN-13 veya Barkod no">
+                            <input type="text" id="productBarcode" placeholder="EAN-13 veya Barkod no" tabindex="0">
                         </div>
                         <div class="form-group">
                             <label>Birim</label>
@@ -1161,6 +1241,19 @@
             document.getElementById('productForm').reset();
             document.getElementById('productId').value = '';
             resetImageUpload(); // Görsel alanını sıfırla
+
+            // Barkod ve SKU alanlarının düzenlenebilir olduğundan emin ol
+            const barcodeInput = document.getElementById('productBarcode');
+            const skuInput = document.getElementById('productSku');
+            if (barcodeInput) {
+                barcodeInput.removeAttribute('readonly');
+                barcodeInput.removeAttribute('disabled');
+            }
+            if (skuInput) {
+                skuInput.removeAttribute('readonly');
+                skuInput.removeAttribute('disabled');
+            }
+
             document.getElementById('productModal').classList.add('active');
         }
 
@@ -1258,6 +1351,18 @@
                     console.log('⚠️ Görsel bulunamadı, önizleme sıfırlandı');
                 }
 
+                // Barkod ve SKU alanlarının düzenlenebilir olduğundan emin ol
+                const barcodeInput = document.getElementById('productBarcode');
+                const skuInput = document.getElementById('productSku');
+                if (barcodeInput) {
+                    barcodeInput.removeAttribute('readonly');
+                    barcodeInput.removeAttribute('disabled');
+                }
+                if (skuInput) {
+                    skuInput.removeAttribute('readonly');
+                    skuInput.removeAttribute('disabled');
+                }
+
                 document.getElementById('productModal').classList.add('active');
             }
         }
@@ -1286,7 +1391,46 @@
 
         // Close modal
         function closeModal() {
-            document.getElementById('productModal').classList.remove('active');
+            const modal = document.getElementById('productModal');
+            modal.classList.remove('active');
+            modal.classList.remove('minimized');
+        }
+
+        // Minimize modal
+        function minimizeModal() {
+            const modal = document.getElementById('productModal');
+            modal.classList.add('minimized');
+
+            // İkonu değiştir
+            const minimizeBtn = modal.querySelector('.modal-minimize i');
+            if (minimizeBtn) {
+                minimizeBtn.className = 'fa-solid fa-window-maximize';
+            }
+
+            // Minimize edilmiş modal'a tıklandığında restore et
+            const modalElement = modal.querySelector('.modal');
+            modalElement.onclick = function (e) {
+                if (modal.classList.contains('minimized')) {
+                    restoreModal();
+                    e.stopPropagation();
+                }
+            };
+        }
+
+        // Restore modal
+        function restoreModal() {
+            const modal = document.getElementById('productModal');
+            modal.classList.remove('minimized');
+
+            // İkonu geri değiştir
+            const minimizeBtn = modal.querySelector('.modal-minimize i');
+            if (minimizeBtn) {
+                minimizeBtn.className = 'fa-solid fa-minus';
+            }
+
+            // onclick handler'ı kaldır
+            const modalElement = modal.querySelector('.modal');
+            modalElement.onclick = null;
         }
 
         // Save product
@@ -1363,6 +1507,10 @@
                 brandShowcase,  // beta, bosch, makita, knipex, dewalt, blackdecker
                 mainImage: imageToUse
             };
+
+            // Debug: Barkod kontrolü
+            console.log('💾 Kaydedilen Barkod:', barcode || 'BOŞ');
+            console.log('💾 Kaydedilen SKU:', sku || 'BOŞ');
 
 
 
