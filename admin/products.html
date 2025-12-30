@@ -1666,6 +1666,11 @@
                         } else {
                             products.push(response.data);
                         }
+
+                        // ÖNEMLİ: API kaydı başarılı olsa bile localStorage'ı güncelle
+                        // Böylece frontend (Carousel/Popüler) API'ye ulaşamazsa bile en güncel veriyi görür.
+                        localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+
                         renderProducts(); // Hemen tabloyu güncelle
                     }
 

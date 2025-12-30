@@ -18,7 +18,7 @@ async function initProductCarousel() {
     try {
         // Try to fetch products from API
         // API'den tüm 'featured' etiketli veya isFeatured=true olanları iste
-        const response = await window.API.getProducts({ isFeatured: true, limit: 60 });
+        const response = await window.API.getProducts({ isFeatured: true, limit: 60, sort: '-createdAt' });
 
         if (response && response.success && response.data && response.data.length > 0) {
             console.log('✅ Featured products loaded from API:', response.data.length);

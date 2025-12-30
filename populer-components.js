@@ -97,7 +97,7 @@
             React.useEffect(function () {
                 if (window.API && typeof window.API.getProducts === 'function') {
                     // isPopular: true ile sadece popüler ürünleri iste
-                    window.API.getProducts({ isPopular: true, limit: 60 }).then(function (res) {
+                    window.API.getProducts({ isPopular: true, limit: 60, sort: '-createdAt' }).then(function (res) {
                         if (res.success && res.data && res.data.length > 0) {
                             var mapped = res.data.map(function (p) {
                                 return {
