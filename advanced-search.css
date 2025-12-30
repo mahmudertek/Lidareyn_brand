@@ -190,40 +190,90 @@
     }
 }
 
+/* Kapsamlı Mobil Düzenleme (Tüm Mobil Cihazlar İçin) */
 @media (max-width: 992px) {
     .advanced-search-section {
-        width: 95%;
-    }
-
-    .search-options-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .search-option-row.full-width {
-        grid-column: span 1;
+        width: 100%;
+        padding: 0 10px;
+        /* Kenardan hafif boşluk */
+        box-sizing: border-box;
     }
 
     .advanced-search-panel {
-        padding: 25px 20px;
-    }
-}
-
-@media (max-width: 576px) {
-    .advanced-search-title {
-        font-size: 18px;
+        padding: 20px 15px;
+        width: 100%;
+        box-sizing: border-box;
     }
 
-    .search-input-wrapper {
+    .search-options-grid {
+        display: flex;
+        /* Grid yerine Flex Column */
         flex-direction: column;
+        gap: 15px;
     }
 
+    /* Tüm satırları alt alta diz */
+    .search-option-row,
+    .search-option-row.full-width {
+        grid-column: span 1;
+        display: flex;
+        flex-direction: column;
+        /* Dikey dizilim */
+        align-items: stretch;
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Label stilini düzenle */
+    .search-option-label {
+        width: 100%;
+        margin-bottom: 5px;
+        white-space: normal;
+        /* Metin kaydır */
+    }
+
+    /* Input ve Buton Kapsayıcısı */
+    .search-input-wrapper {
+        display: flex;
+        flex-direction: column;
+        /* Input üstte, buton altta */
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Input Alanı */
+    .search-input-wrapper input[type="text"] {
+        width: 100%;
+        min-width: 0;
+        /* Flex taşmasını önle */
+        box-sizing: border-box;
+    }
+
+    /* Buton */
     .search-btn-inline {
         width: 100%;
         justify-content: center;
+        margin-left: 0;
+        box-sizing: border-box;
     }
 
-    .search-input-wrapper input[type="text"] {
+    .advanced-search-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    /* Yeni eklenen sıralama butonları */
+    .responsive-sort-buttons {
+        display: flex;
+        flex-direction: column;
         width: 100%;
+        gap: 10px;
+        padding-top: 10px;
+        margin: 0;
+    }
+
+    .sort-btn-compact {
+        width: 100%;
+        justify-content: center;
     }
 }
