@@ -1163,12 +1163,28 @@
 
                 if (response.success && response.data) {
                     products = response.data;
-                    // Yerel ürünleri de ekle
+                    // Yerel ürünleri de ekle veya birleştir
                     const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
                     if (localProducts.length > 0) {
                         localProducts.forEach(lp => {
-                            if (!products.find(p => (p._id || p.id) === (lp._id || lp.id))) {
+                            const existingProduct = products.find(p => (p._id || p.id) === (lp._id || lp.id));
+
+                            if (!existingProduct) {
+                                // API'de yoksa ekle
                                 products.push(lp);
+                            } else {
+                                // API'de varsa ama eksikse, Local'den tamamla (Merge)
+                                if ((existingProduct.salePrice === undefined || existingProduct.salePrice === null) && lp.salePrice) {
+                                    existingProduct.salePrice = lp.salePrice;
+                                }
+                                if (!existingProduct.barcode && lp.barcode) {
+                                    existingProduct.barcode = lp.barcode;
+                                }
+                                if ((existingProduct.stock === undefined || existingProduct.stock === null) && lp.stock) {
+                                    // Stok API'de bazen 0 gelebilir ama biz yerelde güncellediysek yereli alalım mı?
+                                    // Şimdilik sadece boşsa alalım.
+                                    existingProduct.stock = lp.stock;
+                                }
                             }
                         });
                     }
