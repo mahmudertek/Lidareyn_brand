@@ -471,12 +471,13 @@
 
         /* Minimized Modal - Sağ Alta Küçültme */
         .modal-overlay.minimized {
-            background: transparent;
+            background: transparent !important;
             pointer-events: none;
-            align-items: flex-end;
-            justify-content: flex-end;
-            padding: 0;
-            z-index: 9999;
+            align-items: flex-end !important;
+            justify-content: flex-end !important;
+            padding: 0 !important;
+            z-index: 9999 !important;
+            display: flex !important;
             /* En üstte durması için */
         }
 
@@ -1235,8 +1236,9 @@
             }
 
             if (syncedCount > 0) {
-                // Başarılı senkronizasyon - localStorage'ı temizle
-                localStorage.removeItem('galatacarsi_products');
+                // Başarılı senkronizasyon - localStorage'ı silmek yerine koruyoruz!
+                // localStorage.removeItem('galatacarsi_products'); // RİSKLİ - Sunucu restart olursa veri kaybı yaşanır.
+                console.log(`🎉 ${syncedCount} yerel ürün sunucuya aktarıldı (Yedek korundu)!`);
                 alert(`🎉 ${syncedCount} yerel ürün sunucuya aktarıldı!`);
                 // Listeyi yenile
                 await loadProducts();
@@ -1409,12 +1411,13 @@
                 updateSubCategories(product.subCategory);
 
                 document.getElementById('productPrice').value = product.price || '';
-                document.getElementById('productSalePrice').value = product.salePrice || '';
+                // 0 değeri de geçerli bir değerdir, bu yüzden null check yapıyoruz
+                document.getElementById('productSalePrice').value = (product.salePrice !== null && product.salePrice !== undefined) ? product.salePrice : '';
                 document.getElementById('productStock').value = product.stock || 0;
                 document.getElementById('productUnit').value = product.unit || 'adet';
                 document.getElementById('productDescription').value = product.description || '';
                 document.getElementById('productSku').value = product.sku || '';
-                document.getElementById('productBarcode').value = product.barcode || '';
+                document.getElementById('productBarcode').value = (product.barcode !== null && product.barcode !== undefined) ? product.barcode : '';
 
                 // Tüm etiketleri yükle
                 document.getElementById('tagPopular').checked = product.isPopular || false;
