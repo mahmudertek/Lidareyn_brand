@@ -1578,6 +1578,65 @@
                 }
             });
 
+            // Sıralama Butonları (Compact) Logic
+            const compactSortBtns = document.querySelectorAll('.sort-btn-compact');
+            compactSortBtns.forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const sortType = this.getAttribute('data-sort');
+
+                    // Görsel olarak aktif yap
+                    compactSortBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // İlgili radio butonu bul ve işaretle
+                    if (sortType === 'price-asc') {
+                        const radio = document.querySelector('input[name="price-sort"][value="low-to-high"]');
+                        if (radio) {
+                            radio.checked = true;
+                            radio.dispatchEvent(new Event('change'));
+                        }
+                    } else if (sortType === 'price-desc') {
+                        const radio = document.querySelector('input[name="price-sort"][value="high-to-low"]');
+                        if (radio) {
+                            radio.checked = true;
+                            radio.dispatchEvent(new Event('change'));
+                        }
+                    }
+                });
+            });
+
+            // Sayfa yüklendiğinde URL parametrelerine göre aktif butonu belirle
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentSort = urlParams.get('sort');
+            if (currentSort === 'price_asc') {
+                const btn = document.querySelector('.sort-btn-compact[data-sort="price-asc"]');
+                if (btn) btn.classList.add('active');
+                const radio = document.querySelector('input[name="price-sort"][value="low-to-high"]');
+                if (radio) radio.checked = true;
+            } else if (currentSort === 'price_desc') {
+                const btn = document.querySelector('.sort-btn-compact[data-sort="price-desc"]');
+                if (btn) btn.classList.add('active');
+                const radio = document.querySelector('input[name="price-sort"][value="high-to-low"]');
+                if (radio) radio.checked = true;
+            }
+
+            // Radio butonlar değiştiğinde compact butonları da güncelle
+            const sortRadios = document.querySelectorAll('input[name="price-sort"]');
+            sortRadios.forEach(radio => {
+                radio.addEventListener('change', function () {
+                    if (this.checked) {
+                        compactSortBtns.forEach(btn => btn.classList.remove('active'));
+                        if (this.value === 'low-to-high') {
+                            const btn = document.querySelector('.sort-btn-compact[data-sort="price-asc"]');
+                            if (btn) btn.classList.add('active');
+                        } else if (this.value === 'high-to-low') {
+                            const btn = document.querySelector('.sort-btn-compact[data-sort="price-desc"]');
+                            if (btn) btn.classList.add('active');
+                        }
+                    }
+                });
+            });
+
             // Filtreleri Temizle Butonu
             const clearBtn = document.getElementById('clear-filters-btn');
             if (clearBtn) {

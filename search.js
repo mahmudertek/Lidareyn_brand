@@ -52,6 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
             elements.sortSelect.value = state.sort.replace('_', '-');
         }
 
+        // Initial Active Sort Button
+        if (state.sort) {
+            const btn = document.querySelector(`.sort-btn[data-sort="${state.sort.replace('_', '-')}"]`);
+            if (btn) btn.classList.add('active');
+        }
+
         showLoadingState();
         await loadProductsFromAPI();
         applyFilters();
@@ -172,7 +178,9 @@ document.addEventListener('DOMContentLoaded', () => {
             results = results.filter(p =>
                 (p.name && p.name.toLowerCase().includes(q)) ||
                 (p.brand && p.brand.toLowerCase().includes(q)) ||
-                (p.category && p.category.toLowerCase().includes(q))
+                (p.category && p.category.toLowerCase().includes(q)) ||
+                (p.barcode && p.barcode.toLowerCase().includes(q)) ||
+                (p.sku && p.sku.toLowerCase().includes(q))
             );
         }
 
@@ -193,8 +201,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (sortValue.includes('price')) {
             const isDesc = sortValue.includes('desc');
             results.sort((a, b) => {
-                const pA = parseFloat(a.price || 0);
-                const pB = parseFloat(b.price || 0);
+                const getPrice = (p) => {
+                    if (p.salePrice && parseFloat(p.salePrice) > 0) return parseFloat(p.salePrice);
+                    return parseFloat(p.price || 0);
+                };
+                const pA = getPrice(a);
+                const pB = getPrice(b);
                 return isDesc ? pB - pA : pA - pB;
             });
         }
@@ -416,11 +428,17 @@ document.addEventListener('DOMContentLoaded', () => {
             sortButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
 
+            // Sort helper
+            const getPrice = (p) => {
+                if (p.salePrice && parseFloat(p.salePrice) > 0) return parseFloat(p.salePrice);
+                return parseFloat(p.price || 0);
+            };
+
             // Sort
             if (sortType === 'price-asc') {
-                state.filteredProducts.sort((a, b) => parseFloat(a.price || 0) - parseFloat(b.price || 0));
+                state.filteredProducts.sort((a, b) => getPrice(a) - getPrice(b));
             } else if (sortType === 'price-desc') {
-                state.filteredProducts.sort((a, b) => parseFloat(b.price || 0) - parseFloat(a.price || 0));
+                state.filteredProducts.sort((a, b) => getPrice(b) - getPrice(a));
             }
 
             renderResults();

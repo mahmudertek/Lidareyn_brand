@@ -549,6 +549,7 @@
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
+            line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -647,7 +648,15 @@
 
         function createProductCard(product) {
             const card = document.createElement('a');
-            const priceStr = typeof product.price === 'number' ? product.price.toLocaleString('tr-TR') + ' TL' : product.price;
+
+            // İndirimli fiyat kontrolü
+            const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
+            const displayPrice = hasSalePrice ? product.salePrice : product.price;
+            const oldPrice = hasSalePrice ? product.price : null;
+
+            const priceStr = typeof displayPrice === 'number' ? displayPrice.toLocaleString('tr-TR') + ' TL' : displayPrice;
+            const oldPriceStr = oldPrice ? (typeof oldPrice === 'number' ? oldPrice.toLocaleString('tr-TR') + ' TL' : oldPrice) : null;
+
             // Görsel için birden fazla kaynak kontrol et
             const image = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400?text=Urun';
 
@@ -664,11 +673,15 @@
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </div>
+                ${hasSalePrice ? '<div class="product-badge sale" style="position: absolute; top: 10px; left: 10px; background: #e74c3c; color: white; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; z-index: 1;">İNDİRİM</div>' : ''}
                 <!-- Görsel görünürlüğünü zorla -->
                 <img src="${image}" alt="${product.name}" class="product-image" loading="lazy" style="opacity: 1 !important; visibility: visible !important; display: block !important; width: 100% !important;">
                 <div class="product-info">
                     <div class="product-name">${product.name}</div>
-                    <div class="product-price">${priceStr}</div>
+                    <div class="product-price-container" style="display: flex; align-items: center; gap: 8px;">
+                        <div class="product-price">${priceStr}</div>
+                        ${oldPriceStr ? `<div class="product-old-price" style="text-decoration: line-through; color: #999; font-size: 0.85rem;">${oldPriceStr}</div>` : ''}
+                    </div>
                 </div>
             `;
 

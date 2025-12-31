@@ -30,10 +30,15 @@ async function initProductCarousel() {
                 let imageUrl = product.mainImage || product.image || (product.images && product.images[0]) || null;
                 if (!imageUrl) imageUrl = 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name || 'Ürün');
 
+                const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
+                const displayPrice = hasSalePrice ? product.salePrice : product.price;
+                const oldPrice = hasSalePrice ? product.price : null;
+
                 return {
                     id: product._id || product.id,
                     name: product.name,
-                    price: `₺${product.price ? product.price.toLocaleString() : '0'}`,
+                    price: `₺${displayPrice ? parseFloat(displayPrice).toLocaleString('tr-TR') : '0'}`,
+                    oldPrice: oldPrice ? `₺${parseFloat(oldPrice).toLocaleString('tr-TR')}` : null,
                     image: imageUrl,
                     badge: product.isNew ? 'Yeni' : (product.tags && product.tags.includes('new') ? 'Yeni' : ''),
                     link: `urun-detay.html?id=${product._id || product.id}`
@@ -61,14 +66,21 @@ async function initProductCarousel() {
 
                 if (featuredProducts.length > 0) {
                     console.log('✅ Featured products loaded from localStorage:', featuredProducts.length);
-                    products = featuredProducts.map(product => ({
-                        id: product._id || product.id,
-                        name: product.name,
-                        price: `₺${product.price ? parseFloat(product.price).toLocaleString() : '0'}`,
-                        image: product.mainImage || product.image || 'https://placehold.co/300x200?text=Ürün',
-                        badge: (product.isNew || (product.tags && product.tags.includes('new'))) ? 'Yeni' : '',
-                        link: `urun-detay.html?id=${product._id || product.id}`
-                    }));
+                    products = featuredProducts.map(product => {
+                        const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
+                        const displayPrice = hasSalePrice ? product.salePrice : product.price;
+                        const oldPrice = hasSalePrice ? product.price : null;
+
+                        return {
+                            id: product._id || product.id,
+                            name: product.name,
+                            price: `₺${displayPrice ? parseFloat(displayPrice).toLocaleString('tr-TR') : '0'}`,
+                            oldPrice: oldPrice ? `₺${parseFloat(oldPrice).toLocaleString('tr-TR')}` : null,
+                            image: product.mainImage || product.image || 'https://placehold.co/300x200?text=Ürün',
+                            badge: (product.isNew || (product.tags && product.tags.includes('new'))) ? 'Yeni' : '',
+                            link: `urun-detay.html?id=${product._id || product.id}`
+                        };
+                    });
                 }
             }
         } catch (e) {
@@ -168,7 +180,10 @@ async function initProductCarousel() {
                 </div>
                 <div class="product-carousel-info">
                     <h3 class="product-carousel-name">${product.name}</h3>
-                    <p class="product-carousel-price">${product.price}</p>
+                    <div class="product-carousel-price-area">
+                        <p class="product-carousel-price">${product.price}</p>
+                        ${product.oldPrice ? `<p class="product-carousel-old-price">${product.oldPrice}</p>` : ''}
+                    </div>
                 </div>
             `;
 

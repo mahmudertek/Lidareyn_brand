@@ -771,7 +771,21 @@
 
                     // Başlık ve Fiyat
                     if (titleEl) titleEl.textContent = p.name || 'İsimsiz Ürün';
-                    if (priceEl) priceEl.textContent = p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Fiyat Yok';
+
+                    const hasSalePrice = p.salePrice && parseFloat(p.salePrice) > 0;
+                    const displayPrice = hasSalePrice ? p.salePrice : p.price;
+                    const oldPrice = hasSalePrice ? p.price : null;
+
+                    if (priceEl) {
+                        if (hasSalePrice) {
+                            priceEl.innerHTML = `
+                                <span class="current-price" style="color: #e74c3c;">₺${parseFloat(displayPrice).toLocaleString('tr-TR')}</span>
+                                <span class="old-price" style="text-decoration: line-through; color: #999; font-size: 0.9em; margin-left: 10px;">₺${parseFloat(oldPrice).toLocaleString('tr-TR')}</span>
+                            `;
+                        } else {
+                            priceEl.textContent = displayPrice ? `₺${parseFloat(displayPrice).toLocaleString('tr-TR')}` : 'Fiyat Yok';
+                        }
+                    }
                     if (breadName) breadName.textContent = p.name || '';
 
                     // Marka
