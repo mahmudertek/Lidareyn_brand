@@ -362,6 +362,17 @@
     }
 }
 
+/* Clear Filters Container Margins */
+.clear-filters-container {
+    margin-top: 20px;
+}
+
+@media (max-width: 992px) {
+    .clear-filters-container {
+        margin-top: 5px !important;
+    }
+}
+
 /* Filtreleri Temizle butonu - Desktop varsayılan stiller */
 .clear-filters-custom {
     width: 100%;
