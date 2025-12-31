@@ -781,21 +781,56 @@
                                 <option value="Diğer">Diğer</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Üst Kategori *</label>
-                            <select id="productCategory" required onchange="updateSubCategories()">
-                                <option value="">Kategori Seçin</option>
-                                <option value="elektrikli-el-aletleri">Elektrikli El Aletleri</option>
-                                <option value="olcme-ve-kontrol-aletleri">Ölçme & Kontrol Aletleri</option>
-                                <option value="el-aletleri">El Aletleri</option>
-                                <option value="nalbur-yapi-malzemeleri">Yapı ve İnşaat Malzemeleri</option>
-                                <option value="asindirici-kesici">Aşındırıcı ve Kesici Uçlar</option>
-                                <option value="yapi-kimyasallari">Yapıştırıcı, Dolgu ve Kimyasallar</option>
-                                <option value="kaynak-malzemeleri">Kaynak Malzemeleri</option>
-                                <option value="hirdavat-el-aletleri">Hırdavat ve El Aletleri</option>
-                                <option value="is-guvenligi-ve-calisma-ekipmanlari">İş Güvenliği ve Çalışma Ekipmanları
-                                </option>
-                            </select>
+                        <div class="form-group full-width">
+                            <label style="font-weight: 700; color: #1e293b; margin-bottom: 10px; display: block;">Ana
+                                Kategoriler (Birden Fazla Seçebilirsiniz) *</label>
+                            <div id="category-checkbox-list"
+                                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; background: #fff; padding: 15px; border: 1px solid #d1d5db; border-radius: 8px;">
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="elektrikli-el-aletleri">
+                                    Elektrikli El Aletleri
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="olcme-ve-kontrol-aletleri">
+                                    Ölçme & Kontrol Aletleri
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="el-aletleri"> El Aletleri
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="nalbur-yapi-malzemeleri">
+                                    Yapı ve İnşaat Malzemeleri
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="asindirici-kesici">
+                                    Aşındırıcı ve Kesici Uçlar
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="yapi-kimyasallari">
+                                    Yapıştırıcı, Dolgu ve Kimyasallar
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="kaynak-malzemeleri"> Kaynak
+                                    Malzemeleri
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="hirdavat-el-aletleri">
+                                    Hırdavat ve El Aletleri
+                                </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories"
+                                        value="is-guvenligi-ve-calisma-ekipmanlari"> İş Güvenliği
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -1366,6 +1401,10 @@
             document.getElementById('modalTitle').textContent = 'Yeni Ürün Ekle';
             document.getElementById('productForm').reset();
             document.getElementById('productId').value = '';
+
+            // Checkbox listesini sıfırla
+            document.querySelectorAll('input[name="productCategories"]').forEach(cb => cb.checked = false);
+
             resetImageUpload(); // Görsel alanını sıfırla
 
             // Barkod ve SKU alanlarının düzenlenebilir olduğundan emin ol
@@ -1393,46 +1432,21 @@
                 document.getElementById('productName').value = product.name || '';
                 document.getElementById('productBrand').value = product.brand || '';
 
-                // Kategori eşleştirmesi - slug veya ad'dan dropdown'daki slug'a dönüşüm
-                let categoryValue = '';
-                const categoryInput = product.categorySlug || product.category || '';
+                // KATEGORİ TEMİZLE VE İŞARETLE (Çoklu Seçim v2.0)
+                const categoryCheckboxes = document.querySelectorAll('input[name="productCategories"]');
+                categoryCheckboxes.forEach(cb => cb.checked = false); // Önce hepsini temizle
 
-                // Kapsamlı kategori eşleştirme haritası
-                const categoryMapping = {
-                    // Kategori adları -> dropdown slug
-                    'Elektrikli El Aletleri': 'elektrikli-el-aletleri',
-                    'Ölçme & Kontrol Aletleri': 'olcme-ve-kontrol-aletleri',
-                    'Ölçme ve Kontrol Aletleri': 'olcme-ve-kontrol-aletleri',
-                    'El Aletleri': 'el-aletleri',
-                    'Yapı ve İnşaat Malzemeleri': 'nalbur-yapi-malzemeleri',
-                    'Aşındırıcı ve Kesici Uçlar': 'asindirici-kesici',
-                    'Yapıştırıcı, Dolgu ve Kimyasallar': 'yapi-kimyasallari',
-                    'Kaynak Malzemeleri': 'kaynak-malzemeleri',
-                    'Hırdavat ve El Aletleri': 'hirdavat-el-aletleri',
-                    'İş Güvenliği ve Çalışma Ekipmanları': 'is-guvenligi-ve-calisma-ekipmanlari',
+                // Ürünün kategorilerini belirle (allCategories dizisi varsa onu kullan, yoksa tekli slug'ı al)
+                const productCats = product.allCategories || (product.categorySlug ? [product.categorySlug] : []);
 
-                    // Alternatif slug'lar -> dropdown slug (backend'den farklı gelebilir)
-                    'elektrikli-el-aletleri': 'elektrikli-el-aletleri',
-                    'olcme-ve-kontrol-aletleri': 'olcme-ve-kontrol-aletleri',
-                    'olcme-kontrol-aletleri': 'olcme-ve-kontrol-aletleri',
-                    'el-aletleri': 'el-aletleri',
-                    'nalbur-yapi-malzemeleri': 'nalbur-yapi-malzemeleri',
-                    'yapi-ve-insaat-malzemeleri': 'nalbur-yapi-malzemeleri',
-                    'yapi-ve-i-nsaat-malzemeleri': 'nalbur-yapi-malzemeleri',
-                    'asindirici-kesici': 'asindirici-kesici',
-                    'asindirici-ve-kesici-uclar': 'asindirici-kesici',
-                    'yapi-kimyasallari': 'yapi-kimyasallari',
-                    'yapistirici-dolgu-kimyasallar': 'yapi-kimyasallari',
-                    'kaynak-malzemeleri': 'kaynak-malzemeleri',
-                    'hirdavat-el-aletleri': 'hirdavat-el-aletleri',
-                    'is-guvenligi-ve-calisma-ekipmanlari': 'is-guvenligi-ve-calisma-ekipmanlari',
-                    'i-s-guvenligi-ve-calisma-ekipmanlari': 'is-guvenligi-ve-calisma-ekipmanlari'
-                };
+                categoryCheckboxes.forEach(cb => {
+                    if (productCats.includes(cb.value)) {
+                        cb.checked = true;
+                    }
+                });
 
-                categoryValue = categoryMapping[categoryInput] || categoryInput;
-                console.log('📂 Kategori eşleştirme:', categoryInput, '->', categoryValue);
-                document.getElementById('productCategory').value = categoryValue;
-                updateSubCategories(product.subCategory);
+                // Alt kategorileri güncelle (İlk seçili kategoriye göre)
+                updateSubCategories(product.subCategory, productCats[0]);
 
                 document.getElementById('productPrice').value = product.price || '';
                 // 0 değeri de geçerli bir değerdir, bu yüzden null check yapıyoruz
@@ -1637,7 +1651,15 @@
             const salePrice = rawSalePrice !== '' ? parseFloat(rawSalePrice) : null;
 
             const stock = parseInt(document.getElementById('productStock').value) || 0;
-            const category = document.getElementById('productCategory').value;
+
+            // ÇOKLU KATEGORİ OKUMA (Checkbox listesinden)
+            const selectedCategoryCheckboxes = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
+            const categorySlugs = selectedCategoryCheckboxes.map(cb => cb.value); // Dizi olarak: ["cat1", "cat2"]
+            const categoryLabel = selectedCategoryCheckboxes.length > 0 ? selectedCategoryCheckboxes[0].parentElement.textContent.trim() : "";
+
+            // Eğer birden fazla seçilmişse kategori adını virgülle ayır (Görsel uyum için)
+            const categoryName = selectedCategoryCheckboxes.map(cb => cb.parentElement.textContent.trim()).join(', ');
+
             const description = document.getElementById('productDescription').value;
             const sku = document.getElementById('productSku').value;
             const barcode = document.getElementById('productBarcode').value;
@@ -1657,13 +1679,10 @@
             }
 
             // Kategori kontrolü
-            if (!category) {
-                alert('Lütfen bir kategori seçin.');
+            if (categorySlugs.length === 0) {
+                alert('Lütfen en az bir kategori seçin.');
                 return;
             }
-
-            // Kategori ismini al
-            const categoryName = getCategoryName(category);
 
             // Yüklenen görseli al veya placeholder kullan
             const imageToUse = uploadedImageBase64 || `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`;
@@ -1678,8 +1697,9 @@
             const productData = {
                 name,
                 brand,
-                category: categoryName,
-                categorySlug: category,
+                category: categoryName, // Virgüllü kategori isimleri
+                categorySlug: categorySlugs[0], // İlk kategori (Eskisiyle uyum için)
+                allCategories: categorySlugs,   // TÜM KATEGORİLER (Dizi olarak)
                 subCategory: subCategory,
 
                 price,
