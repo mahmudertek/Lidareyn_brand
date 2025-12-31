@@ -1,0 +1,287 @@
+/* ============================================
+   ADVANCED SEARCH PANEL STYLES
+   Gelişmiş Arama Bölmesi - Ana Sayfa
+   ============================================ */
+
+.advanced-search-section {
+    width: 80%;
+    max-width: 1500px;
+    margin: 40px auto;
+    padding: 0;
+}
+
+.advanced-search-panel {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
+    border-radius: 20px;
+    padding: 35px 40px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.06),
+        0 1px 3px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(139, 123, 216, 0.12);
+    position: relative;
+    overflow: hidden;
+}
+
+.advanced-search-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+            #8b7bd8 0%,
+            #a594e6 50%,
+            #8b7bd8 100%);
+}
+
+.advanced-search-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.advanced-search-title i {
+    color: #8b7bd8;
+    font-size: 24px;
+}
+
+.search-options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 40px;
+}
+
+.search-option-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.search-option-row.full-width {
+    grid-column: span 2;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-option-row.full-width .search-option-label {
+    white-space: nowrap;
+    min-width: auto;
+}
+
+.search-option-row.full-width .search-input-wrapper {
+    flex: 1;
+}
+
+.search-option-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-option-label i {
+    color: #8b7bd8;
+    font-size: 14px;
+    width: 18px;
+}
+
+.search-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-input-wrapper input[type="text"] {
+    flex: 1;
+    padding: 14px 18px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #333;
+    background: #fff;
+    transition: all 0.3s ease;
+}
+
+.search-input-wrapper input[type="text"]:focus {
+    outline: none;
+    border-color: #8b7bd8;
+    box-shadow: 0 0 0 3px rgba(139, 123, 216, 0.15);
+}
+
+.search-input-wrapper input[type="text"]::placeholder {
+    color: #999;
+}
+
+.search-btn-inline {
+    padding: 14px 24px;
+    background: linear-gradient(135deg, #8b7bd8 0%, #6b5bb8 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.search-btn-inline:hover {
+    background: linear-gradient(135deg, #7a6ac7 0%, #5a4aa7 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 123, 216, 0.35);
+}
+
+.search-btn-inline i {
+    font-size: 14px;
+}
+
+/* Sort Options Radio Buttons */
+.sort-option-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: #fff;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sort-option-item:hover {
+    border-color: #8b7bd8;
+    background: #faf9ff;
+}
+
+.sort-option-item input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #8b7bd8;
+    cursor: pointer;
+}
+
+.sort-option-item label {
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    flex: 1;
+}
+
+.sort-option-item.checked {
+    border-color: #8b7bd8;
+    background: linear-gradient(135deg, #faf9ff 0%, #f3f0ff 100%);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1200px) {
+    .advanced-search-section {
+        width: 90%;
+    }
+}
+
+/* Kapsamlı Mobil Düzenleme (Tüm Mobil Cihazlar İçin) */
+@media (max-width: 992px) {
+    .advanced-search-section {
+        width: 100%;
+        padding: 0 10px;
+        /* Kenardan hafif boşluk */
+        box-sizing: border-box;
+    }
+
+    .advanced-search-panel {
+        padding: 20px 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .search-options-grid {
+        display: flex;
+        /* Grid yerine Flex Column */
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Tüm satırları alt alta diz */
+    .search-option-row,
+    .search-option-row.full-width {
+        grid-column: span 1;
+        display: flex;
+        flex-direction: column;
+        /* Dikey dizilim */
+        align-items: stretch;
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Label stilini düzenle */
+    .search-option-label {
+        width: 100%;
+        margin-bottom: 5px;
+        white-space: normal;
+        /* Metin kaydır */
+    }
+
+    /* Input ve Buton Kapsayıcısı */
+    .search-input-wrapper {
+        display: flex;
+        flex-direction: column;
+        /* Input üstte, buton altta */
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Input Alanı */
+    .search-input-wrapper input[type="text"] {
+        width: 100%;
+        min-width: 0;
+        /* Flex taşmasını önle */
+        box-sizing: border-box;
+    }
+
+    /* Buton */
+    .search-btn-inline {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        box-sizing: border-box;
+    }
+
+    .advanced-search-title {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    /* Yeni eklenen sıralama butonları */
+    .responsive-sort-buttons {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        padding-top: 10px;
+        margin: 0;
+    }
+
+    .sort-btn-compact {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Active State for Sort Buttons */
+.sort-btn-compact.active {
+    background: linear-gradient(135deg, #8b7bd8, #6b5bb8) !important;
+    color: white !important;
+    border-color: #6b5bb8 !important;
+    box-shadow: 0 4px 12px rgba(139, 123, 216, 0.3) !important;
+}

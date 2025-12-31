@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Get Admin Token</title>
+</head>
+
+<body>
+    <h1>Admin Token</h1>
+    <p>Open browser console (F12) and run this page from admin panel</p>
+    <pre id="token"></pre>
+    <script>
+        const token = localStorage.getItem('adminToken') || localStorage.getItem('token');
+        document.getElementById('token').textContent = token || 'No token found';
+        console.log('Admin Token:', token);
+
+        // Also show in alert for easy copy
+        if (token) {
+            prompt('Copy this token:', token);
+        }
+    </script>
+</body>
+
+</html>

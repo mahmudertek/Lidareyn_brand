@@ -5,15 +5,15 @@
 
 .advanced-search-section {
     width: 80%;
-    max-width: 1500px;
-    margin: 40px auto;
+    max-width: 1400px;
+    margin: 32px auto;
     padding: 0;
 }
 
 .advanced-search-panel {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
-    border-radius: 20px;
-    padding: 35px 40px;
+    border-radius: 16px;
+    padding: 28px 32px;
     box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.06),
         0 1px 3px rgba(0, 0, 0, 0.03);
@@ -36,24 +36,24 @@
 }
 
 .advanced-search-title {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
     color: #1a1a2e;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .advanced-search-title i {
     color: #8b7bd8;
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .search-options-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 24px 40px;
+    gap: 18px 32px;
 }
 
 .search-option-row {
@@ -101,10 +101,10 @@
 
 .search-input-wrapper input[type="text"] {
     flex: 1;
-    padding: 14px 18px;
+    padding: 11px 14px;
     border: 1.5px solid #e0e0e0;
-    border-radius: 12px;
-    font-size: 14px;
+    border-radius: 10px;
+    font-size: 13px;
     color: #333;
     background: #fff;
     transition: all 0.3s ease;
@@ -121,18 +121,18 @@
 }
 
 .search-btn-inline {
-    padding: 14px 24px;
+    padding: 11px 20px;
     background: linear-gradient(135deg, #8b7bd8 0%, #6b5bb8 100%);
     color: white;
     border: none;
-    border-radius: 12px;
-    font-size: 14px;
+    border-radius: 10px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     white-space: nowrap;
 }
 
@@ -150,11 +150,11 @@
 .sort-option-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 14px 18px;
+    gap: 10px;
+    padding: 11px 14px;
     background: #fff;
     border: 1.5px solid #e0e0e0;
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -277,10 +277,11 @@
         justify-content: center;
     }
 }
+
 /* Active State for Sort Buttons */
 .sort-btn-compact.active {
-    background: linear-gradient(135deg, #10b981, #059669) !important;
+    background: linear-gradient(135deg, #8b7bd8, #6b5bb8) !important;
     color: white !important;
-    border-color: #059669 !important;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3) !important;
-} 
+    border-color: #6b5bb8 !important;
+    box-shadow: 0 4px 12px rgba(139, 123, 216, 0.3) !important;
+}
