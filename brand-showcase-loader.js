@@ -45,6 +45,32 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
+        // 🚀 VERİ BİRLEŞTİRME (MERGE DATA FIX)
+        // API'den gelen verilerde salePrice eksikse, localStorage'dan tamamla
+        try {
+            const localMergeData = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+            if (localMergeData.length > 0 && allProducts.length > 0) {
+                let mergedCount = 0;
+                allProducts.forEach(prod => {
+                    const localMatch = localMergeData.find(lp => (lp._id || lp.id) === (prod._id || prod._id));
+                    if (localMatch) {
+                        // İndirimli fiyat eksikse tamamla
+                        if ((prod.salePrice === undefined || prod.salePrice === null) && localMatch.salePrice) {
+                            prod.salePrice = localMatch.salePrice;
+                            mergedCount++;
+                        }
+                        // Barkod eksikse tamamla
+                        if (!prod.barcode && localMatch.barcode) {
+                            prod.barcode = localMatch.barcode;
+                        }
+                    }
+                });
+                if (mergedCount > 0) console.log(`🔄 ${mergedCount} ürünün indirim bilgisi yerel veriden kurtarıldı.`);
+            }
+        } catch (mergeErr) {
+            console.error('Merge error:', mergeErr);
+        }
+
         if (allProducts.length === 0) {
             console.warn('⚠️ No products found from any source');
             return;

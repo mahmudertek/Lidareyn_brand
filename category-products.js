@@ -60,6 +60,31 @@
             console.log('✅ Kategori ürünleri products-data.js\'den yüklendi:', allProducts.length);
         }
 
+        // 🚀 VERİ BİRLEŞTİRME (MERGE DATA FIX) - İndirimli fiyatları kurtar
+        try {
+            const localMergeData = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+            if (localMergeData.length > 0 && allProducts.length > 0) {
+                let mergedCount = 0;
+                allProducts.forEach(prod => {
+                    const localMatch = localMergeData.find(lp => (lp._id || lp.id) === (prod._id || prod._id));
+                    if (localMatch) {
+                        // İndirimli fiyat eksikse tamamla
+                        if ((prod.salePrice === undefined || prod.salePrice === null) && localMatch.salePrice) {
+                            prod.salePrice = localMatch.salePrice;
+                            mergedCount++;
+                        }
+                        // Barkod eksikse tamamla
+                        if (!prod.barcode && localMatch.barcode) {
+                            prod.barcode = localMatch.barcode;
+                        }
+                    }
+                });
+                if (mergedCount > 0) console.log(`🔄 Kategori Sayfası: ${mergedCount} ürünün indirim bilgisi yerel veriden kurtarıldı.`);
+            }
+        } catch (mergeErr) {
+            console.error('Merge error:', mergeErr);
+        }
+
         return allProducts;
     }
 
