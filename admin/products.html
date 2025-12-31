@@ -581,7 +581,8 @@
         <main class="main-content">
             <!-- Topbar -->
             <header class="topbar">
-                <div class="page-title" style="color:#8b7bd8; font-weight:bold;">Ürün Yönetimi v2.0 (DEBUG)</div>
+                <div class="page-title" style="color:#8b7bd8 !important; font-weight:bold;">Ürün Yönetimi v2.0 (DEBUG)
+                </div>
 
                 <div class="topbar-right">
                     <button class="notification-btn">
@@ -1446,7 +1447,13 @@
                 });
 
                 // Alt kategorileri güncelle (İlk seçili kategoriye göre)
-                updateSubCategories(product.subCategory, productCats[0]);
+                if (productCats[0]) {
+                    const categorySelect = document.getElementById('productCategory');
+                    if (categorySelect) {
+                        categorySelect.value = productCats[0];
+                    }
+                    updateSubCategories(product.subCategory);
+                }
 
                 document.getElementById('productPrice').value = product.price || '';
                 // 0 değeri de geçerli bir değerdir, bu yüzden null check yapıyoruz
