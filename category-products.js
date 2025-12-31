@@ -125,15 +125,15 @@
         const img = product.mainImage || product.image || 'https://placehold.co/300x300/f5f5f5/999?text=Resim+Yok';
         const name = product.name || 'Ürün';
         const brand = product.brand || '';
-        const price = product.price || 0;
-        const salePrice = product.salePrice;
-        const hasSale = salePrice && parseFloat(salePrice) > 0 && parseFloat(salePrice) < price;
+        const price = parseFloat(product.price) || 0;
+        const salePriceVal = parseFloat(product.salePrice);
+        const hasSale = !isNaN(salePriceVal) && salePriceVal > 0 && salePriceVal < price;
 
         let priceHtml = '';
         if (hasSale) {
             priceHtml = `
                 <span class="old-price">${price.toLocaleString('tr-TR')} TL</span>
-                <span class="price sale-price">${parseFloat(salePrice).toLocaleString('tr-TR')} TL</span>
+                <span class="price sale-price">${salePriceVal.toLocaleString('tr-TR')} TL</span>
             `;
         } else {
             priceHtml = `<span class="price">${price.toLocaleString('tr-TR')} TL</span>`;
@@ -308,6 +308,7 @@
                         url.searchParams.set('subcategory', text);
                         window.history.pushState({}, '', url);
                         renderCategoryProducts();
+                        hideAccordionIfSubcategory(); // Accordion'u gizle
                     }
                 });
             }
@@ -316,15 +317,44 @@
         console.log('📂 Alt kategori linkleri güncellendi');
     }
 
+    // Alt kategori seçiliyse accordion'u gizle
+    function hideAccordionIfSubcategory() {
+        const subCategory = getSubCategoryFromURL();
+
+        if (subCategory) {
+            // Alt kategori seçiliyse accordion'u gizle
+            const accordion = document.querySelector('.category-accordion');
+            if (accordion) {
+                accordion.style.display = 'none';
+            }
+
+            // Breadcrumb'a alt kategori ekle
+            const breadcrumb = document.querySelector('.breadcrumb .container');
+            if (breadcrumb && !breadcrumb.querySelector('.subcategory-crumb')) {
+                const icon = document.createElement('i');
+                icon.className = 'fa-solid fa-chevron-right';
+                const span = document.createElement('span');
+                span.className = 'subcategory-crumb';
+                span.textContent = decodeURIComponent(subCategory);
+                breadcrumb.appendChild(icon);
+                breadcrumb.appendChild(span);
+            }
+
+            console.log('📂 Alt kategori görünümü: Accordion gizlendi');
+        }
+    }
+
     // Sayfa yüklendiğinde çalıştır
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             renderCategoryProducts();
             updateSubcategoryLinks();
+            hideAccordionIfSubcategory();
         });
     } else {
         renderCategoryProducts();
         updateSubcategoryLinks();
+        hideAccordionIfSubcategory();
     }
 
 })();

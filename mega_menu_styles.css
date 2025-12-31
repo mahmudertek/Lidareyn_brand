@@ -43,11 +43,30 @@
     /* No animation */
 }
 
+
+/* Hover Bridge Fix - Görünmez Köprü */
+.nav-item-dropdown::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    /* Buton ile menü arasındaki boşluğu doldurur */
+    background: transparent;
+    z-index: 1001;
+    /* Mega menünün altında ama buton hizasında */
+}
+
 /* Hover enabled - Mega menu opens on hover */
 .nav-item-dropdown:hover .mega-menu {
     opacity: 1;
     visibility: visible;
     display: flex;
+    top: 100%;
+    /* Emin olmak için */
+    margin-top: 0;
+    /* Ekstra güvenle yapışmasını sağla */
 }
 
 /* Left Sidebar: Category List */

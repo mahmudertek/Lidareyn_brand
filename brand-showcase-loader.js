@@ -126,14 +126,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const imgSource = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
                 const productUrl = `urun-detay.html?id=${product._id || product.id}`;
 
-                const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
-                const displayPrice = hasSalePrice ? product.salePrice : product.price;
-                const oldPrice = hasSalePrice ? product.price : null;
+                const price = parseFloat(product.price) || 0;
+                const salePriceVal = parseFloat(product.salePrice);
+                const hasSalePrice = !isNaN(salePriceVal) && salePriceVal > 0 && salePriceVal < price;
+
+                const displayPrice = hasSalePrice ? salePriceVal : price;
+                const oldPrice = hasSalePrice ? price : null;
 
                 const priceHtml = hasSalePrice
-                    ? `<span style="color:#e74c3c; font-weight:700;">₺${parseFloat(displayPrice).toLocaleString('tr-TR')}</span>
-                       <span style="text-decoration:line-through; color:#999; font-size:0.8em; margin-left:8px;">₺${parseFloat(oldPrice).toLocaleString('tr-TR')}</span>`
-                    : `<span>₺${displayPrice ? parseFloat(displayPrice).toLocaleString('tr-TR') : '---'}</span>`;
+                    ? `<span style="color:#e74c3c; font-weight:700;">₺${displayPrice.toLocaleString('tr-TR')}</span>
+                       <span style="text-decoration:line-through; color:#999; font-size:0.8em; margin-left:8px;">₺${oldPrice.toLocaleString('tr-TR')}</span>`
+                    : `<span>₺${displayPrice.toLocaleString('tr-TR')}</span>`;
 
                 card.innerHTML = `
                     <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${product._id || product.id}')">

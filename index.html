@@ -365,10 +365,11 @@
                                     </div>
                                 </li>
                                 <li>
-                                    <a href="kategoriler/hirdavat-el-aletleri.html">
+                                    <a href="kategoriler/el-aletleri.html">
                                         <div class="menu-item-left">
                                             <i class="fa-solid fa-screwdriver-wrench"></i>
                                             <span>El Aletleri</span>
+
                                         </div>
                                         <i class="fa-solid fa-chevron-right"></i>
                                     </a>
@@ -769,14 +770,18 @@
                         </div>
                     </div>
 
-                    <!-- Filtreleri Temizle Butonu -->
-                    <div class="search-option-row full-width" style="margin-top: 20px;">
-                        <button type="button" id="clear-filters-btn"
-                            style="width: 100%; padding: 14px 24px; background: linear-gradient(135deg, #8b7bd8, #6b5bb8); color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(139, 123, 216, 0.3);">
-                            <i class="fa-solid fa-broom"></i>
-                            Filtreleri Temizle
-                        </button>
+                    <!-- Filtreleri Temizle Butonu (Yapısı diğer rowlarla birebir aynı) -->
+                    <div class="search-option-row" style="margin-top: 5px;">
+                        <div class="search-input-wrapper">
+                            <button type="button" id="clear-filters-btn" class="search-btn-inline clear-filters-custom">
+                                <i class="fa-solid fa-broom"></i>
+                                Filtreleri Temizle
+                            </button>
+                        </div>
                     </div>
+
+
+
                 </div>
             </div>
         </section>
@@ -1676,6 +1681,9 @@
     <script src="advanced-search.js?v=1766859876"></script>
     <!-- Brand Showcase Loader - Ana sayfadaki marka vitrinlerini API/localStorage'dan dolduruyor -->
     <script src="brand-showcase-loader.js?v=1767214000"></script>
+    <!-- Mega menu alt kategori linklerini günceller -->
+    <script src="mega-menu-links.js?v=1767221500"></script>
 </body>
+
 
 </html>
