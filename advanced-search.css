@@ -362,14 +362,25 @@
     }
 }
 
-/* Clear Filters Container Margins */
+/* Clear Filters Container Margins & Layout */
 .clear-filters-container {
     margin-top: 20px;
+    grid-column: 1 / -1 !important;
+    /* Grid'in en başından en sonuna kadar kapla (Desktop) */
+    width: 100%;
+    display: flex;
+}
+
+.clear-filters-container .search-input-wrapper {
+    width: 100%;
+    flex: 1;
 }
 
 @media (max-width: 992px) {
     .clear-filters-container {
         margin-top: 5px !important;
+        grid-column: initial !important;
+        /* Mobilde grid olmadığı için resetle (gerçi mobilde zaten flex column) */
     }
 }
 
