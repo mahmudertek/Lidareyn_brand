@@ -1,4 +1,4 @@
-// Pre-compiled React Components (No Babel Required)
+﻿// Pre-compiled React Components (No Babel Required)
 // ChromaGrid and FlowingMenu components
 
 // Wait for React and ReactDOM to load
@@ -137,7 +137,7 @@
                     image: 'gorseller/category_elektrikli_el_aletleri.png'
                 },
                 {
-                    title: 'Ölçme & Kontrol Aletleri',
+                    title: 'Ölçme Ve Kontrol Aletleri',
                     description: 'Hassas ölçüm ve kontrol işlemleri için profesyonel cihazlar.',
                     slug: 'olcme-ve-kontrol-aletleri',
                     image: 'gorseller/category_olcme_kontrol.png'
@@ -221,3 +221,4 @@
         console.log('✅ React components mounted successfully (pre-compiled, no Babel)');
     });
 })();
+

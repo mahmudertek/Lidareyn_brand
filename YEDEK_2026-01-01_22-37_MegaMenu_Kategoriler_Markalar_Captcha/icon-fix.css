@@ -1,0 +1,34 @@
+/* Simple CSS fix - Remove circular borders from header icons */
+
+.icon-btn {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: none;
+}
+
+.icon-btn i {
+    font-size: 22px;
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+}
+
+.icon-btn:hover {
+    background: transparent;
+    transform: translateY(-2px);
+}
+
+.icon-btn:hover i {
+    color: var(--accent-purple);
+}
+
+.icon-btn:active {
+    transform: translateY(0);
+}

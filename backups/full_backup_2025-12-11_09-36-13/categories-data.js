@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // KATEGORI VERİLERİ - RESELS E-TİCARET
 // ============================================
 
@@ -65,7 +65,7 @@ const categoriesData = {
         image: 'gorseller/mega_menu_hardware_products.png',
         subcategories: [
             { name: 'Elektrikli El Aletleri', items: ['Matkaplar (Darbeli, Darbesiz)', 'Vidalayıcılar (Akülü, Elektrikli)', 'Kırıcı-Deliciler (SDS Max, SDS Plus)', 'Karot Makineleri', 'Taşlama ve Kesme Makineleri (Avuç İçi, Büyük)', 'Zımparalar (Titreşim, Eksantrik, Şerit)', 'Planyalar', 'Frezeler', 'Dekupaj Testereler', 'Daire Testereler', 'Gönye Kesmeler', 'Sıcak Hava Tabancaları', 'Kaynak Makineleri (Inverter, Gazaltı)', 'Akülü Alet Setleri'], icon: 'fa-plug' },
-            { name: 'Ölçme & Kontrol Aletleri', items: ['Lazerli Ölçüm Cihazları (Mesafe Ölçer)', 'Lazer Hizalamalar (Çizgi, Nokta)', 'Şerit Metreler', 'Çelik Metreler', 'Kumpaslar (Dijital, Analog)', 'Mikrometreler', 'Su Terazileri (Dijital, Klasik)', 'Açı Ölçerler', 'Dijital Tartılar', 'Endoskoplar'], icon: 'fa-ruler-combined' },
+            { name: 'Ölçme Ve Kontrol Aletleri', items: ['Lazerli Ölçüm Cihazları (Mesafe Ölçer)', 'Lazer Hizalamalar (Çizgi, Nokta)', 'Şerit Metreler', 'Çelik Metreler', 'Kumpaslar (Dijital, Analog)', 'Mikrometreler', 'Su Terazileri (Dijital, Klasik)', 'Açı Ölçerler', 'Dijital Tartılar', 'Endoskoplar'], icon: 'fa-ruler-combined' },
             { name: 'El Aletleri', items: ['Anahtar Takımları (Lokma, Kombine, Alyen)', 'Tornavidalar (Düz, Yıldız, Tork)', 'Pense ve Yan Keski Çeşitleri', 'Çekiçler (Demirci, Lastik, Kaya)', 'Maket Bıçakları ve Yedekleri', 'Testereler (El Testereleri, Budama Testereleri)', 'Eğeler ve Raspalar', 'Keski ve Zımbalar', 'Mengene ve Kelepçeler'], icon: 'fa-wrench' },
             { name: 'Bağlantı ve Sabitleme Elemanları', items: ['Vidalar (Sunta, Alçıpan, Metrik)', 'Somun ve Rondelalar', 'Civatalar', 'Dübel Çeşitleri (Plastik, Çelik, Kimyasal)', 'Perçinler', 'Kancalar ve Halkalar', 'Tel ve Zincirler'], icon: 'fa-link' },
             { name: 'İş Güvenliği ve İş Giysileri', items: ['Koruyucu Eldivenler (İş, Kaynak, Montaj)', 'İş Ayakkabıları ve Botları (Çelik Burunlu)', 'İş Elbiseleri ve Tulumlar', 'Koruyucu Gözlük ve Maskeler', 'Baretler', 'İşitme Koruyucular', 'İlk Yardım Malzemeleri'], icon: 'fa-helmet-safety' },
@@ -150,3 +150,4 @@ function getAllCategories() {
 function getCategoryBySlug(slug) {
     return categoriesData[slug] || null;
 }
+

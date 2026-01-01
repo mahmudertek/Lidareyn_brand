@@ -1,4 +1,4 @@
-// Seed Products Script - Hırdavat Ürünleri
+﻿// Seed Products Script - Hırdavat Ürünleri
 // Bu scripti çalıştırarak veritabanına örnek ürünler ekleyebilirsiniz
 // node seedProducts.js
 
@@ -178,7 +178,7 @@ async function seedProducts() {
                 name: 'Stanley FatMax 5m Şerit Metre',
                 slug: 'stanley-fatmax-5m-serit-metre',
                 brand: 'Stanley',
-                category: 'Ölçme & Kontrol Aletleri',
+                category: 'Ölçme Ve Kontrol Aletleri',
                 price: 299,
                 stock: 100,
                 description: 'BladeArmor kaplama, manyetik uç. 5 metre uzunluk.',
@@ -290,3 +290,4 @@ async function seedProducts() {
 }
 
 seedProducts();
+

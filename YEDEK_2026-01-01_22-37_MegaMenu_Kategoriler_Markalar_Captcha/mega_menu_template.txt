@@ -1,0 +1,446 @@
+﻿<div class="mega-menu">
+                            <ul class="mega-menu-list">
+                                <li>
+                                    <a href="kategoriler/akulu-aletler.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-battery-full"></i>
+                                            <span>Akülü Aletler</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Akülü Matkap &amp; Vidalama</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Akülü Matkap">Akülü Matkap</a></li>
+                                                <li><a href="arama.html?q=Akülü Vidalama">Akülü Vidalama</a></li>
+                                                <li><a href="arama.html?q=Akülü Darbeli Matkap">Akülü Darbeli Matkap</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Akülü Kesme &amp; Taşlama</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Akülü Avuç Taşlama">Akülü Avuç Taşlama</a>
+                                                </li>
+                                                <li><a href="arama.html?q=Akülü Testere">Akülü Testere</a></li>
+                                                <li><a href="arama.html?q=Akülü Dekupaj">Akülü Dekupaj</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Batarya &amp; Şarj Cihazları</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Lityum Batarya">Lityum Batarya</a></li>
+                                                <li><a href="arama.html?q=Hızlı Şarj Cihazı">Hızlı Şarj Cihazı</a></li>
+                                                <li><a href="arama.html?q=Çoklu Şarj İstasyonu">Çoklu Şarj İstasyonu</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/jeneratorler.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-bolt"></i>
+                                            <span>Jeneratörler</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Benzinli Jeneratörler</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Taşınabilir Jeneratör">Taşınabilir
+                                                        Jeneratör</a></li>
+                                                <li><a href="arama.html?q=Ev Tipi Jeneratör">Ev Tipi Jeneratör</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>İnverter Jeneratörler</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Sessiz İnverter">Sessiz İnverter</a></li>
+                                                <li><a href="arama.html?q=Çift Yakıtlı İnverter">Çift Yakıtlı
+                                                        İnverter</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Endüstriyel Jeneratörler</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Dizel Jeneratör">Dizel Jeneratör</a></li>
+                                                <li><a href="arama.html?q=Yüksek Güç Jeneratör">Yüksek Güç Jeneratör</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/hobi-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                            <span>Hobi Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Elektrikli Hobi Aletleri</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Mini Taşlama Dremel">Mini Taşlama (Dremel)</a>
+                                                </li>
+                                                <li><a href="arama.html?q=Elektrikli Gravür">Elektrikli Gravür</a></li>
+                                                <li><a href="arama.html?q=Mini Zımpara">Mini Zımpara</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Akülü Hobi Aletleri</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Akülü Mini Matkap">Akülü Mini Matkap</a></li>
+                                                <li><a href="arama.html?q=Şarjlı Tornavida">Şarjlı Tornavida</a></li>
+                                                <li><a href="arama.html?q=Mini Testere">Mini Testere</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Hobi Aksesuarları</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Gravür Uçları">Gravür Uçları</a></li>
+                                                <li><a href="arama.html?q=Kesme Diskleri">Kesme Diskleri</a></li>
+                                                <li><a href="arama.html?q=Parlatma Uçları">Parlatma Uçları</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/elektrikli-el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-plug"></i>
+                                            <span>Elektrikli El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Delme & Vidalama</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Matkaplar (Darbeli, Darbesiz)">Matkaplar
+                                                        (Darbeli, Darbesiz)</a></li>
+                                                <li><a href="arama.html?q=Vidalayıcılar (Akülü, Elektrikli)">Vidalayıcılar
+                                                        (Akülü, Elektrikli)</a></li>
+                                                <li><a href="arama.html?q=Kırıcı-Deliciler (SDS Max, SDS Plus)">Kırıcı-Deliciler
+                                                        (SDS Max, SDS Plus)</a></li>
+                                                <li><a href="arama.html?q=Karot Makineleri">Karot Makineleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kesme & Taşlama</h4>
+                                            <ul>
+                                                <li><a
+                                                        href="arama.html?q=Taşlama ve Kesme Makineleri (Avuç İçi, Büyük)">Taşlama
+                                                        ve Kesme Makineleri (Avuç İçi, Büyük)</a></li>
+                                                <li><a href="arama.html?q=Dekupaj Testereler">Dekupaj Testereler</a>
+                                                </li>
+                                                <li><a href="arama.html?q=Daire Testereler">Daire Testereler</a></li>
+                                                <li><a href="arama.html?q=Gönye Kesmeler">Gönye Kesmeler</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Yüzey İşleme</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Zımparalar (Titreşim, Eksantrik, Şerit)">Zımparalar
+                                                        (Titreşim, Eksantrik, Şerit)</a></li>
+                                                <li><a href="arama.html?q=Planyalar">Planyalar</a></li>
+                                                <li><a href="arama.html?q=Frezeler">Frezeler</a></li>
+                                                <li><a href="arama.html?q=Sıcak Hava Tabancaları">Sıcak Hava
+                                                        Tabancaları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Diğer Makineler</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Kaynak Makineleri (Inverter, Gazaltı)">Kaynak
+                                                        Makineleri (Inverter, Gazaltı)</a></li>
+                                                <li><a href="arama.html?q=Akülü Alet Setleri">Akülü Alet Setleri</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/olcme-ve-kontrol-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-ruler-combined"></i>
+                                            <span>Ölçme ve Kontrol Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Lazerli Ölçüm</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Lazerli Ölçüm Cihazları (Mesafe Ölçer)">Lazerli
+                                                        Ölçüm Cihazları (Mesafe Ölçer)</a></li>
+                                                <li><a href="arama.html?q=Lazer Hizalamalar (Çizgi, Nokta)">Lazer
+                                                        Hizalamalar (Çizgi, Nokta)</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Mekanik Ölçüm</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Şerit Metreler">Şerit Metreler</a></li>
+                                                <li><a href="arama.html?q=Çelik Metreler">Çelik Metreler</a></li>
+                                                <li><a href="arama.html?q=Kumpaslar (Dijital, Analog)">Kumpaslar
+                                                        (Dijital, Analog)</a></li>
+                                                <li><a href="arama.html?q=Mikrometreler">Mikrometreler</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Terazi & Açı</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Su Terazileri (Dijital, Klasik)">Su Terazileri
+                                                        (Dijital, Klasik)</a></li>
+                                                <li><a href="arama.html?q=Açı Ölçerler">Açı Ölçerler</a></li>
+                                                <li><a href="arama.html?q=Dijital Tartılar">Dijital Tartılar</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Görüntüleme</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Endoskoplar">Endoskoplar</a></li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <a href="kategoriler/nalbur-yapi-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-trowel-bricks"></i>
+                                            <span>Yapı ve İnşaat Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Kimyasal & Yapıştırıcı</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Silikon, Mastik ve Köpükler">Silikon, Mastik
+                                                        ve Köpükler</a></li>
+                                                <li><a href="arama.html?q=Yapıştırıcılar (Epoksi, Japon, Poliüretan)">Yapıştırıcılar
+                                                        (Epoksi, Japon, Poliüretan)</a></li>
+                                                <li><a href="arama.html?q=Harç ve Beton Malzemeleri">Harç ve Beton
+                                                        Malzemeleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Boya & İzolasyon</h4>
+                                            <ul>
+                                                <li><a href="#">Boyalar ve Boya Malzemeleri (Fırça, Rulo, Tiner)</a>
+                                                </li>
+                                                <li><a href="arama.html?q=İzolasyon Malzemeleri">İzolasyon
+                                                        Malzemeleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Donanım</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Kilitler ve Menteşeler">Kilitler ve
+                                                        Menteşeler</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/asindirici-kesici.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-compact-disc"></i>
+                                            <span>Aşındırıcı ve Kesici Uçlar</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Delici & Vidalama</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Matkap Uçları (Metal, Ahşap, Beton)">Matkap
+                                                        Uçları (Metal, Ahşap, Beton)</a></li>
+                                                <li><a href="arama.html?q=Freze Uçları">Freze Uçları</a></li>
+                                                <li><a href="arama.html?q=Karot Uçları">Karot Uçları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kesme & Taşlama</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Taşlama Diskleri">Taşlama Diskleri</a></li>
+                                                <li><a href="arama.html?q=Kesme Diskleri">Kesme Diskleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Aşındırma ve Zımpara</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Zımpara Kağıtları ve Bantları">Zımpara
+                                                        Kağıtları ve Bantları</a></li>
+                                            </ul>
+                                        </div>
+
+
+                                    </div>
+                                </li>
+                                <li>
+                                    <a href="kategoriler/yapi-kimyasallari.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-flask"></i>
+                                            <span>Yapıştırıcı, Dolgu ve Kimyasallar</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Yapıştırıcılar</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Silikon, Mastik ve Akrilikler">Silikon, Mastik
+                                                        ve Akrilikler</a></li>
+                                                <li><a href="arama.html?q=Yapıştırıcı Çeşitleri (Epoksi, Japon, Ahşap)">Yapıştırıcı
+                                                        Çeşitleri (Epoksi, Japon, Ahşap)</a></li>
+                                                <li><a href="arama.html?q=Poliüretan Köpükler">Poliüretan Köpükler</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Dolgu ve Harçlar</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Çimento Esaslı Harçlar">Çimento Esaslı
+                                                        Harçlar</a></li>
+                                                <li><a href="arama.html?q=Alçı ve Alçı Ürünleri">Alçı ve Alçı
+                                                        Ürünleri</a></li>
+                                                <li><a href="arama.html?q=Derz Dolgular">Derz Dolgular</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kimyasallar</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Tiner ve Çözücüler">Tiner ve Çözücüler</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <a href="kategoriler/kaynak-malzemeleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-fire-burner"></i>
+                                            <span>Kaynak Malzemeleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Sarf Malzemeleri</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Elektrotlar (Rutil, Bazik)">Elektrotlar
+                                                        (Rutil, Bazik)</a></li>
+                                                <li><a href="arama.html?q=Kaynak Telleri (Gazaltı, Tig)">Kaynak Telleri
+                                                        (Gazaltı, Tig)</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Koruyucu Ekipman</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Kaynak Maskeleri ve Eldivenleri">Kaynak
+                                                        Maskeleri ve Eldivenleri</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Makine ve Aksesuar</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Kaynak Makineleri ve Aksesuarları">Kaynak
+                                                        Makineleri ve Aksesuarları</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <a href="kategoriler/hirdavat-el-aletleri.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-screwdriver-wrench"></i>
+                                            <span>Hırdavat ve El Aletleri</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Ölçü Aletleri</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Metre, Su Terazisi, Gönye">Metre, Su Terazisi,
+                                                        Gönye</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Kesici & Delici</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Testere, Matkap Uçları">Testere, Matkap
+                                                        Uçları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Sıkıştırma & Tutma</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Pense, İngiliz Anahtarı">Pense, İngiliz
+                                                        Anahtarı</a></li>
+                                                <li><a href="arama.html?q=Mengene">Mengene</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Vurucu Aletler</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Çekiç, Balta">Çekiç, Balta</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <a href="kategoriler/is-guvenligi-ve-calisma-ekipmanlari.html">
+                                        <div class="menu-item-left">
+                                            <i class="fa-solid fa-helmet-safety"></i>
+                                            <span>İş Güvenliği ve Çalışma Ekipmanları</span>
+                                        </div>
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </a>
+                                    <div class="sub-menu">
+                                        <div class="sub-menu-column">
+                                            <h4>Koruyucu Giyim</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=İş Elbiseleri, Eldiven">İş Elbiseleri,
+                                                        Eldiven</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Ayak & Baş Koruma</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Baret, Çelik Burunlu Ayakkabı">Baret, Çelik
+                                                        Burunlu Ayakkabı</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Göz & Kulak Koruma</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=Göz ve Kulak Koruyucuları">Göz ve Kulak
+                                                        Koruyucuları</a></li>
+                                            </ul>
+                                        </div>
+                                        <div class="sub-menu-column">
+                                            <h4>Çalışma Ekipmanları</h4>
+                                            <ul>
+                                                <li><a href="arama.html?q=İş İskelesi ve Merdivenler">İş İskelesi ve
+                                                        Merdivenler</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    

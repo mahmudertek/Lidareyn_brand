@@ -1,0 +1,89 @@
+/* --- HYBRID CATEGORY PAGE STYLES --- */
+
+/* 1. Subcategory Chips (Top Scrollable Bar) */
+.subcategory-chips-section {
+    background: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 10px 0;
+    position: sticky;
+    top: 60px;
+    /* Below sticky header */
+    z-index: 900;
+}
+
+.subcategory-chips-wrapper {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    padding-bottom: 5px;
+    /* Space for scrollbar if any */
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+}
+
+.subcategory-chips-wrapper::-webkit-scrollbar {
+    display: none;
+    /* Hide scrollbar Chrome/Safari */
+}
+
+.sub-chip {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #f8f9fa;
+    border: 1px solid #eee;
+    border-radius: 50px;
+    /* Capsule shape */
+    font-size: 13px;
+    font-weight: 500;
+    color: #444;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.sub-chip i {
+    color: #8b7bd8;
+    font-size: 14px;
+}
+
+.sub-chip:hover {
+    background: #8b7bd8;
+    color: #fff;
+    border-color: #8b7bd8;
+}
+
+.sub-chip:hover i {
+    color: #fff;
+}
+
+/* 2. Listing Controls (Filter/Sort) */
+.listing-controls {
+    margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+    .subcategory-chips-section {
+        top: 105px;
+        /* Header + Subnav on mobile */
+        padding: 10px 0;
+    }
+
+    .category-hero {
+        padding: 1rem 0 !important;
+        /* Smaller hero on mobile */
+    }
+
+    .category-hero h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .products-grid {
+        /* Ensure 2-column on mobile as per previous rules */
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}

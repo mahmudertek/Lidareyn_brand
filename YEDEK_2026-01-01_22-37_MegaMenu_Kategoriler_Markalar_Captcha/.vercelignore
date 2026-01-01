@@ -1,0 +1,57 @@
+# Vercel Deployment - Ignore unnecessary files
+
+# Python scripts
+*.py
+*.pyc
+__pycache__/
+
+# Batch files
+*.bat
+
+# Backups
+backups/
+*.tar.gz
+
+# Development files
+.env
+.env.local
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Backend (deploy separately)
+backend/
+
+# Test files
+test*.html
+simple_image_test.html
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+base64_image.txt
+bebek_base64.txt
+rename_log.txt
+backup_list.txt
+yedekleme_bilgisi.txt
+
+# TypeScript (not needed for production)
+*.tsx
+*.ts
+
+# Documentation (optional, can be included)
+*.md
+!README.md

@@ -1,4 +1,4 @@
-// ============================================
+﻿// ============================================
 // KATEGORI VERİLERİ - KARAKÖY TÜCCARI E-TİCARET
 // ============================================
 
@@ -16,7 +16,7 @@ const categoriesData = {
         ]
     },
     'olcme-ve-kontrol-aletleri': {
-        title: 'Ölçme & Kontrol Aletleri',
+        title: 'Ölçme Ve Kontrol Aletleri',
         description: 'Hassas ölçüm ve kontrol işlemleri için profesyonel cihazlar.',
         icon: 'fa-ruler-combined',
         image: 'gorseller/category_olcme_kontrol.png',
@@ -220,3 +220,4 @@ function getAllCategories() {
 function getCategoryBySlug(slug) {
     return categoriesData[slug] || null;
 }
+

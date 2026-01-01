@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -30,7 +30,7 @@ const productSchema = new mongoose.Schema({
         required: [true, 'Kategori gereklidir'],
         enum: [
             'Elektrikli El Aletleri',
-            'Ölçme & Kontrol Aletleri',
+            'Ölçme Ve Kontrol Aletleri',
             'El Aletleri',
             'Yapı ve İnşaat Malzemeleri',
             'Aşındırıcı ve Kesici Uçlar',
@@ -148,3 +148,4 @@ productSchema.methods.updateRating = function () {
 };
 
 module.exports = mongoose.model('Product', productSchema);
+

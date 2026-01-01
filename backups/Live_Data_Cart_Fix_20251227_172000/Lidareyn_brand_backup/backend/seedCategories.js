@@ -1,4 +1,4 @@
-// Seed Categories to MongoDB
+﻿// Seed Categories to MongoDB
 const mongoose = require('mongoose');
 require('dotenv').config();
 
@@ -44,7 +44,7 @@ const categoriesData = [
         sortOrder: 1
     },
     {
-        name: 'Ölçme & Kontrol Aletleri',
+        name: 'Ölçme Ve Kontrol Aletleri',
         icon: 'fas fa-ruler-combined',
         description: 'Metre, kumpas, su terazisi ve ölçüm cihazları',
         isFeatured: true,
@@ -148,3 +148,4 @@ async function seedCategories() {
 }
 
 seedCategories();
+
