@@ -854,6 +854,12 @@
                                         value="is-guvenligi-ve-calisma-ekipmanlari" onchange="handleCategoryChange()">
                                     İş Güvenliği ve Çalışma Ekipmanları
                                 </label>
+                                <label
+                                    style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                                    <input type="checkbox" name="productCategories" value="bahce-aletleri"
+                                        onchange="handleCategoryChange()">
+                                    Bahçe Aletleri
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -1475,7 +1481,7 @@
                     if (categorySelect) {
                         categorySelect.value = productCats[0];
                     }
-                    updateSubCategories(product.subCategory);
+                    updateSubCategories(productCats[0], product.subCategory);
                 }
 
                 document.getElementById('productPrice').value = product.price || '';
@@ -1692,12 +1698,16 @@
                 'Elektrikli El Aletleri': 'Elektrikli El Aletleri',
                 'Ölçme Ve Kontrol Aletleri': 'Ölçme Ve Kontrol Aletleri',
                 'El Aletleri': 'El Aletleri',
-                'Yapı ve İnşaat Malzemeleri': 'Yapı ve İnşaat Malzemeleri',
                 'Aşındırıcı ve Kesici Uçlar': 'Aşındırıcı ve Kesici Uçlar',
                 'Yapıştırıcı, Dolgu ve Kimyasallar': 'Yapıştırıcı, Dolgu ve Kimyasallar',
                 'Kaynak Malzemeleri': 'Kaynak Malzemeleri',
                 'Hırdavat ve El Aletleri': 'Hırdavat ve El Aletleri',
-                'İş Güvenliği': 'İş Güvenliği ve Çalışma Ekipmanları'
+                'İş Güvenliği': 'İş Güvenliği ve Çalışma Ekipmanları',
+                'Bahçe Aletleri': 'Bahçe Aletleri',
+                'Akülü Aletler': 'Akülü Aletler',
+                'Jeneratörler': 'Jeneratörler',
+                'Hobi Aletleri': 'Hobi Aletleri',
+                'Aksesuarlar': 'Aksesuarlar'
             };
 
             // Eğer birden fazla seçilmişse kategori adını virgülle ayır
@@ -1904,6 +1914,10 @@
         // Get category name from slug - Backend Enum Değerleriyle Birebir Eşleşmeli
         function getCategoryName(slug) {
             const categoryMap = {
+                'akulu-aletler': 'Akülü Aletler',
+                'jeneratorler': 'Jeneratörler',
+                'hobi-aletleri': 'Hobi Aletleri',
+                'aksesuarlar': 'Aksesuarlar',
                 'elektrikli-el-aletleri': 'Elektrikli El Aletleri',
                 'olcme-ve-kontrol-aletleri': 'Ölçme Ve Kontrol Aletleri',
                 'el-aletleri': 'El Aletleri',
@@ -1911,8 +1925,8 @@
                 'yapi-kimyasallari': 'Yapıştırıcı, Dolgu ve Kimyasallar',
                 'kaynak-malzemeleri': 'Kaynak Malzemeleri',
                 'hirdavat-el-aletleri': 'Hırdavat ve El Aletleri',
-                'nalbur-yapi-malzemeleri': 'Yapı ve İnşaat Malzemeleri',
-                'is-guvenligi-ve-calisma-ekipmanlari': 'İş Güvenliği ve Çalışma Ekipmanları'
+                'is-guvenligi-ve-calisma-ekipmanlari': 'İş Güvenliği ve Çalışma Ekipmanları',
+                'bahce-aletleri': 'Bahçe Aletleri'
             };
             return categoryMap[slug] || slug;
         }
@@ -1981,6 +1995,9 @@
                 // Kategoriyi seç
                 categorySelect.value = target.category;
 
+                // Alt kategorileri de tetikle
+                updateSubCategories(target.category);
+
                 // Kullanıcıya görsel geri bildirim ver
                 brandSelect.style.borderColor = '#22c55e';
                 categorySelect.style.borderColor = '#22c55e';
@@ -2003,51 +2020,49 @@
 
         // categoriesData artık ../categories-data.js dosyasından geliyor
 
-        function updateSubCategories(selectedSub = null) {
+        function updateSubCategories(manualCategory = null, selectedSub = null) {
             const categoryObj = document.getElementById('productCategory');
             const subCategoryObj = document.getElementById('productSubCategory');
-            const selectedCategory = categoryObj.value;
+
+            // Hangi kategorinin kullanılacağını belirle (Parametre mi yoksa seçili select mi?)
+            let selectedCategory = manualCategory;
+            if (!selectedCategory && categoryObj) {
+                selectedCategory = categoryObj.value;
+            }
+
+            // Eğer hala boşsa seçili checkbox'tan al
+            if (!selectedCategory) {
+                const checked = document.querySelector('input[name="productCategories"]:checked');
+                if (checked) selectedCategory = checked.value;
+            }
 
             // Clear options
             subCategoryObj.innerHTML = '<option value="">Alt Kategori Seçin</option>';
 
-            console.log('📂 Kategori seçildi:', selectedCategory);
-            console.log('📂 categoriesData var mı:', typeof categoriesData !== 'undefined');
+            console.log('📂 Alt kategori yükleniyor. Üst Kategori:', selectedCategory);
 
             if (selectedCategory && typeof categoriesData !== 'undefined' && categoriesData[selectedCategory]) {
                 const catData = categoriesData[selectedCategory];
 
-                console.log('📂 Kategori verisi:', catData);
-
-                // Veri yapısı kontrolü: Obje içinde subcategories dizisi
                 if (catData.subcategories && Array.isArray(catData.subcategories)) {
                     catData.subcategories.forEach(group => {
-                        if (group.name) {
-                            // Gruplu dropdown (optgroup) oluştur
-                            const optgroup = document.createElement('optgroup');
-                            optgroup.label = group.name;
+                        const optgroup = document.createElement('optgroup');
+                        optgroup.label = group.name;
 
-                            // Grup içindeki items'ları ekle
-                            if (group.items && Array.isArray(group.items)) {
-                                group.items.forEach(item => {
-                                    const option = document.createElement('option');
-                                    option.value = item;
-                                    option.textContent = item;
-                                    if (selectedSub && selectedSub === item) {
-                                        option.selected = true;
-                                    }
-                                    optgroup.appendChild(option);
-                                });
-                            }
-
-                            subCategoryObj.appendChild(optgroup);
+                        if (group.items && Array.isArray(group.items)) {
+                            group.items.forEach(item => {
+                                const option = document.createElement('option');
+                                option.value = item;
+                                option.textContent = item;
+                                if (selectedSub && (selectedSub === item)) {
+                                    option.selected = true;
+                                }
+                                optgroup.appendChild(option);
+                            });
                         }
+                        subCategoryObj.appendChild(optgroup);
                     });
-
-                    console.log('📂 Alt kategoriler yüklendi (gruplu)');
-                }
-                // Eski yapı (direkt array) desteği (fallback)
-                else if (Array.isArray(catData)) {
+                } else if (Array.isArray(catData)) {
                     catData.forEach(sub => {
                         const option = document.createElement('option');
                         option.value = sub;
@@ -2058,6 +2073,9 @@
                         subCategoryObj.appendChild(option);
                     });
                 }
+                console.log('✅ Alt kategoriler başarıyla listelendi');
+            } else {
+                console.warn('⚠️ Kategori verisi bulunamadı veya üst kategori seçilmedi');
             }
         }
 
@@ -2076,7 +2094,7 @@
                 }
 
                 // Alt kategorileri yükle
-                updateSubCategories();
+                updateSubCategories(firstCategory);
 
                 console.log('📂 Kategori değişti:', firstCategory);
             } else {

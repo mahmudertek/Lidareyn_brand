@@ -13,7 +13,8 @@
 .advanced-search-panel {
     background: linear-gradient(135deg, #ffffff 0%, #f8f9fc 100%);
     border-radius: 16px;
-    padding: 28px 32px;
+    padding: 20px 32px;
+    /* Dikey padding %15 azaltıldı: 28px -> 24px -> 20px */
     box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.06),
         0 1px 3px rgba(0, 0, 0, 0.03);
@@ -36,10 +37,12 @@
 }
 
 .advanced-search-title {
-    font-size: 18px;
+    font-size: 17px;
+    /* 18px -> 17px */
     font-weight: 700;
     color: #1a1a2e;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
+    /* 20px -> 16px */
     display: flex;
     align-items: center;
     gap: 10px;
@@ -47,13 +50,15 @@
 
 .advanced-search-title i {
     color: #8b7bd8;
-    font-size: 20px;
+    font-size: 18px;
+    /* 20px -> 18px */
 }
 
 .search-options-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px 32px;
+    gap: 14px 32px;
+    /* 18px -> 14px dikey gap */
 }
 
 .search-option-row {

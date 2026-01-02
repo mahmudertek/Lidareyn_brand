@@ -6,21 +6,21 @@
 
 .flowing-menu-container {
     position: relative;
-    /* GRID MOTION REPLICATION */
     width: 100% !important;
     max-width: none !important;
-    /* Let parent (.future-content in unified-layout) control the 1500px/80% width */
-    height: 420px;
+    height: 130px;
+    /* %25 kalınlaştırıldı: 105px -> 130px */
     margin: 0 !important;
     overflow: hidden;
     background: linear-gradient(135deg, #b8b8b8 0%, #d0d0d0 50%, #b8b8b8 100%);
     color: #333;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-radius: 24px !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    border-radius: 16px !important;
     box-sizing: border-box !important;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
 .flowing-menu-scroll-wrapper {
@@ -28,51 +28,47 @@
     z-index: 2;
     display: flex;
     flex-direction: row;
-    /* Horizontal layout for columns */
-    align-items: flex-start;
+    /* TEK SATIR - Yatay düzen */
+    flex-wrap: nowrap !important;
+    /* Satır atlamayı kesinlikle engelle */
+    align-items: center;
     justify-content: flex-start;
     height: 100%;
     width: 100%;
-    overflow: auto;
-    /* Enable both X and Y scroll */
-    padding: 28px;
-    /* 40 * 0.7 = 28 */
-    gap: 42px;
-    /* 60 * 0.7 = 42 */
-    /* Space between columns */
+    /* Sınırı belirle */
+    overflow-x: auto !important;
+    /* Yatay scroll şart */
+    overflow-y: hidden;
+    /* Dikey scroll yok */
+    padding: 0 40px;
+    box-sizing: border-box;
 
     /* Custom Scrollbar Styling for Firefox */
     scrollbar-width: thin;
-    scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    scrollbar-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.05);
 }
 
 /* Custom Scrollbar Styling for Webkit (Chrome, Safari, Edge) */
 .flowing-menu-scroll-wrapper::-webkit-scrollbar {
-    width: 6px;
-    /* 8 * 0.7 = ~6 */
-    /* Vertical scrollbar width */
-    height: 6px;
-    /* 8 * 0.7 = ~6 */
-    /* Horizontal scrollbar height */
-    display: block;
+    width: 0;
+    /* Dikey scrollbar yok */
+    height: 8px;
+    /* Yatay bar yüksekliği */
+    display: block !important;
 }
 
 .flowing-menu-scroll-wrapper::-webkit-scrollbar-track {
-    background: transparent;
-    margin: 7px;
-    /* 10 * 0.7 = 7 */
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
 }
 
 .flowing-menu-scroll-wrapper::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 3px;
-    /* 4 * 0.7 = ~3 */
-    border: 1px solid #d0d0d0;
-    /* 2 * 0.7 = ~1.4 */
+    border-radius: 4px;
 }
 
 .flowing-menu-scroll-wrapper::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .flowing-menu-scroll-wrapper::-webkit-scrollbar-corner {
@@ -81,24 +77,13 @@
 
 .flowing-menu-column {
     display: flex;
-    flex-direction: column;
-    min-width: 140px;
-    /* 200 * 0.7 = 140 */
-    flex-shrink: 0;
+    height: 100%;
+    align-items: center;
 }
 
 .flowing-menu-header {
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.05rem;
-    /* 1.5rem * 0.7 = 1.05rem */
-    font-weight: 700;
-    color: #333;
-    margin-bottom: 14px;
-    /* 20 * 0.7 = 14 */
-    text-transform: uppercase;
-    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-    padding-bottom: 7px;
-    /* 10 * 0.7 = 7 */
+    display: none;
+    /* Header gizli */
 }
 
 .flowing-menu-list-column {
@@ -106,49 +91,54 @@
     padding: 0;
     margin: 0;
     display: flex;
-    flex-direction: column;
-    gap: 8px;
-    /* 12 * 0.7 = ~8 */
+    flex-direction: row;
+    flex-wrap: nowrap !important;
+    /* TEK SATIR GARANTİSİ */
+    align-items: center;
+    gap: 40px;
+    /* Markalar arası geniş boşluk */
 }
 
 .flowing-menu-item {
     font-family: 'Poppins', sans-serif;
     font-size: 1.1rem;
-    /* Increased from 0.77rem */
-    font-weight: 800;
-    /* Kalın yazı */
+    /* Yazı biraz büyütüldü çünkü kutu yok */
+    font-weight: 700;
     text-transform: uppercase;
     cursor: pointer;
-    line-height: 1.4;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    opacity: 1;
-    color: #000000;
+    line-height: 1.2;
+    transition: all 0.25s ease;
+    opacity: 0.8;
+    /* Varsayılan biraz soluk */
+    color: #111;
     text-align: center;
-    padding: 10px 30px;
-    /* Increased horizontal padding */
+    padding: 0;
     margin: 0;
-    border-radius: 8px;
-    display: inline-block;
-    min-width: 120px;
-    background: transparent;
-    letter-spacing: 0.05em;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    flex-shrink: 0;
+    background: transparent !important;
+    /* Kutuyu kaldır */
+    border: none !important;
+    /* Çerçeveyi kaldır */
+    letter-spacing: 0.04em;
+    box-shadow: none !important;
 }
 
 .flowing-menu-item:hover {
     opacity: 1;
-    background: #e0e0e0;
-    transform: translateX(6px);
-    /* 8 * 0.7 = ~6 */
     color: #000;
+    transform: translateY(-2px);
+    /* Hafif yukarı zıplama efekti */
 }
 
 .flowing-menu-item.active {
     opacity: 1 !important;
-    background: #e0e0e0 !important;
-    color: #000 !important;
-    transform: translateX(7px) !important;
-    /* 10 * 0.7 = 7 */
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: #8b7bd8 !important;
+    /* Aktif markaya renk ver */
+    font-weight: 800;
 }
 
 .flowing-menu-background {
@@ -167,29 +157,41 @@
     .flowing-menu-container {
         width: 94%;
         max-width: 94%;
-        height: 330px;
-        /* 165 * 2 = 330 */
+        height: 80px;
+        /* Mobilde de küçültüldü: 330px -> 80px */
+        border-radius: 12px !important;
     }
 
     .flowing-menu-column {
-        min-width: 112px;
-        /* 160 * 0.7 = 112 */
+        min-width: auto;
+        flex-direction: row;
     }
 
     .flowing-menu-header {
-        font-size: 0.84rem;
-        /* 1.2rem * 0.7 = 0.84rem */
+        display: none;
+        /* Mobilde de gizli */
+    }
+
+    .flowing-menu-list-column {
+        flex-direction: row;
+        align-items: center;
+        gap: 25px;
+        /* Mobilde markalar arası boşluk */
     }
 
     .flowing-menu-item {
-        font-size: 0.95rem;
-        /* Increased from 0.7rem */
-        padding: 8px 20px;
-        min-width: 100px;
+        font-size: 0.85rem;
+        padding: 0;
+        min-width: auto;
+        white-space: nowrap;
     }
 
     .flowing-menu-scroll-wrapper {
-        padding: 20px;
-        gap: 30px;
+        padding: 5px 20px;
+        gap: 25px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        flex-direction: row;
+        align-items: center;
     }
 }

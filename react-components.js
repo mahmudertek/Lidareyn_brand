@@ -104,8 +104,7 @@
             return React.createElement('div', { className: 'flowing-menu-container' },
                 React.createElement('div', { className: 'flowing-menu-scroll-wrapper' },
                     React.createElement('ul', {
-                        className: 'flowing-menu-list-column',
-                        style: { display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center', width: '100%' }
+                        className: 'flowing-menu-list-column'
                     },
                         brands.map(function (brand) {
                             var isActive = activeBrandId === brand.id;
@@ -196,6 +195,12 @@
                     description: 'Güvenli çalışma ortamları için gerekli koruyucu donanımlar.',
                     slug: 'is-guvenligi-ve-calisma-ekipmanlari',
                     image: 'gorseller/category_is_guvenligi.png'
+                },
+                {
+                    title: 'Bahçe Aletleri',
+                    description: 'Profesyonel bahçe bakımı için elektrikli, akülü ve manuel bahçe aletleri.',
+                    slug: 'bahce-aletleri',
+                    image: 'gorseller/category_bahce_aletleri.png'
                 }
             ];
 

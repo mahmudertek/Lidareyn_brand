@@ -139,6 +139,19 @@ const categoriesData = {
             { name: 'Çalışma Ekipmanları', items: ['İş İskelesi ve Merdivenler'], icon: 'fa-stairs' }
         ]
     },
+
+    'bahce-aletleri': {
+        title: 'Bahçe Aletleri',
+        description: 'Profesyonel bahçe bakımı için elektrikli, akülü ve manuel bahçe aletleri.',
+        icon: 'fa-leaf',
+        image: 'gorseller/category_bahce_aletleri.png',
+        subcategories: [
+            { name: 'Kesme & Budama', items: ['Çit Kesme Makinesi', 'Budama Makası', 'Ağaç Kesme Testeresi', 'Dal Budama Aleti'], icon: 'fa-scissors' },
+            { name: 'Çim Bakımı', items: ['Çim Biçme Makinesi', 'Tırpan', 'Çim Havalandırıcı', 'Çim Süpürgesi'], icon: 'fa-seedling' },
+            { name: 'Sulama Sistemleri', items: ['Bahçe Hortumu', 'Sulama Tabancası', 'Damla Sulama Sistemi', 'Fıskiye ve Yağmurlama'], icon: 'fa-droplet' },
+            { name: 'Toprak İşleme', items: ['Çapa Makinesi', 'Kürek', 'Tırmık', 'Bel', 'Kazma'], icon: 'fa-mountain' }
+        ]
+    },
 };
 
 // Kategori listesini döndür
