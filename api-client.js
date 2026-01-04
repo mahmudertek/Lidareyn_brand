@@ -38,7 +38,8 @@ const API = {
     // LocalStorage'dan ürün çekme (fallback)
     getProductsFromLocalStorage(params = {}) {
         try {
-            const stored = localStorage.getItem('galata_products') || localStorage.getItem('products');
+            // Admin panel 'galatacarsi_products' kullanıyor, eski sürüm 'galata_products' veya 'products'
+            const stored = localStorage.getItem('galatacarsi_products') || localStorage.getItem('galata_products') || localStorage.getItem('products');
             if (!stored) {
                 return { success: false, data: [] };
             }
@@ -46,14 +47,14 @@ const API = {
             let products = JSON.parse(stored);
 
             // Filtrele
-            if (params.isNew === 'true') {
-                products = products.filter(p => p.isNew === true || p.tags?.includes('Yeni'));
+            if (params.isNew === 'true' || params.isNew === true) {
+                products = products.filter(p => p.isNew === true || p.tags?.includes('new') || p.tags?.includes('Yeni'));
             }
             if (params.isPopular === 'true' || params.isPopular === true) {
-                products = products.filter(p => p.isPopular === true || p.tags?.includes('Popüler'));
+                products = products.filter(p => p.isPopular === true || p.tags?.includes('popular') || p.tags?.includes('Popüler'));
             }
             if (params.isFeatured === 'true' || params.isFeatured === true) {
-                products = products.filter(p => p.isFeatured === true || p.tags?.includes('Öne Çıkan'));
+                products = products.filter(p => p.isFeatured === true || p.tags?.includes('featured') || p.tags?.includes('Öne Çıkan'));
             }
 
             // Sırala
