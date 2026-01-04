@@ -1,0 +1,87 @@
+/* ============================================================ 
+   HEADER SYMMETRY & ALIGNMENT FIX (ULTIMATE)
+   Ensures all elements are locked to the same imaginary line.
+   ============================================================ */
+.header-container,
+.nav-menu,
+.main-nav,
+.header-icons,
+.icon-btn,
+.nav-link,
+.logo,
+.logo a,
+.user-menu-container,
+.search-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center;
+    /* Default center, will be overridden where needed */
+    height: 100% !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    box-sizing: border-box !important;
+}
+
+.header-container {
+    justify-content: space-between !important;
+    height: var(--header-height, 38px) !important;
+}
+
+.nav-menu {
+    gap: 22px !important;
+    justify-content: flex-start !important;
+}
+
+.nav-link {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 0 5px !important;
+    color: #333 !important;
+}
+
+.logo a {
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    color: #8b7bd8 !important;
+    letter-spacing: -0.5px !important;
+}
+
+.header-icons {
+    gap: 12px !important;
+    justify-content: flex-end !important;
+}
+
+.icon-btn {
+    padding: 0 8px !important;
+    font-size: 14px !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+.icon-label {
+    margin-left: 5px !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    /* Ensure label is also centered */
+    display: flex !important;
+    align-items: center !important;
+}
+
+/* Fix for icons that might have weird line-height */
+.icon-btn i,
+.nav-link i {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    line-height: 1 !important;
+}
+
+/* Mobile Adjustments for the fix */
+@media (max-width: 768px) {
+    .header-container {
+        height: 50px !important;
+        /* Mobile height */
+    }
+}
