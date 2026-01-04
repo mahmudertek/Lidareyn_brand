@@ -783,12 +783,16 @@
                                     <option value="Festool">Festool</option>
                                     <option value="Diğer">Diğer</option>
                                 </select>
-                                <div style="display: flex; gap: 4px; flex: 1.5;">
+                                <div style="display: flex; gap: 4px; flex: 2;">
                                     <input type="text" id="newBrandInput" placeholder="Marka Ekle"
                                         style="width: 100%; min-width: 100px; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px;">
-                                    <button type="button" onclick="addNewBrand()"
+                                    <button type="button" onclick="addNewBrand()" title="Yeni Marka Ekle"
                                         style="background: #4f46e5; color: white; border: none; padding: 0 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; min-width: 40px;">
                                         <i class="fa-solid fa-plus" style="font-size: 14px;"></i>
+                                    </button>
+                                    <button type="button" onclick="deleteSelectedBrand()" title="Seçili Markayı Sil"
+                                        style="background: #ef4444; color: white; border: none; padding: 0 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; min-width: 40px;">
+                                        <i class="fa-solid fa-trash" style="font-size: 14px;"></i>
                                     </button>
                                 </div>
                             </div>
@@ -2167,6 +2171,50 @@
                     addBtn.disabled = false;
                 }
                 input.value = '';
+            }
+        }
+
+        // Seçili markayı silme fonksiyonu
+        async function deleteSelectedBrand() {
+            const select = document.getElementById('productBrand');
+            const selectedBrandName = select.value;
+
+            if (!selectedBrandName || selectedBrandName === 'Diğer') {
+                alert('Lütfen silmek istediğiniz markayı listeden seçin.');
+                return;
+            }
+
+            if (!confirm(`"${selectedBrandName}" markasını silmek istediğinizden emin misiniz?`)) {
+                return;
+            }
+
+            try {
+                // allBrands dizisinden ID'yi bul
+                const brandObj = allBrands.find(b => b.name === selectedBrandName);
+
+                if (brandObj && (brandObj._id || brandObj.id)) {
+                    const response = await ADMIN_API.deleteBrand(brandObj._id || brandObj.id);
+                    if (response.success) {
+                        alert('Marka başarıyla silindi.');
+                    } else {
+                        console.warn('API silme başarısız:', response.message);
+                    }
+                } else {
+                    console.warn('Marka ID\'si bulunamadı, sadece listeden kaldırılıyor.');
+                }
+
+                // Her durumda listeden kaldır
+                const index = select.selectedIndex;
+                select.remove(index);
+                select.selectedIndex = 0;
+
+                // allBrands listesini de güncelle
+                allBrands = allBrands.filter(b => b.name !== selectedBrandName);
+
+                console.log('🗑️ Marka silindi:', selectedBrandName);
+            } catch (error) {
+                console.error('Marka silme hatası:', error);
+                alert('Marka silinirken bir hata oluştu veya sunucu bağlantısı yok.');
             }
         }
 
