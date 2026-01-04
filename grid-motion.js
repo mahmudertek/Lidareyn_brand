@@ -9,17 +9,20 @@ function initInfiniteRows() {
     // reset
     container.innerHTML = '';
 
-    // Exactly 9 Categories for 9 Frames
+    // Exactly 12 Categories for 12 Frames (3 rows * 4 items)
     const images = [
+        'gorseller/category_akulu_aletler.png',
+        'gorseller/category_jeneratorler.png',
+        'gorseller/category_hobi_aletleri.png',
+        'gorseller/category_aksesuarlar.png',
         'gorseller/category_elektrikli_el_aletleri.png',
         'gorseller/category_olcme_kontrol.png',
-        'gorseller/category_el_aletleri.png',
-        'gorseller/category_yapi_insaat.png',
         'gorseller/category_asindirici_kesici.png',
         'gorseller/category_yapi_kimyasallari.png',
         'gorseller/category_kaynak.png',
         'gorseller/category_hirdavat.png',
-        'gorseller/category_is_guvenligi.png'
+        'gorseller/category_is_guvenligi.png',
+        'gorseller/category_bahce_aletleri.png'
     ];
 
     // Preload images
@@ -38,14 +41,14 @@ function initInfiniteRows() {
     });
 
     function buildGrid(isMobile = false) {
-        // 3 Rows - Each row has 3 specific category images
-        // Row 1: Categories 1, 2, 3
-        // Row 2: Categories 4, 5, 6
-        // Row 3: Categories 7, 8, 9
+        // 3 Rows - Each row has 4 specific category images
+        // Row 1: Categories 1, 2, 3, 4
+        // Row 2: Categories 5, 6, 7, 8
+        // Row 3: Categories 9, 10, 11, 12
         const rowConfigs = [
-            { id: 1, images: [images[0], images[1], images[2]], direction: -1 }, // Left scroll
-            { id: 2, images: [images[3], images[4], images[5]], direction: 1 },  // Right scroll
-            { id: 3, images: [images[6], images[7], images[8]], direction: -1 }  // Left scroll
+            { id: 1, images: [images[0], images[1], images[2], images[3]], direction: -1 }, // Left scroll
+            { id: 2, images: [images[4], images[5], images[6], images[7]], direction: 1 },  // Right scroll
+            { id: 3, images: [images[8], images[9], images[10], images[11]], direction: -1 } // Left scroll
         ];
 
         const rowsContainer = document.createElement('div');
@@ -58,7 +61,7 @@ function initInfiniteRows() {
             row.classList.add('grid-row-track');
             row.dataset.direction = config.direction;
 
-            // Repeat the 3 images 6 times for seamless infinite loop
+            // Repeat the 4 images 6 times for seamless infinite loop
             const repeatCount = 6;
             const fullContent = [];
             for (let r = 0; r < repeatCount; r++) {
@@ -69,8 +72,8 @@ function initInfiniteRows() {
                 const card = document.createElement('div');
                 card.classList.add('grid-card');
                 card.style.backgroundImage = `url('${img}')`;
-                // Width calculated: container shows ~3 cards, each ~30% of visible area
-                card.style.width = isMobile ? '30%' : '28%';
+                // Width calculated: to show ~4 cards, each ~23% of visible area on PC, ~22% on mobile
+                card.style.width = isMobile ? '22%' : '23%';
                 row.appendChild(card);
             });
 
@@ -101,8 +104,8 @@ function initInfiniteRows() {
                 rows.forEach((row, i) => {
                     const direction = parseInt(row.dataset.direction);
                     const fullWidth = row.scrollWidth;
-                    // We have 3 images repeated 6 times = 18 cards total
-                    // One cycle is 3 cards (1/6 of total)
+                    // We have 4 images repeated 6 times = 24 cards total per row
+                    // One cycle is 4 cards (1/6 of total)
                     const cycleWidth = fullWidth / 6;
 
                     // Start position - center the view

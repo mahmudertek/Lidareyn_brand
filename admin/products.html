@@ -760,28 +760,38 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Marka *</label>
-                            <select id="productBrand" required>
-                                <option value="">Marka Seçin</option>
-                                <option value="Bosch">Bosch</option>
-                                <option value="Makita">Makita</option>
-                                <option value="DeWalt">DeWalt</option>
-                                <option value="Beta">Beta</option>
-                                <option value="Knipex">Knipex</option>
-                                <option value="Stanley">Stanley</option>
-                                <option value="Black+Decker">Black+Decker</option>
-                                <option value="Hikoki">Hikoki</option>
-                                <option value="Milwaukee">Milwaukee</option>
-                                <option value="Karcher">Kärcher</option>
-                                <option value="Einhell">Einhell</option>
-                                <option value="Gedore">Gedore</option>
-                                <option value="Irwin">Irwin</option>
-                                <option value="Bahco">Bahco</option>
-                                <option value="Wiha">Wiha</option>
-                                <option value="Wera">Wera</option>
-                                <option value="Metabo">Metabo</option>
-                                <option value="Festool">Festool</option>
-                                <option value="Diğer">Diğer</option>
-                            </select>
+                            <div style="display: flex; gap: 8px;">
+                                <select id="productBrand" required style="flex: 2;">
+                                    <option value="">Marka Seçin</option>
+                                    <option value="Bosch">Bosch</option>
+                                    <option value="Makita">Makita</option>
+                                    <option value="DeWalt">DeWalt</option>
+                                    <option value="Beta">Beta</option>
+                                    <option value="Knipex">Knipex</option>
+                                    <option value="Stanley">Stanley</option>
+                                    <option value="Black+Decker">Black+Decker</option>
+                                    <option value="Hikoki">Hikoki</option>
+                                    <option value="Milwaukee">Milwaukee</option>
+                                    <option value="Karcher">Kärcher</option>
+                                    <option value="Einhell">Einhell</option>
+                                    <option value="Gedore">Gedore</option>
+                                    <option value="Irwin">Irwin</option>
+                                    <option value="Bahco">Bahco</option>
+                                    <option value="Wiha">Wiha</option>
+                                    <option value="Wera">Wera</option>
+                                    <option value="Metabo">Metabo</option>
+                                    <option value="Festool">Festool</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                                <div style="display: flex; gap: 4px; flex: 1.5;">
+                                    <input type="text" id="newBrandInput" placeholder="Marka Ekle"
+                                        style="width: 100%; min-width: 100px; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 13px;">
+                                    <button type="button" onclick="addNewBrand()"
+                                        style="background: #4f46e5; color: white; border: none; padding: 0 12px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; min-width: 40px;">
+                                        <i class="fa-solid fa-plus" style="font-size: 14px;"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group full-width">
                             <label style="font-weight: 700; color: #1e293b; margin-bottom: 10px; display: block;">Ana
@@ -2076,6 +2086,87 @@
                 console.log('✅ Alt kategoriler başarıyla listelendi');
             } else {
                 console.warn('⚠️ Kategori verisi bulunamadı veya üst kategori seçilmedi');
+            }
+        }
+
+        // Yeni marka ekleme fonksiyonu
+        async function addNewBrand() {
+            const input = document.getElementById('newBrandInput');
+            const select = document.getElementById('productBrand');
+            const addBtn = input.nextElementSibling;
+            const newBrand = input.value.trim();
+
+            if (!newBrand) {
+                alert('Lütfen eklenecek marka adını girin.');
+                return;
+            }
+
+            // Mevcut var mı kontrol et
+            let exists = false;
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value.toLowerCase() === newBrand.toLowerCase()) {
+                    select.selectedIndex = i;
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (exists) {
+                alert('Bu marka zaten listede mevcut.');
+                input.value = '';
+                return;
+            }
+
+            // API'ye gönder (Eğer API varsa)
+            try {
+                if (addBtn) addBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                if (addBtn) addBtn.disabled = true;
+
+                const response = await ADMIN_API.createBrand({ name: newBrand });
+
+                if (response.success || response.id || response._id) {
+                    // Başarıyla eklendi
+                    const option = document.createElement('option');
+                    option.value = newBrand;
+                    option.textContent = newBrand;
+
+                    // "Diğer" seçeneğinin önüne ekle
+                    const otherOption = Array.from(select.options).find(o => o.value === 'Diğer');
+                    if (otherOption) {
+                        select.insertBefore(option, otherOption);
+                    } else {
+                        select.appendChild(option);
+                    }
+                    option.selected = true;
+
+                    input.style.borderColor = '#22c55e';
+                    setTimeout(() => { input.style.borderColor = ''; }, 2000);
+                    console.log('✅ Marka backend\'e kaydedildi:', newBrand);
+                } else {
+                    throw new Error(response.message || 'API Hatası');
+                }
+            } catch (error) {
+                console.warn('⚠️ Marka backend\'e kaydedilemedi, yerel ekleniyor:', error.message);
+
+                // Hata olsa bile yerel olarak ekle (Offline mode gibi davran)
+                const option = document.createElement('option');
+                option.value = newBrand;
+                option.textContent = newBrand;
+                const otherOption = Array.from(select.options).find(o => o.value === 'Diğer');
+                if (otherOption) {
+                    select.insertBefore(option, otherOption);
+                } else {
+                    select.appendChild(option);
+                }
+                option.selected = true;
+
+                alert('Marka yerel olarak eklendi (Sunucu bağlantısı kurulamadı).');
+            } finally {
+                if (addBtn) {
+                    addBtn.innerHTML = '<i class="fa-solid fa-plus"></i>';
+                    addBtn.disabled = false;
+                }
+                input.value = '';
             }
         }
 
