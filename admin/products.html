@@ -582,6 +582,10 @@
             <!-- Topbar -->
             <header class="topbar">
                 <div class="page-title" style="color:#8b7bd8 !important; font-weight:bold;">Ürün Yönetimi v2.0 (DEBUG)
+                    <span id="api-status-badge"
+                        style="font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 10px; background: #fee2e2; color: #991b1b; vertical-align: middle;">
+                        <i class="fa-solid fa-circle-nodes"></i> KONTROL EDİLİYOR...
+                    </span>
                 </div>
 
                 <div class="topbar-right">
@@ -898,6 +902,19 @@
                             görüneceğini seçin:</p>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                            <!-- AKTİF / PASİF DURUMU (EN ÜSTE EKLENDİ) -->
+                            <label
+                                style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #fafaf9; border-radius: 10px; border: 2px solid #a8a29e; cursor: pointer; grid-column: span 2; margin-bottom: 8px;">
+                                <input type="checkbox" id="productIsActive" checked
+                                    style="width: 24px; height: 24px; accent-color: #0ea5e9;">
+                                <div>
+                                    <span style="font-weight: 700; color: #1c1917; font-size: 16px;">🟢 ÜRÜN AKTİF
+                                        SİTEDE GÖSTER</span>
+                                    <small style="display: block; color: #44403c; font-size: 12px;">Bu seçenek işaretli
+                                        olmazsa ürün sitede hiçbir yerde görünmez.</small>
+                                </div>
+                            </label>
+
                             <label
                                 style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #ecfdf5; border-radius: 10px; border: 2px solid #86efac; cursor: pointer;">
                                 <input type="checkbox" id="tagPopular"
@@ -1049,6 +1066,33 @@
         let allCategories = [];
         let isLoading = false;
         let uploadedImageBase64 = '';
+
+        // API Durum Kontrolü
+        async function checkApiStatus() {
+            const badge = document.getElementById('api-status-badge');
+            if (!badge) return;
+
+            try {
+                // Basit bir getProducts çağrısı ile test et (limit 1)
+                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000));
+                const apiPromise = ADMIN_API.getProducts({ limit: 1 });
+
+                const result = await Promise.race([apiPromise, timeoutPromise]);
+
+                if (result) {
+                    badge.style.background = '#dcfce7';
+                    badge.style.color = '#166534';
+                    badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> SİSTEM CANLI';
+                }
+            } catch (err) {
+                badge.style.background = '#fee2e2';
+                badge.style.color = '#991b1b';
+                badge.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> SUNUCUYA ERİŞİLEMİYOR';
+            }
+        }
+
+        // 30 saniyede bir kontrol et
+        setInterval(checkApiStatus, 30000);
 
         // Görsel yükleme fonksiyonu
         function handleImageUpload(input) {
@@ -1340,7 +1384,13 @@
             }
         }
 
-
+        // Initialize
+        window.onload = async () => {
+            await checkApiStatus(); // İlk durum kontrolü
+            await loadProducts();
+            await loadCategories();
+            await loadBrands();
+        };
 
         // Show loading state
         function showLoading() {
@@ -1403,15 +1453,20 @@
 
                 const image = product.mainImage || `https://placehold.co/60x60/6366f1/fff?text=${(product.brand || 'P').charAt(0)}`;
                 const productId = product._id || product.id;
-                const featuredBadge = product.isFeatured ? '<span style="background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px;">ÖNE ÇIKAN</span>' : '';
-                const newBadge = product.isNew ? '<span style="background:#dbeafe;color:#2563eb;padding:2px 6px;border-radius:4px;font-size:10px;margin-left:5px;">YENİ</span>' : '';
+                const featuredBadge = product.isFeatured ? '<span style="background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;font-size:10px;">ÖNE ÇIKAN</span>' : '';
+                const newBadge = product.isNew ? '<span style="background:#dbeafe;color:#2563eb;padding:2px 6px;border-radius:4px;font-size:10px;">YENİ</span>' : '';
+                const isActiveBadge = product.isActive !== false ?
+                    '<span style="background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px;font-size:10px;">AKTİF</span>' :
+                    '<span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:4px;font-size:10px;">PASİF</span>';
 
                 tbody.innerHTML += `
                     <tr>
                         <td><img src="${image}" class="product-image" alt="${product.name}"></td>
                         <td>
                             <div class="product-name">${product.name}</div>
-                            <div style="margin-top:4px;">${featuredBadge}${newBadge}</div>
+                            <div style="margin-top:4px; display:flex; gap:4px; align-items:center;">
+                                ${isActiveBadge}${featuredBadge}${newBadge}
+                            </div>
                         </td>
                         <td><span class="product-brand">${product.brand || '-'}</span></td>
                         <td>${product.category || '-'}</td>
@@ -1512,6 +1567,7 @@
                 document.getElementById('tagBestSeller').checked = product.isBestSeller || false;
                 document.getElementById('tagNew').checked = product.isNew || false;
                 document.getElementById('tagFeatured').checked = product.isFeatured || false;
+                document.getElementById('productIsActive').checked = product.isActive !== false;
 
                 // Marka vitrini seçimi
                 document.getElementById('brandShowcase').value = product.brandShowcase || '';
@@ -1790,6 +1846,7 @@
 
                 // Tags array (Toplu)
                 tags: tags,
+                isActive: document.getElementById('productIsActive').checked,
 
                 // Ana sayfa marka vitrini
                 brandShowcase: brandShowcase || '',
@@ -1827,9 +1884,9 @@
             showLoading(); // Yükleniyor göster
 
             try {
-                // Timeout Koruması (10 saniye - görsel yükleme uzun sürebilir)
+                // Timeout Koruması (30 saniye - Render uyku modundan çıkarken uzun sürebilir)
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (10sn)')), 10000)
+                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (30sn)')), 30000)
                 );
 
                 let apiCall;
@@ -1916,8 +1973,11 @@
                 renderProducts();
 
                 // Kullanıcıya bilgi ver
-                const msg = error.message.includes('Timeout') ? 'Sunucu yanıt vermedi.' : 'Sunucu bağlantısı yok.';
-                alert(`✅ Ürün TARAYICIYA kaydedildi!\n(${msg})\n\nÜrün şu an sadece sizin bilgisayarınızda kayıtlı. İnternet/Sunucu düzeldiğinde otomatik gönderilecek.`);
+                const msg = error.message.includes('zaman aşımı')
+                    ? 'Sunucu 30 saniye içinde yanıt vermedi (Render uyuyor olabilir).'
+                    : 'İnternet bağlantısı veya sunucu hatası.';
+
+                alert(`⚠️ SUNUCUYA KAYDEDİLEMEDİ!\n\nDurum: ${msg}\n\nÜrün ŞİMDİLİK bu tarayıcıya (localStorage) kaydedildi. \n\nLÜTFEN DİKKAT: Bilgisayarınızı kapatmadan veya tarayıcıyı temizlemeden önce internetinizin düzeldiğinden ve sunucunun (Render) çalıştığından emin olup tekrar deneyin.`);
             } finally {
                 // Her durumda loading state'i kaldır (renderProducts zaten temizler ama nolur nolmaz)
                 const tbody = document.getElementById('productsTableBody');
