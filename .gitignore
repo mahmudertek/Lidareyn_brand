@@ -22,6 +22,8 @@ Thumbs.db
 
 # Backups
 backups/
+YEDEK_*/
+YEDEK*/
 *.zip
 *.rar
 *.tar.gz
