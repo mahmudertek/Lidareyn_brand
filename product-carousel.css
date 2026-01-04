@@ -99,7 +99,8 @@
     background-position: center;
     background-color: #fff;
     position: relative;
-    padding: 15px;
+    padding: 25px;
+    /* Daha fazla boşluk (Zoom out hissi) */
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -112,6 +113,8 @@
     width: auto;
     height: auto;
     object-fit: contain;
+    transform: scale(0.9);
+    /* Resimleri biraz daha küçült (Tamamen görünmesi için) */
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
