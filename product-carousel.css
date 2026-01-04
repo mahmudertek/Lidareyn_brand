@@ -99,8 +99,8 @@
     background-position: center;
     background-color: #fff;
     position: relative;
-    padding: 25px;
-    /* Daha fazla boşluk (Zoom out hissi) */
+    padding: 12px;
+    /* Daha az boşluk - daha büyük görsel */
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -113,14 +113,14 @@
     width: auto;
     height: auto;
     object-fit: contain;
-    transform: scale(0.9);
-    /* Resimleri biraz daha küçült (Tamamen görünmesi için) */
+    transform: scale(0.95);
+    /* Dengeli boyut - ne çok küçük ne çok büyük */
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .product-carousel-card:hover .product-carousel-image img {
-    transform: scale(0.9);
-    /* Zoom-out effect */
+    transform: scale(1);
+    /* Hover'da hafif büyütme */
 }
 
 /* Product Badge */

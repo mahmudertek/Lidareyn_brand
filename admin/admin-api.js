@@ -57,10 +57,47 @@ const ADMIN_API = {
                 headers: this.getHeaders(),
                 body: JSON.stringify(productData)
             });
-            return await response.json();
+            const result = await response.json();
+
+            // LocalStorage'a da kaydet (fallback için)
+            if (result.success && result.data) {
+                this.saveProductToLocalStorage(result.data);
+            }
+
+            return result;
         } catch (error) {
             console.error('Create product error:', error);
-            return { success: false, error: error.message };
+
+            // Backend başarısız olursa sadece localStorage'a kaydet
+            const localProduct = {
+                ...productData,
+                _id: 'local_' + Date.now(),
+                id: 'local_' + Date.now(),
+                createdAt: new Date().toISOString()
+            };
+            this.saveProductToLocalStorage(localProduct);
+
+            return { success: true, data: localProduct, savedLocally: true };
+        }
+    },
+
+    // LocalStorage'a ürün kaydet
+    saveProductToLocalStorage(product) {
+        try {
+            let products = JSON.parse(localStorage.getItem('galata_products') || '[]');
+
+            // Eğer mevcut ürün varsa güncelle, yoksa ekle
+            const existingIndex = products.findIndex(p => p._id === product._id || p.id === product.id);
+            if (existingIndex >= 0) {
+                products[existingIndex] = product;
+            } else {
+                products.unshift(product); // Yeni ürünü başa ekle
+            }
+
+            localStorage.setItem('galata_products', JSON.stringify(products));
+            console.log('✅ Ürün localStorage\'a kaydedildi:', product.name);
+        } catch (e) {
+            console.error('LocalStorage save error:', e);
         }
     },
 

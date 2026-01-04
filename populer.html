@@ -61,7 +61,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=1766859876">
+    <link rel="stylesheet" href="header-align.css"><link rel="stylesheet" href="style.css?v=1766859876">
     <link rel="stylesheet" href="mobile.css?v=1766859876">
     <link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
 
@@ -668,16 +668,12 @@
     </div>
 
     <main class="main-content">
-        <div id="circular-gallery-root" class="container" style="padding: 40px 0;">
-            <div style="text-align: center; padding: 100px 0;">
-                <i class="fa-solid fa-spinner fa-spin" style="font-size: 40px; color: #8b7bd8;"></i>
-                <p style="margin-top: 15px; color: #64748b; font-family: 'Poppins', sans-serif;">Popüler ürünler
-                    hazırlanıyor...</p>
-            </div>
-        </div>
+        <div id="circular-gallery-root" class="container" style="padding: 40px 0;"></div>
     </main>
 
-    <!-- React is now loaded at the bottom for better performance and consistency -->
+    <!-- React Integration -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
 
     <!-- Component Styles -->
     <!-- Custom Component Styles -->
@@ -961,6 +957,8 @@
     </style>
     <script src="products-data.js"></script>
 
+    <!-- Pre-compiled React Components (No Babel needed - much faster!) -->
+    <script src="populer-components.js?v=1"></script>
 
 
 
@@ -1086,10 +1084,6 @@
         </div>
     </div>
 
-    <!-- React Framework -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-
     <script src="api-client.js"></script>
     <script src="script.js"></script>
     <script src="categories-data.js"></script>
@@ -1099,7 +1093,7 @@
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>
     <script src="site-analytics.js"></script>
-    <script src="populer-components.js?v=1.1"></script>
+    <script src="populer-components.js"></script>
 </body>
 
 </html>

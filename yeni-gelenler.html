@@ -61,7 +61,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="style.css?v=1766859876">
+    <link rel="stylesheet" href="header-align.css"><link rel="stylesheet" href="style.css?v=1766859876">
     <link rel="stylesheet" href="mobile.css?v=1766859876">
     <link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
 
@@ -677,10 +677,10 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             gap: 20px;
+            /* Gap azaltıldı */
             margin: 40px 0;
             padding: 0 20px;
-            align-content: start;
-            /* Prevent rows from stretching to fill height */
+            min-height: 800px;
         }
 
         .product-card {
@@ -787,7 +787,7 @@
         }
     </style>
 
-    <!-- Products Data -->
+    <script src="api-client.js"></script><!-- Products Data -->
     <script src="products-data.js"></script>
 
     <!-- Product Grid Script -->
@@ -800,11 +800,17 @@
 
             let products = [];
             try {
-                // Sadece son eklenen 48 ürünü getir (En kesin ve temiz mantık)
-                const res = await window.API.getProducts({ sort: '-createdAt', limit: 48 });
+                // Öncelik: Admin panelinde "Yeni" olarak işaretlenen ürünler
+                const res = await window.API.getProducts({ isNew: 'true', sort: '-createdAt', limit: 48 });
 
-                if (res.success && res.data) {
+                if (res.success && res.data && res.data.length > 0) {
                     products = res.data;
+                } else {
+                    // Eğer "Yeni" işaretli ürün yoksa, son eklenen 48 ürünü getir
+                    const fallbackRes = await window.API.getProducts({ sort: '-createdAt', limit: 48 });
+                    if (fallbackRes.success && fallbackRes.data) {
+                        products = fallbackRes.data;
+                    }
                 }
 
                 if (products.length === 0) {
@@ -1062,3 +1068,4 @@
 </body>
 
 </html>
+

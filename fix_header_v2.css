@@ -1,0 +1,87 @@
+/* ============================================================ 
+   ULTIMATE HEADER RECOVERY FIX (V2)
+   Fixes duplicate icons and symmetry across all devices.
+   ============================================================ */
+
+/* 1. Hide mobile-only elements on desktop strictly */
+@media (min-width: 993px) {
+
+    .mobile-search-btn,
+    .mobile-menu-toggle,
+    .mobile-categories-btn {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    .search-container {
+        display: flex !important;
+    }
+}
+
+/* 2. Setup mobile search correctly */
+@media (max-width: 992px) {
+    .search-container {
+        display: none !important;
+    }
+
+    .mobile-search-btn {
+        display: flex !important;
+    }
+
+    /* Ensure header height on mobile is consistent */
+    .main-header {
+        height: 50px !important;
+    }
+}
+
+/* 3. Global Alignment Fix (Center all items vertically) */
+.header-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    /* Changed from center to space-between */
+    height: 100% !important;
+    position: relative !important;
+    /* Added for absolute positioning of logo */
+}
+
+.nav-menu,
+.main-nav,
+.header-icons,
+.icon-btn,
+.nav-link,
+.user-menu-container,
+.search-container {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+}
+
+/* Center the logo absolutely */
+.logo {
+    position: absolute !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    z-index: 10 !important;
+    /* Ensure logo stays on top */
+}
+
+.logo a {
+    font-size: 1.25rem !important;
+    font-weight: 800 !important;
+    color: #8b7bd8 !important;
+    letter-spacing: -0.5px !important;
+    text-decoration: none !important;
+}
+
+.nav-link {
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    padding: 0 10px !important;
+}

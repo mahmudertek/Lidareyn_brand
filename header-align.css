@@ -1,0 +1,66 @@
+/* ============================================
+   HEADER ALIGNMENT FIX - All items on same line
+   ============================================ */
+
+.header-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    height: 100% !important;
+}
+
+.header-container>* {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+}
+
+.main-nav,
+.nav-menu,
+.nav-menu li,
+.nav-link,
+.logo,
+.logo a,
+.header-icons,
+.icon-btn,
+.search-container,
+.user-menu-container {
+    display: flex !important;
+    align-items: center !important;
+    height: 100% !important;
+    line-height: 1 !important;
+}
+
+.nav-menu {
+    gap: 5px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.nav-link {
+    padding: 0 8px !important;
+    white-space: nowrap !important;
+}
+
+.header-icons {
+    gap: 8px !important;
+}
+
+.icon-btn {
+    padding: 0 6px !important;
+    gap: 4px !important;
+}
+
+.icon-label {
+    line-height: 1 !important;
+}
+
+/* Hide mobile elements on desktop */
+@media (min-width: 993px) {
+
+    .mobile-search-btn,
+    .mobile-menu-toggle,
+    .mobile-categories-btn {
+        display: none !important;
+    }
+}
