@@ -1178,6 +1178,12 @@
             document.getElementById('imagePreview').style.display = 'none';
             document.getElementById('imagePlaceholder').style.display = 'block';
             document.getElementById('productImage').value = '';
+            document.getElementById('productIsActive').checked = true;
+            document.getElementById('tagPopular').checked = false;
+            document.getElementById('tagBestSeller').checked = false;
+            document.getElementById('tagNew').checked = false;
+            document.getElementById('tagFeatured').checked = false;
+            document.getElementById('brandShowcase').value = '';
         }
 
         // Görsel alanına tıklama
@@ -1563,11 +1569,11 @@
                 document.getElementById('productBarcode').value = (product.barcode !== null && product.barcode !== undefined) ? product.barcode : '';
 
                 // Tüm etiketleri yükle
-                document.getElementById('tagPopular').checked = product.isPopular || false;
-                document.getElementById('tagBestSeller').checked = product.isBestSeller || false;
-                document.getElementById('tagNew').checked = product.isNew || false;
-                document.getElementById('tagFeatured').checked = product.isFeatured || false;
                 document.getElementById('productIsActive').checked = product.isActive !== false;
+                document.getElementById('tagPopular').checked = !!product.isPopular;
+                document.getElementById('tagBestSeller').checked = !!product.isBestSeller;
+                document.getElementById('tagNew').checked = !!product.isNew;
+                document.getElementById('tagFeatured').checked = !!product.isFeatured;
 
                 // Marka vitrini seçimi
                 document.getElementById('brandShowcase').value = product.brandShowcase || '';
@@ -1839,6 +1845,7 @@
                 barcode: barcode || '', // Boş string olarak gönder
 
                 // Tüm etiketler (Ayrı ayrı)
+                isActive: !!document.getElementById('productIsActive').checked,
                 isPopular: !!isPopular,
                 isBestSeller: !!isBestSeller,
                 isNew: !!isNew,
@@ -1846,7 +1853,6 @@
 
                 // Tags array (Toplu)
                 tags: tags,
-                isActive: document.getElementById('productIsActive').checked,
 
                 // Ana sayfa marka vitrini
                 brandShowcase: brandShowcase || '',

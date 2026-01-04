@@ -93,25 +93,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const normalizedTarget = targetBrand.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-            // 3. Find products for this brand
+            // 3. Find products for this brand - STRICT MANUAL CONTROL
             let brandProducts = allProducts.filter(p => {
-                // EXCEPTION: If the product SPECIFICALLY chose this showcase, include it
+                // SADECE ve SADECE manual olarak seçilenleri göster
                 const showcaseVal = (p.brandShowcase || p.showcase || '').toLowerCase().replace(/[^a-z0-9]/g, '');
-                if (showcaseVal === normalizedTarget) return true;
-
-                if (!p.brand) return false;
-                const dbBrand = p.brand.toLowerCase().trim();
-                const target = targetBrand.toLowerCase().trim();
-
-                // 1. Direct includes match
-                if (dbBrand.includes(target)) return true;
-
-                // 2. Reverse includes
-                if (target.includes(dbBrand)) return true;
-
-                // 3. Normalized match
-                const normalize = (s) => s.replace(/[^a-z0-9]/g, '');
-                return normalize(dbBrand).includes(normalize(target));
+                return showcaseVal === normalizedTarget;
             });
 
             // 4. Sort
