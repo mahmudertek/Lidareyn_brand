@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         await loadProductsFromAPI();
         applyFilters();
         renderSidebarFilters();
+        updateBreadcrumbs();
         setupEventListeners();
     }
 
@@ -223,6 +224,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         state.filteredProducts = results;
         renderResults();
+        updateBreadcrumbs(); // Update path when filters change
+    }
+
+    // New: Dynamic Breadcrumb Renderer
+    function updateBreadcrumbs() {
+        const breadcrumbCurrent = document.getElementById('breadcrumb-current');
+        if (!breadcrumbCurrent) return;
+
+        let path = 'Arama Sonuçları';
+        if (state.query) {
+            path = `"${state.query}"`;
+        } else if (state.category) {
+            path = formatCategoryName(state.category);
+        } else if (state.brand) {
+            path = state.brand;
+        }
+
+        breadcrumbCurrent.textContent = path;
     }
 
     // 5. Rendering - Robust Version
@@ -348,40 +367,75 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
 
     function renderSidebarFilters() {
-        // Normalization helper for sidebar grouping
-        const normalize = (str) => {
-            if (!str) return '';
-            return str.toLowerCase().trim().replace(/lar$/, '').replace(/ler$/, '');
-        };
+        // Find if we are in a dominant category (all results belong to one)
+        const categoriesInResult = [...new Set(state.filteredProducts.filter(p => p.category).map(p => p.category))];
+        const isSingleCategory = categoriesInResult.length === 1 || state.category !== '';
+        const activeCategory = state.category || (categoriesInResult.length === 1 ? categoriesInResult[0] : null);
 
-        // Smart Category Grouping
-        const categoryMap = {};
-        state.products.forEach(p => {
-            if (!p.category) return;
-            const norm = normalize(p.category);
-            if (!categoryMap[norm]) {
-                categoryMap[norm] = {
-                    displayName: p.category, // Use the first actual name found as display
-                    count: 0,
-                    originalNames: new Set()
-                };
+        const categoryTitle = document.querySelector('.filter-group:nth-child(2) .filter-title');
+
+        if (isSingleCategory && activeCategory) {
+            // WE ARE IN A SPECIFIC CATEGORY -> SHOW SUB-CATEGORIES
+            if (categoryTitle) categoryTitle.innerHTML = `Alt Kategoriler <i class="fa-solid fa-chevron-down"></i>`;
+
+            const subCategoryMap = {};
+            state.filteredProducts.forEach(p => {
+                if (!p.subCategory) return;
+                subCategoryMap[p.subCategory] = (subCategoryMap[p.subCategory] || 0) + 1;
+            });
+
+            if (elements.categoryFilters) {
+                const subCats = Object.keys(subCategoryMap).sort();
+                if (subCats.length > 0) {
+                    elements.categoryFilters.innerHTML = subCats.map(sub => `
+                        <label class="filter-item">
+                            <input type="checkbox" value="${sub}" onchange="toggleFilter('subCategories', '${escapeQuotes(sub)}')">
+                            <span>${sub}</span>
+                            <span class="filter-count">(${subCategoryMap[sub]})</span>
+                        </label>
+                    `).join('');
+                } else {
+                    elements.categoryFilters.innerHTML = '<p style="padding:10px; color:#888; font-size:12px;">Alt kategori bulunamadı.</p>';
+                }
             }
-            categoryMap[norm].count++;
-            categoryMap[norm].originalNames.add(p.category);
-        });
+        } else {
+            // GLOBAL SEARCH -> SHOW MAIN CATEGORIES (Normal behavior)
+            if (categoryTitle) categoryTitle.innerHTML = `Kategoriler <i class="fa-solid fa-chevron-down"></i>`;
 
-        if (elements.categoryFilters) {
-            elements.categoryFilters.innerHTML = Object.keys(categoryMap).sort().map(key => {
-                const cat = categoryMap[key];
-                return `
-                <label class="filter-item">
-                    <input type="checkbox" value="${cat.displayName}" onchange="toggleFilter('categories', '${escapeQuotes(Array.from(cat.originalNames)[0])}')">
-                    <span>${cat.displayName}</span>
-                    <span class="filter-count">(${cat.count})</span>
-                </label>
-            `}).join('');
+            const normalize = (str) => {
+                if (!str) return '';
+                return str.toLowerCase().trim().replace(/lar$/, '').replace(/ler$/, '');
+            };
+
+            const categoryMap = {};
+            state.products.forEach(p => {
+                if (!p.category) return;
+                const norm = normalize(p.category);
+                if (!categoryMap[norm]) {
+                    categoryMap[norm] = {
+                        displayName: p.category,
+                        count: 0,
+                        originalNames: new Set()
+                    };
+                }
+                categoryMap[norm].count++;
+                categoryMap[norm].originalNames.add(p.category);
+            });
+
+            if (elements.categoryFilters) {
+                elements.categoryFilters.innerHTML = Object.keys(categoryMap).sort().map(key => {
+                    const cat = categoryMap[key];
+                    return `
+                    <label class="filter-item">
+                        <input type="checkbox" value="${cat.displayName}" onchange="toggleFilter('categories', '${escapeQuotes(Array.from(cat.originalNames)[0])}')">
+                        <span>${cat.displayName}</span>
+                        <span class="filter-count">(${cat.count})</span>
+                    </label>
+                `}).join('');
+            }
         }
 
+        // BRANDS remain the same
         const brands = [...new Set(state.products.filter(p => p.brand).map(p => p.brand))].sort().slice(0, 15);
         if (elements.brandFilters) {
             elements.brandFilters.innerHTML = brands.map(brand => `

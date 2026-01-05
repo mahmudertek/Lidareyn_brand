@@ -139,6 +139,36 @@
             border-color: #6366f1 !important;
             color: white !important;
         }
+
+        /* Breadcrumb Styles */
+        .breadcrumb-nav {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .breadcrumb-item a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .breadcrumb-item a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-item.active {
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .breadcrumb-separator {
+            font-size: 10px;
+            color: #d1d5db;
+        }
     </style>
 </head>
 
@@ -426,7 +456,7 @@
                                     </div>
                                 </li>
 
-                                
+
                                 <li>
                                     <a href="kategoriler/asindirici-kesici.html">
                                         <div class="menu-item-left">
@@ -641,16 +671,19 @@
                                         <div class="sub-menu-column">
                                             <h4>Kesme &amp; Budama</h4>
                                             <ul>
-                                                <li><a href="arama.html?q=Çit Kesme Makinesi">Çit Kesme Makinesi</a></li>
+                                                <li><a href="arama.html?q=Çit Kesme Makinesi">Çit Kesme Makinesi</a>
+                                                </li>
                                                 <li><a href="arama.html?q=Budama Makası">Budama Makası</a></li>
-                                                <li><a href="arama.html?q=Ağaç Kesme Testeresi">Ağaç Kesme Testeresi</a></li>
+                                                <li><a href="arama.html?q=Ağaç Kesme Testeresi">Ağaç Kesme Testeresi</a>
+                                                </li>
                                                 <li><a href="arama.html?q=Dal Budama Aleti">Dal Budama Aleti</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Çim Bakımı</h4>
                                             <ul>
-                                                <li><a href="arama.html?q=Çim Biçme Makinesi">Çim Biçme Makinesi</a></li>
+                                                <li><a href="arama.html?q=Çim Biçme Makinesi">Çim Biçme Makinesi</a>
+                                                </li>
                                                 <li><a href="arama.html?q=Tırpan">Tırpan</a></li>
                                                 <li><a href="arama.html?q=Çim Havalandırıcı">Çim Havalandırıcı</a></li>
                                                 <li><a href="arama.html?q=Çim Süpürgesi">Çim Süpürgesi</a></li>
@@ -661,8 +694,10 @@
                                             <ul>
                                                 <li><a href="arama.html?q=Bahçe Hortumu">Bahçe Hortumu</a></li>
                                                 <li><a href="arama.html?q=Sulama Tabancası">Sulama Tabancası</a></li>
-                                                <li><a href="arama.html?q=Damla Sulama Sistemi">Damla Sulama Sistemi</a></li>
-                                                <li><a href="arama.html?q=Fıskiye Yağmurlama">Fıskiye ve Yağmurlama</a></li>
+                                                <li><a href="arama.html?q=Damla Sulama Sistemi">Damla Sulama Sistemi</a>
+                                                </li>
+                                                <li><a href="arama.html?q=Fıskiye Yağmurlama">Fıskiye ve Yağmurlama</a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -736,6 +771,12 @@
     </header>
 
     <main class="page-container search-page">
+        <!-- Breadcrumbs -->
+        <nav class="breadcrumb-nav">
+            <span class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></span>
+            <span class="breadcrumb-separator"><i class="fa-solid fa-chevron-right"></i></span>
+            <span class="breadcrumb-item active" id="breadcrumb-current">Arama Sonuçları</span>
+        </nav>
 
         <div class="search-header-bar">
             <h1><span id="search-query-display">"..."</span> için arama sonuçları</h1>
@@ -955,5 +996,3 @@
 </body>
 
 </html>
-
-
