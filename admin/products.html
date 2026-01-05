@@ -658,6 +658,11 @@
                 <div class="products-header">
                     <h2 style="margin: 0; color: #1f2937;">Tüm Ürünler</h2>
                     <div style="display: flex; gap: 10px;">
+                        <button class="add-product-btn" style="background: #059669; opacity: 0.9;"
+                            onclick="openPriceIncreaseModal()">
+                            <i class="fa-solid fa-percent"></i>
+                            Markaya Göre Zam Yap
+                        </button>
                         <button class="add-product-btn" style="background: #4f46e5; opacity: 0.9;"
                             onclick="window.location.href='brands.html'">
                             <i class="fa-solid fa-tags"></i>
@@ -722,6 +727,47 @@
 
             </div>
         </main>
+    </div>
+
+    <!-- Price Increase by Brand Modal -->
+    <div class="modal-overlay" id="priceIncreaseModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #059669, #10b981);">
+                <h2 style="color: white;"><i class="fa-solid fa-percent"></i> Markaya Göre Zam Yap</h2>
+                <button class="modal-close" onclick="closePriceIncreaseModal()" style="color: white;">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 24px;">
+                <div class="form-group">
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Marka Seçin *</label>
+                    <select id="zamBrandSelect"
+                        style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
+                        <option value="">-- Marka Seçin --</option>
+                    </select>
+                </div>
+                <div class="form-group" style="margin-top: 16px;">
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Zam Yüzdesi (%) *</label>
+                    <input type="number" id="zamPercentage" placeholder="Örn: 10" min="0" max="500" step="0.1"
+                        style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
+                    <small style="color: #6b7280; margin-top: 4px; display: block;">Örn: 10 girerseniz, ürün fiyatları
+                        %10 artırılır</small>
+                </div>
+                <div id="zamPreview"
+                    style="margin-top: 16px; padding: 12px; background: #f3f4f6; border-radius: 8px; display: none;">
+                    <strong>Önizleme:</strong>
+                    <p id="zamPreviewText" style="margin: 8px 0 0; color: #374151;"></p>
+                </div>
+                <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button onclick="closePriceIncreaseModal()"
+                        style="padding: 12px 24px; background: #6b7280; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        İptal
+                    </button>
+                    <button onclick="applyPriceIncrease()"
+                        style="padding: 12px 24px; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        <i class="fa-solid fa-check"></i> Zammı Uygula
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Add/Edit Product Modal -->
@@ -2376,6 +2422,132 @@
                     subCategoryObj.innerHTML = '<option value="">Önce Üst Kategori Seçiniz</option>';
                 }
             }
+        }
+
+        // ==================== PRICE INCREASE BY BRAND ====================
+
+        function openPriceIncreaseModal() {
+            const modal = document.getElementById('priceIncreaseModal');
+            const brandSelect = document.getElementById('zamBrandSelect');
+
+            // Markaları yükle
+            const brands = [...new Set(products.filter(p => p.brand).map(p => p.brand))].sort();
+            brandSelect.innerHTML = '<option value="">-- Marka Seçin --</option>';
+            brands.forEach(brand => {
+                const count = products.filter(p => p.brand === brand).length;
+                brandSelect.innerHTML += `<option value="${brand}">${brand} (${count} ürün)</option>`;
+            });
+
+            // Reset fields
+            document.getElementById('zamPercentage').value = '';
+            document.getElementById('zamPreview').style.display = 'none';
+
+            modal.classList.add('active');
+
+            // Önizleme için event listener
+            document.getElementById('zamBrandSelect').addEventListener('change', updateZamPreview);
+            document.getElementById('zamPercentage').addEventListener('input', updateZamPreview);
+        }
+
+        function updateZamPreview() {
+            const brand = document.getElementById('zamBrandSelect').value;
+            const percentage = parseFloat(document.getElementById('zamPercentage').value);
+            const previewDiv = document.getElementById('zamPreview');
+            const previewText = document.getElementById('zamPreviewText');
+
+            if (brand && !isNaN(percentage) && percentage > 0) {
+                const brandProducts = products.filter(p => p.brand === brand);
+                const count = brandProducts.length;
+
+                // Örnek hesaplama
+                if (brandProducts.length > 0) {
+                    const sample = brandProducts[0];
+                    const oldPrice = parseFloat(sample.price) || 0;
+                    const newPrice = oldPrice * (1 + percentage / 100);
+
+                    previewText.innerHTML = `
+                        <strong>${brand}</strong> markasının <strong>${count}</strong> ürününe <strong>%${percentage}</strong> zam uygulanacak.<br>
+                        <span style="color: #6b7280; font-size: 13px;">
+                            Örnek: ${sample.name.substring(0, 40)}...<br>
+                            Eski: ₺${oldPrice.toLocaleString('tr-TR')} → Yeni: ₺${newPrice.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}
+                        </span>
+                    `;
+                    previewDiv.style.display = 'block';
+                }
+            } else {
+                previewDiv.style.display = 'none';
+            }
+        }
+
+        function closePriceIncreaseModal() {
+            document.getElementById('priceIncreaseModal').classList.remove('active');
+        }
+
+        async function applyPriceIncrease() {
+            const brand = document.getElementById('zamBrandSelect').value;
+            const percentage = parseFloat(document.getElementById('zamPercentage').value);
+
+            if (!brand) {
+                alert('Lütfen bir marka seçin.');
+                return;
+            }
+
+            if (isNaN(percentage) || percentage <= 0) {
+                alert('Lütfen geçerli bir yüzde girin (0\'dan büyük).');
+                return;
+            }
+
+            const brandProducts = products.filter(p => p.brand === brand);
+
+            if (brandProducts.length === 0) {
+                alert('Bu markaya ait ürün bulunamadı.');
+                return;
+            }
+
+            const confirm = window.confirm(
+                `${brand} markasının ${brandProducts.length} ürününe %${percentage} zam uygulanacak.\n\nDevam etmek istiyor musunuz?`
+            );
+
+            if (!confirm) return;
+
+            let successCount = 0;
+            let failCount = 0;
+
+            for (const product of brandProducts) {
+                try {
+                    const oldPrice = parseFloat(product.price) || 0;
+                    const newPrice = Math.round(oldPrice * (1 + percentage / 100) * 100) / 100;
+
+                    // Ürünü güncelle
+                    const updatedProduct = { ...product, price: newPrice };
+
+                    // API'ye gönder
+                    const response = await ADMIN_API.updateProduct(product._id || product.id, updatedProduct);
+
+                    if (response.success) {
+                        // Yereli güncelle
+                        const index = products.findIndex(p => (p._id || p.id) === (product._id || product.id));
+                        if (index !== -1) {
+                            products[index].price = newPrice;
+                        }
+                        successCount++;
+                    } else {
+                        failCount++;
+                    }
+                } catch (error) {
+                    console.error('Zam uygulama hatası:', error);
+                    failCount++;
+                }
+            }
+
+            // LocalStorage güncelle
+            localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+
+            // Sonuç
+            closePriceIncreaseModal();
+            renderProducts();
+
+            alert(`✅ Zam uygulandı!\n\nBaşarılı: ${successCount} ürün\nBaşarısız: ${failCount} ürün`);
         }
 
     </script>

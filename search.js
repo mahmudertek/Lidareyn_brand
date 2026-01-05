@@ -179,6 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 (p.name && p.name.toLowerCase().includes(q)) ||
                 (p.brand && p.brand.toLowerCase().includes(q)) ||
                 (p.category && p.category.toLowerCase().includes(q)) ||
+                (p.subCategory && p.subCategory.toLowerCase().includes(q)) ||
+                (p.description && p.description.toLowerCase().includes(q)) ||
                 (p.barcode && p.barcode.toLowerCase().includes(q)) ||
                 (p.sku && p.sku.toLowerCase().includes(q))
             );

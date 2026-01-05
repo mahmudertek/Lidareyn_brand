@@ -121,9 +121,9 @@ const categoriesData = {
         image: 'gorseller/category_hirdavat.png',
         subcategories: [
             { name: 'Anahtarlar & Vidalama', items: ['Anahtar Takımları (Lokma, Kombine)', 'İngiliz Anahtarı', 'Tornavidalar (Düz, Yıldız, Tork)'], icon: 'fa-wrench' },
-            { name: 'Kesme & Şekillendirme', items: ['Pense ve Yan Keski Çeşitleri', 'Maket Bıçakları', 'Testereler (El, Budama)', 'Eğeler ve Raspalar'], icon: 'fa-scissors' },
+            { name: 'Kesme & Şekillendirme', items: ['Pense ve Yan Keski Çeşitleri', 'Maket Bıçakları', 'Eğeler ve Raspalar'], icon: 'fa-scissors' },
             { name: 'Vurma & Sabitleme', items: ['Çekiçler (Demirci, Lastik)', 'Balta', 'Keski ve Zımbalar', 'Mengene ve Kelepçeler'], icon: 'fa-hammer' },
-            { name: 'Ölçü Aletleri', items: ['Metre', 'Su Terazisi', 'Gönye'], icon: 'fa-ruler-combined' }
+            { name: 'Kavrama ve İnce İşçilik Penseleri', items: ['Düz Uçlu Kargaburunlar', 'Eğri Uçlu Kargaburunlar', 'Uzun Uçlu Kargaburunlar', 'Yuvarlak Uçlu Kargaburunlar'], icon: 'fa-hand' }
         ]
     },
 
