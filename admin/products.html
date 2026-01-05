@@ -2078,10 +2078,10 @@
 
                 // Kullanıcıya bilgi ver
                 const msg = error.message.includes('zaman aşımı')
-                    ? 'Sunucu 30 saniye içinde yanıt vermedi (Render uyuyor olabilir).'
+                    ? 'Sunucu 90 saniye içinde yanıt vermedi (Render uyuyor olabilir).'
                     : 'İnternet bağlantısı veya sunucu hatası.';
 
-                alert(`⚠️ SUNUCUYA KAYDEDİLEMEDİ!\n\nDurum: ${msg}\n\nÜrün ŞİMDİLİK bu tarayıcıya (localStorage) kaydedildi. \n\nLÜTFEN DİKKAT: Bilgisayarınızı kapatmadan veya tarayıcıyı temizlemeden önce internetinizin düzeldiğinden ve sunucunun (Render) çalıştığından emin olup tekrar deneyin.`);
+                alert(`⚠️ SUNUCUYA KAYDEDİLEMEDİ!\n\nHATA DETAYI: ${error.message}\n\nDurum: ${msg}\n\nÜrün ŞİMDİLİK bu tarayıcıya (localStorage) kaydedildi. \n\nLÜTFEN DİKKAT: Bilgisayarınızı kapatmadan veya tarayıcıyı temizlemeden önce internetinizin düzeldiğinden ve sunucunun (Render) çalıştığından emin olup tekrar deneyin.`);
             } finally {
                 // Her durumda loading state'i kaldır (renderProducts zaten temizler ama nolur nolmaz)
                 const tbody = document.getElementById('productsTableBody');

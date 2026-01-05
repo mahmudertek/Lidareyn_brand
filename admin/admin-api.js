@@ -112,7 +112,19 @@ const ADMIN_API = {
             return await response.json();
         } catch (error) {
             console.error('Update product error:', error);
-            return { success: false, error: error.message };
+
+            // Backend başarısız olursa localStorage'a kaydet (Fallback)
+            // Backend ID'sini ve güncel verileri birleştir
+            const localProduct = {
+                ...productData,
+                _id: id,
+                id: id,
+                updatedAt: new Date().toISOString()
+            };
+
+            this.saveProductToLocalStorage(localProduct);
+
+            return { success: true, data: localProduct, savedLocally: true };
         }
     },
 
