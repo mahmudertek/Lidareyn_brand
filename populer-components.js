@@ -109,9 +109,9 @@
                                     oldPrice: hasSalePrice ? p.price : null,
                                     image: p.mainImage || p.image || (p.images && p.images[0]) || 'https://placehold.co/300x400?text=Urun',
                                     brand: p.brand,
-                                    badge: (p.isPopular || (p.tags && p.tags.includes('popular'))) ? 'Popüler' : ''
+                                    badge: (p.isPopular === true || p.isPopular === 'true') ? 'Popüler' : ''
                                 };
-                            });
+                            }).filter(function (p) { return p.badge === 'Popüler'; });
                             setProducts(mapped);
                         } else {
                             // API boş dönerse localStorage dene
@@ -130,8 +130,7 @@
                     } catch (e) { }
 
                     var popularProducts = localData.filter(function (p) {
-                        return p.isPopular === true || p.isPopular === 'true' ||
-                            (p.tags && Array.isArray(p.tags) && p.tags.includes('popular'));
+                        return p.isPopular === true || p.isPopular === 'true';
                     });
 
                     if (popularProducts.length > 0) {

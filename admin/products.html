@@ -763,34 +763,33 @@
 
                     <div class="form-row">
                         <div class="form-group full-width">
-                            <label>Marka *</label>
-                            <div class="brand-section-container"
-                                style="display: flex; gap: 12px; align-items: flex-start;">
-                                <!-- Marka Seçim Dropdown -->
-                                <div class="custom-brand-container" style="flex: 1;">
-                                    <div id="brandSelectTrigger" class="brand-select-trigger"
-                                        onclick="toggleBrandDropdown()">
-                                        <span id="selectedBrandDisplay">Marka Seçin</span>
-                                        <i class="fa-solid fa-chevron-down"></i>
-                                    </div>
-                                    <div id="brandDropdownList" class="brand-dropdown-list">
-                                        <div id="brandItemsContainer">
-                                            <!-- Markalar buraya yüklenecek -->
+                            <label>Marka Seçimi (Ara veya Yeni Ekle) *</label>
+                            <div class="custom-brand-dropdown-wrapper" style="position: relative; width: 100%;">
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <!-- Arama ve Seçim Alanı -->
+                                    <div style="position: relative; flex: 1;">
+                                        <input type="text" id="brandSearchInput" placeholder="Marka ara veya seç..."
+                                            onfocus="showBrandList()" oninput="filterBrandList(this.value)"
+                                            style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; background: #fff;">
+                                        <i class="fa-solid fa-chevron-down"
+                                            style="position: absolute; right: 15px; top: 15px; color: #9ca3af; pointer-events: none;"></i>
+
+                                        <!-- Dropdown Liste -->
+                                        <div id="brandListDropdown"
+                                            style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #d1d5db; border-radius: 8px; margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
+                                            <div id="brandListContainer">
+                                                <!-- Markalar JS ile buraya yüklenecek -->
+                                            </div>
                                         </div>
                                     </div>
-                                    <input type="hidden" id="productBrand" required>
-                                </div>
 
-                                <!-- Yeni Marka Ekle Bölümü -->
-                                <div class="brand-add-container" style="display: flex; gap: 8px; align-items: center;">
-                                    <input type="text" id="newBrandInput" placeholder="Yeni marka adı..."
-                                        style="padding: 12px 14px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; width: 180px;">
-                                    <button type="button" onclick="addNewBrandFromInput()"
-                                        style="width: 44px; height: 44px; background: #22c55e; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center;"
-                                        title="Marka Ekle">
-                                        <i class="fa-solid fa-plus"></i>
+                                    <!-- Yeni Marka Ekle Butonu (Input'taki değer yeni ise) -->
+                                    <button type="button" onclick="addNewBrandFromSearch()"
+                                        style="white-space: nowrap; padding: 0 20px; height: 44px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                                        <i class="fa-solid fa-plus"></i> Yeni Ekle
                                     </button>
                                 </div>
+                                <input type="hidden" id="productBrand" required>
                             </div>
                         </div>
                         <div class="form-group full-width">
@@ -1198,17 +1197,14 @@
             resetImageUpload();
         }
 
-
-        // Load brands for dropdown (Updated for Custom UI)
+        // Load brands for dropdown (Searchable List)
         async function loadBrandsDropdown() {
             try {
                 const response = await ADMIN_API.getBrands();
                 if (response.success && response.data) {
                     allBrands = response.data;
-                    const filterSelect = document.getElementById('brandFilter');
-                    const itemsContainer = document.getElementById('brandItemsContainer');
 
-                    // Filter Select Update
+                    const filterSelect = document.getElementById('brandFilter');
                     if (filterSelect) {
                         filterSelect.innerHTML = '<option value="">Tüm Markalar</option>';
                         allBrands.forEach(brand => {
@@ -1219,8 +1215,7 @@
                         });
                     }
 
-                    // Custom Dropdown Items Update
-                    renderBrandItems();
+                    renderBrandSearchList();
                     console.log('✅ Markalar yüklendi:', allBrands.length);
                 }
             } catch (error) {
@@ -1228,71 +1223,97 @@
             }
         }
 
-        function renderBrandItems(searchTerm = '') {
-            const container = document.getElementById('brandItemsContainer');
+        function renderBrandSearchList(filter = '') {
+            const container = document.getElementById('brandListContainer');
             if (!container) return;
 
-            container.innerHTML = '';
-            const filtered = searchTerm
-                ? allBrands.filter(b => b.name.toLowerCase().includes(searchTerm.toLowerCase()))
-                : allBrands;
+            const filtered = allBrands.filter(b => b.name.toLowerCase().includes(filter.toLowerCase()));
 
-            filtered.forEach(brand => {
-                const div = document.createElement('div');
-                div.className = 'brand-item';
-                div.onclick = (e) => {
-                    if (e.target.closest('.brand-item-delete')) return;
-                    selectBrand(brand.name);
-                };
+            if (filtered.length === 0) {
+                container.innerHTML = '<div style="padding: 12px; color: #9ca3af; text-align: center; font-size: 13px;">Sonuç bulunamadı</div>';
+                return;
+            }
 
-                div.innerHTML = `
-                    <span class="brand-item-name">${brand.name}</span>
-                    <div class="brand-item-delete" onclick="deleteBrandFromDropdown(event, '${brand._id || brand.id}', '${brand.name}')" title="Markayı Sil" style="color: #dc2626; cursor: pointer; padding: 4px 8px;">
-                        <i class="fa-solid fa-trash"></i>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
+            container.innerHTML = filtered.map(brand => `
+                <div class="brand-search-item" 
+                    style="padding: 10px 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f3f4f6; transition: background 0.2s;"
+                    onmouseover="this.style.background='#f9fafb'" 
+                    onmouseout="this.style.background='transparent'"
+                    onclick="selectBrandFromList('${brand.name.replace(/'/g, "\\'")}')">
+                    <span style="font-size: 14px; font-weight: 500; color: #374151;">${brand.name}</span>
+                    <button type="button" onclick="event.stopPropagation(); deleteBrandFromSearch('${brand._id || brand.id}', '${brand.name.replace(/'/g, "\\'")}')" 
+                        style="color: #ef4444; background: none; border: none; cursor: pointer; padding: 5px;" title="Markayı Sil">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </div>
+            `).join('');
         }
 
-        // Yeni marka ekleme (input kutusundan)
-        async function addNewBrandFromInput() {
-            const input = document.getElementById('newBrandInput');
-            const name = input.value.trim();
+        function showBrandList() {
+            document.getElementById('brandListDropdown').style.display = 'block';
+            renderBrandSearchList(document.getElementById('brandSearchInput').value);
+        }
 
+        function filterBrandList(val) {
+            renderBrandSearchList(val);
+        }
+
+        function selectBrandFromList(name) {
+            document.getElementById('brandSearchInput').value = name;
+            document.getElementById('productBrand').value = name;
+            document.getElementById('brandListDropdown').style.display = 'none';
+        }
+
+        // Dışarı tıklayınca kapat
+        document.addEventListener('click', function (e) {
+            const wrapper = document.querySelector('.custom-brand-dropdown-wrapper');
+            if (wrapper && !wrapper.contains(e.target)) {
+                const dropdown = document.getElementById('brandListDropdown');
+                if (dropdown) dropdown.style.display = 'none';
+            }
+        });
+
+        async function addNewBrandFromSearch() {
+            const name = document.getElementById('brandSearchInput').value.trim();
             if (!name) {
-                alert('Lütfen marka adı girin!');
+                alert('Lütfen bir marka adı girin');
                 return;
             }
 
-            // Mevcut marka kontrolü
-            const exists = allBrands.find(b => b.name.toLowerCase() === name.toLowerCase());
-            if (exists) {
-                alert('Bu marka zaten mevcut!');
-                selectBrand(exists.name);
-                input.value = '';
-                return;
-            }
-
-            try {
-                const response = await ADMIN_API.createBrand({ name: name });
-                if (response.success || response.id || response._id) {
-                    await loadBrandsDropdown();
-                    selectBrand(name);
-                    input.value = '';
-                    alert('✅ Marka başarıyla eklendi: ' + name);
-                } else {
-                    throw new Error(response.error || 'Marka eklenemedi');
+            if (confirm(`'${name}' markasını yeni olarak eklemek istiyor musunuz?`)) {
+                try {
+                    const response = await ADMIN_API.createBrand({ name });
+                    if (response.success) {
+                        await loadBrandsDropdown();
+                        selectBrandFromList(name);
+                        alert('✅ Marka başarıyla eklendi');
+                    }
+                } catch (e) {
+                    const newBrand = { _id: 'local_' + Date.now(), name };
+                    allBrands.push(newBrand);
+                    renderBrandSearchList();
+                    selectBrandFromList(name);
+                    alert('⚠️ Marka yerel olarak eklendi');
                 }
-            } catch (err) {
-                console.error('Add brand error:', err);
-                // Yerel ekleme (fallback)
-                const localBrand = { _id: 'local_' + Date.now(), name: name };
-                allBrands.push(localBrand);
-                renderBrandItems();
-                selectBrand(name);
-                input.value = '';
-                alert('⚠️ Marka yerel olarak eklendi (sunucu bağlantısı yok): ' + name);
+            }
+        }
+
+        async function deleteBrandFromSearch(id, name) {
+            if (confirm(`'${name}' markasını tamamen silmek istediğinizden emin misiniz?`)) {
+                try {
+                    const response = await ADMIN_API.deleteBrand(id);
+                    if (response.success) {
+                        allBrands = allBrands.filter(b => (b._id || b.id) !== id);
+                        renderBrandSearchList(document.getElementById('brandSearchInput').value);
+                        if (document.getElementById('productBrand').value === name) {
+                            document.getElementById('productBrand').value = '';
+                            document.getElementById('brandSearchInput').value = '';
+                        }
+                    }
+                } catch (e) {
+                    allBrands = allBrands.filter(b => (b._id || b.id) !== id);
+                    renderBrandSearchList(document.getElementById('brandSearchInput').value);
+                }
             }
         }
 
@@ -1453,7 +1474,7 @@
             await checkApiStatus(); // İlk durum kontrolü
             await loadProducts();
             await loadCategories();
-            await loadBrands();
+            await loadBrandsDropdown();
         };
 
         // Show loading state
@@ -1593,7 +1614,10 @@
                 document.getElementById('modalTitle').textContent = 'Ürün Düzenle';
                 document.getElementById('productId').value = id;
                 document.getElementById('productName').value = product.name || '';
+
+                // Markayı hem inputta hem gizli inputta set et
                 document.getElementById('productBrand').value = product.brand || '';
+                document.getElementById('brandSearchInput').value = product.brand || '';
 
                 // KATEGORİ TEMİZLE VE İŞARETLE (Çoklu Seçim v2.0)
                 const categoryCheckboxes = document.querySelectorAll('input[name="productCategories"]');
@@ -1879,12 +1903,21 @@
             // Yüklenen görseli al veya placeholder kullan
             const imageToUse = uploadedImageBase64 || `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`;
 
-            // Tags array oluştur (Backend uyumluluğu için ekstra güvenlik)
+            // Tags array oluştur (DİKKAT: Popülerlik kontrolü burada çok önemli)
             const tags = [];
-            if (isPopular) tags.push('popular');
+            if (isPopular) {
+                tags.push('popular');
+                tags.push('Popüler'); // Ekstra güvenlik
+            }
             if (isNew) tags.push('new');
             if (isFeatured) tags.push('featured');
             if (isBestSeller) tags.push('bestseller');
+
+            // Eğer popüler işaretli DEĞİLSE, tags içinden popular kelimelerini temizle
+            if (!isPopular) {
+                // Bu durumda (yukarıda push etmedik zaten ama backend'de kalmış olabilir diye) 
+                // productData.tags boş gidecek.
+            }
 
             const productData = {
                 name,
@@ -1902,9 +1935,9 @@
                 sku: sku || '',         // Boş string olarak gönder
                 barcode: barcode || '', // Boş string olarak gönder
 
-                // Tüm etiketler (Ayrı ayrı)
+                // Tüm etiketler (Ayrı ayrı) - ÖNEMLİ: isPopular BOOLEAN olarak gitsin
                 isActive: !!document.getElementById('productIsActive').checked,
-                isPopular: !!isPopular,
+                isPopular: isPopular, // document.getElementById('tagPopular').checked
                 isBestSeller: !!isBestSeller,
                 isNew: !!isNew,
                 isFeatured: !!isFeatured,
@@ -2217,78 +2250,7 @@
             }
         }
 
-        // --- CUSTOM BRAND DROPDOWN LOGIC ---
-        function toggleBrandDropdown() {
-            const list = document.getElementById('brandDropdownList');
-            const isOpen = list.classList.contains('active');
-
-            // Close all first
-            document.querySelectorAll('.brand-dropdown-list').forEach(l => l.classList.remove('active'));
-
-            if (!isOpen) {
-                list.classList.add('active');
-            }
-        }
-
-        // filterBrands fonksiyonu artık kullanılmıyor (arama kutusu kaldırıldı)
-
-        function selectBrand(name) {
-            document.getElementById('productBrand').value = name;
-            document.getElementById('selectedBrandDisplay').textContent = name;
-            document.getElementById('brandDropdownList').classList.remove('active');
-
-            // Trigger change event if needed
-            const hiddenInput = document.getElementById('productBrand');
-            hiddenInput.dispatchEvent(new Event('change'));
-        }
-
-        async function addNewBrandDirectly() {
-            const name = document.getElementById('brandSearchInput').value.trim();
-            if (!name) return;
-
-            try {
-                const response = await ADMIN_API.createBrand({ name: name });
-                if (response.success || response.id || response._id) {
-                    await loadBrandsDropdown();
-                    selectBrand(name);
-                    document.getElementById('brandSearchInput').value = '';
-                    document.getElementById('brandAddRow').style.display = 'none';
-                }
-            } catch (err) {
-                console.error('Add brand error:', err);
-                alert('Marka eklenemedi.');
-            }
-        }
-
-        async function deleteBrandFromDropdown(event, id, name) {
-            event.stopPropagation();
-            if (!confirm(`"${name}" markasını silmek istediğinizden emin misiniz?`)) return;
-
-            try {
-                const response = await ADMIN_API.deleteBrand(id);
-                if (response.success) {
-                    allBrands = allBrands.filter(b => (b._id || b.id) !== id);
-                    renderBrandItems(document.getElementById('brandSearchInput').value);
-
-                    // Reset if deleted brand was selected
-                    if (document.getElementById('productBrand').value === name) {
-                        document.getElementById('productBrand').value = '';
-                        document.getElementById('selectedBrandDisplay').textContent = 'Marka Seçin';
-                    }
-                }
-            } catch (err) {
-                console.error('Delete brand error:', err);
-                alert('Marka silinemedi.');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.custom-brand-container')) {
-                const dList = document.getElementById('brandDropdownList');
-                if (dList) dList.classList.remove('active');
-            }
-        });
+        // --- ESKI CUSTOM DROPDOWN KODLARI KALDIRILDI (Artık standart select kullanılıyor) ---
 
         // Kategori checkbox değiştiğinde alt kategorileri güncelle
         function handleCategoryChange() {

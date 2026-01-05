@@ -51,7 +51,7 @@ const API = {
                 products = products.filter(p => p.isNew === true || p.tags?.includes('new') || p.tags?.includes('Yeni'));
             }
             if (params.isPopular === 'true' || params.isPopular === true) {
-                products = products.filter(p => p.isPopular === true || p.tags?.includes('popular') || p.tags?.includes('Popüler'));
+                products = products.filter(p => p.isPopular === true || p.isPopular === 'true');
             }
             if (params.isFeatured === 'true' || params.isFeatured === true) {
                 products = products.filter(p => p.isFeatured === true || p.tags?.includes('featured') || p.tags?.includes('Öne Çıkan'));

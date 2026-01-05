@@ -58,6 +58,10 @@ async function fetchProductsFromAPI() {
                     stock: product.stock || 0,
                     specs: product.specs || product.features || [],
                     tags: product.tags || [],
+                    isPopular: product.isPopular || false,
+                    isNew: product.isNew || false,
+                    isFeatured: product.isFeatured || false,
+                    isBestSeller: product.isBestSeller || false,
                     brandShowcase: product.brandShowcase || false
                 }));
 
@@ -116,6 +120,10 @@ async function updateFromAPIBackground() {
                 stock: product.stock || 0,
                 specs: product.specs || product.features || [],
                 tags: product.tags || [],
+                isPopular: product.isPopular || false,
+                isNew: product.isNew || false,
+                isFeatured: product.isFeatured || false,
+                isBestSeller: product.isBestSeller || false,
                 brandShowcase: product.brandShowcase || false
             }));
 
