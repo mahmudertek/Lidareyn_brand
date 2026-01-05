@@ -12,7 +12,7 @@
 
     <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
-        
+
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
@@ -28,7 +28,7 @@
 
             if (hasBypass) {
                 localStorage.setItem('admin_session', 'active_' + Date.now());
-                const cleanUrl = window.location.pathname; 
+                const cleanUrl = window.location.pathname;
                 window.history.replaceState(null, '', cleanUrl); // URL'i temizle
                 document.getElementById('bakim-blocking-style').remove();
                 return;
@@ -49,8 +49,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marka Yönetimi - Galata Çarşı Admin</title>
-    
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
     <style>
         /* Brand Management Styles */
@@ -418,7 +418,8 @@
             height: 18px;
             accent-color: #6366f1;
         }
-    </style><meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+    </style>
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
 </head>
 
 <body>
@@ -453,7 +454,7 @@
 
                 <!-- Header -->
                 <div class="brands-header">
-                    <h2 style="margin: 0; color: #1f2937;">Popüler Markalar</h2>
+                    <h2 style="margin: 0; color: #1f2937;">Tüm Markalar</h2>
                     <button class="add-brand-btn" onclick="openAddBrandModal()">
                         <i class="fa-solid fa-plus"></i>
                         Yeni Marka Ekle
@@ -575,7 +576,7 @@
             grid.innerHTML = '<p style="text-align: center; padding: 40px; color: #6b7280;"><i class="fa-solid fa-spinner fa-spin"></i> Markalar yükleniyor...</p>';
 
             try {
-                const response = await ADMIN_API.getBrands();
+                const response = await ADMIN_API.getBrands({ limit: 1000 });
                 if (response.success) {
                     brands = response.data;
                     renderBrands();

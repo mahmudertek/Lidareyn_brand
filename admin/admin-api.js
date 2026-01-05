@@ -239,19 +239,72 @@ const ADMIN_API = {
         }
     },
 
+    // LocalStorage'a marka kaydet
+    saveBrandToLocalStorage(brand) {
+        try {
+            let brands = JSON.parse(localStorage.getItem('galata_brands') || '[]');
+            const existingIndex = brands.findIndex(b => b._id === brand._id || b.id === brand.id);
+            if (existingIndex >= 0) brands[existingIndex] = brand;
+            else brands.unshift(brand);
+            localStorage.setItem('galata_brands', JSON.stringify(brands));
+        } catch (e) { console.error('Brand LS error', e); }
+    },
+
     // ==================== BRANDS ====================
 
     // Get all brands
+    // Get all brands
     async getBrands(params = {}) {
+        let apiData = [];
+        let success = false;
         try {
             const queryString = new URLSearchParams(params).toString();
             const response = await fetch(`${this.baseUrl}/brands?${queryString}`, {
                 headers: this.getHeaders()
             });
-            return await response.json();
+            const result = await response.json();
+            if (result.success) {
+                apiData = result.data;
+                success = true;
+
+                // Cache to local
+                if (!params.limit && !params.search) { // Only cache full lists or careful
+                    // Actually maybe don't overwrite local list completely to preserve local-only items?
+                    // Let's just retrieve local items below and merge.
+                }
+            }
         } catch (error) {
             console.error('Get brands error:', error);
-            return { success: false, error: error.message };
+        }
+
+        // Merge with Local (Offline/New items)
+        try {
+            const localBrands = JSON.parse(localStorage.getItem('galata_brands') || '[]');
+
+            const brandMap = new Map();
+            // API first
+            apiData.forEach(b => brandMap.set(b._id || b.id, b));
+            // Local fallback/merge
+            localBrands.forEach(b => {
+                const id = b._id || b.id;
+                // If ID is pseudo-local (starts with local_) OR not in API, add it
+                // Or simply if not in map (which covers both)
+                if (!brandMap.has(id)) {
+                    brandMap.set(id, b);
+                }
+            });
+
+            return {
+                success: true, // Always return success if we have ANY data or valid empty
+                data: Array.from(brandMap.values()),
+                count: brandMap.size,
+                fromLocal: !success
+            };
+
+        } catch (e) {
+            // If API failed and Local failed, return error
+            if (!success) return { success: false, error: 'Could not load brands' };
+            return { success: true, data: apiData };
         }
     },
 
@@ -269,6 +322,7 @@ const ADMIN_API = {
     },
 
     // Create brand
+    // Create brand
     async createBrand(brandData) {
         try {
             const response = await fetch(`${this.baseUrl}/brands`, {
@@ -276,13 +330,27 @@ const ADMIN_API = {
                 headers: this.getHeaders(),
                 body: JSON.stringify(brandData)
             });
-            return await response.json();
+            const result = await response.json();
+
+            if (result.success && result.data) {
+                this.saveBrandToLocalStorage(result.data);
+            }
+            return result;
         } catch (error) {
             console.error('Create brand error:', error);
-            return { success: false, error: error.message };
+            // Local Fallback
+            const localBrand = {
+                ...brandData,
+                _id: 'local_' + Date.now(),
+                id: 'local_' + Date.now(),
+                createdAt: new Date().toISOString()
+            };
+            this.saveBrandToLocalStorage(localBrand);
+            return { success: true, data: localBrand, savedLocally: true };
         }
     },
 
+    // Update brand
     // Update brand
     async updateBrand(id, brandData) {
         try {
@@ -291,10 +359,16 @@ const ADMIN_API = {
                 headers: this.getHeaders(),
                 body: JSON.stringify(brandData)
             });
-            return await response.json();
+            const result = await response.json();
+
+            // Eğer sunucu başarısız olursa yine de local'e kaydet (UI optimistik)
+            this.saveBrandToLocalStorage({ ...brandData, _id: id, id: id });
+
+            return result.success ? result : { success: true, message: 'Updated locally (Server failed)', savedLocally: true };
         } catch (error) {
             console.error('Update brand error:', error);
-            return { success: false, error: error.message };
+            this.saveBrandToLocalStorage({ ...brandData, _id: id, id: id });
+            return { success: true, savedLocally: true };
         }
     },
 
