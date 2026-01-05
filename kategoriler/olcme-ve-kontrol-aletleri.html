@@ -13,7 +13,7 @@
 
     <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
-        
+
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
@@ -29,7 +29,7 @@
 
             if (hasBypass) {
                 localStorage.setItem('admin_session', 'active_' + Date.now());
-                const cleanUrl = window.location.pathname; 
+                const cleanUrl = window.location.pathname;
                 window.history.replaceState(null, '', cleanUrl); // URL'i temizle
                 document.getElementById('bakim-blocking-style').remove();
                 return;
@@ -60,12 +60,13 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hırdavat ve El Aletleri - Galata Çarşı</title>
-    
-    
-    
-    
-<meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png"><meta name="description" content="Oto bakım, tamir, onarım ürünleri ve servis ekipmanları en uygun fiyatlarla.">
+    <title>Ölçme ve Kontrol Aletleri - Galata Çarşı</title>
+
+
+
+
+    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+    <meta name="description" content="Oto bakım, tamir, onarım Ürünleri ve servis ekipmanları en uygun fiyatlarla.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -74,12 +75,11 @@
     <link rel="stylesheet" href="../style.css?v=1766859876">
     <link rel="stylesheet" href="../mobile.css?v=1766859876">
     <link rel="stylesheet" href="../mega_menu_styles.css?v=1766859876">
-
     <link rel="stylesheet" href="../breadcrumb.css?v=1766859876">
-
     <link rel="stylesheet" href="../category-hero.css">
     <link rel="stylesheet" href="../category-accordion.css?v=1766859876">
     <link rel="stylesheet" href="../category-brands-dropdown.css?v=1766859876">
+    <link rel="stylesheet" href="../hybrid_category_styles.css?v=2">
 </head>
 
 <body>
@@ -87,7 +87,8 @@
     <div class="development-notice">
         <div class="notice-content">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
+            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya
+                <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
         </div>
     </div>
 
@@ -107,7 +108,7 @@
                             <i class="fa-solid fa-bars" aria-hidden="true"></i>
                             Tüm Kategoriler
                         </a>
-                                                                        <div class="mega-menu">
+                        <div class="mega-menu">
                             <ul class="mega-menu-list">
                                 <li>
                                     <a href="akulu-aletler.html">
@@ -123,7 +124,8 @@
                                             <ul>
                                                 <li><a href="../arama.html?q=Akülü Matkap">Akülü Matkap</a></li>
                                                 <li><a href="../arama.html?q=Akülü Vidalama">Akülü Vidalama</a></li>
-                                                <li><a href="../arama.html?q=Akülü Darbeli Matkap">Akülü Darbeli Matkap</a>
+                                                <li><a href="../arama.html?q=Akülü Darbeli Matkap">Akülü Darbeli
+                                                        Matkap</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -140,8 +142,10 @@
                                             <h4>Batarya &amp; Şarj Cihazları</h4>
                                             <ul>
                                                 <li><a href="../arama.html?q=Lityum Batarya">Lityum Batarya</a></li>
-                                                <li><a href="../arama.html?q=Hızlı Şarj Cihazı">Hızlı Şarj Cihazı</a></li>
-                                                <li><a href="../arama.html?q=Çoklu Şarj İstasyonu">Çoklu Şarj İstasyonu</a>
+                                                <li><a href="../arama.html?q=Hızlı Şarj Cihazı">Hızlı Şarj Cihazı</a>
+                                                </li>
+                                                <li><a href="../arama.html?q=Çoklu Şarj İstasyonu">Çoklu Şarj
+                                                        İstasyonu</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -161,7 +165,8 @@
                                             <ul>
                                                 <li><a href="../arama.html?q=Taşınabilir Jeneratör">Taşınabilir
                                                         Jeneratör</a></li>
-                                                <li><a href="../arama.html?q=Ev Tipi Jeneratör">Ev Tipi Jeneratör</a></li>
+                                                <li><a href="../arama.html?q=Ev Tipi Jeneratör">Ev Tipi Jeneratör</a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -176,7 +181,8 @@
                                             <h4>Endüstriyel Jeneratörler</h4>
                                             <ul>
                                                 <li><a href="../arama.html?q=Dizel Jeneratör">Dizel Jeneratör</a></li>
-                                                <li><a href="../arama.html?q=Yüksek Güç Jeneratör">Yüksek Güç Jeneratör</a>
+                                                <li><a href="../arama.html?q=Yüksek Güç Jeneratör">Yüksek Güç
+                                                        Jeneratör</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -194,16 +200,19 @@
                                         <div class="sub-menu-column">
                                             <h4>Elektrikli Hobi Aletleri</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Mini Taşlama Dremel">Mini Taşlama (Dremel)</a>
+                                                <li><a href="../arama.html?q=Mini Taşlama Dremel">Mini Taşlama
+                                                        (Dremel)</a>
                                                 </li>
-                                                <li><a href="../arama.html?q=Elektrikli Gravür">Elektrikli Gravür</a></li>
+                                                <li><a href="../arama.html?q=Elektrikli Gravür">Elektrikli Gravür</a>
+                                                </li>
                                                 <li><a href="../arama.html?q=Mini Zımpara">Mini Zımpara</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Akülü Hobi Aletleri</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Akülü Mini Matkap">Akülü Mini Matkap</a></li>
+                                                <li><a href="../arama.html?q=Akülü Mini Matkap">Akülü Mini Matkap</a>
+                                                </li>
                                                 <li><a href="../arama.html?q=Şarjlı Tornavida">Şarjlı Tornavida</a></li>
                                                 <li><a href="../arama.html?q=Mini Testere">Mini Testere</a></li>
                                             </ul>
@@ -248,11 +257,14 @@
                                         <div class="sub-menu-column">
                                             <h4>Matkap &amp; Vidalama Uçları</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Metal Matkap Uçları">Metal Matkap Uçları</a>
+                                                <li><a href="../arama.html?q=Metal Matkap Uçları">Metal Matkap
+                                                        Uçları</a>
                                                 </li>
-                                                <li><a href="../arama.html?q=Beton Matkap Uçları">Beton Matkap Uçları</a>
+                                                <li><a href="../arama.html?q=Beton Matkap Uçları">Beton Matkap
+                                                        Uçları</a>
                                                 </li>
-                                                <li><a href="../arama.html?q=Vidalama Uçları Seti">Vidalama Uçları Seti</a>
+                                                <li><a href="../arama.html?q=Vidalama Uçları Seti">Vidalama Uçları
+                                                        Seti</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -344,7 +356,8 @@
                                         <div class="sub-menu-column">
                                             <h4>Terazi & Açı</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Su Terazileri (Dijital, Klasik)">Su Terazileri
+                                                <li><a href="../arama.html?q=Su Terazileri (Dijital, Klasik)">Su
+                                                        Terazileri
                                                         (Dijital, Klasik)</a></li>
                                                 <li><a href="../arama.html?q=Açı Ölçerler">Açı Ölçerler</a></li>
                                                 <li><a href="../arama.html?q=Dijital Tartılar">Dijital Tartılar</a></li>
@@ -407,11 +420,14 @@
                                         <div class="sub-menu-column">
                                             <h4>Yapıştırıcılar</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Silikon, Mastik ve Akrilikler">Silikon, Mastik
+                                                <li><a href="../arama.html?q=Silikon, Mastik ve Akrilikler">Silikon,
+                                                        Mastik
                                                         ve Akrilikler</a></li>
-                                                <li><a href="../arama.html?q=Yapıştırıcı Çeşitleri (Epoksi, Japon, Ahşap)">Yapıştırıcı
+                                                <li><a
+                                                        href="../arama.html?q=Yapıştırıcı Çeşitleri (Epoksi, Japon, Ahşap)">Yapıştırıcı
                                                         Çeşitleri (Epoksi, Japon, Ahşap)</a></li>
-                                                <li><a href="../arama.html?q=Poliüretan Köpükler">Poliüretan Köpükler</a>
+                                                <li><a href="../arama.html?q=Poliüretan Köpükler">Poliüretan
+                                                        Köpükler</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -449,7 +465,8 @@
                                             <ul>
                                                 <li><a href="../arama.html?q=Elektrotlar (Rutil, Bazik)">Elektrotlar
                                                         (Rutil, Bazik)</a></li>
-                                                <li><a href="../arama.html?q=Kaynak Telleri (Gazaltı, Tig)">Kaynak Telleri
+                                                <li><a href="../arama.html?q=Kaynak Telleri (Gazaltı, Tig)">Kaynak
+                                                        Telleri
                                                         (Gazaltı, Tig)</a></li>
                                             </ul>
                                         </div>
@@ -504,10 +521,12 @@
                                         <div class="sub-menu-column">
                                             <h4>Vurma &amp; Sabitleme</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Çekiçler (Demirci, Lastik)">Çekiçler (Demirci,
+                                                <li><a href="../arama.html?q=Çekiçler (Demirci, Lastik)">Çekiçler
+                                                        (Demirci,
                                                         Lastik)</a></li>
                                                 <li><a href="../arama.html?q=Balta">Balta</a></li>
-                                                <li><a href="../arama.html?q=Keski ve Zımbalar">Keski ve Zımbalar</a></li>
+                                                <li><a href="../arama.html?q=Keski ve Zımbalar">Keski ve Zımbalar</a>
+                                                </li>
                                                 <li><a href="../arama.html?q=Mengene ve Kelepçeler">Mengene ve
                                                         Kelepçeler</a></li>
                                             </ul>
@@ -574,18 +593,22 @@
                                         <div class="sub-menu-column">
                                             <h4>Kesme &amp; Budama</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Çit Kesme Makinesi">Çit Kesme Makinesi</a></li>
+                                                <li><a href="../arama.html?q=Çit Kesme Makinesi">Çit Kesme Makinesi</a>
+                                                </li>
                                                 <li><a href="../arama.html?q=Budama Makası">Budama Makası</a></li>
-                                                <li><a href="../arama.html?q=Ağaç Kesme Testeresi">Ağaç Kesme Testeresi</a></li>
+                                                <li><a href="../arama.html?q=Ağaç Kesme Testeresi">Ağaç Kesme
+                                                        Testeresi</a></li>
                                                 <li><a href="../arama.html?q=Dal Budama Aleti">Dal Budama Aleti</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Çim Bakımı</h4>
                                             <ul>
-                                                <li><a href="../arama.html?q=Çim Biçme Makinesi">Çim Biçme Makinesi</a></li>
+                                                <li><a href="../arama.html?q=Çim Biçme Makinesi">Çim Biçme Makinesi</a>
+                                                </li>
                                                 <li><a href="../arama.html?q=Tırpan">Tırpan</a></li>
-                                                <li><a href="../arama.html?q=Çim Havalandırıcı">Çim Havalandırıcı</a></li>
+                                                <li><a href="../arama.html?q=Çim Havalandırıcı">Çim Havalandırıcı</a>
+                                                </li>
                                                 <li><a href="../arama.html?q=Çim Süpürgesi">Çim Süpürgesi</a></li>
                                             </ul>
                                         </div>
@@ -594,8 +617,10 @@
                                             <ul>
                                                 <li><a href="../arama.html?q=Bahçe Hortumu">Bahçe Hortumu</a></li>
                                                 <li><a href="../arama.html?q=Sulama Tabancası">Sulama Tabancası</a></li>
-                                                <li><a href="../arama.html?q=Damla Sulama Sistemi">Damla Sulama Sistemi</a></li>
-                                                <li><a href="../arama.html?q=Fıskiye Yağmurlama">Fıskiye ve Yağmurlama</a></li>
+                                                <li><a href="../arama.html?q=Damla Sulama Sistemi">Damla Sulama
+                                                        Sistemi</a></li>
+                                                <li><a href="../arama.html?q=Fıskiye Yağmurlama">Fıskiye ve
+                                                        Yağmurlama</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -612,144 +637,338 @@
                             </ul>
                         </div>
 
+                    </li>
+                    <li><a href="../yeni-gelenler.html" class="nav-link">Yeni Gelenler</a></li>
+                    <li><a href="../populer.html" class="nav-link">Popüler Ürünler</a></li>
+                    <li><a href="../juvex.html" class="nav-link">Juwex</a></li>
+                </ul>
+            </nav>
 
+            <!-- Logo (Centered) -->
+            <div class="logo">
+                <a href="../index.html">Galata Çarşı</a>
+            </div>
 
-                        <!-- Sözleşmeler Column (Restored) -->
-                        <div class="footer-column">
-                            <h3 class="footer-title">Sözleşmeler</h3>
-                            <ul class="footer-links">
-                                <li><a href="../kvkk.html">KVKK Aydınlatma Metni</a></li>
-                                <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
-                                <li><a href="../gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
-                                <li><a href="../iade-iptal.html">İade ve İptal Koşulları</a></li>
-                            </ul>
-                        </div>
+            <!-- Header Icons (Right Side) -->
+            <div class="header-icons">
+                <button class="icon-btn mobile-search-btn" aria-label="Arama Yap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+                <div class="search-container" role="search">
+                    <input type="text" id="header-search-input" class="search-input" placeholder="Ürün ara..."
+                        aria-label="Ürün arama" autocomplete="off">
+                    <button class="icon-btn search-btn" aria-label="Arama yap" type="button"><i
+                            class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>
+                </div>
+                <div class="user-menu-container">
+                    <button class="icon-btn user-btn" aria-label="Hesabım">
+                        <i class="fa-regular fa-user"></i>
+                        <span class="icon-label" id="user-label">Giriş Yap</span>
+                    </button>
+                    <!-- User Dropdown -->
+                    <div class="user-dropdown">
+                        <a href="../giris-yap.html" class="dropdown-item"><i class="fa-solid fa-right-to-bracket"></i>
+                            Giriş Yap</a>
+                        <a href="../giris-yap.html?tab=register" class="dropdown-item"><i
+                                class="fa-solid fa-user-plus"></i> Üye Ol</a>
+                    </div>
+                </div>
+                <button class="icon-btn favorites-btn" aria-label="Favorilerim"
+                    onclick="window.location.href='favoriler.html'">
+                    <i class="fa-regular fa-heart"></i>
+                    <span class="icon-label">Favorilerim</span>
+                </button>
+                <button class="icon-btn cart-btn" aria-label="Sepetim" onclick="window.location.href='sepet.html'">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count"></span>
+                    <span class="icon-label">Sepetim</span>
+                </button>
+            </div>
 
-                        <!-- Yardım Column -->
-                        <div class="footer-column">
-                            <h3 class="footer-title">Yardım</h3>
-                            <ul class="footer-links">
-                                <li><a href="sipÇarşıis-takibi.html">Sipariş Takibi</a></li>
-                                <li><a href="yeni-Üyelik.html">Yeni Üyelik</a></li>
-                                <li><a href="uye-giris.html">Üye Giriş</a></li>
-                                <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
-                                <li><a href="../sss.html">Sıkça Sorulan Sorular</a></li>
-                                <li><a href="../sepet.html">Sepetiniz</a></li>
-                            </ul>
-                        </div>
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" aria-label="Menü">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+    </header>
 
-                        <!-- Müşteri Hizmetleri Column -->
-                        <div class="footer-column">
-                            <h3 class="footer-title">Müşteri Hizmetleri</h3>
-                            <ul class="footer-links">
-                                <li>
-                                    <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i> mail@galatacarsi.com</a>
-                                </li>
-                                <li>
-                                    <a href="https://wa.me/905550501374" target="_blank"><i class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
-                                </li>
-                                <li>
-                                    <a href="tel:+905550501374"><i class="fa-solid fa-phone"></i> 0555 050 13 74</a>
-                                </li>
-                                <li class="working-hours">
-                                    <i class="fa-solid fa-clock"></i>
-                                    <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
-                                </li>
-                            </ul>
-                        </div>
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="../index.html">Ana Sayfa</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Ölçme ve Kontrol Aletleri</span>
+        </div>
+    </div>
 
-                        <!-- Güvenli Ödeme Column -->
-                        <div class="footer-column">
-                            <h3 class="footer-title">Güvenli Ödeme</h3>
-                            <div class="payment-logos">
-                                <div class="payment-logo">
-                                    <i class="fa-brands fa-cc-visa"></i>
-                                    <span>Visa</span>
-                                </div>
-                                <div class="payment-logo">
-                                    <i class="fa-brands fa-cc-mastercard"></i>
-                                    <span>Mastercard</span>
-                                </div>
-                                <div class="payment-logo">
-                                    <i class="fa-solid fa-credit-card"></i>
-                                    <span>Troy</span>
-                                </div>
-                                <div class="payment-logo">
-                                    <i class="fa-brands fa-cc-amex"></i>
-                                    <span>Amex</span>
-                                </div>
-                            </div>
-                            <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
-                        </div>
+    <!-- Mobile: Category Accordion Navigation -->
+    <div class="container">
+        <div class="category-accordion">
+            <button class="accordion-main-trigger">
+                Alt Kategoriler
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="accordion-content">
+                <!-- Lazerli Ölçüm -->
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        Lazerli Ölçüm
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Lazerli Ölçüm Cihazları (Mesafe Ölçer)</a>
+                        <a href="#" class="accordion-child-item">Lazer Hizalamalar (Çizgi, Nokta)</a>
                     </div>
                 </div>
 
-                <!-- Footer Bottom Section -->
-
-            </div>
-        </footer>
-
-        <div class="sidebar-overlay"></div>
-
-        <!-- Favorites Sidebar -->
-        <div class="favorites-sidebar">
-            <div class="sidebar-header">
-                <h2>Favorilerim</h2>
-                <button class="close-sidebar" aria-label="Kapat">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div id="favorites-content" class="sidebar-content"></div>
-        </div>
-
-        <!-- Cart Sidebar -->
-        <div class="cart-sidebar">
-            <div class="sidebar-header">
-                <h2>Sepetim</h2>
-                <button class="close-sidebar" aria-label="Kapat">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div id="cart-content" class="sidebar-content"></div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Toplam:</span>
-                    <span class="total-amount">0.00 TL</span>
-                </div>
-                <a href="../sepet.html" class="btn btn-primary checkout-btn">Sepete Git</a>
-            </div>
-        </div>
-
-        <script src="../script.js"></script>
-        <script src="../categories-data.js"></script>
-        <script src="../products-data.js"></script>
-        <script src="../live-search.js"></script>
-        <script src="cookie-consent.js"></script>
-        <script src="../mobile-menu.js"></script>
-        <script src="../category-accordion.js"></script>
-        <script src="../category-brands-dropdown.js"></script>
-
-        <!-- Mobile SeÇarşıch Overlay -->
-        <div id="mobile-search-overlay" class="mobile-search-overlay">
-            <div class="mobile-search-content">
-                <form action="../arama.html" method="GET" class="mobile-search-form">
-                    <input type="text" name="q" class="mobile-search-input"
-                        placeholder="Ürün, kategori veya marka ara..." autocomplete="off">
-                    <button type="submit" class="mobile-search-submit">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                <!-- Mekanik Ölçüm -->
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        Mekanik Ölçüm
+                        <i class="fa-solid fa-chevron-down"></i>
                     </button>
-                </form>
-                <button class="close-search-btn" aria-label="Kapat">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-                <div class="mobile-search-results"></div>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Şerit Metreler</a>
+                        <a href="#" class="accordion-child-item">Çelik Metreler</a>
+                        <a href="#" class="accordion-child-item">Kumpaslar (Dijital, Analog)</a>
+                        <a href="#" class="accordion-child-item">Mikrometreler</a>
+                    </div>
+                </div>
+
+                <!-- Terazi & Açı -->
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        Terazi & Açı
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Su Terazileri (Dijital, Klasik)</a>
+                        <a href="#" class="accordion-child-item">Açı Ölçerler</a>
+                        <a href="#" class="accordion-child-item">Dijital Tartılar</a>
+                    </div>
+                </div>
+
+                <!-- Görüntüleme -->
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        Görüntüleme
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Endoskoplar</a>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Brands Dropdown (Mobile Only) -->
+        <div class="brands-dropdown-wrapper">
+            <button class="brands-dropdown-trigger">
+                Bu kategorideki tüm markalar
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="brands-dropdown-content">
+                <div class="brands-search-container">
+                    <input type="text" class="brands-search-input" placeholder="Marka ara...">
+                </div>
+                <div class="brands-grid">
+                    <!-- Brands will be rendered by JS -->
+                </div>
+                <div class="brands-pagination">
+                    <button class="pagination-arrow pagination-prev" aria-label="nceki">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="pagination-dots">
+                        <!-- Dots will be rendered by JS -->
+                    </div>
+                    <button class="pagination-arrow pagination-next" aria-label="Sonraki">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter/Sort Bar - Part of unified container -->
+            <div class="category-filter-bar">
+                <span class="product-count"> 0 Ürün </span>
+                <div class="sort-options">
+                    <select class="sort-select">
+                        <option>Önerilen Sıralama</option>
+                        <option>En Düşük Fiyat</option>
+                        <option>En Yüksek Fiyat</option>
+                        <option>En Yeniler</option>
+                        <option>En Çok Satanlar</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hybrid: Product Listing -->
+    <section class="category-products-section" style="padding: 20px 0;">
+        <div class="container">
+            <div class="products-grid">
+                <!-- Ürünler Admin Panelinden Yüklenecektir -->
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Sidebar Overlay -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <!-- Main Footer Grid (All Columns in Gray Box) -->
+            <div class="footer-grid-wrapper">
+                <div class="footer-grid">
+                    <!-- Kurumsal Column -->
+                    <!-- Kurumsal Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Kurumsal</h3>
+                        <ul class="footer-links">
+                            <li><a href="hakkimizda.html">Hakkımızda</a></li>
+                            <li><a href="../iletisim.html">İletişim</a></li>
+
+                            <li><a href="magazalar.html">Mağazalarımız</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Sözleşmeler Column (Restored) -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Sözleşmeler</h3>
+                        <ul class="footer-links">
+                            <li><a href="../kvkk.html">KVKK Aydınlatma Metni</a></li>
+                            <li><a href="mesafeli-satis-sozlesmesi.html">Mesafeli Satış Sözleşmesi</a></li>
+                            <li><a href="../gizlilik-guvenlik.html">Gizlilik ve Güvenlik</a></li>
+                            <li><a href="../iade-iptal.html">İade ve İptal Koşulları</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Yardm Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Yardm</h3>
+                        <ul class="footer-links">
+                            <li><a href="siparis-takibi.html">Sipariş Takibi</a></li>
+                            <li><a href="yeni-Üyelik.html">Yeni Üyelik</a></li>
+                            <li><a href="uye-giris.html">Üye Giriş</a></li>
+                            <li><a href="sifremi-unuttum.html">Şifremi Unuttum</a></li>
+                            <li><a href="../sss.html">Sıkça Sorulan Sorular</a></li>
+                            <li><a href="../sepet.html">Sepetiniz</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Müşteri Hizmetleri Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Müşteri Hizmetleri</h3>
+                        <ul class="footer-links">
+                            <li>
+                                <a href="mailto:mail@galatacarsi.com"><i class="fa-solid fa-envelope"></i>
+                                    mail@galatacarsi.com</a>
+                            </li>
+                            <li>
+                                <a href="https://wa.me/905550501374" target="_blank"><i
+                                        class="fa-brands fa-whatsapp"></i> 0555 050 13 74</a>
+                            </li>
+                            <li>
+                                <a href="tel:+905550501374"><i class="fa-solid fa-phone"></i> 0555 050 13 74</a>
+                            </li>
+                            <li class="working-hours">
+                                <i class="fa-solid fa-clock"></i>
+                                <span>Çalışma Saatleri: Hafta içi 09:00 - 18:00</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Güvenli Ödeme Column -->
+                    <div class="footer-column">
+                        <h3 class="footer-title">Güvenli Ödeme</h3>
+                        <div class="payment-logos">
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-visa"></i>
+                                <span>Visa</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-mastercard"></i>
+                                <span>Mastercard</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-solid fa-credit-card"></i>
+                                <span>Troy</span>
+                            </div>
+                            <div class="payment-logo">
+                                <i class="fa-brands fa-cc-amex"></i>
+                                <span>Amex</span>
+                            </div>
+                        </div>
+                        <p class="payment-note">Tüm ödemeleriniz SSL sertifikası ile güvence altındadır.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Bottom Section -->
+
+        </div>
+    </footer>
+
+    <div class="sidebar-overlay"></div>
+
+    <!-- Favorites Sidebar -->
+    <div class="favorites-sidebar">
+        <div class="sidebar-header">
+            <h2>Favorilerim</h2>
+            <button class="close-sidebar" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="favorites-content" class="sidebar-content"></div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar">
+        <div class="sidebar-header">
+            <h2>Sepetim</h2>
+            <button class="close-sidebar" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div id="cart-content" class="sidebar-content"></div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Toplam:</span>
+                <span class="total-amount">0.00 TL</span>
+            </div>
+            <a href="../sepet.html" class="btn btn-primary checkout-btn">Sepete Git</a>
+        </div>
+    </div>
+
+    <script src="../script.js"></script>
+    <script src="../categories-data.js"></script>
+    <script src="../products-data.js"></script>
+    <script src="../live-search.js"></script>
+    <script src="cookie-consent.js"></script>
+    <script src="../mobile-menu.js"></script>
+    <script src="../category-accordion.js"></script>
+    <script src="../category-brands-dropdown.js"></script>
+    <!-- Dinamik ürün yükleyici -->
+    <script src="../category-products.js?v=1767215000"></script>
+
+    <!-- Mobile Search Overlay -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <form action="../arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="rn, kategori veya marka ara..."
+                    autocomplete="off">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <button class="close-search-btn" aria-label="Kapat">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mobile-search-results"></div>
+        </div>
+    </div>
 
 
 </body>
 
 
 </html>
-
-

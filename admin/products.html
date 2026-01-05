@@ -656,7 +656,9 @@
 
                 <!-- Header -->
                 <div class="products-header">
-                    <h2 style="margin: 0; color: #1f2937;">Tüm Ürünler</h2>
+                    <h2 style="margin: 0; color: #1f2937;">Tüm Ürünler <span id="totalProductCount"
+                            style="font-size: 14px; background: #e5e7eb; color: #4b5563; padding: 4px 10px; border-radius: 20px; vertical-align: middle; margin-left: 8px;">0</span>
+                    </h2>
                     <div style="display: flex; gap: 10px;">
                         <button class="add-product-btn" style="background: #059669; opacity: 0.9;"
                             onclick="openPriceIncreaseModal()">
@@ -1649,6 +1651,8 @@
         // Render products table
         function renderProducts() {
             const tbody = document.getElementById('productsTableBody');
+            const countSpan = document.getElementById('totalProductCount');
+            if (countSpan) countSpan.textContent = products.length;
 
             if (products.length === 0) {
                 tbody.innerHTML = `

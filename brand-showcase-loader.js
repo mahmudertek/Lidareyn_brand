@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     // Ürün Seçilmedi Placeholder'ı
                     card.innerHTML = `
                         <button class="madeniyat-favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                        <div style="height:180px; display:flex; align-items:center; justify-content:center; background:#f9f9f9; color:#ddd; font-size:40px;">
+                        <div class="madeniyat-placeholder-box">
                             <i class="fa-solid fa-toolbox"></i>
                         </div>
                         <div class="madeniyat-product-info">

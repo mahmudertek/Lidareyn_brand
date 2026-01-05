@@ -146,12 +146,43 @@
     // Ürün kartı HTML'i oluştur
     function createProductCard(product) {
         const id = product._id || product.id;
-        const img = product.mainImage || product.image || 'https://placehold.co/300x300/f5f5f5/999?text=Resim+Yok';
+
+        // 🖼️ Gelişmiş Görsel Çekme Mantığı (yeni-gelenler.html ile aynı)
+        let rawImage = product.mainImage || product.image || (product.images && product.images[0]) || '';
+        let finalImgPath = rawImage;
+
+        if (!finalImgPath || finalImgPath.length < 5) {
+            finalImgPath = 'https://placehold.co/400x400/f5f5f5/999?text=Resim+Yok';
+        } else if (finalImgPath.startsWith('data:') || finalImgPath.startsWith('http')) {
+            // Base64 veya Harici Link - Olduğu gibi bırak
+        } else {
+            // Yerel yol - Klasör derinliğini ayarla
+            let cleanPath = finalImgPath.replace(/\\/g, '/').replace(/^\/+/, '');
+            const isSubDir = window.location.pathname.includes('/kategoriler/');
+
+            if (isSubDir) {
+                // Kategori sayfası alt klasörde, bir üst dizine çıkmalı
+                finalImgPath = cleanPath.startsWith('gorseller/') ? '../' + cleanPath : '../gorseller/' + cleanPath;
+            } else {
+                // Ana dizin (populer, yeni-gelenler vb)
+                finalImgPath = cleanPath.startsWith('gorseller/') ? cleanPath : 'gorseller/' + cleanPath;
+            }
+        }
+
         const name = product.name || 'Ürün';
         const brand = product.brand || '';
         const price = parseFloat(product.price) || 0;
         const salePriceVal = parseFloat(product.salePrice);
         const hasSale = !isNaN(salePriceVal) && salePriceVal > 0 && salePriceVal < price;
+
+        // Debug Log (Sadece 1 kez, sadece sorunlu yollar için)
+        if (typeof window.debugLogged === 'undefined') {
+            const testImg = document.createElement('img');
+            testImg.onload = () => console.log('✅ Resim Testi Başarılı:', finalImgPath);
+            testImg.onerror = () => console.error('❌ Resim Testi Hatalı (Yol Yanlış olabilir):', finalImgPath);
+            testImg.src = finalImgPath;
+            window.debugLogged = true;
+        }
 
         let priceHtml = '';
         if (hasSale) {
@@ -173,12 +204,12 @@
         card.innerHTML = `
             <div class="product-image">
                 ${hasSale ? '<span class="badge sale">İNDİRİM</span>' : ''}
-                <img src="${img}" alt="${name}" loading="lazy" onerror="this.style.display='none'">
+                <img src="${finalImgPath}" alt="${name}" loading="lazy" style="opacity: 1 !important; visibility: visible !important;" onerror="this.onerror=null; this.src='https://placehold.co/400x400/f5f5f5/999?text=Görsel+Yok'">
                 <div class="card-actions">
-                    <button class="action-btn" aria-label="Favori" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${id}')">
+                    <button class="action-btn favorite-btn" aria-label="Favori" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${id}')">
                         <i class="fa-regular fa-heart"></i>
                     </button>
-                    <button class="action-btn" aria-label="Sepet" onclick="event.stopPropagation(); window.addToCart && window.addToCart('${id}')">
+                    <button class="action-btn cart-btn" aria-label="Sepet" onclick="event.stopPropagation(); window.addToCart && window.addToCart('${id}')">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
                 </div>
