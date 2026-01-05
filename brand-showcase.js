@@ -57,28 +57,42 @@ const BRAND_SHOWCASE = {
         const container = document.querySelector(this.brands[brandKey]);
         if (!container) return;
 
-        // KRİTİK: Sadece sizin admin panelinden işaretlediğiniz ürünleri al
+        // KRİTİK: SADECE admin panelinden işaretlenenleri al
         const brandProducts = (products || []).filter(p => {
-            const val = (p.brandShowcase || '').toLowerCase().trim();
+            const val = (p.brandShowcase || p.showcase || '').toLowerCase().trim();
             const productBrand = (p.brand || '').toLowerCase().trim();
             const targetKey = brandKey.toLowerCase().trim();
 
-            // 1. Öncelik: BrandShowcase tam eşleşiyorsa (Manuel Kontrol)
             if (val === targetKey) return true;
-
-            // 2. Öncelik: GÜVENLİ MOD - Eğer veri 'None' ise ama marka eşleşiyorsa göster
-            // Bu sayede test ürünü gibi markası belli ama vitrin verisi tam oturmamış ürünler görünür.
             if (!val || val === 'none' || val === '') {
                 if (productBrand === targetKey) return true;
             }
-
             return false;
         }).slice(0, 3); // Maksimum 3 tane göster
 
-        if (brandProducts.length > 0) {
-            container.innerHTML = brandProducts.map(p => this.createProductCard(p)).join('');
-            console.log(`✅ ${brandKey} için ${brandProducts.length} manuel seçili ürün yüklendi.`);
+        // HER ZAMAN 3 slot render et (Görsel bütünlük için)
+        let html = '';
+        for (let i = 0; i < 3; i++) {
+            const p = brandProducts[i];
+            if (p) {
+                html += this.createProductCard(p);
+            } else {
+                // Placeholder Card
+                html += `
+                    <article class="madeniyat-product-card">
+                        <button class="madeniyat-favorite-btn"><i class="fa-regular fa-heart"></i></button>
+                        <img src="https://placehold.co/400x400/f3f3f3/ddd?text=${brandKey.toUpperCase()}" class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Yükleniyor...</h3>
+                            <p class="madeniyat-product-price">--- TL</p>
+                        </div>
+                    </article>
+                `;
+            }
         }
+
+        container.innerHTML = html;
+        console.log(`✅ ${brandKey} için vitrin güncellendi (Ürün: ${brandProducts.length}, Slot: 3).`);
     },
 
     async loadAllShowcases() {
