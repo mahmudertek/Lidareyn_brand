@@ -144,10 +144,10 @@
         .breadcrumb-nav {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 15px 0;
-            font-size: 14px;
-            color: #6b7280;
+            gap: 8px;
+            padding: 0 0 15px 0;
+            font-size: 13px;
+            color: #9ca3af;
         }
 
         .breadcrumb-item a {
@@ -771,12 +771,6 @@
     </header>
 
     <main class="page-container search-page">
-        <!-- Breadcrumbs -->
-        <nav class="breadcrumb-nav">
-            <span class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></span>
-            <span class="breadcrumb-separator"><i class="fa-solid fa-chevron-right"></i></span>
-            <span class="breadcrumb-item active" id="breadcrumb-current">Arama Sonuçları</span>
-        </nav>
 
         <div class="search-header-bar">
             <h1><span id="search-query-display">"..."</span> için arama sonuçları</h1>
@@ -836,6 +830,12 @@
 
             <!-- Results Grid -->
             <div class="search-results-area">
+                <!-- Breadcrumbs (Moved here for better alignment) -->
+                <nav class="breadcrumb-nav" style="padding-top: 0; padding-bottom: 10px;">
+                    <span class="breadcrumb-item"><a href="index.html">Ana Sayfa</a></span>
+                    <span class="breadcrumb-separator"><i class="fa-solid fa-chevron-right"></i></span>
+                    <span class="breadcrumb-item active" id="breadcrumb-current">Arama Sonuçları</span>
+                </nav>
 
                 <div class="results-toolbar">
                     <button class="mobile-filter-btn" id="open-filters-btn">
