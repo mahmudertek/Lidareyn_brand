@@ -8,6 +8,9 @@ const API = {
 
     // --- PRODUCTS ---
     async getProducts(params = {}) {
+        let apiData = [];
+
+        // 1. API'den Çek
         try {
             const queryString = new URLSearchParams(params).toString();
             const response = await fetch(`${this.baseUrl}/products?${queryString}`, {
@@ -15,24 +18,42 @@ const API = {
                 headers: { 'Content-Type': 'application/json' }
             });
 
-            if (!response.ok) {
-                throw new Error('Backend response not ok');
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.data) {
+                    apiData = result.data;
+                }
             }
-
-            const result = await response.json();
-
-            // Başarılı ise döndür
-            if (result.success && result.data && result.data.length > 0) {
-                return result;
-            }
-
-            // Veri yoksa localStorage'a bak
-            return this.getProductsFromLocalStorage(params);
-
         } catch (error) {
-            console.warn('Backend API error, falling back to localStorage:', error.message);
-            return this.getProductsFromLocalStorage(params);
+            console.warn('Backend API error, defaulting to local merge:', error.message);
         }
+
+        // 2. LocalStorage'dan Çek (Filtrelenmiş olarak gelir)
+        const localRes = this.getProductsFromLocalStorage(params);
+        const localData = localRes.data || [];
+
+        // 3. BİRLEŞTİR (Local Veri Öncelikli - ID çakışmasında local kazanır)
+        const mergedMap = new Map();
+
+        // Önce API verisini ekle
+        apiData.forEach(p => mergedMap.set(p._id || p.id, p));
+
+        // Sonra Local veriyi ekle (Varsa API'nin üstüne yazar - Güncelleme için kritik)
+        localData.forEach(p => mergedMap.set(p._id || p.id, p));
+
+        let finalProducts = Array.from(mergedMap.values());
+
+        // 4. Yeniden Sırala (Merge sırayı bozabilir)
+        if (params.sort === '-createdAt') {
+            finalProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+        }
+
+        // 5. Limit Uygula
+        if (params.limit) {
+            finalProducts = finalProducts.slice(0, parseInt(params.limit));
+        }
+
+        return { success: true, data: finalProducts };
     },
 
     // LocalStorage'dan ürün çekme (fallback)
