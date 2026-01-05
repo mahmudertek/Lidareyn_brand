@@ -455,10 +455,16 @@
                 <!-- Header -->
                 <div class="brands-header">
                     <h2 style="margin: 0; color: #1f2937;">Tüm Markalar</h2>
-                    <button class="add-brand-btn" onclick="openAddBrandModal()">
-                        <i class="fa-solid fa-plus"></i>
-                        Yeni Marka Ekle
-                    </button>
+                    <div style="display:flex; gap:10px;">
+                        <button class="add-brand-btn" style="background: #10b981;" onclick="syncHomepageBrands()">
+                            <i class="fa-solid fa-rotate"></i>
+                            Ana Sayfadan Çek
+                        </button>
+                        <button class="add-brand-btn" onclick="openAddBrandModal()">
+                            <i class="fa-solid fa-plus"></i>
+                            Yeni Marka Ekle
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Brands Grid -->
@@ -669,22 +675,71 @@
             });
         }
 
+        // Ana Sayfadaki Markaları Senkronize Et
+        async function syncHomepageBrands() {
+            if (!confirm('Ana sayfada bulunan standart markaları (Beta, Bosch, Makita, vb.) listenize eklemek istiyor musunuz? \n(Zaten ekli olanlar tekrar eklenmez)')) {
+                return;
+            }
+
+            const standardBrands = [
+                { name: 'Beta', country: 'İtalya', color: '#E30613' },
+                { name: 'Bosch', country: 'Almanya', color: '#005691' },
+                { name: 'Makita', country: 'Japonya', color: '#00A0B0' },
+                { name: 'Knipex', country: 'Almanya', color: '#E31E24' },
+                { name: 'DeWalt', country: 'ABD', color: '#FEBD17' },
+                { name: 'Black+Decker', country: 'ABD', color: '#FF6600' },
+                { name: 'Milwaukee', country: 'ABD', color: '#D31245' },
+                { name: 'Stanley', country: 'ABD', color: '#FFD700' },
+                { name: 'Einhell', country: 'Almanya', color: '#D41E45' },
+                { name: 'Metabo', country: 'Almanya', color: '#2C5E4F' },
+                { name: 'İzeltaş', country: 'Türkiye', color: '#E30613' },
+                { name: 'Gedore', country: 'Almanya', color: '#004A99' },
+                { name: 'WD-40', country: 'ABD', color: '#F8E800' },
+                { name: 'Fisco', country: 'İngiltere', color: '#E30613' },
+                { name: 'Proxxon', country: 'Almanya', color: '#006532' },
+                { name: 'Kama', country: 'Türkiye', color: '#333333' },
+                { name: 'Karbosan', country: 'Türkiye', color: '#004A99' },
+                { name: 'Kristal', country: 'Türkiye', color: '#E30613' },
+                { name: 'Osaka', country: 'Japonya', color: '#333333' },
+                { name: 'Gison', country: 'Tayvan', color: '#0066CC' },
+                { name: 'Baymax', country: 'Türkiye', color: '#333333' },
+                { name: 'Beybi', country: 'Türkiye', color: '#E30613' }
+            ];
+
+            const grid = document.getElementById('brandsGrid');
+            const originalContent = grid.innerHTML;
+            grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;"><i class="fa-solid fa-sync fa-spin fa-2x"></i><br><br>Markalar senkronize ediliyor...</div>';
+
+            let addedCount = 0;
+
+            try {
+                // Mevcutları al
+                const currentResponse = await ADMIN_API.getBrands({ limit: 1000 });
+                const currentBrands = currentResponse.success ? currentResponse.data : [];
+
+                for (const std of standardBrands) {
+                    // İsim kontrolü (Case insensitive)
+                    const exists = currentBrands.some(b => b.name.toLowerCase() === std.name.toLowerCase());
+                    if (!exists) {
+                        await ADMIN_API.createBrand(std);
+                        addedCount++;
+                    }
+                }
+
+                await loadBrands();
+                alert(`İşlem tamamlandı! ${addedCount} yeni marka eklendi.`);
+
+            } catch (error) {
+                console.error('Sync error:', error);
+                alert('Senkronizasyon sırasında hata oluştu.');
+                grid.innerHTML = originalContent;
+            }
+        }
+
         // Seed 20 brands
         async function seedBrands() {
-            if (confirm('20 markanın hepsini veritabanına eklemek istiyor musunuz?')) {
-                try {
-                    const response = await ADMIN_API.seedBrands();
-                    if (response.success) {
-                        alert(response.message);
-                        await loadBrands();
-                    } else {
-                        alert(response.message || 'Markalar eklenemedi');
-                    }
-                } catch (error) {
-                    console.error('Seed error:', error);
-                    alert('Markalar eklenirken hata oluştu');
-                }
-            }
+            // Deprecated logic, redirecting to new sync
+            await syncHomepageBrands();
         }
 
         // View brand products
