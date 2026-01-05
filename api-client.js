@@ -51,7 +51,25 @@ const API = {
                 products = products.filter(p => p.isNew === true || p.tags?.includes('new') || p.tags?.includes('Yeni'));
             }
             if (params.isPopular === 'true' || params.isPopular === true) {
-                products = products.filter(p => p.isPopular === true || p.isPopular === 'true');
+                products = products.filter(p => {
+                    // 1. KESİN ENGEL: Admin panelinden özellikle kapatıldıysa
+                    if (p.isPopular === false || p.isPopular === 'false') return false;
+
+                    // 2. KABUL ET: Boolean true ise
+                    if (p.isPopular === true || p.isPopular === 'true') return true;
+
+                    // 3. TAG KONTROLÜ (Array veya String)
+                    if (p.tags) {
+                        if (Array.isArray(p.tags)) {
+                            return p.tags.some(t => t && (t.toLowerCase() === 'popular' || t.toLowerCase() === 'popüler'));
+                        }
+                        if (typeof p.tags === 'string') {
+                            const lowerTags = p.tags.toLowerCase();
+                            return lowerTags.includes('popular') || lowerTags.includes('popüler');
+                        }
+                    }
+                    return false;
+                });
             }
             if (params.isFeatured === 'true' || params.isFeatured === true) {
                 products = products.filter(p => p.isFeatured === true || p.tags?.includes('featured') || p.tags?.includes('Öne Çıkan'));

@@ -109,7 +109,7 @@
                                     oldPrice: hasSalePrice ? p.price : null,
                                     image: p.mainImage || p.image || (p.images && p.images[0]) || 'https://placehold.co/300x400?text=Urun',
                                     brand: p.brand,
-                                    badge: (p.isPopular === true || p.isPopular === 'true') ? 'Popüler' : ''
+                                    badge: (p.isPopular === true || p.isPopular === 'true' || (p.tags && (p.tags.includes('popular') || p.tags.includes('Popüler')))) ? 'Popüler' : ''
                                 };
                             }).filter(function (p) { return p.badge === 'Popüler'; });
                             setProducts(mapped);
@@ -130,7 +130,23 @@
                     } catch (e) { }
 
                     var popularProducts = localData.filter(function (p) {
-                        return p.isPopular === true || p.isPopular === 'true';
+                        // 1. KESİN ENGEL
+                        if (p.isPopular === false || p.isPopular === 'false') return false;
+
+                        // 2. KABUL ET
+                        if (p.isPopular === true || p.isPopular === 'true') return true;
+
+                        // 3. TAG KONTROLÜ (Array veya String)
+                        if (p.tags) {
+                            if (Array.isArray(p.tags)) {
+                                return p.tags.some(function (t) { return t && (t.toLowerCase() === 'popular' || t.toLowerCase() === 'popüler'); });
+                            }
+                            if (typeof p.tags === 'string') {
+                                var lowerTags = p.tags.toLowerCase();
+                                return lowerTags.indexOf('popular') !== -1 || lowerTags.indexOf('popüler') !== -1;
+                            }
+                        }
+                        return false;
                     });
 
                     if (popularProducts.length > 0) {

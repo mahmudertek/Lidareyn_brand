@@ -1981,10 +1981,15 @@
             showLoading(); // Yükleniyor göster
 
             try {
-                // Timeout Koruması (30 saniye - Render uyku modundan çıkarken uzun sürebilir)
+                // Timeout Koruması (90 saniye - Render uyku modundan çıkarken uzun sürebilir)
                 const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (30sn)')), 30000)
+                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (90sn)')), 90000)
                 );
+
+                // Uzun sürerse kullanıcıyı bilgilendir
+                const notifyUserTimer = setTimeout(() => {
+                    alert("Sunucu uyku modunda olabilir, uyandırılıyor... Lütfen bekleyiniz (Bu işlem 1 dakika sürebilir).");
+                }, 4000);
 
                 let apiCall;
                 if (id) {
@@ -1995,6 +2000,8 @@
 
                 // API İsteği vs Timeout Yarışı
                 let response = await Promise.race([apiCall, timeoutPromise]);
+
+                clearTimeout(notifyUserTimer); // İşlem biterse uyarıyı iptal et
 
                 if (response.success) {
                     console.log('✅ API Yanıtı Başarılı:', response);
