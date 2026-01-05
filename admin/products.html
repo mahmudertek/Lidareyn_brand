@@ -1473,9 +1473,11 @@
                                     existingProduct.barcode = lp.barcode;
                                 }
                                 if ((existingProduct.stock === undefined || existingProduct.stock === null) && lp.stock) {
-                                    // Stok API'de bazen 0 gelebilir ama biz yerelde güncellediysek yereli alalım mı?
-                                    // Şimdilik sadece boşsa alalım.
                                     existingProduct.stock = lp.stock;
+                                }
+                                // Unit merging - Local deger varsa ve API'den farkli ise Local'i al
+                                if (lp.unit && lp.unit !== 'adet' && existingProduct.unit !== lp.unit) {
+                                    existingProduct.unit = lp.unit;
                                 }
                             }
                         });
@@ -1624,6 +1626,8 @@
                 const productId = product._id || product.id;
                 const featuredBadge = product.isFeatured ? '<span style="background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;font-size:10px;">ÖNE ÇIKAN</span>' : '';
                 const newBadge = product.isNew ? '<span style="background:#dbeafe;color:#2563eb;padding:2px 6px;border-radius:4px;font-size:10px;">YENİ</span>' : '';
+                const popularBadge = product.isPopular ? '<span style="background:#fce7f3;color:#be185d;padding:2px 6px;border-radius:4px;font-size:10px;">POPÜLER</span>' : '';
+                const bestsellerBadge = product.isBestSeller ? '<span style="background:#fef9c3;color:#a16207;padding:2px 6px;border-radius:4px;font-size:10px;">ÇOK SATAN</span>' : '';
                 const isActiveBadge = product.isActive !== false ?
                     '<span style="background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px;font-size:10px;">AKTİF</span>' :
                     '<span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:4px;font-size:10px;">PASİF</span>';
@@ -1633,8 +1637,8 @@
                         <td><img src="${image}" class="product-image" alt="${product.name}"></td>
                         <td>
                             <div class="product-name">${product.name}</div>
-                            <div style="margin-top:4px; display:flex; gap:4px; align-items:center;">
-                                ${isActiveBadge}${featuredBadge}${newBadge}
+                            <div style="margin-top:4px; display:flex; gap:4px; align-items:center; flex-wrap:wrap;">
+                                ${isActiveBadge}${featuredBadge}${popularBadge}${bestsellerBadge}${newBadge}
                             </div>
                         </td>
                         <td><span class="product-brand">${product.brand || '-'}</span></td>
@@ -2101,6 +2105,10 @@
                     }
                     if (!finalData.barcode && sentData.barcode) {
                         finalData.barcode = sentData.barcode;
+                    }
+                    // Unit alanini koru - API donmezse gonderilen degeri kullan
+                    if (!finalData.unit && sentData.unit) {
+                        finalData.unit = sentData.unit;
                     }
                     // ------------------------------------
 
