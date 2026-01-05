@@ -129,44 +129,56 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             productsContainer.innerHTML = '';
 
-            // 5. Render
-            brandProducts.forEach(product => {
+            // 5. Render (Ensure exactly 3 slots)
+            for (let i = 0; i < 3; i++) {
+                const product = brandProducts[i];
                 const card = document.createElement('article');
                 card.className = 'madeniyat-product-card';
-                card.style.cursor = 'pointer';
 
-                const imgSource = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
-                const productUrl = `urun-detay.html?id=${product._id || product.id}`;
+                if (product) {
+                    card.style.cursor = 'pointer';
+                    const imgSource = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
+                    const productUrl = `urun-detay.html?id=${product._id || product.id}`;
 
-                const price = parseFloat(product.price) || 0;
-                const salePriceVal = parseFloat(product.salePrice);
-                const hasSalePrice = !isNaN(salePriceVal) && salePriceVal > 0 && salePriceVal < price;
+                    const price = parseFloat(product.price) || 0;
+                    const salePriceVal = parseFloat(product.salePrice);
+                    const hasSalePrice = !isNaN(salePriceVal) && salePriceVal > 0 && salePriceVal < price;
 
-                const displayPrice = hasSalePrice ? salePriceVal : price;
-                const oldPrice = hasSalePrice ? price : null;
+                    const displayPrice = hasSalePrice ? salePriceVal : price;
+                    const oldPrice = hasSalePrice ? price : null;
 
-                const priceHtml = hasSalePrice
-                    ? `<span style="color:#e74c3c; font-weight:700;">₺${displayPrice.toLocaleString('tr-TR')}</span>
-                       <span style="text-decoration:line-through; color:#999; font-size:0.8em; margin-left:8px;">₺${oldPrice.toLocaleString('tr-TR')}</span>`
-                    : `<span>₺${displayPrice.toLocaleString('tr-TR')}</span>`;
+                    const priceHtml = hasSalePrice
+                        ? `<span style="color:#e74c3c; font-weight:700;">₺${displayPrice.toLocaleString('tr-TR')}</span>
+                           <span style="text-decoration:line-through; color:#999; font-size:0.8em; margin-left:8px;">₺${oldPrice.toLocaleString('tr-TR')}</span>`
+                        : `<span>₺${displayPrice.toLocaleString('tr-TR')}</span>`;
 
-                card.innerHTML = `
-                    <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${product._id || product.id}')">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image" style="opacity: 1 !important; visibility: visible !important; display: block !important; object-fit: contain;">
-                    <div class="madeniyat-product-info">
-                        <h3 class="madeniyat-product-name" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; height: 3em;">${product.name}</h3>
-                        <p class="madeniyat-product-price">${priceHtml}</p>
-                    </div>
-                `;
+                    card.innerHTML = `
+                        <button class="madeniyat-favorite-btn" aria-label="Favorilere Ekle" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${product._id || product.id}')">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                        <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image" style="opacity: 1 !important; visibility: visible !important; display: block !important; object-fit: contain;">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; height: 3em;">${product.name}</h3>
+                            <p class="madeniyat-product-price">${priceHtml}</p>
+                        </div>
+                    `;
 
-                card.onclick = function () {
-                    window.location.href = productUrl;
-                };
-
+                    card.onclick = function () {
+                        window.location.href = productUrl;
+                    };
+                } else {
+                    // Placeholder card for empty slots
+                    card.innerHTML = `
+                        <button class="madeniyat-favorite-btn"><i class="fa-regular fa-heart"></i></button>
+                        <img src="https://placehold.co/400x400/f3f3f3/ddd?text=${targetBrand}" class="madeniyat-product-image">
+                        <div class="madeniyat-product-info">
+                            <h3 class="madeniyat-product-name">Yükleniyor...</h3>
+                            <p class="madeniyat-product-price">--- TL</p>
+                        </div>
+                    `;
+                }
                 productsContainer.appendChild(card);
-            });
+            }
         });
 
     } catch (error) {
