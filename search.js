@@ -97,105 +97,113 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // 3. Load Data from API or localStorage
+    // 3. Load Data - Hybrid Mode (Merge API + Local)
     async function loadProductsFromAPI() {
+        let apiProducts = [];
+        let localProducts = [];
+
+        // Step 1: Fetch from API
         try {
             let apiUrl = `${API_URL}/products?limit=500`;
-
             if (state.brand) {
                 apiUrl += `&brand=${encodeURIComponent(state.brand)}`;
             }
 
             const response = await fetch(apiUrl);
-
-            if (!response.ok) {
-                throw new Error('API yanıt vermedi');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.data) {
+                    apiProducts = Array.isArray(data.data) ? data.data : [];
+                    console.log('✅ Search: Loaded', apiProducts.length, 'products from API');
+                }
             }
-
-            const data = await response.json();
-
-            if (data.success && data.data) {
-                state.products = Array.isArray(data.data) ? data.data : [];
-                console.log('✅ Search: Loaded', state.products.length, 'products from API');
-            } else {
-                throw new Error('Ürün verisi alınamadı');
-            }
-
         } catch (error) {
-            console.warn('Search: API Error, checking local storage fallback...', error);
+            console.warn('Search: API Fetch failed, will rely on local data', error);
+        }
 
-            let localData = [];
-
-            // STRATEGY 1: Check standard localStorage keys
-            try {
-                // Try keys in order of likelihood (galatacarsi_products is used by admin/products.html)
-                const keysToCheck = ['galatacarsi_products', 'galata_products', 'galata_products_cache', 'products'];
-
-                for (const key of keysToCheck) {
-                    const raw = localStorage.getItem(key);
-                    if (raw) {
-                        const parsed = JSON.parse(raw);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            localData = parsed;
-                            console.log(`✅ Search: Found ${localData.length} products in '${key}'`);
-                            break; // Stop if found
-                        }
+        // Step 2: Fetch from localStorage and Sync Sources
+        try {
+            const keysToCheck = ['galatacarsi_products', 'galata_products', 'galatat_products_cache', 'products'];
+            for (const key of keysToCheck) {
+                const raw = localStorage.getItem(key);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        localProducts = parsed;
+                        console.log(`✅ Search: Found ${localProducts.length} products in local '${key}'`);
+                        break;
                     }
                 }
-            } catch (e) {
-                console.error('Search: Error reading localStorage:', e);
             }
 
-            // STRATEGY 2: Check window global from products-data.js (if loaded)
-            if (localData.length === 0 && typeof window.getAllProductsSync === 'function') {
-                try {
-                    const syncData = window.getAllProductsSync();
-                    if (Array.isArray(syncData) && syncData.length > 0) {
-                        localData = syncData;
-                        console.log('✅ Search: Found products via getAllProductsSync');
-                    }
-                } catch (e) { console.warn('Search: getAllProductsSync failed', e); }
+            // Fallback to global sync function if available
+            if (localProducts.length === 0 && typeof window.getAllProductsSync === 'function') {
+                localProducts = window.getAllProductsSync() || [];
             }
-
-            // Apply found data
-            if (localData.length > 0) {
-                state.products = localData;
-            } else {
-                console.warn('Search: No products found in API or Local Storage.');
-                state.products = [];
-            }
+        } catch (e) {
+            console.error('Search: Local storage read error', e);
         }
+
+        // Step 3: Smart Merge & Deduplicate (Preferred API version if ID matches)
+        const productMap = new Map();
+
+        // Load local first as baseline
+        localProducts.forEach(p => {
+            const id = p._id || p.id;
+            if (id) productMap.set(id.toString(), p);
+        });
+
+        // Overwrite/Merge with API data (API is source of truth for same ID)
+        apiProducts.forEach(p => {
+            const id = p._id || p.id;
+            if (id) productMap.set(id.toString(), p);
+        });
+
+        state.products = Array.from(productMap.values());
+        console.log('🚀 Search: Hybrid data ready.', state.products.length, 'unique products found.');
 
         state.isLoading = false;
     }
 
-    // 4. Filtering Logic
+    // 4. Smart Filtering Logic
     function applyFilters() {
         let results = [...state.products];
 
+        // Normalization helper for smart matching
+        const normalize = (str) => {
+            if (!str) return '';
+            return str.toLowerCase()
+                .trim()
+                .replace(/lar$/, '')
+                .replace(/ler$/, '')
+                .replace(/ı$/, '')
+                .replace(/i$/, '')
+                .replace(/u$/, '')
+                .replace(/ü$/, '');
+        };
+
         if (state.query) {
-            const q = state.query.toLowerCase();
+            const q = normalize(state.query);
             results = results.filter(p =>
-                (p.name && p.name.toLowerCase().includes(q)) ||
-                (p.brand && p.brand.toLowerCase().includes(q)) ||
-                (p.category && p.category.toLowerCase().includes(q)) ||
-                (p.subCategory && p.subCategory.toLowerCase().includes(q)) ||
-                (p.description && p.description.toLowerCase().includes(q)) ||
-                (p.barcode && p.barcode.toLowerCase().includes(q)) ||
-                (p.sku && p.sku.toLowerCase().includes(q))
+                normalize(p.name).includes(q) ||
+                normalize(p.brand).includes(q) ||
+                normalize(p.category).includes(q) ||
+                normalize(p.subCategory).includes(q) ||
+                (p.description && normalize(p.description).includes(q)) ||
+                (p.barcode && p.barcode.includes(state.query)) ||
+                (p.sku && p.sku.includes(state.query))
             );
         }
 
         if (state.brand) {
-            const brandLower = state.brand.toLowerCase();
-            results = results.filter(p =>
-                p.brand && p.brand.toLowerCase().includes(brandLower)
-            );
+            const b = normalize(state.brand);
+            results = results.filter(p => p.brand && normalize(p.brand).includes(b));
         }
 
-        // Additional filters...
+        // Smart Category Filter (Handles plurals/singulars)
         if (state.filters.categories.length > 0) {
-            results = results.filter(p => state.filters.categories.includes(p.category));
+            const selectedNorms = state.filters.categories.map(normalize);
+            results = results.filter(p => p.category && selectedNorms.includes(normalize(p.category)));
         }
 
         // Sort
@@ -340,15 +348,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 500);
 
     function renderSidebarFilters() {
-        const categories = [...new Set(state.products.filter(p => p.category).map(p => p.category))].sort();
+        // Normalization helper for sidebar grouping
+        const normalize = (str) => {
+            if (!str) return '';
+            return str.toLowerCase().trim().replace(/lar$/, '').replace(/ler$/, '');
+        };
+
+        // Smart Category Grouping
+        const categoryMap = {};
+        state.products.forEach(p => {
+            if (!p.category) return;
+            const norm = normalize(p.category);
+            if (!categoryMap[norm]) {
+                categoryMap[norm] = {
+                    displayName: p.category, // Use the first actual name found as display
+                    count: 0,
+                    originalNames: new Set()
+                };
+            }
+            categoryMap[norm].count++;
+            categoryMap[norm].originalNames.add(p.category);
+        });
+
         if (elements.categoryFilters) {
-            elements.categoryFilters.innerHTML = categories.map(cat => `
+            elements.categoryFilters.innerHTML = Object.keys(categoryMap).sort().map(key => {
+                const cat = categoryMap[key];
+                return `
                 <label class="filter-item">
-                    <input type="checkbox" value="${cat}" onchange="toggleFilter('categories', '${escapeQuotes(cat)}')">
-                    <span>${cat}</span>
-                    <span class="filter-count">(${state.products.filter(p => p.category === cat).length})</span>
+                    <input type="checkbox" value="${cat.displayName}" onchange="toggleFilter('categories', '${escapeQuotes(Array.from(cat.originalNames)[0])}')">
+                    <span>${cat.displayName}</span>
+                    <span class="filter-count">(${cat.count})</span>
                 </label>
-            `).join('');
+            `}).join('');
         }
 
         const brands = [...new Set(state.products.filter(p => p.brand).map(p => p.brand))].sort().slice(0, 15);
