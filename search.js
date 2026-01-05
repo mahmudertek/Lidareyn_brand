@@ -240,20 +240,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (paginationEl) paginationEl.style.display = state.filteredProducts.length > 20 ? 'flex' : 'none';
 
         // Limit to 24 for "page 1" demo
-        // Filter out products without valid images first
-        const productsWithImages = state.filteredProducts.filter(product => {
-            const img = product.mainImage || product.image || (product.images && product.images[0]);
-            // Check if image exists and is not a placeholder URL
-            if (!img) return false;
-            if (img.includes('placehold.co') || img.includes('placeholder')) return false;
-            return true;
-        });
+        const pageProducts = state.filteredProducts.slice(0, 24);
 
-        const pageProducts = productsWithImages.slice(0, 24);
-
-        // Update result count to reflect only products with images
         if (elements.resultCount) {
-            elements.resultCount.textContent = `${productsWithImages.length} ürün bulundu`;
+            elements.resultCount.textContent = `${state.filteredProducts.length} ürün bulundu`;
         }
 
         pageProducts.forEach(product => {
@@ -281,10 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return src;
                 };
 
-                let productImage = fixImageSrc(rawImage);
-
-                // Skip this product if no valid image
-                if (!productImage) return;
+                let productImage = fixImageSrc(rawImage) || 'gorseller/no-image.png';
 
                 // Debug log (can be seen in browser console)
                 // console.log('Product Image:', product.name, rawImage, '->', productImage);
