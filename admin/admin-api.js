@@ -109,7 +109,16 @@ const ADMIN_API = {
                 headers: this.getHeaders(),
                 body: JSON.stringify(productData)
             });
-            return await response.json();
+            const result = await response.json();
+
+            // Eğer sunucu açık ama işlem başarısızsa (örn: validation hatası veya 500)
+            // Yine de yerel olarak kaydetmek istiyoruz (Kullanıcı verisi kaybolmasın)
+            if (!result.success) {
+                console.warn('Backend rejected update, falling back to local:', result.error);
+                throw new Error(result.error || 'Server rejected update');
+            }
+
+            return result;
         } catch (error) {
             console.error('Update product error:', error);
 
