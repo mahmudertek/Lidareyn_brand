@@ -358,7 +358,7 @@
                                     </div>
                                 </li>
 
-                                
+
                                 <li>
                                     <a href="kategoriler/asindirici-kesici.html">
                                         <div class="menu-item-left">
@@ -574,16 +574,19 @@
                                         <div class="sub-menu-column">
                                             <h4>Kesme &amp; Budama</h4>
                                             <ul>
-                                                <li><a href="arama.html?q=Çit Kesme Makinesi">Çit Kesme Makinesi</a></li>
+                                                <li><a href="arama.html?q=Çit Kesme Makinesi">Çit Kesme Makinesi</a>
+                                                </li>
                                                 <li><a href="arama.html?q=Budama Makası">Budama Makası</a></li>
-                                                <li><a href="arama.html?q=Ağaç Kesme Testeresi">Ağaç Kesme Testeresi</a></li>
+                                                <li><a href="arama.html?q=Ağaç Kesme Testeresi">Ağaç Kesme Testeresi</a>
+                                                </li>
                                                 <li><a href="arama.html?q=Dal Budama Aleti">Dal Budama Aleti</a></li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
                                             <h4>Çim Bakımı</h4>
                                             <ul>
-                                                <li><a href="arama.html?q=Çim Biçme Makinesi">Çim Biçme Makinesi</a></li>
+                                                <li><a href="arama.html?q=Çim Biçme Makinesi">Çim Biçme Makinesi</a>
+                                                </li>
                                                 <li><a href="arama.html?q=Tırpan">Tırpan</a></li>
                                                 <li><a href="arama.html?q=Çim Havalandırıcı">Çim Havalandırıcı</a></li>
                                                 <li><a href="arama.html?q=Çim Süpürgesi">Çim Süpürgesi</a></li>
@@ -594,8 +597,10 @@
                                             <ul>
                                                 <li><a href="arama.html?q=Bahçe Hortumu">Bahçe Hortumu</a></li>
                                                 <li><a href="arama.html?q=Sulama Tabancası">Sulama Tabancası</a></li>
-                                                <li><a href="arama.html?q=Damla Sulama Sistemi">Damla Sulama Sistemi</a></li>
-                                                <li><a href="arama.html?q=Fıskiye Yağmurlama">Fıskiye ve Yağmurlama</a></li>
+                                                <li><a href="arama.html?q=Damla Sulama Sistemi">Damla Sulama Sistemi</a>
+                                                </li>
+                                                <li><a href="arama.html?q=Fıskiye Yağmurlama">Fıskiye ve Yağmurlama</a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <div class="sub-menu-column">
@@ -719,6 +724,11 @@
                     <span class="current-price" id="product-price">--- TL</span>
                     <span class="original-price" id="original-price" style="display: none;"></span>
                     <span class="discount-badge" id="discount-badge" style="display: none;"></span>
+                    <div class="kdv-kargo-note"
+                        style="font-size: 12px; color: #27ae60; margin-top: 8px; font-weight: 500;">
+                        <i class="fa-solid fa-check-circle" style="margin-right: 5px;"></i>
+                        Fiyatlarımıza KDV ve Kargo Dahildir
+                    </div>
                 </div>
 
                 <!-- Variant options will be dynamically loaded if available -->
@@ -932,17 +942,46 @@
             if (titleEl) titleEl.textContent = 'Yükleniyor...';
 
             try {
-                // API'den ürün çek
-                const response = await fetch(`${PRODUCT_API}/products/${productId}`);
+                let p = null;
 
-                if (!response.ok) {
-                    throw new Error('API yanıt vermedi');
+                // Local products (admin tarafından oluşturulmuş, henüz API'ye senkronize edilmemiş)
+                if (productId.startsWith('local_')) {
+                    console.log('Local ürün tespit edildi, localStorage kontrol ediliyor...');
+                    const localProducts = localStorage.getItem('galatacarsi_products');
+                    if (localProducts) {
+                        const products = JSON.parse(localProducts);
+                        p = products.find(prod => prod._id === productId || prod.id === productId);
+                        if (p) {
+                            console.log('✅ Ürün localStorage\'dan yüklendi:', p.name);
+                        }
+                    }
+                    if (!p) {
+                        throw new Error('Yerel ürün bulunamadı. Ürün silinmiş olabilir.');
+                    }
+                } else {
+                    // API'den ürün çek
+                    const response = await fetch(`${PRODUCT_API}/products/${productId}`);
+
+                    if (!response.ok) {
+                        // API hata verirse localStorage'a bak
+                        console.warn('API yanıt vermedi, localStorage kontrol ediliyor...');
+                        const localProducts = localStorage.getItem('galatacarsi_products') || localStorage.getItem('galata_products');
+                        if (localProducts) {
+                            const products = JSON.parse(localProducts);
+                            p = products.find(prod => (prod._id === productId || prod.id === productId));
+                        }
+                        if (!p) throw new Error('API yanıt vermedi ve yerel kayıt bulunamadı');
+                    } else {
+                        const data = await response.json();
+                        if (data.success && data.data) {
+                            p = data.data;
+                        } else {
+                            throw new Error('Ürün bulunamadı (API yanıtı boş)');
+                        }
+                    }
                 }
 
-                const data = await response.json();
-
-                if (data.success && data.data) {
-                    const p = data.data;
+                if (p) {
 
                     // Başlık ve Fiyat
                     if (titleEl) titleEl.textContent = p.name || 'İsimsiz Ürün';
@@ -1040,8 +1079,6 @@
 
                     console.log('Ürün yüklendi:', p.name);
 
-                } else {
-                    throw new Error('Ürün bulunamadı (API yanıtı boş)');
                 }
 
             } catch (error) {
@@ -1066,4 +1103,3 @@
 </body>
 
 </html>
-

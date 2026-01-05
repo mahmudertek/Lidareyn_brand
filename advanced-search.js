@@ -58,6 +58,9 @@
     }
 
     function initAdvancedSearch() {
+        // General Search (Sayfa, marka, ürün, kategori)
+        initGeneralSearch();
+
         // Brand Search
         initBrandSearch();
 
@@ -70,8 +73,263 @@
         // Price Sort Options
         initPriceSortOptions();
 
+        // Clear Filters Button
+        initClearFilters();
+
         console.log('✅ Advanced Search Panel initialized with live search');
     }
+
+    // ==================== GENERAL SEARCH (Dynamic) ====================
+    let cachedBrands = [];
+    let cachedCategories = [];
+
+    // Load dynamic brands from API/localStorage
+    async function loadDynamicBrands() {
+        try {
+            // Try API first
+            if (window.API && window.API.getBrands) {
+                const response = await window.API.getBrands();
+                if (response && response.success && response.data) {
+                    cachedBrands = response.data;
+                    console.log('✅ Brands loaded from API:', cachedBrands.length);
+                    return;
+                }
+            }
+        } catch (e) { console.warn('Brand API failed', e); }
+
+        // Fallback to localStorage
+        try {
+            const local = localStorage.getItem('galata_brands');
+            if (local) {
+                cachedBrands = JSON.parse(local);
+                console.log('✅ Brands loaded from localStorage:', cachedBrands.length);
+            }
+        } catch (e) { console.error('Brand localStorage error', e); }
+    }
+
+    // Load categories from categoriesData (global)
+    function loadCategoriesFromData() {
+        if (typeof categoriesData !== 'undefined') {
+            cachedCategories = [];
+            Object.keys(categoriesData).forEach(slug => {
+                const cat = categoriesData[slug];
+                // Ana kategori
+                cachedCategories.push({
+                    type: 'category',
+                    name: cat.title,
+                    slug: slug,
+                    icon: cat.icon || 'fa-folder',
+                    link: `kategori.html?cat=${slug}`
+                });
+                // Alt kategoriler
+                if (cat.subcategories && Array.isArray(cat.subcategories)) {
+                    cat.subcategories.forEach(sub => {
+                        // Group name
+                        cachedCategories.push({
+                            type: 'subcategory',
+                            name: sub.name,
+                            parent: cat.title,
+                            slug: slug,
+                            icon: sub.icon || 'fa-tag',
+                            link: `kategori.html?cat=${slug}&sub=${encodeURIComponent(sub.name)}`
+                        });
+                        // Items within group
+                        if (sub.items && Array.isArray(sub.items)) {
+                            sub.items.forEach(item => {
+                                cachedCategories.push({
+                                    type: 'item',
+                                    name: item,
+                                    parent: sub.name,
+                                    grandparent: cat.title,
+                                    slug: slug,
+                                    icon: 'fa-circle-dot',
+                                    link: `arama.html?q=${encodeURIComponent(item)}`
+                                });
+                            });
+                        }
+                    });
+                }
+            });
+            console.log('✅ Categories loaded:', cachedCategories.length);
+        }
+    }
+
+    // Static pages
+    const staticPages = [
+        { name: 'Ana Sayfa', link: 'index.html', icon: 'fa-home' },
+        { name: 'Yeni Gelenler', link: 'yeni-gelenler.html', icon: 'fa-sparkles' },
+        { name: 'Popüler Ürünler', link: 'populer.html', icon: 'fa-fire' },
+        { name: 'Tüm Kategoriler', link: 'kategoriler.html', icon: 'fa-th-large' },
+        { name: 'Hakkımızda', link: 'hakkimizda.html', icon: 'fa-info-circle' },
+        { name: 'İletişim', link: 'iletisim.html', icon: 'fa-envelope' },
+        { name: 'Sepetim', link: 'sepet.html', icon: 'fa-shopping-cart' },
+        { name: 'Favorilerim', link: 'favoriler.html', icon: 'fa-heart' },
+        { name: 'Giriş Yap', link: 'giris-yap.html', icon: 'fa-sign-in-alt' }
+    ];
+
+    function initGeneralSearch() {
+        const searchInput = document.getElementById('general-search-input');
+        const searchBtn = document.getElementById('general-search-btn');
+        const resultsContainer = document.getElementById('live-search-results');
+
+        if (!searchInput || !resultsContainer) return;
+
+        // Load dynamic data
+        loadDynamicBrands();
+        loadCategoriesFromData();
+
+        // Live search on input
+        let debounceTimer;
+        searchInput.addEventListener('input', function (e) {
+            const query = e.target.value.trim().toLowerCase();
+
+            clearTimeout(debounceTimer);
+
+            if (query.length < 2) {
+                resultsContainer.style.display = 'none';
+                return;
+            }
+
+            debounceTimer = setTimeout(() => {
+                showGeneralSearchResults(query, resultsContainer, searchInput);
+            }, 200);
+        });
+
+        // Search button click
+        if (searchBtn) {
+            searchBtn.addEventListener('click', function () {
+                performGeneralSearch(searchInput.value);
+            });
+        }
+
+        // Enter key
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                resultsContainer.style.display = 'none';
+                performGeneralSearch(searchInput.value);
+            }
+        });
+
+        // Hide on outside click
+        document.addEventListener('click', function (e) {
+            if (!searchInput.closest('.responsive-search-input-container').contains(e.target)) {
+                resultsContainer.style.display = 'none';
+            }
+        });
+    }
+
+    function showGeneralSearchResults(query, container, input) {
+        let html = '';
+
+        // 1. Sayfalar
+        const matchingPages = staticPages.filter(p => p.name.toLowerCase().includes(query));
+        if (matchingPages.length > 0) {
+            html += '<div class="live-search-section-title"><i class="fa-solid fa-file"></i> Sayfalar</div>';
+            matchingPages.forEach(page => {
+                html += `
+                    <a href="${page.link}" class="live-search-item">
+                        <i class="fa-solid ${page.icon}"></i>
+                        <span class="live-search-name">${highlightMatch(page.name, query)}</span>
+                    </a>
+                `;
+            });
+        }
+
+        // 2. Kategoriler (Ana + Alt + Item)
+        const matchingCategories = cachedCategories.filter(c => c.name.toLowerCase().includes(query)).slice(0, 8);
+        if (matchingCategories.length > 0) {
+            html += '<div class="live-search-section-title"><i class="fa-solid fa-folder"></i> Kategoriler</div>';
+            matchingCategories.forEach(cat => {
+                const subLabel = cat.parent ? `<small style="color:#888; margin-left:5px;">(${cat.parent})</small>` : '';
+                html += `
+                    <a href="${cat.link}" class="live-search-item">
+                        <i class="fa-solid ${cat.icon}"></i>
+                        <span class="live-search-name">${highlightMatch(cat.name, query)}${subLabel}</span>
+                    </a>
+                `;
+            });
+        }
+
+        // 3. Markalar (Dinamik)
+        const matchingBrands = cachedBrands.filter(b => b.name && b.name.toLowerCase().includes(query)).slice(0, 6);
+        if (matchingBrands.length > 0) {
+            html += '<div class="live-search-section-title"><i class="fa-solid fa-tag"></i> Markalar</div>';
+            matchingBrands.forEach(brand => {
+                const productCount = cachedProducts.filter(p => p.brand && p.brand.toLowerCase() === brand.name.toLowerCase()).length;
+                html += `
+                    <div class="live-search-item" data-brand="${brand.name}" style="cursor:pointer;">
+                        <i class="fa-solid fa-tag"></i>
+                        <span class="live-search-name">${highlightMatch(brand.name, query)}</span>
+                        ${productCount > 0 ? `<span class="live-search-count">${productCount} ürün</span>` : ''}
+                    </div>
+                `;
+            });
+        }
+
+        // 4. Ürünler
+        const matchingProducts = cachedProducts.filter(p =>
+            (p.name && p.name.toLowerCase().includes(query)) ||
+            (p.brand && p.brand.toLowerCase().includes(query)) ||
+            (p.category && p.category.toLowerCase().includes(query))
+        ).slice(0, 6);
+        if (matchingProducts.length > 0) {
+            html += '<div class="live-search-section-title"><i class="fa-solid fa-box"></i> Ürünler</div>';
+            matchingProducts.forEach(product => {
+                html += `
+                    <a href="urun-detay.html?id=${product._id || product.id}" class="live-search-item live-search-product">
+                        <img src="${product.mainImage || product.image || 'https://placehold.co/50x50/f0f0f0/999?text=Ürün'}" alt="${product.name}">
+                        <div class="live-search-product-info">
+                            <span class="live-search-name">${highlightMatch(product.name, query)}</span>
+                            <span class="live-search-brand">${product.brand || ''}</span>
+                        </div>
+                        <span class="live-search-price">${formatPrice(product.price)}</span>
+                    </a>
+                `;
+            });
+        }
+
+        // Sonuç yok
+        if (html === '') {
+            html = '<div class="live-search-no-result">"' + query + '" için sonuç bulunamadı</div>';
+        }
+
+        container.innerHTML = html;
+        container.style.display = 'block';
+
+        // Add click handlers to brand items
+        container.querySelectorAll('.live-search-item[data-brand]').forEach(item => {
+            item.addEventListener('click', function () {
+                const brand = this.dataset.brand;
+                input.value = brand;
+                container.style.display = 'none';
+                performBrandSearch(brand);
+            });
+        });
+    }
+
+    function performGeneralSearch(query) {
+        if (!query || !query.trim()) {
+            showNotification('Lütfen bir arama terimi girin.', 'warning');
+            return;
+        }
+        window.location.href = `arama.html?q=${encodeURIComponent(query.trim())}`;
+    }
+
+    // ==================== CLEAR FILTERS ====================
+    function initClearFilters() {
+        const clearBtn = document.getElementById('clear-filters-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function () {
+                // Clear all inputs
+                const inputs = document.querySelectorAll('.advanced-search-panel input[type="text"]');
+                inputs.forEach(input => input.value = '');
+                // Redirect to clean home or refresh
+                window.location.href = 'index.html';
+            });
+        }
+    }
+
 
     // ==================== BRAND SEARCH ====================
     function initBrandSearch() {

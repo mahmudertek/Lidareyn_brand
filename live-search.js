@@ -132,6 +132,104 @@ function initLiveSearch() {
         searchContainer.appendChild(dropdown);
     }
 
+    // ============= DYNAMIC DATA LOADING ===================
+    let dynamicBrands = [];
+    let dynamicCategories = [];
+    let dynamicProducts = [];
+
+    // Load brands dynamically
+    async function loadLiveSearchBrands() {
+        try {
+            // Try API first
+            if (window.API && window.API.getBrands) {
+                const response = await window.API.getBrands();
+                if (response && response.success && response.data) {
+                    dynamicBrands = response.data.map(b => b.name);
+                    console.log('Live Search: Loaded', dynamicBrands.length, 'brands from API');
+                    return;
+                }
+            }
+        } catch (e) { console.warn('Live Search: API brand load failed', e); }
+
+        // Fallback to localStorage
+        try {
+            const local = localStorage.getItem('galata_brands');
+            if (local) {
+                dynamicBrands = JSON.parse(local).map(b => b.name);
+                console.log('Live Search: Loaded', dynamicBrands.length, 'brands from localStorage');
+            }
+        } catch (e) { console.error('Live Search: localStorage brand error', e); }
+    }
+
+    // Load categories from categoriesData
+    function loadLiveSearchCategories() {
+        if (typeof categoriesData !== 'undefined') {
+            dynamicCategories = [];
+            Object.keys(categoriesData).forEach(slug => {
+                const cat = categoriesData[slug];
+                // Ana kategori
+                dynamicCategories.push({
+                    name: cat.title,
+                    slug: slug,
+                    type: 'main'
+                });
+                // Alt kategoriler
+                if (cat.subcategories && Array.isArray(cat.subcategories)) {
+                    cat.subcategories.forEach(sub => {
+                        dynamicCategories.push({
+                            name: sub.name,
+                            parent: cat.title,
+                            slug: slug,
+                            type: 'sub'
+                        });
+                        // Items
+                        if (sub.items && Array.isArray(sub.items)) {
+                            sub.items.forEach(item => {
+                                dynamicCategories.push({
+                                    name: item,
+                                    parent: sub.name,
+                                    slug: slug,
+                                    type: 'item'
+                                });
+                            });
+                        }
+                    });
+                }
+            });
+            console.log('Live Search: Loaded', dynamicCategories.length, 'categories');
+        }
+    }
+
+    // Load products
+    async function loadLiveSearchProducts() {
+        try {
+            // Try API
+            const response = await fetch('https://galatacarsi-backend-api.onrender.com/api/products?limit=500');
+            if (response.ok) {
+                const data = await response.json();
+                if (data.success && data.data) {
+                    dynamicProducts = data.data;
+                    console.log('Live Search: Loaded', dynamicProducts.length, 'products from API');
+                    return;
+                }
+            }
+        } catch (e) { console.warn('Live Search: API product load failed', e); }
+
+        // Fallback
+        try {
+            const local = localStorage.getItem('galatacarsi_products') || localStorage.getItem('galata_products');
+            if (local) {
+                dynamicProducts = JSON.parse(local);
+                console.log('Live Search: Loaded', dynamicProducts.length, 'products from localStorage');
+            }
+        } catch (e) { console.error('Live Search: localStorage product error', e); }
+    }
+
+    // Initialize dynamic data
+    loadLiveSearchBrands();
+    loadLiveSearchCategories();
+    loadLiveSearchProducts();
+
     // 3. Input Event Listener for Live Search
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.trim().toLowerCase();
@@ -141,34 +239,24 @@ function initLiveSearch() {
             return;
         }
 
-        // Get Data with Fallback
-        const products = window.galataProductsData || [];
-        const categories = window.categoriesData || [];
+        // --- DYNAMIC FILTERING LOGIC ---
 
-        // Debug data availability
-        if (products.length === 0) console.warn('Live Search: No products data found!');
+        // 1. Products (Search by name, brand, category)
+        const matchedProducts = dynamicProducts.filter(p =>
+            (p.name && p.name.toLowerCase().includes(query)) ||
+            (p.brand && p.brand.toLowerCase().includes(query)) ||
+            (p.category && p.category.toLowerCase().includes(query))
+        ).slice(0, 5);
 
-        // --- FILTERING LOGIC ---
+        // 2. Categories (from dynamicCategories)
+        const matchedCategories = dynamicCategories
+            .filter(c => c.name.toLowerCase().includes(query))
+            .slice(0, 5);
 
-        // 1. Products (Search by name or description)
-        const matchedProducts = products.filter(p =>
-            p.name.toLowerCase().includes(query) ||
-            (p.description && p.description.toLowerCase().includes(query))
-        ).slice(0, 4);
-
-        // 2. Categories (Search in flat list derived from products or direct category list)
-        // Extract unique categories from products as a fallback
-        const productCategories = [...new Set(products.map(p => p.category.split(' > ')[0]))];
-        const matchedCategories = productCategories
-            .filter(c => c.toLowerCase().includes(query))
-            .slice(0, 3);
-
-        // 3. Brands (Mock brands or extract from 'brand' field if exists)
-        // Since we don't have a structured brand object, we manually define or extract
-        const knownBrands = ['Adidas', 'Nike', 'Puma', 'Zara', 'Mavi', 'Defacto', 'Samsung', 'Apple', 'Bosch', 'Makita'];
-        const matchedBrands = knownBrands
-            .filter(b => b.toLowerCase().includes(query))
-            .slice(0, 3);
+        // 3. Brands (from dynamicBrands)
+        const matchedBrands = dynamicBrands
+            .filter(b => b && b.toLowerCase().includes(query))
+            .slice(0, 5);
 
         let html = '';
 
@@ -176,10 +264,14 @@ function initLiveSearch() {
         if (matchedCategories.length > 0) {
             html += `<div class="search-section-title">Kategoriler</div>`;
             matchedCategories.forEach(cat => {
+                const parentLabel = cat.parent ? ` <small style="color:#888;">(${cat.parent})</small>` : '';
+                const link = cat.type === 'item'
+                    ? `arama.html?q=${encodeURIComponent(cat.name)}`
+                    : `kategori.html?cat=${cat.slug}`;
                 html += `
-                <a href="arama.html?category=${encodeURIComponent(cat)}" class="search-result-item" tabindex="0">
+                <a href="${link}" class="search-result-item" tabindex="0">
                     <div class="search-icon-circle"><i class="fa-solid fa-layer-group"></i></div>
-                    <span class="search-result-name">${cat}</span>
+                    <span class="search-result-name">${highlightMatch(cat.name, query)}${parentLabel}</span>
                 </a>`;
             });
         }
@@ -189,9 +281,9 @@ function initLiveSearch() {
             html += `<div class="search-section-title">Markalar</div>`;
             matchedBrands.forEach(brand => {
                 html += `
-                <a href="arama.html?q=${encodeURIComponent(brand)}" class="search-result-item" tabindex="0">
+                <a href="arama.html?brand=${encodeURIComponent(brand)}" class="search-result-item" tabindex="0">
                     <div class="search-icon-circle"><i class="fa-solid fa-tag"></i></div>
-                    <span class="search-result-name">${brand}</span>
+                    <span class="search-result-name">${highlightMatch(brand, query)}</span>
                 </a>`;
             });
         }
@@ -200,12 +292,16 @@ function initLiveSearch() {
         if (matchedProducts.length > 0) {
             html += `<div class="search-section-title">Ürünler</div>`;
             matchedProducts.forEach(prod => {
+                const img = prod.mainImage || prod.image || (prod.images && prod.images[0]) || 'https://placehold.co/50x50/f0f0f0/999?text=Ürün';
+                const price = prod.salePrice && parseFloat(prod.salePrice) > 0
+                    ? parseFloat(prod.salePrice).toLocaleString('tr-TR') + ' TL'
+                    : (prod.price ? parseFloat(prod.price).toLocaleString('tr-TR') + ' TL' : '');
                 html += `
-                <a href="urun-detay.html?id=${prod.id}" class="search-result-item search-result-product" tabindex="0">
-                    <img src="${prod.image}" alt="${prod.name}">
+                <a href="urun-detay.html?id=${prod._id || prod.id}" class="search-result-item search-result-product" tabindex="0">
+                    <img src="${img}" alt="${prod.name || 'Ürün'}" onerror="this.style.display='none';">
                     <div class="search-result-info">
-                        <span class="search-result-name">${prod.name}</span>
-                        <span class="search-result-price">${prod.price}</span>
+                        <span class="search-result-name">${highlightMatch(prod.name || 'İsimsiz', query)}</span>
+                        <span class="search-result-price">${price}</span>
                     </div>
                 </a>`;
             });
@@ -219,6 +315,13 @@ function initLiveSearch() {
         dropdown.innerHTML = html;
         dropdown.classList.add('active');
     });
+
+    // Helper: Highlight matching text
+    function highlightMatch(text, query) {
+        if (!text || !query) return text || '';
+        const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        return text.replace(regex, '<strong style="color:#8b7bd8;">$1</strong>');
+    }
 
     // Close on outside click
     document.addEventListener('click', (e) => {

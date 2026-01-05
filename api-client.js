@@ -160,11 +160,26 @@ const API = {
     async getBrands() {
         try {
             const response = await fetch(`${this.baseUrl}/brands?active=true`);
-            return await response.json();
+            const result = await response.json();
+            if (result.success && result.data) {
+                return result;
+            }
         } catch (error) {
             console.error('Get brands error:', error);
-            return { success: false, data: [] };
         }
+
+        // Fallback to localStorage
+        try {
+            const local = localStorage.getItem('galata_brands');
+            if (local) {
+                const brands = JSON.parse(local);
+                return { success: true, data: brands, fromLocal: true };
+            }
+        } catch (e) {
+            console.error('Brands localStorage error:', e);
+        }
+
+        return { success: false, data: [] };
     }
 };
 
