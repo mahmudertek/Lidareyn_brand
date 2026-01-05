@@ -454,7 +454,11 @@
 
                 <!-- Header -->
                 <div class="brands-header">
-                    <h2 style="margin: 0; color: #1f2937;">Tüm Markalar</h2>
+                    <h2 style="margin: 0; color: #1f2937;">
+                        Tüm Markalar
+                        <span id="brandTotalCount"
+                            style="font-size: 14px; background: #e5e7eb; color: #4b5563; padding: 4px 10px; border-radius: 20px; vertical-align: middle; margin-left: 8px;">0</span>
+                    </h2>
                     <div style="display:flex; gap:10px;">
                         <button class="add-brand-btn" style="background: #10b981;" onclick="syncHomepageBrands()">
                             <i class="fa-solid fa-rotate"></i>
@@ -612,6 +616,7 @@
         // Render brands grid
         function renderBrands() {
             const grid = document.getElementById('brandsGrid');
+            document.getElementById('brandTotalCount').textContent = brands.length;
 
             if (brands.length === 0) {
                 grid.innerHTML = `
