@@ -1668,8 +1668,17 @@
 
             tbody.innerHTML = '';
 
-            // Ürünleri varsayılan sırayla listele (Eskiden Yeniye: Üst=Eski, Alt=Yeni)
-            products.forEach(product => {
+            // KESİN VE NİHAİ ÇÖZÜM: ID'ye göre Yeniden -> Eskiye sırala (Z-A)
+            // TABLO ÜSTÜ = EN YENİ ÜRÜN
+            // TABLO ALTI = EN ESKİ ÜRÜN
+            const sortedProducts = [...products].sort((a, b) => {
+                const idA = (a._id || a.id).toString();
+                const idB = (b._id || b.id).toString();
+                // B, A'dan önce gelir (Büyükten küçüğe / Yeniden eskiye)
+                return idB.localeCompare(idA);
+            });
+
+            sortedProducts.forEach(product => {
                 let stockClass = 'stock-high';
                 let stockText = 'Stokta';
                 if (product.stock === 0) {
