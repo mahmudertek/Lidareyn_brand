@@ -71,12 +71,10 @@
 
         // --- FlowingMenu Component ---
         const FlowingMenu = function () {
-            const _useState = useState(null);
-            const activeBrandId = _useState[0];
-            const setActiveBrandId = _useState[1];
+            const [activeBrandId, setActiveBrandId] = useState(null);
 
-            // Brand Names
-            const brands = [
+            // Initial fallback data
+            const [brands, setBrands] = useState([
                 { id: 1, name: 'Beta', slug: 'beta' },
                 { id: 2, name: 'Bosch', slug: 'bosch' },
                 { id: 3, name: 'Makita', slug: 'makita' },
@@ -89,17 +87,57 @@
                 { id: 10, name: 'İzeltaş', slug: 'izeltas' },
                 { id: 11, name: 'Stanley', slug: 'stanley' },
                 { id: 12, name: 'Gedore', slug: 'gedore' },
-                { id: 13, name: 'Metabo', slug: 'metabo' },
-                { id: 14, name: 'Milwaukee', slug: 'milwaukee' },
-                { id: 15, name: 'Kama', slug: 'kama' },
-                { id: 16, name: 'Proxxon', slug: 'proxxon' },
-                { id: 17, name: 'Karbosan', slug: 'karbosan' },
-                { id: 18, name: 'Kristal', slug: 'kristal' },
-                { id: 19, name: 'Osaka', slug: 'osaka' },
-                { id: 20, name: 'Gison', slug: 'gison' },
-                { id: 21, name: 'Baymax', slug: 'baymax' },
-                { id: 22, name: 'Beybi', slug: 'beybi' }
-            ];
+                { id: 13, name: 'Milwaukee', slug: 'milwaukee' },
+                { id: 14, name: 'Proxxon', slug: 'proxxon' }
+            ]);
+
+            // Dynamic Fetch Effect
+            useEffect(function () {
+                const fetchBrands = async () => {
+                    let apiBrands = [];
+
+                    // 1. API'den Çek
+                    if (window.API && typeof window.API.getBrands === 'function') {
+                        try {
+                            const res = await window.API.getBrands();
+                            if (res && res.success && Array.isArray(res.data)) {
+                                apiBrands = res.data;
+                            }
+                        } catch (e) { console.error('Brand fetch error', e); }
+                    }
+
+                    // 2. LocalStorage'dan Çek (Admin Fallback için)
+                    let localBrands = [];
+                    try {
+                        const saved = localStorage.getItem('galata_brands') || localStorage.getItem('brands');
+                        if (saved) localBrands = JSON.parse(saved);
+                    } catch (e) { }
+
+                    // 3. Birleştir (Deduplicate)
+                    const merged = new Map();
+
+                    // API öncelikli
+                    apiBrands.forEach(b => merged.set(b.name.toLowerCase(), b));
+
+                    // Local'den API'de olmayanları ekle
+                    localBrands.forEach(b => {
+                        if (!merged.has(b.name.toLowerCase())) {
+                            merged.set(b.name.toLowerCase(), b);
+                        }
+                    });
+
+                    if (merged.size > 0) {
+                        const finalBrands = Array.from(merged.values()).map((b, idx) => ({
+                            id: b._id || b.id || ('br_' + idx),
+                            name: b.name,
+                            slug: b.slug || b.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+                        }));
+                        setBrands(finalBrands);
+                    }
+                };
+
+                fetchBrands();
+            }, []);
 
             return React.createElement('div', { className: 'flowing-menu-container' },
                 React.createElement('div', { className: 'flowing-menu-scroll-wrapper' },
