@@ -23,9 +23,30 @@ async function initProductCarousel() {
         if (response && response.success && response.data && response.data.length > 0) {
             console.log('✅ Featured products loaded from API:', response.data.length);
 
-            // API zaten filtrelediği için gelenleri direkt kullanıyoruz
-            // Ama yine de client-side bir doğrulama ve veri normalizasyonu yapalım
-            products = response.data.map(product => {
+            let rawProducts = response.data;
+
+            // Merge with LocalStorage (Priority: Local Change)
+            try {
+                const localRaw = localStorage.getItem('galatacarsi_products');
+                if (localRaw) {
+                    const localList = JSON.parse(localRaw);
+                    const localMap = new Map(localList.map(p => [p._id || p.id, p]));
+
+                    rawProducts = rawProducts.map(apiP => {
+                        const localP = localMap.get(apiP._id || apiP.id);
+                        // If exists in local, use local version (it might have isFeatured=false now)
+                        return localP ? localP : apiP;
+                    });
+                }
+            } catch (e) { console.error('Merge error', e); }
+
+            // Re-filter (Because local override might have set isFeatured=false)
+            // Backend filtered for us, but local override might disqualify it
+            rawProducts = rawProducts.filter(p =>
+                p.isFeatured === true || p.isFeatured === 'true' || (p.tags && p.tags.includes('featured'))
+            );
+
+            products = rawProducts.map(product => {
                 // Try multiple image sources
                 let imageUrl = product.mainImage || product.image || (product.images && product.images[0]) || null;
                 if (!imageUrl) imageUrl = 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name || 'Ürün');

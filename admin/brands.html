@@ -432,7 +432,10 @@
         <main class="main-content">
             <!-- Topbar -->
             <header class="topbar">
-                <div class="page-title">Marka Yönetimi</div>
+                <div class="page-title">
+                    Marka Yönetimi
+                    <span id="topBrandCount" style="color: #6b7280; font-size: 0.8em; margin-left: 10px;">(0)</span>
+                </div>
 
                 <div class="topbar-right">
                     <button class="notification-btn">
@@ -616,7 +619,9 @@
         // Render brands grid
         function renderBrands() {
             const grid = document.getElementById('brandsGrid');
-            document.getElementById('brandTotalCount').textContent = brands.length;
+            const count = brands.length;
+            document.getElementById('brandTotalCount').textContent = count;
+            document.getElementById('topBrandCount').textContent = `(${count})`;
 
             if (brands.length === 0) {
                 grid.innerHTML = `
