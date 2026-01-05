@@ -1,6 +1,7 @@
+
 /**
- * Ana Sayfa Marka Vitrini v2.0 - Tamamen Manuel Kontrol
- * Sadece admin panelinden seçilen ve brandShowcase alanı eşleşen ürünleri gösterir.
+ * Ana Sayfa Marka Vitrini v2.6 - Ultra Robust Sync with Tags
+ * Hem API hem LocalStorage desteği ile admin panelindeki seçimleri anında yansıtır.
  */
 
 const BRAND_SHOWCASE = {
@@ -17,104 +18,118 @@ const BRAND_SHOWCASE = {
         'blackdecker': '.theme-blackdecker .madeniyat-products-section'
     },
 
-    async fetchProducts() {
+    async fetchUnifiedProducts() {
+        const TIMESTAMP = new Date().getTime();
+        let apiProducts = [];
+        let localProducts = [];
+
+        // 1. Local Data
         try {
-            const response = await fetch(`${this.apiUrl}/products?limit=100&active=true`);
+            localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+        } catch (e) { console.error('Local data error'); }
+
+        // 2. API Data
+        try {
+            const response = await fetch(`${this.apiUrl}/products?limit=1000&t=${TIMESTAMP}`);
             const result = await response.json();
-            if (!result.success) return null;
-            return result.data || [];
+            if (result.success) {
+                apiProducts = result.data || [];
+            }
         } catch (error) {
-            console.error('❌ API hatası:', error);
-            return null;
+            console.warn('API fetch error, using local only');
         }
+
+        // 3. Merge (Local overrides API)
+        const idMap = new Map();
+        apiProducts.forEach(p => idMap.set(p._id || p.id, p));
+        localProducts.forEach(p => idMap.set(p._id || p.id, p));
+
+        return Array.from(idMap.values());
     },
 
     createProductCard(product) {
+        if (!product) return '';
         const badge = product.isBestSeller ? '<span class="madeniyat-product-badge">Çok Satan</span>' :
             product.isNew ? '<span class="madeniyat-product-badge">Yeni</span>' : '';
 
-        // Try multiple image sources
-        const image = product.mainImage || product.image || (product.images && product.images[0]) || `https://placehold.co/400x400/6366f1/ffffff?text=${(product.brand || 'P').charAt(0)}`;
-        const price = product.salePrice || product.price || 0;
+        const image = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
+        const price = parseFloat(product.salePrice || product.price) || 0;
+        const oldPrice = (product.salePrice && product.price > product.salePrice) ? product.price : null;
         const productUrl = `urun-detay.html?id=${product._id || product.id}`;
 
+        const priceHtml = oldPrice
+            ? `<span style="color:#e74c3c; font-weight:700;">₺${price.toLocaleString('tr-TR')}</span>
+               <span style="text-decoration:line-through; color:#999; font-size:0.8em; margin-left:8px;">₺${oldPrice.toLocaleString('tr-TR')}</span>`
+            : `<span>₺${price.toLocaleString('tr-TR')}</span>`;
+
         return `
-            <article class="madeniyat-product-card">
+            <article class="madeniyat-product-card" onclick="window.location.href='${productUrl}'">
                 ${badge}
-                <button class="madeniyat-favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                <a href="${productUrl}">
-                    <img src="${image}" alt="${product.name}" class="madeniyat-product-image" style="opacity: 1 !important;">
-                </a>
+                <button class="madeniyat-favorite-btn" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${product._id || product.id}')">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <img src="${image}" alt="${product.name}" class="madeniyat-product-image" style="object-fit: contain;">
                 <div class="madeniyat-product-info">
-                    <h3 class="madeniyat-product-name">${product.name}</h3>
-                    <p class="madeniyat-product-price">${price.toLocaleString('tr-TR')}TL</p>
+                    <h3 class="madeniyat-product-name" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 3em;">${product.name}</h3>
+                    <p class="madeniyat-product-price">${priceHtml}</p>
                 </div>
             </article>
         `;
     },
 
-    renderBrandProducts(brandKey, products) {
+    renderBrandProducts(brandKey, allProducts) {
         const container = document.querySelector(this.brands[brandKey]);
         if (!container) return;
 
-        // KRİTİK: SADECE admin panelinden işaretlenenleri al
-        const brandProducts = (products || []).filter(p => {
-            const val = (p.brandShowcase || p.showcase || '').toLowerCase().trim();
-            const productBrand = (p.brand || '').toLowerCase().trim();
-            const targetKey = brandKey.toLowerCase().trim();
+        const normalizedTarget = brandKey.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-            if (val === targetKey) return true;
-            if (!val || val === 'none' || val === '') {
-                if (productBrand === targetKey) return true;
-            }
-            return false;
-        }).slice(0, 3); // Maksimum 3 tane göster
+        // Robust match (seçilen markayı içerenleri al)
+        const brandProducts = allProducts.filter(p => {
+            const val1 = (p.brandShowcase || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+            const val2 = (p.showcase || '').toLowerCase().replace(/[^a-z0-9]/g, '');
 
-        // HER ZAMAN 3 slot render et (Görsel bütünlük için)
+            // TAG CONTROL: Etiketlerde "showcase-beta" var mı?
+            const tags = Array.isArray(p.tags) ? p.tags.map(t => String(t).toLowerCase()) : [];
+            const tagMatch = tags.some(t => t === `showcase-${normalizedTarget}` || t === normalizedTarget);
+
+            return val1 === normalizedTarget || val2 === normalizedTarget || tagMatch;
+        }).slice(0, 3);
+
         let html = '';
         for (let i = 0; i < 3; i++) {
             const p = brandProducts[i];
             if (p) {
                 html += this.createProductCard(p);
             } else {
-                // Placeholder Card
                 html += `
                     <article class="madeniyat-product-card">
                         <button class="madeniyat-favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                        <img src="https://placehold.co/400x400/f3f3f3/ddd?text=${brandKey.toUpperCase()}" class="madeniyat-product-image">
+                        <div style="height:180px; display:flex; align-items:center; justify-content:center; background:#f9f9f9; color:#ddd; font-size:40px;">
+                            <i class="fa-solid fa-toolbox"></i>
+                        </div>
                         <div class="madeniyat-product-info">
-                            <h3 class="madeniyat-product-name">Yükleniyor...</h3>
-                            <p class="madeniyat-product-price">--- TL</p>
+                            <h3 class="madeniyat-product-name" style="color:#ccc;">Ürün Seçilmedi</h3>
+                            <p class="madeniyat-product-price" style="color:#eee;">--- TL</p>
                         </div>
                     </article>
                 `;
             }
         }
-
         container.innerHTML = html;
-        console.log(`✅ ${brandKey} için vitrin güncellendi (Ürün: ${brandProducts.length}, Slot: 3).`);
     },
 
-    async loadAllShowcases() {
-        const products = await this.fetchProducts();
-        if (products === null && this.retryCount < this.maxRetries) {
-            this.retryCount++;
-            setTimeout(() => this.loadAllShowcases(), 5000);
-            return;
-        }
+    async init() {
+        console.log('🚀 Brand Showcase Starting Unified Init...');
+        const products = await this.fetchUnifiedProducts();
 
         Object.keys(this.brands).forEach(brandKey => {
-            this.renderBrandProducts(brandKey, products || []);
+            this.renderBrandProducts(brandKey, products);
         });
-    },
-
-    init() {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.loadAllShowcases());
-        } else {
-            this.loadAllShowcases();
-        }
     }
 };
 
-BRAND_SHOWCASE.init();
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => BRAND_SHOWCASE.init());
+} else {
+    BRAND_SHOWCASE.init();
+}

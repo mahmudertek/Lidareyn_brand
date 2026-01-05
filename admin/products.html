@@ -661,7 +661,7 @@
                         <button class="add-product-btn" style="background: #059669; opacity: 0.9;"
                             onclick="openPriceIncreaseModal()">
                             <i class="fa-solid fa-percent"></i>
-                            Markaya Göre Zam Yap
+                            Markaya Göre Fiyat Değişimi
                         </button>
                         <button class="add-product-btn" style="background: #4f46e5; opacity: 0.9;"
                             onclick="window.location.href='brands.html'">
@@ -729,11 +729,11 @@
         </main>
     </div>
 
-    <!-- Price Increase by Brand Modal -->
+    <!-- Price Change by Brand Modal -->
     <div class="modal-overlay" id="priceIncreaseModal">
         <div class="modal" style="max-width: 500px;">
-            <div class="modal-header" style="background: linear-gradient(135deg, #059669, #10b981);">
-                <h2 style="color: white;"><i class="fa-solid fa-percent"></i> Markaya Göre Zam Yap</h2>
+            <div class="modal-header" style="background: linear-gradient(135deg, #4f46e5, #4338ca);">
+                <h2 style="color: white;"><i class="fa-solid fa-percent"></i> Markaya Göre Fiyat Değişimi</h2>
                 <button class="modal-close" onclick="closePriceIncreaseModal()" style="color: white;">&times;</button>
             </div>
             <div class="modal-body" style="padding: 24px;">
@@ -744,12 +744,23 @@
                         <option value="">-- Marka Seçin --</option>
                     </select>
                 </div>
+
                 <div class="form-group" style="margin-top: 16px;">
-                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Zam Yüzdesi (%) *</label>
-                    <input type="number" id="zamPercentage" placeholder="Örn: 10" min="0" max="500" step="0.1"
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">İşlem Türü *</label>
+                    <select id="priceChangeType"
+                        style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;"
+                        onchange="updateZamPreview()">
+                        <option value="increase">📈 Zam Yap (Fiyat Artır)</option>
+                        <option value="discount">📉 İndirim Yap (Fiyat Düşür)</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-top: 16px;">
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Oran Yüzdesi (%) *</label>
+                    <input type="number" id="zamPercentage" placeholder="Örn: 10" min="0" max="99" step="0.1"
                         style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
-                    <small style="color: #6b7280; margin-top: 4px; display: block;">Örn: 10 girerseniz, ürün fiyatları
-                        %10 artırılır</small>
+                    <small style="color: #6b7280; margin-top: 4px; display: block;">Sadece pozitif sayı girin (Örn: 10).
+                        İndirim seçerseniz fiyat düşer.</small>
                 </div>
                 <div id="zamPreview"
                     style="margin-top: 16px; padding: 12px; background: #f3f4f6; border-radius: 8px; display: none;">
@@ -762,8 +773,8 @@
                         İptal
                     </button>
                     <button onclick="applyPriceIncrease()"
-                        style="padding: 12px 24px; background: #059669; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
-                        <i class="fa-solid fa-check"></i> Zammı Uygula
+                        style="padding: 12px 24px; background: #4f46e5; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                        <i class="fa-solid fa-check"></i> Uygula
                     </button>
                 </div>
             </div>
@@ -1657,6 +1668,7 @@
 
             tbody.innerHTML = '';
 
+            // Ürünleri varsayılan sırayla listele (Eskiden Yeniye: Üst=Eski, Alt=Yeni)
             products.forEach(product => {
                 let stockClass = 'stock-high';
                 let stockText = 'Stokta';
@@ -2079,10 +2091,19 @@
                 // Tags array (Toplu)
                 tags: tags,
 
-                // Ana sayfa marka vitrini
+                // Ana sayfa marka vitrini (Hem ayrı alan olarak hem de tag olarak gönderelim)
                 brandShowcase: brandShowcase || '',
                 mainImage: imageToUse
             };
+
+            // BACKEND SCHEMA YEDEKLEMESİ:
+            // Eğer backend 'brandShowcase' alanını kabul etmiyorsa diye tag içine de ekleyelim
+            if (brandShowcase) {
+                const showcaseTag = `showcase-${brandShowcase}`;
+                if (!productData.tags.includes(showcaseTag)) {
+                    productData.tags.push(showcaseTag);
+                }
+            }
 
             console.log('💾 Kaydedilecek Veri (DETAYLI):', {
                 barcode: productData.barcode,
@@ -2452,6 +2473,8 @@
         function updateZamPreview() {
             const brand = document.getElementById('zamBrandSelect').value;
             const percentage = parseFloat(document.getElementById('zamPercentage').value);
+            const type = document.getElementById('priceChangeType').value; // increase or discount
+
             const previewDiv = document.getElementById('zamPreview');
             const previewText = document.getElementById('zamPreviewText');
 
@@ -2459,14 +2482,18 @@
                 const brandProducts = products.filter(p => p.brand === brand);
                 const count = brandProducts.length;
 
-                // Örnek hesaplama
+                // Hesaplama Mantığı
+                const isDiscount = type === 'discount';
+                const multiplier = isDiscount ? (1 - percentage / 100) : (1 + percentage / 100);
+                const actionText = isDiscount ? 'İNDİRİM' : 'ZAM';
+
                 if (brandProducts.length > 0) {
                     const sample = brandProducts[0];
                     const oldPrice = parseFloat(sample.price) || 0;
-                    const newPrice = oldPrice * (1 + percentage / 100);
+                    const newPrice = oldPrice * multiplier;
 
                     previewText.innerHTML = `
-                        <strong>${brand}</strong> markasının <strong>${count}</strong> ürününe <strong>%${percentage}</strong> zam uygulanacak.<br>
+                        <strong>${brand}</strong> markasının <strong>${count}</strong> ürününe <strong>%${percentage} ${actionText}</strong> uygulanacak.<br>
                         <span style="color: #6b7280; font-size: 13px;">
                             Örnek: ${sample.name.substring(0, 40)}...<br>
                             Eski: ₺${oldPrice.toLocaleString('tr-TR')} → Yeni: ₺${newPrice.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}
@@ -2486,6 +2513,7 @@
         async function applyPriceIncrease() {
             const brand = document.getElementById('zamBrandSelect').value;
             const percentage = parseFloat(document.getElementById('zamPercentage').value);
+            const type = document.getElementById('priceChangeType').value;
 
             if (!brand) {
                 alert('Lütfen bir marka seçin.');
@@ -2504,8 +2532,12 @@
                 return;
             }
 
+            const isDiscount = type === 'discount';
+            const actionText = isDiscount ? 'İNDİRİM' : 'ZAM';
+            const multiplier = isDiscount ? (1 - percentage / 100) : (1 + percentage / 100);
+
             const confirm = window.confirm(
-                `${brand} markasının ${brandProducts.length} ürününe %${percentage} zam uygulanacak.\n\nDevam etmek istiyor musunuz?`
+                `${brand} markasının ${brandProducts.length} ürününe %${percentage} ${actionText} uygulanacak.\n\nDevam etmek istiyor musunuz?`
             );
 
             if (!confirm) return;
@@ -2513,13 +2545,24 @@
             let successCount = 0;
             let failCount = 0;
 
+            // Kullanıcıya işlem başladığını belirtelim
+            document.getElementById('zamPreviewText').textContent = "İşlem yapılıyor, lütfen bekleyiniz...";
+
             for (const product of brandProducts) {
                 try {
                     const oldPrice = parseFloat(product.price) || 0;
-                    const newPrice = Math.round(oldPrice * (1 + percentage / 100) * 100) / 100;
+                    const newPrice = Math.round(oldPrice * multiplier * 100) / 100;
 
                     // Ürünü güncelle
+                    // Eğer indirim yapılıyorsa, eski fiyatı salePrice olarak saklamak mantıklı olabilir mi? 
+                    // Kullanıcı isteğinde belirtilmedi ama genellikle indirimde: price -> newPrice, salePrice -> newPrice
+                    // Eğer "Zam" ise sadece price artar.
+                    // Şimdilik sadece ana fiyatı değiştiriyoruz, salePrice mantığı karışık olabilir.
+
                     const updatedProduct = { ...product, price: newPrice };
+
+                    // Eğer indirim yapıldıysa ve ürünün bir indirimli fiyatı (salePrice) varsa, onu da güncellemek gerekebilir
+                    // Basit tutalım: Ana fiyatı değiştir.
 
                     // API'ye gönder
                     const response = await ADMIN_API.updateProduct(product._id || product.id, updatedProduct);
@@ -2535,7 +2578,7 @@
                         failCount++;
                     }
                 } catch (error) {
-                    console.error('Zam uygulama hatası:', error);
+                    console.error('Fiyat değişimi hatası:', error);
                     failCount++;
                 }
             }
@@ -2547,7 +2590,7 @@
             closePriceIncreaseModal();
             renderProducts();
 
-            alert(`✅ Zam uygulandı!\n\nBaşarılı: ${successCount} ürün\nBaşarısız: ${failCount} ürün`);
+            alert(`✅ ${actionText} uygulandı!\n\nBaşarılı: ${successCount} ürün\nBaşarısız: ${failCount} ürün`);
         }
 
     </script>
