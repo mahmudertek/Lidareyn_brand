@@ -91,22 +91,29 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const normalizedTarget = targetBrand.toLowerCase().replace(/[^a-z0-9]/g, '');
 
-            // 5. Ürünleri Filtrele (Sadece Manuel Seçilenler)
-            // Tags desteği eklendi: "showcase-beta" vb.
+            // 5. Ürünleri Filtrele (ÜST DÜZEY GÜVENLİK VE KESİN EŞLEŞME)
             let brandProducts = allProducts.filter(p => {
-                // Her türlü etiket alanına bakıyoruz (case/trim insensitive)
-                const val1 = String(p.brandShowcase || '').toLowerCase().trim();
-                const val2 = String(p.showcase || '').toLowerCase().trim();
-                const val3 = String(p.vitrin || '').toLowerCase().trim();
+                const pName = String(p.name || '').toLowerCase();
+                const pBrandRaw = String(p.brand || p.marka || '').toLowerCase().trim();
+                const pBrandNorm = pBrandRaw.replace(/[^a-z0-9]/g, '');
 
-                // TAG CONTROL: Etiketlerde "showcase-beta" var mı?
-                const tags = Array.isArray(p.tags) ? p.tags.map(t => String(t).toLowerCase()) : [];
-                const tagMatch = tags.some(t => t === `showcase-${normalizedTarget}` || t === normalizedTarget);
+                // 1. OTO-KONTROL: Marka adı EŞLEŞMELİDİR.
+                if (pBrandNorm !== normalizedTarget) return false;
 
-                return val1 === normalizedTarget ||
-                    val2 === normalizedTarget ||
-                    val3 === normalizedTarget ||
-                    tagMatch;
+                // 2. ÇAPRAZ KONTROL (CROSS-CHECK):
+                // Veritabanında marka yanlış girilmiş olabilir (Örn: Adı 'Wilke...' ama Markası 'Beta' seçilmiş).
+                // Eğer ürün isminde, hedef marka DIŞINDA başka bilinen bir markanın adı geçiyorsa, bu ürünü GİZLE.
+                const knownBrands = ['wilke', 'bosch', 'makita', 'dewalt', 'knipex', 'blackdecker', 'einhell', 'stanley', 'izeltas', 'fisco', 'proxxon', 'gedore', 'milwaukee', 'metabo'];
+
+                // Mevcut markayı hariç tut
+                const otherBrands = knownBrands.filter(b => b !== normalizedTarget);
+
+                // Ürün isminde başka bir marka adı geçiyor mu? (Örn: Beta vitrininde 'Wilke' geçmemeli)
+                const isContaminated = otherBrands.some(badBrand => pName.includes(badBrand));
+
+                if (isContaminated) return false;
+
+                return true;
             });
 
             // İlk 3 ürünü al

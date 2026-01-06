@@ -8,11 +8,13 @@
 
 .search-header-bar {
     max-width: 1300px;
+    width: 100%;
     margin: 0 auto 1.5rem auto;
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .search-header-bar h1 {
@@ -317,6 +319,7 @@
     line-height: 1.3;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     height: 2.6em;
@@ -405,8 +408,32 @@
 }
 
 @media (max-width: 992px) {
+
+    /* Genel taşma önleme */
+    .search-page,
+    .search-header-bar,
+    .search-layout,
+    .search-results {
+        max-width: 100% !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+    }
+
     .search-layout {
         grid-template-columns: 1fr;
+        padding: 0 10px !important;
+    }
+
+    .search-header-bar {
+        padding: 0 10px !important;
+        flex-wrap: wrap;
+    }
+
+    .search-header-bar h1 {
+        font-size: 1.2rem !important;
+        width: 100%;
+        margin-bottom: 0.5rem;
     }
 
     .search-sidebar {
@@ -436,6 +463,12 @@
 
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 10px !important;
+    }
+
+    .results-toolbar {
+        flex-wrap: wrap;
+        gap: 10px;
     }
 }
 

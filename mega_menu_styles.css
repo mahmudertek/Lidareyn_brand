@@ -45,7 +45,7 @@
 
 
 /* Hover Bridge Fix - Görünmez Köprü */
-.nav-item-dropdown::after {
+.categories-link::after {
     content: '';
     position: absolute;
     top: 100%;

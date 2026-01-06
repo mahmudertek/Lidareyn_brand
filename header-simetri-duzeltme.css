@@ -1,87 +1,262 @@
-/* ============================================================ 
-   HEADER SYMMETRY & ALIGNMENT FIX (ULTIMATE)
-   Ensures all elements are locked to the same imaginary line.
-   ============================================================ */
-.header-container,
-.nav-menu,
-.main-nav,
-.header-icons,
-.icon-btn,
-.nav-link,
-.logo,
-.logo a,
-.user-menu-container,
-.search-container {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center;
-    /* Default center, will be overridden where needed */
-    height: 100% !important;
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    box-sizing: border-box !important;
-}
+/* =====================================================
+   HEADER SİMETRİ & MOBİL DÜZELTMESİ (GÜNCEL - STEP 2664)
+   ===================================================== */
 
+/* --- GLOBAL HEADER AYARLARI --- */
 .header-container {
-    justify-content: space-between !important;
-    height: var(--header-height, 38px) !important;
+    align-items: center !important;
 }
 
-.nav-menu {
-    gap: 22px !important;
-    justify-content: flex-start !important;
-}
-
-.nav-link {
-    font-size: 13px !important;
-    font-weight: 600 !important;
-    padding: 0 5px !important;
-    color: #333 !important;
-}
-
+/* Logo dikey ortalama */
+.logo,
 .logo a {
-    font-size: 1.2rem !important;
-    font-weight: 800 !important;
-    color: #8b7bd8 !important;
-    letter-spacing: -0.5px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
 }
 
+/* Masaüstü Navigasyon Hizalama */
+.nav-menu>li,
+.nav-menu>li>.nav-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+}
+
+/* Masaüstü İkonları */
 .header-icons {
-    gap: 12px !important;
-    justify-content: flex-end !important;
-}
-
-.icon-btn {
-    padding: 0 8px !important;
-    font-size: 14px !important;
-    border: none !important;
-    background: transparent !important;
-}
-
-.icon-label {
-    margin-left: 5px !important;
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    /* Ensure label is also centered */
-    display: flex !important;
     align-items: center !important;
 }
 
-/* Fix for icons that might have weird line-height */
+.icon-btn,
 .icon-btn i,
-.nav-link i {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.icon-btn .icon-label {
+    vertical-align: middle !important;
     line-height: 1 !important;
 }
 
-/* Mobile Adjustments for the fix */
-@media (max-width: 768px) {
-    .header-container {
-        height: 50px !important;
-        /* Mobile height */
+/* Search container */
+.search-container {
+    display: flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
+    height: 100% !important;
+}
+
+/* --- MASAÜSTÜNDE MOBİL ÖĞELERİ GİZLE --- */
+@media screen and (min-width: 769px) {
+
+    .mobile-search-btn,
+    .mobile-menu-toggle,
+    .mobile-categories-btn {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
     }
+}
+
+/* --- MOBİL MODE DÜZENLEMELERİ --- */
+@media screen and (max-width: 768px) {
+
+    /* 1. Gereksiz Masaüstü Öğelerini Gizle */
+    .search-container:not(.active),
+    .header-icons .icon-label,
+    .desktop-only {
+        display: none !important;
+    }
+
+    /* 2. Header Container - RELATIVE & VISIBLE OVERFLOW (Nav menü için) */
+    .header-container {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 0 5px !important;
+        height: 100% !important;
+        position: relative !important;
+        overflow: visible !important;
+        /* Menü aşağı taşacak */
+    }
+
+    /* 3. Sol: Mobil Kategoriler Butonu (GÖRÜNÜR) */
+    .mobile-categories-btn {
+        display: flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+        color: #333 !important;
+        text-decoration: none !important;
+        z-index: 20 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: 36px !important;
+    }
+
+    .mobile-categories-btn i {
+        font-size: 16px !important;
+    }
+
+    .mobile-categories-btn span {
+        font-size: 10px !important;
+        font-weight: 600 !important;
+        display: inline-block !important;
+        /* Metin Görünür */
+        white-space: nowrap !important;
+    }
+
+    /* 4. Orta: Logo (MUTLAK ORTALAMA) */
+    .logo {
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        margin: 0 !important;
+        z-index: 10 !important;
+        display: flex !important;
+        width: auto !important;
+        pointer-events: none !important;
+    }
+
+    .logo a {
+        font-size: 16px !important;
+        font-weight: 800 !important;
+        white-space: nowrap !important;
+        color: #000 !important;
+        pointer-events: auto !important;
+    }
+
+    /* 5. Sağ: İkonlar */
+    .header-icons {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-end !important;
+        gap: 0 !important;
+        z-index: 20 !important;
+    }
+
+    .header-icons .icon-btn,
+    .mobile-search-btn {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 30px !important;
+        height: 36px !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    .header-icons i,
+    .mobile-search-btn i {
+        font-size: 16px !important;
+        color: #333 !important;
+    }
+
+    .header-icons .user-menu-container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 30px !important;
+        height: 36px !important;
+    }
+
+    .user-menu-container .icon-btn {
+        width: 100% !important;
+    }
+
+    .mobile-search-btn {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+
+    /* --- NAVİGASYON ŞERİDİ (Header Altı Yatay Menü) --- */
+    .main-nav {
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        width: 100% !important;
+        background-color: #ffffff !important;
+        border-top: 1px solid #f0f0f0 !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05) !important;
+        padding: 0 !important;
+        z-index: 15 !important;
+        display: block !important;
+        height: 36px !important;
+    }
+
+    .nav-menu {
+        display: flex !important;
+        flex-direction: row !important;
+        /* YATAY */
+        align-items: center !important;
+        justify-content: space-evenly !important;
+        /* Eşit dağılım */
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
+    /* "Tüm Kategoriler"i menüden gizle (Yukarıda butonu var) */
+    .nav-menu>li.nav-item-dropdown {
+        display: none !important;
+    }
+
+    .nav-menu>li {
+        flex: 1 !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-bottom: none !important;
+        text-align: center !important;
+        padding: 0 !important;
+    }
+
+    .nav-menu>li:not(:last-child) {
+        border-right: 1px solid #f9f9f9 !important;
+    }
+
+    .nav-menu>li>a {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+        text-transform: uppercase !important;
+        white-space: nowrap !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+}
+
+/* =====================================================
+   DİĞER AYARLAR
+   ===================================================== */
+.sidebar-title,
+.search-sidebar h3 {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    margin-bottom: 15px !important;
+}
+
+.mega-menu-list li>a {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+.mega-menu-list li>a>.fa-chevron-right {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 12px !important;
+    color: #999 !important;
+}
+
+.mega-menu-list li:hover>a>.fa-chevron-right {
+    color: #8b7bd8 !important;
 }

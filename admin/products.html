@@ -1672,13 +1672,16 @@
 
             tbody.innerHTML = '';
 
-            // KESİN VE NİHAİ ÇÖZÜM: ID'ye göre Yeniden -> Eskiye sırala (Z-A)
-            // TABLO ÜSTÜ = EN YENİ ÜRÜN
-            // TABLO ALTI = EN ESKİ ÜRÜN
+            // KESİN VE NİHAİ ÇÖZÜM: En yeni ürün en üstte
+            // Önce createdAt'e, yoksa ID'ye göre sırala (Büyükten küçüğe)
             const sortedProducts = [...products].sort((a, b) => {
-                const idA = (a._id || a.id).toString();
-                const idB = (b._id || b.id).toString();
-                // B, A'dan önce gelir (Büyükten küçüğe / Yeniden eskiye)
+                // createdAt varsa bunu kullan (daha güvenilir)
+                if (a.createdAt && b.createdAt) {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                }
+                // ID'ye göre sırala (MongoDB ObjectID'ler timestamp içerir)
+                const idA = (a._id || a.id || '').toString();
+                const idB = (b._id || b.id || '').toString();
                 return idB.localeCompare(idA);
             });
 

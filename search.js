@@ -513,25 +513,35 @@ document.addEventListener('DOMContentLoaded', () => {
     sortButtons.forEach(btn => {
         btn.addEventListener('click', function () {
             const sortType = this.getAttribute('data-sort');
+            const isAlreadyActive = this.classList.contains('active');
 
-            // Active state
+            // Reset all buttons
             sortButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
 
-            // Sort helper
-            const getPrice = (p) => {
-                if (p.salePrice && parseFloat(p.salePrice) > 0) return parseFloat(p.salePrice);
-                return parseFloat(p.price || 0);
-            };
+            if (isAlreadyActive) {
+                // Untoggle: Back to relevance/default
+                state.sort = 'relevance';
+                // RE-LOAD or RE-APPLY original filters to get default order
+                applyFilters();
+            } else {
+                // Toggle ON
+                this.classList.add('active');
+                state.sort = sortType;
 
-            // Sort
-            if (sortType === 'price-asc') {
-                state.filteredProducts.sort((a, b) => getPrice(a) - getPrice(b));
-            } else if (sortType === 'price-desc') {
-                state.filteredProducts.sort((a, b) => getPrice(b) - getPrice(a));
+                // Sort helper
+                const getPrice = (p) => {
+                    if (p.salePrice && parseFloat(p.salePrice) > 0) return parseFloat(p.salePrice);
+                    return parseFloat(p.price || 0);
+                };
+
+                // Sort
+                if (sortType === 'price-asc') {
+                    state.filteredProducts.sort((a, b) => getPrice(a) - getPrice(b));
+                } else if (sortType === 'price-desc') {
+                    state.filteredProducts.sort((a, b) => getPrice(b) - getPrice(a));
+                }
+                renderResults();
             }
-
-            renderResults();
         });
     });
 
