@@ -1,6 +1,0 @@
-{
-                    title: 'Elektronik Aksesuar',
-                    description: 'Elektronik ve telefon aksesuarları.',
-                    slug: 'elektronik-aksesuar',
-                    image: 'gorseller/category_elektronik.png'
-                }
