@@ -148,9 +148,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             const productsContainer = section.querySelector('.madeniyat-products-section');
             if (!productsContainer) return;
 
-            // KRİTİK: Eğer hiç ürün bulunamazsa bölümü gizle (Boş klasın)
+            // KRİTİK: Eğer hiç ürün bulunamazsa bölümü gizleme (Kullanıcı hepsini görmek istiyor)
             if (brandProducts.length === 0) {
-                section.style.display = 'none';
+                console.log(`[Showcase] No matches found for ${showcaseKey}, showing placeholders.`);
                 return;
             }
 
