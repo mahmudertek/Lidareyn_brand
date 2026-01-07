@@ -98,8 +98,9 @@
             React.useEffect(function () {
                 if (window.API && typeof window.API.getProducts === 'function') {
                     // isPopular: true ile sadece popüler ürünleri iste
-                    window.API.getProducts({ isPopular: true, limit: 60, sort: '-createdAt' }).then(function (res) {
-                        if (res.success && res.data && res.data.length > 0) {
+                    // api-client.js artık hem API'yi hem LocalStorage'ı akıllıca birleştirip filtreliyor.
+                    window.API.getProducts({ isPopular: true, limit: 120, sort: '-createdAt' }).then(function (res) {
+                        if (res.success && res.data) {
                             var mapped = res.data.map(function (p) {
                                 var hasSalePrice = p.salePrice && parseFloat(p.salePrice) > 0;
                                 return {
@@ -107,66 +108,17 @@
                                     name: p.name,
                                     price: hasSalePrice ? p.salePrice : p.price,
                                     oldPrice: hasSalePrice ? p.price : null,
-                                    image: p.mainImage || p.image || (p.images && p.images[0]) || 'https://placehold.co/300x400?text=Urun',
-                                    brand: p.brand,
-                                    badge: (p.isPopular === true || p.isPopular === 'true' || (p.tags && (p.tags.includes('popular') || p.tags.includes('Popüler')))) ? 'Popüler' : ''
+                                    image: p.mainImage || p.image || (p.images && p.images[0]) || 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun',
+                                    brand: p.brand || 'Lidareyn',
+                                    badge: 'Popüler'
                                 };
-                            }).filter(function (p) { return p.badge === 'Popüler'; });
+                            });
                             setProducts(mapped);
-                        } else {
-                            // API boş dönerse localStorage dene
-                            loadFromLocal();
+                            console.log('✨ Popüler ürünler yüklendi:', mapped.length);
                         }
-                    }).catch(function () { loadFromLocal(); });
-                } else {
-                    loadFromLocal();
-                }
-
-                function loadFromLocal() {
-                    // LocalStorage'dan dene
-                    var localData = [];
-                    try {
-                        localData = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
-                    } catch (e) { }
-
-                    var popularProducts = localData.filter(function (p) {
-                        // 1. KESİN ENGEL
-                        if (p.isPopular === false || p.isPopular === 'false') return false;
-
-                        // 2. KABUL ET
-                        if (p.isPopular === true || p.isPopular === 'true') return true;
-
-                        // 3. TAG KONTROLÜ (Array veya String)
-                        if (p.tags) {
-                            if (Array.isArray(p.tags)) {
-                                return p.tags.some(function (t) { return t && (t.toLowerCase() === 'popular' || t.toLowerCase() === 'popüler'); });
-                            }
-                            if (typeof p.tags === 'string') {
-                                var lowerTags = p.tags.toLowerCase();
-                                return lowerTags.indexOf('popular') !== -1 || lowerTags.indexOf('popüler') !== -1;
-                            }
-                        }
-                        return false;
+                    }).catch(function (err) {
+                        console.error('Popüler ürün yükleme hatası:', err);
                     });
-
-                    if (popularProducts.length > 0) {
-                        var mapped = popularProducts.map(function (p) {
-                            var hasSalePrice = p.salePrice && parseFloat(p.salePrice) > 0;
-                            return {
-                                id: p._id || p.id,
-                                name: p.name,
-                                price: hasSalePrice ? (typeof p.salePrice === 'string' ? parseFloat(p.salePrice) : p.salePrice) : (typeof p.price === 'string' ? parseFloat(p.price) : p.price),
-                                oldPrice: hasSalePrice ? (typeof p.price === 'string' ? parseFloat(p.price) : p.price) : null,
-                                image: p.mainImage || p.image || 'https://placehold.co/300x400?text=Urun',
-                                brand: p.brand,
-                                badge: 'Popüler'
-                            };
-                        });
-                        setProducts(mapped);
-                    } else {
-                        // Hiç veri yoksa statik veriyi kullan
-                        setProducts(window.productsData || []);
-                    }
                 }
             }, []);
 

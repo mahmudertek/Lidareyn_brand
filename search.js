@@ -207,6 +207,32 @@ document.addEventListener('DOMContentLoaded', () => {
             results = results.filter(p => p.category && selectedNorms.includes(normalize(p.category)));
         }
 
+        // Brand Filter (Checkboxes)
+        if (state.filters.brands.length > 0) {
+            const selectedBrands = state.filters.brands.map(b => b.toLowerCase());
+            results = results.filter(p => p.brand && selectedBrands.includes(p.brand.toLowerCase()));
+        }
+
+        // Price Filter
+        if (state.filters.minPrice !== null) {
+            results = results.filter(p => {
+                const getPrice = (item) => {
+                    if (item.salePrice && parseFloat(item.salePrice) > 0) return parseFloat(item.salePrice);
+                    return parseFloat(item.price || 0);
+                };
+                return getPrice(p) >= state.filters.minPrice;
+            });
+        }
+        if (state.filters.maxPrice !== null) {
+            results = results.filter(p => {
+                const getPrice = (item) => {
+                    if (item.salePrice && parseFloat(item.salePrice) > 0) return parseFloat(item.salePrice);
+                    return parseFloat(item.price || 0);
+                };
+                return getPrice(p) <= state.filters.maxPrice;
+            });
+        }
+
         // Sort
         const sortValue = state.sort;
         if (sortValue.includes('price')) {
@@ -465,7 +491,50 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
-        // ... (other events can be added here)
+
+        // Price Filter Button
+        if (elements.priceFilterBtn) {
+            elements.priceFilterBtn.addEventListener('click', () => {
+                const min = elements.minPrice ? parseFloat(elements.minPrice.value) : null;
+                const max = elements.maxPrice ? parseFloat(elements.maxPrice.value) : null;
+                state.filters.minPrice = isNaN(min) ? null : min;
+                state.filters.maxPrice = isNaN(max) ? null : max;
+                applyFilters();
+            });
+        }
+
+        // Clear Filters Button
+        const clearBtn = document.getElementById('clear-filters-btn');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+                // Reset State Filters
+                state.filters.categories = [];
+                state.filters.brands = [];
+                state.filters.minPrice = null;
+                state.filters.maxPrice = null;
+
+                // Clear UI Inputs
+                if (elements.minPrice) elements.minPrice.value = '';
+                if (elements.maxPrice) elements.maxPrice.value = '';
+
+                // Uncheck checkboxes
+                document.querySelectorAll('.search-sidebar input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                });
+
+                applyFilters();
+                renderSidebarFilters(); // Re-render to clear counts/items if needed
+
+                // Optional: Scroll to results
+                const resultsArea = document.querySelector('.search-results-area');
+                if (resultsArea) resultsArea.scrollIntoView({ behavior: 'smooth' });
+
+                // Close sidebar on mobile
+                if (window.innerWidth <= 768 && elements.sidebar) {
+                    elements.sidebar.classList.remove('active');
+                }
+            });
+        }
     }
 
     function escapeQuotes(str) { return str.replace(/'/g, "\\'"); }

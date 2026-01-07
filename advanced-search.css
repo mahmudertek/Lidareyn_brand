@@ -329,10 +329,17 @@
     .sort-btn-compact {
         width: 100%;
         justify-content: center;
-        padding: 0 5px;
+        padding: 0 6px;
         font-size: 8px;
         border-radius: 2px;
         height: 17px;
+        background: #fff;
+        border: 1px solid #e0e0e0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-weight: 600;
+        color: #333;
     }
 
     /* Filtreleri Temizle butonu - Mobil - Ara butonuyla birebir aynı */
@@ -344,27 +351,27 @@
         width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
-        height: 42px !important;
-        min-height: 42px !important;
-        max-height: 42px !important;
+        height: 17px !important;
+        min-height: 17px !important;
+        max-height: 17px !important;
         background: linear-gradient(135deg, #8b7bd8, #6b5bb8) !important;
         color: white !important;
-        font-size: 10px !important;
+        font-size: 8px !important;
         font-weight: 600 !important;
-        border-radius: 4px !important;
-        padding: 0 12px !important;
+        border-radius: 2px !important;
+        padding: 0 6px !important;
         box-sizing: border-box !important;
         line-height: 1 !important;
         white-space: nowrap !important;
         overflow: visible !important;
         text-overflow: clip !important;
-        gap: 6px !important;
+        gap: 4px !important;
         border: none !important;
     }
 
     /* Buton içindeki ikon */
     #clear-filters-btn.clear-filters-custom i {
-        font-size: 10px !important;
+        font-size: 8px !important;
         margin: 0 !important;
         flex-shrink: 0 !important;
     }

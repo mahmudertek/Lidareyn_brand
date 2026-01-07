@@ -89,34 +89,61 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (!targetBrand) return;
 
-            const normalizedTarget = targetBrand.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const showcaseKey = normalizedTarget; // Örn: 'beta', 'makita', 'blackdecker'
 
-            // 5. Ürünleri Filtrele (ÜST DÜZEY GÜVENLİK VE KESİN EŞLEŞME)
-            let brandProducts = allProducts.filter(p => {
-                const pName = String(p.name || '').toLowerCase();
+            // 5. Ürünleri Filtrele ve Puanla (AKILLI ÖNCELİKLENDİRME)
+            let brandProducts = allProducts.map(p => {
+                let score = 0;
                 const pBrandRaw = String(p.brand || p.marka || '').toLowerCase().trim();
                 const pBrandNorm = pBrandRaw.replace(/[^a-z0-9]/g, '');
+                const pName = String(p.name || '').toLowerCase();
+                const pShowcase = String(p.brandShowcase || '').toLowerCase().trim();
 
-                // 1. OTO-KONTROL: Marka adı EŞLEŞMELİDİR.
-                if (pBrandNorm !== normalizedTarget) return false;
+                // 1. TAM EŞLEŞME (Admin Panelinden Vitrin Seçilmişse)
+                if (pShowcase === showcaseKey) {
+                    score += 1000;
+                }
 
-                // 2. ÇAPRAZ KONTROL (CROSS-CHECK):
-                // Veritabanında marka yanlış girilmiş olabilir (Örn: Adı 'Wilke...' ama Markası 'Beta' seçilmiş).
-                // Eğer ürün isminde, hedef marka DIŞINDA başka bilinen bir markanın adı geçiyorsa, bu ürünü GİZLE.
-                const knownBrands = ['wilke', 'bosch', 'makita', 'dewalt', 'knipex', 'blackdecker', 'einhell', 'stanley', 'izeltas', 'fisco', 'proxxon', 'gedore', 'milwaukee', 'metabo'];
+                // 2. ETİKET EŞLEŞME (showcase-beta vb.)
+                if (p.tags && Array.isArray(p.tags)) {
+                    if (p.tags.some(t => t && t.toLowerCase() === `showcase-${showcaseKey}`)) {
+                        score += 500;
+                    }
+                }
 
-                // Mevcut markayı hariç tut
+                // 3. GENEL MARKA EŞLEŞME
+                if (pBrandNorm === normalizedTarget) {
+                    score += 10;
+                }
+
+                // 4. ÇAPRAZ KONTROL (GÜVENLİK): Yanlış marka ürününü ele
+                // Eğer ürün isminde BAŞKA bir dev markanın adı geçiyorsa ve marka seçimi hatalıysa ele
+                const knownBrands = ['wilke', 'bosch', 'makita', 'dewalt', 'knipex', 'blackdecker', 'einhell', 'stanley', 'izeltas', 'fisco', 'proxxon', 'gedore', 'milwaukee', 'metabo', 'beta'];
                 const otherBrands = knownBrands.filter(b => b !== normalizedTarget);
+                const isContaminated = otherBrands.some(badBrand => {
+                    // Sadece tam kelime veya belirgin parça kontrolü
+                    if (badBrand === 'beta' && pName.includes('betatools')) return true; // Beta Tools özel durumu
+                    return pName.includes(badBrand);
+                });
 
-                // Ürün isminde başka bir marka adı geçiyor mu? (Örn: Beta vitrininde 'Wilke' geçmemeli)
-                const isContaminated = otherBrands.some(badBrand => pName.includes(badBrand));
+                // Eğer kirliyse ve puanı düşükse (özellikle seçilmemişse) ele
+                if (isContaminated && score < 500) {
+                    score = 0;
+                }
 
-                if (isContaminated) return false;
+                return { ...p, _showcaseScore: score };
+            })
+                .filter(p => p._showcaseScore > 0) // Sadece eşleşenleri al
+                .sort((a, b) => {
+                    // Önce puana göre (1000 > 500 > 10)
+                    if (b._showcaseScore !== a._showcaseScore) {
+                        return b._showcaseScore - a._showcaseScore;
+                    }
+                    // Puanlar eşitse en yeni ürünü al
+                    return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
+                });
 
-                return true;
-            });
-
-            // İlk 3 ürünü al
+            // İlk 3 ürünü al (En yüksek puanlı ve en yeni olanlar)
             brandProducts = brandProducts.slice(0, 3);
 
             const productsContainer = section.querySelector('.madeniyat-products-section');

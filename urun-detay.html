@@ -912,6 +912,7 @@
             }
         }
     </script>
+    <script src="api-client.js?v=999"></script>
     <script src="categories-data.js?v=999"></script>
     <script src="cart-logic.js?v=999"></script>
     <script src="products-data.js?v=999"></script>
@@ -919,9 +920,6 @@
     <script src="auth.js?v=999"></script>
     <script src="script.js?v=999"></script>
     <script>
-        // API URL - config.js'den alınır veya varsayılan kullanılır
-        var PRODUCT_API = window.API_URL || 'https://galatacarsi-backend-api.onrender.com/api';
-
         document.addEventListener('DOMContentLoaded', async function () {
             const urlParams = new URLSearchParams(window.location.search);
             const productId = urlParams.get('id');
@@ -930,66 +928,24 @@
             const priceEl = document.getElementById('product-price');
             const breadName = document.getElementById('bread-name');
 
-            // URL'de ID yoksa hemen bildir
             if (!productId) {
-                if (titleEl) {
-                    titleEl.textContent = 'Ürün Seçilmedi';
-                    titleEl.style.color = '#999';
-                }
-                if (priceEl) priceEl.textContent = '';
-                if (breadName) breadName.textContent = 'Ürün yok';
-                console.warn('URL parametresi ?id=... eksik');
+                if (titleEl) titleEl.textContent = 'Ürün Seçilmedi';
+                console.warn('Ürün ID bulunamadı.');
                 return;
             }
 
-            // Yükleniyor göster
-            if (titleEl) titleEl.textContent = 'Yükleniyor...';
-
             try {
-                let p = null;
+                // window.API kullan (api-client.js tarafından sağlanır)
+                const res = await window.API.getProductById(productId);
 
-                // Local products (admin tarafından oluşturulmuş, henüz API'ye senkronize edilmemiş)
-                if (productId.startsWith('local_')) {
-                    console.log('Local ürün tespit edildi, localStorage kontrol ediliyor...');
-                    const localProducts = localStorage.getItem('galatacarsi_products');
-                    if (localProducts) {
-                        const products = JSON.parse(localProducts);
-                        p = products.find(prod => prod._id === productId || prod.id === productId);
-                        if (p) {
-                            console.log('✅ Ürün localStorage\'dan yüklendi:', p.name);
-                        }
-                    }
-                    if (!p) {
-                        throw new Error('Yerel ürün bulunamadı. Ürün silinmiş olabilir.');
-                    }
-                } else {
-                    // API'den ürün çek
-                    const response = await fetch(`${PRODUCT_API}/products/${productId}`);
+                if (res && res.success && res.data) {
+                    const p = res.data;
 
-                    if (!response.ok) {
-                        // API hata verirse localStorage'a bak
-                        console.warn('API yanıt vermedi, localStorage kontrol ediliyor...');
-                        const localProducts = localStorage.getItem('galatacarsi_products') || localStorage.getItem('galata_products');
-                        if (localProducts) {
-                            const products = JSON.parse(localProducts);
-                            p = products.find(prod => (prod._id === productId || prod.id === productId));
-                        }
-                        if (!p) throw new Error('API yanıt vermedi ve yerel kayıt bulunamadı');
-                    } else {
-                        const data = await response.json();
-                        if (data.success && data.data) {
-                            p = data.data;
-                        } else {
-                            throw new Error('Ürün bulunamadı (API yanıtı boş)');
-                        }
-                    }
-                }
+                    // Başlık ve Breadcrumb
+                    if (titleEl) titleEl.textContent = p.name;
+                    if (breadName) breadName.textContent = p.name;
 
-                if (p) {
-
-                    // Başlık ve Fiyat
-                    if (titleEl) titleEl.textContent = p.name || 'İsimsiz Ürün';
-
+                    // Fiyat Mantığı (Standart)
                     const hasSalePrice = p.salePrice && parseFloat(p.salePrice) > 0;
                     const displayPrice = hasSalePrice ? p.salePrice : p.price;
                     const oldPrice = hasSalePrice ? p.price : null;
@@ -1000,105 +956,48 @@
                                 <span class="current-price" style="color: #e74c3c;">₺${parseFloat(displayPrice).toLocaleString('tr-TR')}</span>
                                 <span class="old-price" style="text-decoration: line-through; color: #999; font-size: 0.9em; margin-left: 10px;">₺${parseFloat(oldPrice).toLocaleString('tr-TR')}</span>
                             `;
+                        } else if (displayPrice) {
+                            priceEl.textContent = `₺${parseFloat(displayPrice).toLocaleString('tr-TR')}`;
                         } else {
-                            priceEl.textContent = displayPrice ? `₺${parseFloat(displayPrice).toLocaleString('tr-TR')}` : 'Fiyat Yok';
+                            priceEl.textContent = 'Fiyat Bilgisi Yok';
                         }
                     }
-                    if (breadName) breadName.textContent = p.name || '';
 
-                    // Marka
-                    const brandEl = document.getElementById('product-brand');
-                    if (brandEl) brandEl.textContent = p.brand || '';
-
-                    const brandLink = document.getElementById('product-brand-link');
-                    if (brandLink) brandLink.textContent = p.brand || 'Belirtilmemiş';
-
-                    // Kategori
-                    const catLink = document.getElementById('product-category-link');
-                    if (catLink) catLink.textContent = p.category || 'Belirtilmemiş';
+                    // Marka & Kategori
+                    document.getElementById('product-brand').textContent = p.brand || '';
+                    document.getElementById('product-brand-link').textContent = p.brand || '---';
+                    document.getElementById('product-category-link').textContent = p.category || '---';
+                    document.getElementById('bread-category').textContent = p.category || 'Ürünler';
 
                     // Stok & Barkod
-                    const stockEl = document.getElementById('product-stock-code');
-                    if (stockEl) stockEl.textContent = p.stockCode || p.sku || p.stock_code || '-';
-
-                    const barcodeEl = document.getElementById('product-barcode');
-                    // Sadece gerçek barkodu göster, sahte barkod üretme
-                    if (barcodeEl) barcodeEl.textContent = p.barcode || '-';
+                    document.getElementById('product-stock-code').textContent = p.sku || p.stockCode || '---';
+                    document.getElementById('product-barcode').textContent = p.barcode || '---';
 
                     // Açıklama
-                    const descEl = document.getElementById('desc-text');
-                    if (descEl) descEl.textContent = p.description || 'Açıklama bulunmuyor.';
+                    document.getElementById('desc-text').textContent = p.description || 'Bu ürün için açıklama girilmemiş.';
 
-                    // STOK KONTROLÜ - Added by Antigravity (Safe Wrap)
-                    try {
-                        const stockCount = parseInt(p.stock || 0);
-                        const addToCartBtn = document.getElementById('add-to-cart-btn');
-
-                        if (addToCartBtn) {
-                            if (stockCount <= 0) {
-                                // Stok Tükendi Durumu
-                                addToCartBtn.disabled = true;
-                                addToCartBtn.innerHTML = '<i class="fa-solid fa-ban"></i> STOKLAR TÜKENMİŞTİR';
-                                addToCartBtn.style.backgroundColor = '#95a5a6';
-                                addToCartBtn.style.borderColor = '#95a5a6';
-                                addToCartBtn.style.cursor = 'not-allowed';
-                                addToCartBtn.style.opacity = '0.7';
-
-                                const priceContainer = document.querySelector('.product-price-container');
-                                if (priceContainer) {
-                                    let stockWarning = document.getElementById('stock-warning-badge');
-                                    if (!stockWarning) {
-                                        stockWarning = document.createElement('div');
-                                        stockWarning.id = 'stock-warning-badge';
-                                        stockWarning.style.color = '#e74c3c';
-                                        stockWarning.style.fontWeight = '600';
-                                        stockWarning.style.marginTop = '10px';
-                                        stockWarning.style.fontSize = '14px';
-                                        priceContainer.appendChild(stockWarning);
-                                    }
-                                    stockWarning.textContent = 'Üzgünüz, bu ürünün stokları tükenmiştir.';
-                                }
-                            } else {
-                                // Stok Var Durumu
-                                addToCartBtn.disabled = false;
-                                addToCartBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i> SEPETE EKLE';
-                                addToCartBtn.style = '';
-
-                                const stockWarning = document.getElementById('stock-warning-badge');
-                                if (stockWarning) stockWarning.remove();
-                            }
-                        }
-                    } catch (stockErr) {
-                        console.error('Stok kontrol hatası:', stockErr);
-                    }
-
-                    // Görsel - birden fazla kaynak kontrol et
+                    // Görsel
                     const mainImg = document.getElementById('mainImage');
-                    const imageUrl = p.mainImage || p.image || (p.images && p.images[0]) || null;
-                    if (mainImg && imageUrl) mainImg.src = imageUrl;
-
-                    // Breadcrumb
-                    const breadCat = document.getElementById('bread-category');
-                    if (breadCat) breadCat.textContent = p.category || 'Ürünler';
-
-                    console.log('Ürün yüklendi:', p.name);
-
-                }
-
-            } catch (error) {
-                console.error('Kritik Hata:', error);
-                if (titleEl) {
-                    // Hatayı kullanıcıya göstermek yerine konsola yazdık ama geliştirme aşamasında görelim
-                    // titleEl.textContent = 'Ürün Bulunamadı: ' + error.message; 
-                    // Kullanıcı dostu mesaj:
-                    if (!titleEl.textContent || titleEl.textContent === 'Yükleniyor...') {
-                        titleEl.textContent = 'Ürün Yüklenirken Hata Oluştu';
+                    if (mainImg) {
+                        mainImg.src = p.mainImage || p.image || (p.images && p.images[0]) || 'https://placehold.co/600x600?text=Resim+Yok';
                     }
-                    titleEl.style.color = 'red';
+
+                    // Sepete Ekle Butonu Kontrolü
+                    const addToCartBtn = document.getElementById('add-to-cart-btn');
+                    const stockCount = parseInt(p.stock || 0);
+                    if (addToCartBtn && stockCount <= 0 && p.stock !== undefined) {
+                        addToCartBtn.disabled = true;
+                        addToCartBtn.innerHTML = '<i class="fa-solid fa-ban"></i> STOKTA YOK';
+                        addToCartBtn.style.opacity = '0.6';
+                    }
+
+                    console.log('📦 Ürün Detayı Senkronize Edildi:', p.name);
+                } else {
+                    throw new Error('Ürün verisi alınamadı.');
                 }
-                // Diğer alanları temizleme ki kısmi veri görünsün
-                // if (priceEl) priceEl.textContent = '';
-                if (breadName && breadName.textContent === 'Yükleniyor...') breadName.textContent = 'Hata';
+            } catch (error) {
+                console.error('Ürün yükleme hatası:', error);
+                if (titleEl) titleEl.textContent = 'Ürün Yüklenemedi';
             }
         });
     </script>

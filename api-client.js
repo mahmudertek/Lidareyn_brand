@@ -68,34 +68,34 @@ const API = {
             let products = JSON.parse(stored);
 
             // Filtrele
-            if (params.isNew === 'true' || params.isNew === true) {
-                products = products.filter(p => p.isNew === true || p.tags?.includes('new') || p.tags?.includes('Yeni'));
-            }
-            if (params.isPopular === 'true' || params.isPopular === true) {
+            // 1. Yeni Ürünler (isNew)
+            if (params.isNew === 'true' || params.isNew === true || params.isNew === 1) {
                 products = products.filter(p => {
-                    // 1. KESİN ENGEL: Admin panelinden özellikle kapatıldıysa
-                    if (p.isPopular === false || p.isPopular === 'false') return false;
-
-                    // 2. KABUL ET: Boolean true ise
-                    if (p.isPopular === true || p.isPopular === 'true') return true;
-
-                    // 3. TAG KONTROLÜ (Array veya String)
-                    if (p.tags) {
-                        if (Array.isArray(p.tags)) {
-                            return p.tags.some(t => t && (t.toLowerCase() === 'popular' || t.toLowerCase() === 'popüler'));
-                        }
-                        if (typeof p.tags === 'string') {
-                            const lowerTags = p.tags.toLowerCase();
-                            return lowerTags.includes('popular') || lowerTags.includes('popüler');
-                        }
-                    }
-                    return false;
+                    const isNewProp = p.isNew === true || p.isNew === 'true' || p.isNew === 1 || p.isNew === '1';
+                    const hasNewTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                        t && typeof t === 'string' && (t.toLowerCase() === 'new' || t.toLowerCase() === 'yeni')
+                    );
+                    return isNewProp || hasNewTag;
                 });
             }
+
+            // 2. Popüler Ürünler (isPopular)
+            if (params.isPopular === 'true' || params.isPopular === true || params.isPopular === 1) {
+                products = products.filter(p => {
+                    if (p.isPopular === false || p.isPopular === 'false') return false;
+                    const isPopProp = p.isPopular === true || p.isPopular === 'true' || p.isPopular === 1 || p.isPopular === '1';
+                    const hasPopTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                        t && typeof t === 'string' && (t.toLowerCase() === 'popular' || t.toLowerCase() === 'popüler' || t.toLowerCase() === 'populer')
+                    );
+                    return isPopProp || hasPopTag;
+                });
+            }
+
+            // 3. Öne Çıkanlar (isFeatured)
             if (params.isFeatured === 'true' || params.isFeatured === true || params.isFeatured === 1) {
                 products = products.filter(p => {
-                    const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true' || p.isFeatured === 1 || p.isFeatured === '1';
-                    const hasFeaturedTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                    const isFeatProp = p.isFeatured === true || p.isFeatured === 'true' || p.isFeatured === 1 || p.isFeatured === '1';
+                    const hasFeatTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
                         t && typeof t === 'string' && (
                             t.toLowerCase() === 'featured' ||
                             t.toLowerCase() === 'öne çıkan' ||
@@ -106,7 +106,18 @@ const API = {
                             t.toLowerCase() === 'firsat'
                         )
                     );
-                    return isFeaturedProp || hasFeaturedTag;
+                    return isFeatProp || hasFeatTag;
+                });
+            }
+
+            // 4. Çok Satanlar (isBestSeller)
+            if (params.isBestSeller === 'true' || params.isBestSeller === true || params.isBestSeller === 1) {
+                products = products.filter(p => {
+                    const isBestProp = p.isBestSeller === true || p.isBestSeller === 'true' || p.isBestSeller === 1 || p.isBestSeller === '1';
+                    const hasBestTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                        t && typeof t === 'string' && (t.toLowerCase() === 'bestseller' || t.toLowerCase() === 'çok satan' || t.toLowerCase() === 'cok satan' || t.toLowerCase() === 'coksatan')
+                    );
+                    return isBestProp || hasBestTag;
                 });
             }
 
@@ -140,21 +151,36 @@ const API = {
     async getProductById(id) {
         try {
             const response = await fetch(`${this.baseUrl}/products/${id}`);
-            if (!response.ok) {
-                // LocalStorage'dan dene
-                const stored = localStorage.getItem('galata_products') || localStorage.getItem('products');
+            if (response.ok) {
+                return await response.json();
+            }
+            // Sunucuda bulunamazsa veya hata verirse LocalStorage'dan dene
+            const keys = ['galatacarsi_products', 'galata_products', 'products', 'admin_products'];
+            for (const key of keys) {
+                const stored = localStorage.getItem(key);
                 if (stored) {
                     const products = JSON.parse(stored);
                     const product = products.find(p => p._id === id || p.id === id);
                     if (product) {
-                        return { success: true, data: product };
+                        return { success: true, data: product, fromLocal: true };
                     }
                 }
-                return { success: false, data: null };
             }
-            return await response.json();
+            return { success: false, data: null };
         } catch (error) {
             console.error('Get product by ID error:', error);
+            // Catch durumunda da LocalStorage'a bak
+            const keys = ['galatacarsi_products', 'galata_products', 'products'];
+            for (const key of keys) {
+                const stored = localStorage.getItem(key);
+                if (stored) {
+                    try {
+                        const products = JSON.parse(stored);
+                        const product = products.find(p => p._id === id || p.id === id);
+                        if (product) return { success: true, data: product, fromLocal: true };
+                    } catch (e) { }
+                }
+            }
             return { success: false, data: null };
         }
     },
