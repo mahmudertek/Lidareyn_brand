@@ -92,11 +92,19 @@ const API = {
                     return false;
                 });
             }
-            if (params.isFeatured === 'true' || params.isFeatured === true) {
+            if (params.isFeatured === 'true' || params.isFeatured === true || params.isFeatured === 1) {
                 products = products.filter(p => {
-                    const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true';
+                    const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true' || p.isFeatured === 1 || p.isFeatured === '1';
                     const hasFeaturedTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
-                        t && typeof t === 'string' && (t.toLowerCase() === 'featured' || t.toLowerCase() === 'öne çıkan' || t.toLowerCase() === 'onecikan')
+                        t && typeof t === 'string' && (
+                            t.toLowerCase() === 'featured' ||
+                            t.toLowerCase() === 'öne çıkan' ||
+                            t.toLowerCase() === 'onecikan' ||
+                            t.toLowerCase() === 'one cikan' ||
+                            t.toLowerCase() === 'one-cikan' ||
+                            t.toLowerCase() === 'fırsat' ||
+                            t.toLowerCase() === 'firsat'
+                        )
                     );
                     return isFeaturedProp || hasFeaturedTag;
                 });

@@ -16,44 +16,38 @@ async function initProductCarousel() {
 
     // Try to fetch products from API
     try {
-        // Try to fetch products from API
+        console.log('🔄 Fetching featured products...');
         // API'den tüm 'featured' etiketli veya isFeatured=true olanları iste
-        const response = await window.API.getProducts({ isFeatured: true, limit: 60, sort: '-createdAt' });
+        // api-client.js zaten LocalStorage ile birleştirme (merge) yapıyor.
+        const response = await window.API.getProducts({ isFeatured: true, limit: 120, sort: '-createdAt' });
 
-        if (response && response.success && response.data && response.data.length > 0) {
-            console.log('✅ Featured products loaded from API:', response.data.length);
+        if (response && response.success && response.data) {
+            console.log('📦 Total products received (API+Local):', response.data.length);
 
-            let rawProducts = response.data;
-
-            // Merge with LocalStorage (Priority: Local Change)
-            try {
-                const localRaw = localStorage.getItem('galatacarsi_products');
-                if (localRaw) {
-                    const localList = JSON.parse(localRaw);
-                    const localMap = new Map(localList.map(p => [p._id || p.id, p]));
-
-                    rawProducts = rawProducts.map(apiP => {
-                        const localP = localMap.get(apiP._id || apiP.id);
-                        // If exists in local, use local version (it might have isFeatured=false now)
-                        return localP ? localP : apiP;
-                    });
-                }
-            } catch (e) { console.error('Merge error', e); }
-
-            // Re-filter (Because local override might have set isFeatured=false)
-            // Backend filtered for us, but local override might disqualify it
-            rawProducts = rawProducts.filter(p => {
-                const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true';
+            // Filtreleme - Ekstra güvenlik: response.data zaten filtrelenmiş olmalı ama teyit ediyoruz
+            const rawProducts = response.data.filter(p => {
+                const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true' || p.isFeatured === 1 || p.isFeatured === '1';
                 const hasFeaturedTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
-                    t && typeof t === 'string' && (t.toLowerCase() === 'featured' || t.toLowerCase() === 'öne çıkan' || t.toLowerCase() === 'onecikan')
+                    t && typeof t === 'string' && (t.toLowerCase() === 'featured' || t.toLowerCase() === 'öne çıkan' || t.toLowerCase() === 'onecikan' || t.toLowerCase() === 'one cikan')
                 );
                 return isFeaturedProp || hasFeaturedTag;
             });
 
+            console.log('✨ Featured products after filter:', rawProducts.length);
+
+            if (rawProducts.length === 0 && response.data.length > 0) {
+                console.warn('⚠️ No products matched featured criteria despite response having data.');
+                // Debug için ilk 3 ürünü logla
+                console.log('Sample data:', response.data.slice(0, 3));
+            }
+
             products = rawProducts.map(product => {
                 // Try multiple image sources
                 let imageUrl = product.mainImage || product.image || (product.images && product.images[0]) || null;
-                if (!imageUrl) imageUrl = 'https://placehold.co/300x200?text=' + encodeURIComponent(product.name || 'Ürün');
+                if (!imageUrl || imageUrl.includes('placehold.co')) {
+                    // Placeholder ise ama brand varsa marka logosu bazlı placeholder yapabiliriz
+                    imageUrl = product.mainImage || product.image || 'https://placehold.co/400x400/f3f4f6/6366f1?text=' + encodeURIComponent(product.name || 'Lidareyn');
+                }
 
                 const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
                 const displayPrice = hasSalePrice ? product.salePrice : product.price;
@@ -65,53 +59,54 @@ async function initProductCarousel() {
                     price: `₺${displayPrice ? parseFloat(displayPrice).toLocaleString('tr-TR') : '0'}`,
                     oldPrice: oldPrice ? `₺${parseFloat(oldPrice).toLocaleString('tr-TR')}` : null,
                     image: imageUrl,
-                    badge: product.isNew ? 'Yeni' : (product.tags && product.tags.includes('new') ? 'Yeni' : ''),
+                    badge: (product.isNew || (product.tags && product.tags.includes('new'))) ? 'Yeni' : '',
                     link: `urun-detay.html?id=${product._id || product.id}`
                 };
             });
         }
     } catch (error) {
-        console.error('Failed to fetch featured products from API:', error);
+        console.error('❌ Failed to fetch featured products:', error);
     }
 
-    // Fallback: Try localStorage
+    // fallback if still empty (e.g. API failed completely)
     if (products.length === 0) {
+        console.log('⚠️ Products list empty, checking direct LocalStorage as final fallback...');
         try {
-            const localProducts = localStorage.getItem('galatacarsi_products');
-            if (localProducts) {
-                const allProducts = JSON.parse(localProducts);
+            const keys = ['galatacarsi_products', 'galata_products', 'products'];
+            let localRaw = null;
+            for (const key of keys) {
+                localRaw = localStorage.getItem(key);
+                if (localRaw) {
+                    console.log(`📂 Found local data in key: ${key}`);
+                    break;
+                }
+            }
 
-                // GÜÇLENDİRİLMİŞ FİLTRELEME:
-                // Hem 'isFeatured' boolean'ına hem de 'tags' dizisine bak
+            if (localRaw) {
+                const allProducts = JSON.parse(localRaw);
                 const featuredProducts = allProducts.filter(p => {
-                    const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true';
-                    const hasFeaturedTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                    const isF = p.isFeatured === true || p.isFeatured === 'true' || p.isFeatured === 1;
+                    const hasT = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
                         t && typeof t === 'string' && (t.toLowerCase() === 'featured' || t.toLowerCase() === 'öne çıkan' || t.toLowerCase() === 'onecikan')
                     );
-                    return isFeaturedProp || hasFeaturedTag;
+                    return isF || hasT;
                 });
 
                 if (featuredProducts.length > 0) {
-                    console.log('✅ Featured products loaded from localStorage:', featuredProducts.length);
-                    products = featuredProducts.map(product => {
-                        const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
-                        const displayPrice = hasSalePrice ? product.salePrice : product.price;
-                        const oldPrice = hasSalePrice ? product.price : null;
-
-                        return {
-                            id: product._id || product.id,
-                            name: product.name,
-                            price: `₺${displayPrice ? parseFloat(displayPrice).toLocaleString('tr-TR') : '0'}`,
-                            oldPrice: oldPrice ? `₺${parseFloat(oldPrice).toLocaleString('tr-TR')}` : null,
-                            image: product.mainImage || product.image || 'https://placehold.co/300x200?text=Ürün',
-                            badge: (product.isNew || (product.tags && product.tags.includes('new'))) ? 'Yeni' : '',
-                            link: `urun-detay.html?id=${product._id || product.id}`
-                        };
-                    });
+                    console.log('✅ Fallback success, products found:', featuredProducts.length);
+                    products = featuredProducts.map(product => ({
+                        id: product._id || product.id,
+                        name: product.name,
+                        price: `₺${(product.salePrice || product.price || 0).toLocaleString('tr-TR')}`,
+                        oldPrice: product.salePrice ? `₺${(product.price || 0).toLocaleString('tr-TR')}` : null,
+                        image: product.mainImage || product.image || 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun',
+                        badge: product.isNew ? 'Yeni' : '',
+                        link: `urun-detay.html?id=${product._id || product.id}`
+                    }));
                 }
             }
         } catch (e) {
-            console.warn('localStorage fallback failed:', e);
+            console.error('Final fallback failed:', e);
         }
     }
 

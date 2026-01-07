@@ -2185,16 +2185,19 @@
                     let finalData = response.data || {};
                     const sentData = productData; // Gönderilen veri
 
-                    if ((finalData.salePrice === undefined || finalData.salePrice === null) && sentData.salePrice) {
-                        finalData.salePrice = sentData.salePrice;
-                    }
-                    if (!finalData.barcode && sentData.barcode) {
-                        finalData.barcode = sentData.barcode;
-                    }
-                    // Unit alanini koru - API donmezse gonderilen degeri kullan
-                    if (!finalData.unit && sentData.unit) {
-                        finalData.unit = sentData.unit;
-                    }
+                    // KRİTİK ALANLARI KORU (Backend bazen eksik dönebilir)
+                    const fieldsToPreserve = [
+                        'salePrice', 'barcode', 'unit', 'description', 'sku',
+                        'isFeatured', 'isPopular', 'isNew', 'isBestSeller', 'isActive',
+                        'tags', 'allCategories', 'brandShowcase'
+                    ];
+
+                    fieldsToPreserve.forEach(field => {
+                        if ((finalData[field] === undefined || finalData[field] === null || finalData[field] === '') &&
+                            (sentData[field] !== undefined && sentData[field] !== null)) {
+                            finalData[field] = sentData[field];
+                        }
+                    });
                     // ------------------------------------
 
                     // Sunucudan dönen (ve düzelttiğimiz) veriyi hemen yerel listeye yansıt (Load beklemeden)
