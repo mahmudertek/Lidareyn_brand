@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const TIMESTAMP = new Date().getTime();
     const API_URL = (window.ENV && window.ENV.API_URL)
         ? `${window.ENV.API_URL}/products?t=${TIMESTAMP}`
-        : `https://galatacarsi-backend-api.onrender.com/api/products?limit=1000&t=${TIMESTAMP}`;
+        : `https://galatacarsi-backend-api.onrender.com/api/products?limit=3000&t=${TIMESTAMP}`;
 
     const brandMap = {
         'theme-beta': 'Beta',
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     };
 
     try {
-        console.log('🔄 Brand Showcase Loader: Ultra-Sync started...');
+        console.log('🔄 Brand Showcase Loader: Ultra-Sync started (Limit: 3000)...');
 
         let apiProducts = [];
         let localProducts = [];
@@ -108,97 +108,90 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // 2. ETİKET EŞLEŞME (showcase-beta vb.)
                 if (p.tags && Array.isArray(p.tags)) {
                     if (p.tags.some(t => t && t.toLowerCase() === `showcase-${showcaseKey}`)) {
-                        score += 500;
+                        score += 800; // Puanı yükseltildi
                     }
                 }
 
                 // 3. GENEL MARKA EŞLEŞME
-                if (pBrandNorm === normalizedTarget || pBrandRaw.includes(normalizedTarget)) {
-                    score += 10;
+                if (pBrandNorm === normalizedTarget || pBrandRaw === normalizedTarget) {
+                    score += 100; // Yedek ürünler için puan yükseltildi
                 }
 
-                // 4. ÇAPRAZ KONTROL (GÜVENLİK): Yanlış marka ürününü ele
-                // Eğer ürün isminde BAŞKA bir dev markanın adı geçiyorsa ve marka seçimi hatalıysa ele
+                // 4. İSİM İÇİNDE MARKA GEÇİYORSA (Ekstra fallback)
+                if (pName.includes(normalizedTarget)) {
+                    score += 50;
+                }
+
+                // 5. ÇAPRAZ KONTROL (GÜVENLİK): Yanlış marka ürününü ele
                 const knownBrands = ['wilke', 'bosch', 'makita', 'dewalt', 'knipex', 'blackdecker', 'einhell', 'stanley', 'izeltas', 'fisco', 'proxxon', 'gedore', 'milwaukee', 'metabo', 'beta'];
                 const otherBrands = knownBrands.filter(b => b !== normalizedTarget);
                 const isContaminated = otherBrands.some(badBrand => {
-                    // Sadece tam kelime veya belirgin parça kontrolü
-                    if (badBrand === 'beta' && pName.includes('betatools')) return false; // Beta Tools özel durumu - kirli değil
-                    return pName.includes(badBrand);
+                    const regex = new RegExp(`\\b${badBrand}\\b`, 'i');
+                    return regex.test(pName) || pBrandNorm === badBrand;
                 });
 
-                // Eğer kirliyse ve puanı düşükse (özellikle seçilmemişse) ele
-                if (isContaminated && score < 500) {
+                // Eğer kirliyse ve özellikle BU vitrin için seçilmemişse ele
+                if (isContaminated && score < 800) {
                     score = 0;
                 }
 
                 return { ...p, _showcaseScore: score };
             })
-                .filter(p => p._showcaseScore > 0) // Sadece eşleşenleri al
+                .filter(p => p._showcaseScore > 0) // Sadece belli bir eşleşme olanları al
                 .sort((a, b) => {
-                    // Önce puana göre (1000 > 500 > 10)
                     if (b._showcaseScore !== a._showcaseScore) {
                         return b._showcaseScore - a._showcaseScore;
                     }
-                    // Puanlar eşitse en yeni ürünü al
                     return new Date(b.createdAt || 0) - new Date(a.createdAt || 0);
                 });
-
-            // İlk 3 ürünü al (En yüksek puanlı ve en yeni olanlar)
-            // Eğer puanı 500+ olan (seçilmiş) ürün yoksa, markaya ait rastgele/yeni 3 ürünü gösterir (skor 10 olanlar)
-            brandProducts = brandProducts.slice(0, 3);
 
             const productsContainer = section.querySelector('.madeniyat-products-section');
             if (!productsContainer) return;
 
+            // KRİTİK: Eğer hiç ürün bulunamazsa bölümü gizle (Boş klasın)
+            if (brandProducts.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            // İlk 3 ürünü al
+            const finalThree = brandProducts.slice(0, 3);
             productsContainer.innerHTML = '';
 
-            // 6. Render Et (Tam 3 slot)
-            for (let i = 0; i < 3; i++) {
-                const product = brandProducts[i];
+            // 6. Render Et
+            finalThree.forEach(product => {
                 const card = document.createElement('article');
                 card.className = 'madeniyat-product-card';
+                card.style.cursor = 'pointer';
 
-                if (product) {
-                    card.style.cursor = 'pointer';
-                    const imgSource = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
-                    const productUrl = `urun-detay.html?id=${product._id || product.id}`;
+                const imgSource = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
+                const productUrl = `urun-detay.html?id=${product._id || product.id}`;
 
-                    const price = parseFloat(product.salePrice || product.price) || 0;
-                    const oldPrice = (product.salePrice && product.price > product.salePrice) ? product.price : null;
+                const price = parseFloat(product.salePrice || product.price) || 0;
+                const oldPrice = (product.salePrice && product.price > product.salePrice) ? product.price : null;
 
-                    const priceHtml = oldPrice
-                        ? `<span style="color:#e74c3c; font-weight:700;">₺${price.toLocaleString('tr-TR')}</span>
-                           <span style="text-decoration:line-through; color:#999; font-size:0.8em; margin-left:8px;">₺${oldPrice.toLocaleString('tr-TR')}</span>`
-                        : `<span>₺${price.toLocaleString('tr-TR')}</span>`;
+                const priceHtml = oldPrice
+                    ? `<span style="color:#e74c3c; font-weight:700;">₺${price.toLocaleString('tr-TR')}</span>
+                       <span style="text-decoration:line-through; color:#999; font-size:0.8em; margin-left:8px;">₺${oldPrice.toLocaleString('tr-TR')}</span>`
+                    : `<span>₺${price.toLocaleString('tr-TR')}</span>`;
 
-                    card.innerHTML = `
-                        <button class="madeniyat-favorite-btn" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${product._id || product.id}')">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                        <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image" style="object-fit: contain;">
-                        <div class="madeniyat-product-info">
-                            <h3 class="madeniyat-product-name" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 3em;">${product.name}</h3>
-                            <p class="madeniyat-product-price">${priceHtml}</p>
-                        </div>
-                    `;
+                card.innerHTML = `
+                    <button class="madeniyat-favorite-btn" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${product._id || product.id}')">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image" style="object-fit: contain;">
+                    <div class="madeniyat-product-info">
+                        <h3 class="madeniyat-product-name" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 3em;">${product.name}</h3>
+                        <p class="madeniyat-product-price">${priceHtml}</p>
+                    </div>
+                `;
 
-                    card.onclick = () => window.location.href = productUrl;
-                } else {
-                    // Ürün Seçilmedi Placeholder'ı
-                    card.innerHTML = `
-                        <button class="madeniyat-favorite-btn"><i class="fa-regular fa-heart"></i></button>
-                        <div class="madeniyat-placeholder-box">
-                            <i class="fa-solid fa-toolbox"></i>
-                        </div>
-                        <div class="madeniyat-product-info">
-                            <h3 class="madeniyat-product-name" style="color:#ccc;">Ürün Seçilmedi</h3>
-                            <p class="madeniyat-product-price" style="color:#eee;">--- TL</p>
-                        </div>
-                    `;
-                }
+                card.onclick = () => window.location.href = productUrl;
                 productsContainer.appendChild(card);
-            }
+            });
+
+            // Eğer tam 3 ürün yoksa ve boş slotlar istenmiyorsa ekleme yapmıyoruz.
+            // brandProducts.length > 0 ama < 3 ise sadece olanları gösterir.
         });
 
     } catch (error) {

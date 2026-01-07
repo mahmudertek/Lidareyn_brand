@@ -37,46 +37,43 @@
 
             var formatPrice = function (price) {
                 if (typeof price === 'number') {
-                    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(price);
+                    return price.toLocaleString('tr-TR') + ' TL';
                 }
                 return price;
             };
 
-            return React.createElement('article', { className: 'product-card' },
-                React.createElement('button', {
-                    className: 'fav-btn-card',
-                    onClick: handleToggleFav,
-                    title: 'Favorilere Ekle'
-                },
-                    React.createElement('i', { className: 'fa-regular fa-heart' })
+            return React.createElement('a', {
+                href: 'urun-detay.html?id=' + product.id,
+                className: 'product-card'
+            },
+                React.createElement('div', { className: 'card-actions' },
+                    React.createElement('button', {
+                        className: 'action-btn',
+                        onClick: handleToggleFav,
+                        title: 'Favorilere Ekle'
+                    },
+                        React.createElement('i', { className: 'fa-regular fa-heart' })
+                    ),
+                    React.createElement('button', {
+                        className: 'action-btn',
+                        onClick: handleAddToCart,
+                        title: 'Sepete Ekle'
+                    },
+                        React.createElement('i', { className: 'fa-solid fa-cart-shopping' })
+                    )
                 ),
-                React.createElement('button', {
-                    className: 'cart-btn-card',
-                    onClick: handleAddToCart,
-                    title: 'Sepete Ekle'
-                },
-                    React.createElement('i', { className: 'fa-solid fa-cart-plus' })
-                ),
-                React.createElement('a', {
-                    href: 'urun-detay.html?id=' + product.id,
-                    className: 'product-img-wrapper'
-                },
-                    React.createElement('img', {
-                        src: product.image,
-                        alt: product.name,
-                        loading: 'lazy',
-                        style: { opacity: 1, visibility: 'visible', display: 'block', width: '100%', height: '100%', objectFit: 'contain' }
-                    })
-                ),
+                React.createElement('img', {
+                    src: product.image,
+                    alt: product.name,
+                    className: 'product-image',
+                    loading: 'lazy',
+                    style: { opacity: 1, visibility: 'visible', display: 'block', width: '100%', height: '100%', objectFit: 'contain' }
+                }),
                 React.createElement('div', { className: 'product-info' },
-                    React.createElement('div', { className: 'product-brand' }, product.brand || 'KARAKÖY TÜCCARI'),
-                    React.createElement('a', {
-                        href: 'urun-detay.html?id=' + product.id,
-                        className: 'product-title'
-                    }, product.name),
-                    React.createElement('div', { className: 'product-price-area' },
-                        product.oldPrice ? React.createElement('span', { className: 'old-price-strikethrough', style: { textDecoration: 'line-through', color: '#999', fontSize: '0.8rem', marginRight: '8px' } }, formatPrice(product.oldPrice)) : null,
-                        React.createElement('span', { className: 'current-price' }, formatPrice(product.price))
+                    React.createElement('div', { className: 'product-name' }, product.name),
+                    React.createElement('div', { className: 'product-price-container', style: { display: 'flex', alignItems: 'center', gap: '8px' } },
+                        React.createElement('div', { className: 'product-price' }, formatPrice(product.price)),
+                        product.oldPrice ? React.createElement('div', { className: 'product-old-price', style: { textDecoration: 'line-through', color: '#999', fontSize: '0.85rem' } }, formatPrice(product.oldPrice)) : null
                     )
                 )
             );
@@ -87,14 +84,15 @@
             var _useState = React.useState([]);
             var products = _useState[0];
             var setProducts = _useState[1];
+            var _useStateLoading = React.useState(true);
+            var loading = _useStateLoading[0];
+            var setLoading = _useStateLoading[1];
 
             React.useEffect(function () {
                 if (window.API && typeof window.API.getProducts === 'function') {
-                    // isPopular: true ile sadece popüler ürünleri iste
-                    // api-client.js artık hem API'yi hem LocalStorage'ı akıllıca birleştirip filtreliyor.
+                    setLoading(true);
                     window.API.getProducts({ isPopular: true, limit: 120, sort: '-createdAt' }).then(function (res) {
                         if (res.success && res.data) {
-                            // SAFETY FILTER: Sadece gerçekten popüler olanları al (API her zaman doğru filtrelemeyebilir)
                             var filtered = res.data.filter(function (p) {
                                 if (p.isPopular === false || p.isPopular === 'false') return false;
                                 var isPopProp = p.isPopular === true || p.isPopular === 'true' || p.isPop === true || p.isPop === 1;
@@ -117,13 +115,26 @@
                                 };
                             });
                             setProducts(mapped);
+                            setLoading(false);
                             console.log('✨ Popüler ürünler yüklendi:', mapped.length);
+                        } else {
+                            setLoading(false);
                         }
                     }).catch(function (err) {
                         console.error('Popüler ürün yükleme hatası:', err);
+                        setLoading(false);
                     });
                 }
             }, []);
+
+            if (loading) {
+                return React.createElement('div', {
+                    style: { textAlign: 'center', padding: '100px 0', width: '100%', gridColumn: '1/-1' }
+                },
+                    React.createElement('i', { className: 'fa-solid fa-spinner fa-spin', style: { fontSize: '40px', color: '#6366f1' } }),
+                    React.createElement('p', { style: { marginTop: '15px', color: '#64748b' } }, 'Popüler ürünler yükleniyor...')
+                );
+            }
 
             return React.createElement('div', { className: 'populer-grid' },
                 products.map(function (product, index) {

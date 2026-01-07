@@ -17,7 +17,7 @@ const ENV = {
         window.location.hostname === '127.0.0.1' ||
         window.location.protocol === 'file:'
         ? 'http://localhost'  // Development
-        : 'https://yourdomain.com',  // Production - BURAYA DOMAIN'İNİZİ YAZIN
+        : 'https://galatacarsi.com',  // Production - BURAYA DOMAIN'İNİZİ YAZIN
 
     // Payment Provider Configuration
     // Options: 'sipay' (recommended - lowest fees), 'iyzico', 'demo'

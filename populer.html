@@ -2,13 +2,13 @@
 <html lang="tr">
 
 <head>
-    <!-- Standardized Favicons (Relative) -->
-    <link rel="icon" type="image/x-icon" href="favicon.ico?v=999">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png?v=999">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon.png?v=999">
-    <link rel="apple-touch-icon" sizes="180x180" href="favicon.png?v=999">
-
-    <!-- Standardized Favicons (Auto-Injected) -->
+    <!-- Optimized Favicons (Absolute for Google) -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=1.1">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png?v=1.1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon.png?v=1.1">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#8b7bd8">
 
 
     <!-- Bakım Modu Sistemi (En Tepede) -->
@@ -758,31 +758,96 @@
             transition: all 0.3s ease;
             position: relative;
             display: flex;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
             flex-direction: column;
-            height: auto;
         }
 
         .product-card:hover {
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transform: translateY(-3px);
             border-color: #ddd;
         }
 
-        .product-img-wrapper {
-            position: relative;
+        .product-image {
             width: 100%;
-            padding-top: 100%;
-            /* Masaüstü için KARE (133% -> 100%) - Compact */
-            overflow: hidden;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
+            padding: 10px;
+            background: #fff;
             border-radius: 6px;
             margin-bottom: 8px;
-            /* Margin azaltıldı */
-            background: #fff;
-            /* Beyaz zemin transparan PNG'ler için */
+        }
+
+        .product-info {
+            padding: 8px 4px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 6px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            min-height: 2.6em;
+        }
+
+        .product-price {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #111;
+            margin-top: auto;
+        }
+
+        .card-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            flex-direction: row-reverse;
+            gap: 8px;
+            z-index: 10;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #eee;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: #8b7bd8;
+            color: #fff;
+            border-color: #8b7bd8;
+        }
+
+        /* --- MOBİL İÇİN COMPACT KArt --- */
+        @media (max-width: 992px) {
+            .populer-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (max-width: 768px) {
-            .products-grid {
+            .populer-grid {
                 display: grid !important;
                 grid-template-columns: repeat(2, 1fr) !important;
                 gap: 10px !important;
@@ -796,7 +861,7 @@
                 display: flex !important;
                 flex-direction: column !important;
                 height: auto !important;
-                min-height: 220px !important;
+                min-height: 280px !important;
                 padding: 8px !important;
                 background: white !important;
                 border: 1px solid #eee !important;
@@ -804,152 +869,46 @@
                 position: relative !important;
             }
 
-            .product-img-wrapper {
+            .product-image {
                 width: 100% !important;
                 height: 150px !important;
-                position: relative !important;
-                padding: 0 !important;
-                margin-bottom: 8px !important;
-                background: #fff !important;
-                border-radius: 6px !important;
-                overflow: hidden !important;
-            }
-
-            .product-img-wrapper img {
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                width: 100% !important;
-                height: 100% !important;
                 object-fit: contain !important;
                 display: block !important;
                 opacity: 1 !important;
                 visibility: visible !important;
-                padding: 5px !important;
+                margin-bottom: 8px !important;
+                background: #fff !important;
+                padding: 0 !important;
             }
 
-            .product-title,
+            .product-info {
+                flex: 1 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+            }
+
             .product-name {
                 font-size: 13px !important;
                 line-height: 1.3 !important;
                 margin-bottom: 5px !important;
                 height: 2.6em !important;
-                min-height: 0 !important;
+                overflow: hidden !important;
             }
 
-            .current-price,
             .product-price {
                 font-size: 15px !important;
                 font-weight: 700 !important;
+                display: flex;
+                align-items: center;
+                gap: 6px;
             }
-
         }
 
-        .fav-btn-card {
-            position: absolute;
-            top: 10px;
-            right: 50px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 2;
-            transition: all 0.2s;
-            color: #666;
-        }
-
-        .fav-btn-card:hover {
-            background: var(--accent-purple, #8b7bd8);
-            color: #fff;
-            border-color: var(--accent-purple, #8b7bd8);
-        }
-
-        .cart-btn-card {
-            position: absolute;
-            top: 10px;
-            /* Aligned with fav button */
-            right: 10px;
-            /* Moved to far right */
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.9);
-            border: 1px solid #eee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 2;
-            transition: all 0.2s;
-            color: #666;
-        }
-
-        .cart-btn-card:hover {
-            background: var(--accent-purple, #8b7bd8);
-            color: #fff;
-            border-color: var(--accent-purple, #8b7bd8);
-        }
-
-        .product-info {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .product-brand {
-            font-size: 11px;
-            color: #999;
-            text-transform: uppercase;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .product-title {
-            font-size: 13px;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 4px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-decoration: none;
-            min-height: 2.8em;
-        }
-
-        .product-title:hover {
-            color: var(--accent-purple, #8b7bd8);
-        }
-
-        .product-price-area {
-            margin-top: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
-        }
-
-        .current-price {
-            font-weight: 700;
-            background: #fff;
-            border: 1px solid #222;
-            color: #222;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+        @media (max-width: 480px) {
+            .populer-grid {
+                grid-template-columns: repeat(1, 1fr);
+            }
         }
     </style>
     <script src="products-data.js"></script>
