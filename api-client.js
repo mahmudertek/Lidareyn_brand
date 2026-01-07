@@ -93,7 +93,13 @@ const API = {
                 });
             }
             if (params.isFeatured === 'true' || params.isFeatured === true) {
-                products = products.filter(p => p.isFeatured === true || p.tags?.includes('featured') || p.tags?.includes('Öne Çıkan'));
+                products = products.filter(p => {
+                    const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true';
+                    const hasFeaturedTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                        t && typeof t === 'string' && (t.toLowerCase() === 'featured' || t.toLowerCase() === 'öne çıkan' || t.toLowerCase() === 'onecikan')
+                    );
+                    return isFeaturedProp || hasFeaturedTag;
+                });
             }
 
             // Sırala

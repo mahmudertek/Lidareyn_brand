@@ -84,24 +84,23 @@
     .mobile-categories-btn {
         display: flex !important;
         align-items: center !important;
-        gap: 1px !important;
+        gap: 2px !important;
         color: #333 !important;
         text-decoration: none !important;
-        z-index: 20 !important;
-        padding: 0 !important;
+        z-index: 1003 !important;
+        padding: 0 5px !important;
         margin: 0 !important;
         height: 36px !important;
     }
 
     .mobile-categories-btn i {
-        font-size: 13px !important;
+        font-size: 14px !important;
     }
 
     .mobile-categories-btn span {
         font-size: 8px !important;
         font-weight: 600 !important;
         display: inline-block !important;
-        /* Metin Görünür */
         white-space: nowrap !important;
     }
 
@@ -124,6 +123,7 @@
         white-space: nowrap !important;
         color: #000 !important;
         pointer-events: auto !important;
+        letter-spacing: -0.5px !important;
     }
 
     /* 5. Sağ: İkonlar */
@@ -199,9 +199,27 @@
         gap: 0 !important;
     }
 
-    /* "Tüm Kategoriler"i menüden gizle (Yukarıda butonu var) */
+    /* "Tüm Kategoriler"i menüden normalde gizle, ama menü aktifken görünür kıl (mega menü için) */
     .nav-menu>li.nav-item-dropdown {
         display: none !important;
+    }
+
+    body.mobile-menu-active .nav-menu>li.nav-item-dropdown,
+    body.mobile-menu-active .nav-item-dropdown,
+    body.mobile-menu-active .mega-menu {
+        display: block !important;
+        position: static !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    body.mobile-menu-active .mega-menu {
+        position: fixed !important;
+        top: 76px !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: calc(100vh - 76px) !important;
+        z-index: 2000 !important;
     }
 
     .nav-menu>li {

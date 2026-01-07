@@ -42,9 +42,13 @@ async function initProductCarousel() {
 
             // Re-filter (Because local override might have set isFeatured=false)
             // Backend filtered for us, but local override might disqualify it
-            rawProducts = rawProducts.filter(p =>
-                p.isFeatured === true || p.isFeatured === 'true' || (p.tags && p.tags.includes('featured'))
-            );
+            rawProducts = rawProducts.filter(p => {
+                const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true';
+                const hasFeaturedTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                    t && typeof t === 'string' && (t.toLowerCase() === 'featured' || t.toLowerCase() === 'öne çıkan' || t.toLowerCase() === 'onecikan')
+                );
+                return isFeaturedProp || hasFeaturedTag;
+            });
 
             products = rawProducts.map(product => {
                 // Try multiple image sources
@@ -79,11 +83,13 @@ async function initProductCarousel() {
 
                 // GÜÇLENDİRİLMİŞ FİLTRELEME:
                 // Hem 'isFeatured' boolean'ına hem de 'tags' dizisine bak
-                const featuredProducts = allProducts.filter(p =>
-                    p.isFeatured === true ||
-                    p.isFeatured === 'true' ||
-                    (p.tags && Array.isArray(p.tags) && p.tags.includes('featured'))
-                );
+                const featuredProducts = allProducts.filter(p => {
+                    const isFeaturedProp = p.isFeatured === true || p.isFeatured === 'true';
+                    const hasFeaturedTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
+                        t && typeof t === 'string' && (t.toLowerCase() === 'featured' || t.toLowerCase() === 'öne çıkan' || t.toLowerCase() === 'onecikan')
+                    );
+                    return isFeaturedProp || hasFeaturedTag;
+                });
 
                 if (featuredProducts.length > 0) {
                     console.log('✅ Featured products loaded from localStorage:', featuredProducts.length);
