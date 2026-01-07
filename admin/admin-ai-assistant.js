@@ -371,7 +371,7 @@ const AdminAIAssistant = {
         await this.delay(500); // Gerçekçi gecikme
         this.hideTyping();
 
-        if (command.type === 'bulk_add_products') {
+        if (command.type === 'bulk_add_products' || command.type === 'advanced_add') {
             this.showProductAddConfirmation(command);
         } else if (command.type === 'add_product') {
             this.showSingleProductForm(command);
@@ -388,60 +388,61 @@ const AdminAIAssistant = {
         this.isProcessing = false;
     },
 
-    // Komutu analiz et (Doğal Dil İşleme - Basit Regex Tabanlı)
+    // Komutu analiz et (Gelişmiş NLP ve Mantık Sorgulama)
     parseCommand(message) {
         const lowerMsg = message.toLowerCase();
+        const command = { type: 'unknown', count: 1, category: null, subCategory: null, rules: {} };
 
-        // Toplu ürün ekleme: "10 tane aksesuarlar kategorisine elmas testereler alt kategorisine ürün ekle"
+        // 1. Gelişmiş Matematik ve Döviz Tespiti
+        if (lowerMsg.includes('euro') || lowerMsg.includes('€') || lowerMsg.includes('dolar') || lowerMsg.includes('$')) {
+            const multiplierMatch = lowerMsg.match(/(?:(?:\*|x|çarp)\s*)(\d+)/i);
+            if (multiplierMatch) {
+                command.rules.currencyMultiplier = parseInt(multiplierMatch[1]);
+                command.type = 'advanced_add';
+            }
+        }
+
+        // 2. Özel SKU ve Twist Kuralları
+        if (lowerMsg.includes('sku') || lowerMsg.includes('stok kodu')) {
+            if (lowerMsg.includes('olmadan') || lowerMsg.includes('temizle') || lowerMsg.includes('twist')) {
+                command.rules.cleanSku = true;
+            }
+        }
+
+        // 3. İsimlendirme Kuralları
+        const prefixMatch = lowerMsg.match(/başına\s+["']?(.+?)["']?\s+yaz/i);
+        if (prefixMatch) {
+            command.rules.namePrefix = prefixMatch[1];
+        }
+
+        // 4. Miktar Tespiti
+        const countMatch = lowerMsg.match(/(\d+)\s*(?:tane|adet|ürün)/i);
+        if (countMatch) command.count = parseInt(countMatch[1]);
+
+        // 5. Kategori ve Alt Kategori Tespiti
+        command.category = this.findCategory(lowerMsg);
+        command.subCategory = this.findSubCategory(lowerMsg);
+
+        // Mevcut Regex Yakalamaları (Geriye Dönük Uyumluluk)
         const bulkMatch = lowerMsg.match(
-            /(\d+)\s*(?:tane|adet)?\s*(.+?)\s*(?:üst\s*)?kategori(?:si)?(?:ne|sine)?\s*(.+?)\s*alt\s*kategori(?:si)?(?:ne|sine)?\s*(?:ürün\s*)?ekle/i
+            /(\d+)\s*(?:tane|adet)?\s*(.+?)\s*(?:üst\s*)?kategori(?:si)?(?:ne|sine)?\s*(.+?)\s*alt\s*kategori(?:si)?(?:ne|sine)?/i
         );
 
-        if (bulkMatch) {
-            return {
-                type: 'bulk_add_products',
-                count: parseInt(bulkMatch[1]),
-                category: this.findCategory(bulkMatch[2]),
-                subCategory: this.findSubCategory(bulkMatch[3]),
-                rawCategory: bulkMatch[2].trim(),
-                rawSubCategory: bulkMatch[3].trim()
-            };
-        }
-
-        // Basit toplu ekleme: "5 ürün ekle" veya "10 tane ürün ekle"
-        const simpleCountMatch = lowerMsg.match(/(\d+)\s*(?:tane|adet)?\s*ürün\s*ekle/i);
-        if (simpleCountMatch) {
-            return {
-                type: 'bulk_add_products',
-                count: parseInt(simpleCountMatch[1]),
-                category: null,
-                subCategory: null
-            };
-        }
-
-        // Kategori belirtilerek ekleme: "aksesuarlar kategorisine ürün ekle"
-        const categoryMatch = lowerMsg.match(
-            /(.+?)\s*(?:üst\s*)?kategori(?:si)?(?:ne|sine)?\s*(?:ürün\s*)?ekle/i
-        );
-        if (categoryMatch) {
-            return {
-                type: 'bulk_add_products',
-                count: 1,
-                category: this.findCategory(categoryMatch[1]),
-                subCategory: null,
-                rawCategory: categoryMatch[1].trim()
-            };
-        }
-
-        // Tek ürün ekleme
-        if (lowerMsg.includes('ürün ekle') || lowerMsg.includes('yeni ürün')) {
-            return { type: 'add_product' };
+        if (bulkMatch && command.type === 'unknown') {
+            command.type = 'bulk_add_products';
+            command.count = parseInt(bulkMatch[1]);
+            command.category = this.findCategory(bulkMatch[2]);
+            command.subCategory = this.findSubCategory(bulkMatch[3]);
+        } else if (command.type === 'unknown') {
+            if (lowerMsg.includes('ürün ekle') || lowerMsg.includes('yeni ürün')) {
+                command.type = (command.count > 1) ? 'bulk_add_products' : 'add_product';
+            }
         }
 
         // Fiyat güncelleme
         if (lowerMsg.includes('fiyat') && (lowerMsg.includes('güncelle') || lowerMsg.includes('zam') || lowerMsg.includes('indirim'))) {
             const percentMatch = lowerMsg.match(/%?\s*(\d+)\s*%?/);
-            const brandMatch = lowerMsg.match(/(bosch|makita|dewalt|beta|knipex|black\+?decker|stanley|ingco|rtrmax)/i);
+            const brandMatch = lowerMsg.match(/(bosch|makita|dewalt|beta|knipex|black\s*decker|stanley|ingco|rtrmax|wilke)/i);
             return {
                 type: 'update_price',
                 percent: percentMatch ? parseInt(percentMatch[1]) : null,
@@ -450,17 +451,11 @@ const AdminAIAssistant = {
             };
         }
 
-        // Stok kontrolü
-        if (lowerMsg.includes('stok') && (lowerMsg.includes('kontrol') || lowerMsg.includes('durum') || lowerMsg.includes('azalan'))) {
-            return { type: 'check_stock' };
-        }
+        // Diğer basit komutlar
+        if (lowerMsg.includes('stok') && (lowerMsg.includes('kontrol') || lowerMsg.includes('durum'))) return { type: 'check_stock' };
+        if (lowerMsg.includes('yardım') || lowerMsg.includes('help')) return { type: 'help' };
 
-        // Yardım
-        if (lowerMsg.includes('yardım') || lowerMsg.includes('help') || lowerMsg.includes('ne yapabilirsin')) {
-            return { type: 'help' };
-        }
-
-        return { type: 'unknown' };
+        return command;
     },
 
     // Kategori bul
@@ -541,6 +536,9 @@ const AdminAIAssistant = {
                     <li><strong>Miktar:</strong> ${command.count} adet</li>
                     <li><strong>Üst Kategori:</strong> ${categoryName}</li>
                     <li><strong>Alt Kategori:</strong> ${subCategoryName}</li>
+                    ${command.rules.currencyMultiplier ? `<li><strong>Fiyat Hesabı:</strong> x${command.rules.currencyMultiplier} (Döviz Çevrimi)</li>` : ''}
+                    ${command.rules.cleanSku ? `<li><strong>SKU Kuralı:</strong> Temiz Veri (Gelişmiş Twist)</li>` : ''}
+                    ${command.rules.namePrefix ? `<li><strong>İsim Öneki:</strong> ${command.rules.namePrefix}</li>` : ''}
                     ${command.attachedImages?.length > 0 ? `<li><strong>Yüklenen Görsel:</strong> ${command.attachedImages.length} adet</li>` : ''}
                 </ul>
                 
@@ -592,14 +590,14 @@ const AdminAIAssistant = {
 
         for (let i = 0; i < count; i++) {
             try {
-                // Görsel belirle (yüklenen görseller varsa sırayla kullan)
+                // Görsel belirle
                 let imageToUse = null;
                 if (command.attachedImages && command.attachedImages.length > 0) {
                     imageToUse = command.attachedImages[i % command.attachedImages.length];
                 }
 
-                // Ürün verisi oluştur
-                const productData = this.generateProductData(categorySlug, subCategory, i + 1, imageToUse);
+                // Ürün verisi oluştur (Kuralları uygula)
+                const productData = this.generateProductData(categorySlug, subCategory, i + 1, imageToUse, command.rules);
 
                 // API'ye gönder
                 if (typeof ADMIN_API !== 'undefined') {
@@ -662,35 +660,47 @@ const AdminAIAssistant = {
     },
 
     // Ürün verisi oluştur
-    generateProductData(categorySlug, subCategory, index, manualImage = null) {
+    generateProductData(categorySlug, subCategory, index, manualImage = null, rules = {}) {
         const categoryTitle = this.getCategoryTitle(categorySlug);
-        const brands = ['Bosch', 'Makita', 'DeWalt', 'Stanley', 'Ingco', 'Rtrmax', 'Beta', 'Knipex'];
-        const randomBrand = brands[Math.floor(Math.random() * brands.length)];
+        const brands = ['Wilke', 'Bosch', 'Makita', 'DeWalt', 'Stanley', 'Ingco', 'Rtrmax', 'Beta', 'Knipex'];
+        const randomBrand = rules.namePrefix && rules.namePrefix.toLowerCase().includes('wilke') ? 'Wilke' : brands[Math.floor(Math.random() * brands.length)];
 
-        const basePrice = Math.floor(Math.random() * 900) + 100; // 100-1000 TL arası
-        const hasDiscount = Math.random() > 0.7;
-        const salePrice = hasDiscount ? Math.floor(basePrice * 0.85) : null;
+        let basePrice = Math.floor(Math.random() * 900) + 100;
+
+        // Kural: Döviz Çevrimi
+        if (rules.currencyMultiplier) {
+            basePrice = basePrice * rules.currencyMultiplier;
+        }
+
+        let sku = `SKU-${Date.now()}-${index}`;
+        // Kural: SKU Temizleme (Twist)
+        if (rules.cleanSku) {
+            sku = sku.replace(/[^0-9]/g, '');
+        }
+
+        let pName = `${subCategory || categoryTitle} Ürün ${index}`;
+        // Kural: İsim Öneki
+        if (rules.namePrefix) {
+            pName = `${rules.namePrefix} ${pName}`;
+        }
 
         return {
-            name: `${subCategory || categoryTitle} Ürün ${index}`,
+            name: pName,
             brand: randomBrand,
             category: categoryTitle,
             categorySlug: categorySlug,
             allCategories: [categorySlug],
             subCategory: subCategory || '',
             price: basePrice,
-            salePrice: salePrice,
-            stock: Math.floor(Math.random() * 50) + 5,
+            salePrice: null,
+            stock: 20,
             unit: 'Adet',
-            description: `${randomBrand} marka ${subCategory || categoryTitle} - Profesyonel kalite, Galata Çarşı güvencesiyle.`,
-            sku: `SKU-${Date.now()}-${index}`,
-            barcode: `869${Math.floor(Math.random() * 10000000000)}`,
+            description: `${randomBrand} marka ${subCategory || categoryTitle}. Profesyonel kalite, Galata Çarşı güvencesiyle.`,
+            sku: sku,
+            barcode: sku,
             isActive: true,
             isNew: true,
-            isPopular: Math.random() > 0.8,
-            isBestSeller: Math.random() > 0.9,
-            isFeatured: Math.random() > 0.85,
-            tags: ['new'],
+            isPopular: false,
             mainImage: manualImage || `https://placehold.co/400x400/6366f1/fff?text=${encodeURIComponent(randomBrand.charAt(0))}`
         };
     },
