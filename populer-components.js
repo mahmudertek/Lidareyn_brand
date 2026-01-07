@@ -77,13 +77,6 @@
                     React.createElement('div', { className: 'product-price-area' },
                         product.oldPrice ? React.createElement('span', { className: 'old-price-strikethrough', style: { textDecoration: 'line-through', color: '#999', fontSize: '0.8rem', marginRight: '8px' } }, formatPrice(product.oldPrice)) : null,
                         React.createElement('span', { className: 'current-price' }, formatPrice(product.price))
-                    ),
-                    React.createElement('button', {
-                        className: 'add-to-cart-sm',
-                        onClick: handleAddToCart
-                    },
-                        React.createElement('i', { className: 'fa-solid fa-cart-shopping' }),
-                        ' Sepete Ekle'
                     )
                 )
             );
@@ -101,7 +94,17 @@
                     // api-client.js artık hem API'yi hem LocalStorage'ı akıllıca birleştirip filtreliyor.
                     window.API.getProducts({ isPopular: true, limit: 120, sort: '-createdAt' }).then(function (res) {
                         if (res.success && res.data) {
-                            var mapped = res.data.map(function (p) {
+                            // SAFETY FILTER: Sadece gerçekten popüler olanları al (API her zaman doğru filtrelemeyebilir)
+                            var filtered = res.data.filter(function (p) {
+                                if (p.isPopular === false || p.isPopular === 'false') return false;
+                                var isPopProp = p.isPopular === true || p.isPopular === 'true' || p.isPop === true || p.isPop === 1;
+                                var hasPopTag = p.tags && Array.isArray(p.tags) && p.tags.some(function (t) {
+                                    return t && typeof t === 'string' && (t.toLowerCase() === 'popular' || t.toLowerCase() === 'popüler' || t.toLowerCase() === 'populer');
+                                });
+                                return isPopProp || hasPopTag;
+                            });
+
+                            var mapped = filtered.map(function (p) {
                                 var hasSalePrice = p.salePrice && parseFloat(p.salePrice) > 0;
                                 return {
                                     id: p._id || p.id,

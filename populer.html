@@ -754,13 +754,12 @@
             background: #fff;
             border: 1px solid #eee;
             border-radius: 8px;
-            padding: 8px;
-            /* Padding azaltıldı (10 -> 8) */
+            padding: 10px;
             transition: all 0.3s ease;
             position: relative;
             display: flex;
             flex-direction: column;
-            height: 100%;
+            height: auto;
         }
 
         .product-card:hover {
@@ -797,7 +796,7 @@
                 display: flex !important;
                 flex-direction: column !important;
                 height: auto !important;
-                min-height: 280px !important;
+                min-height: 220px !important;
                 padding: 8px !important;
                 background: white !important;
                 border: 1px solid #eee !important;
@@ -897,9 +896,9 @@
         }
 
         .product-info {
-            flex: 1;
             display: flex;
             flex-direction: column;
+            gap: 4px;
         }
 
         .product-brand {
@@ -911,10 +910,10 @@
         }
 
         .product-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
             color: #333;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             line-height: 1.4;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -922,8 +921,7 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-decoration: none;
-            flex: 1;
-            /* Pushes price down */
+            min-height: 2.8em;
         }
 
         .product-title:hover {
@@ -931,22 +929,15 @@
         }
 
         .product-price-area {
-            margin-top: auto;
+            margin-top: 4px;
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 12px;
+            margin-bottom: 5px;
         }
 
         .current-price {
             font-weight: 700;
-            font-size: 16px;
-            color: #222;
-        }
-
-        .add-to-cart-sm {
-            width: 100%;
-            padding: 10px;
             background: #fff;
             border: 1px solid #222;
             color: #222;
@@ -959,11 +950,6 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-        }
-
-        .add-to-cart-sm:hover {
-            background: #222;
-            color: #fff;
         }
     </style>
     <script src="products-data.js"></script>

@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (!targetBrand) return;
 
+            const normalizedTarget = targetBrand.toLowerCase().replace(/[^a-z0-9]/g, '');
             const showcaseKey = normalizedTarget; // Örn: 'beta', 'makita', 'blackdecker'
 
             // 5. Ürünleri Filtrele ve Puanla (AKILLI ÖNCELİKLENDİRME)
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
 
                 // 3. GENEL MARKA EŞLEŞME
-                if (pBrandNorm === normalizedTarget) {
+                if (pBrandNorm === normalizedTarget || pBrandRaw.includes(normalizedTarget)) {
                     score += 10;
                 }
 
@@ -122,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const otherBrands = knownBrands.filter(b => b !== normalizedTarget);
                 const isContaminated = otherBrands.some(badBrand => {
                     // Sadece tam kelime veya belirgin parça kontrolü
-                    if (badBrand === 'beta' && pName.includes('betatools')) return true; // Beta Tools özel durumu
+                    if (badBrand === 'beta' && pName.includes('betatools')) return false; // Beta Tools özel durumu - kirli değil
                     return pName.includes(badBrand);
                 });
 
@@ -144,6 +145,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
 
             // İlk 3 ürünü al (En yüksek puanlı ve en yeni olanlar)
+            // Eğer puanı 500+ olan (seçilmiş) ürün yoksa, markaya ait rastgele/yeni 3 ürünü gösterir (skor 10 olanlar)
             brandProducts = brandProducts.slice(0, 3);
 
             const productsContainer = section.querySelector('.madeniyat-products-section');

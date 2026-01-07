@@ -265,11 +265,11 @@
         width: 100%;
         min-width: 0;
         box-sizing: border-box;
-        padding: 1px 5px;
-        font-size: 8px;
-        border-radius: 2px;
+        padding: 8px 12px;
+        font-size: 14px;
+        border-radius: 8px;
         border: 1px solid #e0e0e0;
-        height: 17px;
+        height: 42px;
     }
 
     /* Buton - clear-filters-custom hariç */
@@ -278,11 +278,11 @@
         justify-content: center;
         margin-left: 0;
         box-sizing: border-box;
-        padding: 0 6px;
-        font-size: 8px;
+        padding: 0 16px;
+        font-size: 14px;
         font-weight: 600;
-        border-radius: 2px;
-        height: 17px;
+        border-radius: 8px;
+        height: 42px;
     }
 
     .advanced-search-title {
@@ -329,15 +329,15 @@
     .sort-btn-compact {
         width: 100%;
         justify-content: center;
-        padding: 0 6px;
-        font-size: 8px;
-        border-radius: 2px;
-        height: 17px;
+        padding: 0 16px;
+        font-size: 14px;
+        border-radius: 8px;
+        height: 42px;
         background: #fff;
         border: 1px solid #e0e0e0;
         display: flex;
         align-items: center;
-        gap: 4px;
+        gap: 8px;
         font-weight: 600;
         color: #333;
     }
@@ -351,27 +351,27 @@
         width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
-        height: 17px !important;
-        min-height: 17px !important;
-        max-height: 17px !important;
+        height: 42px !important;
+        min-height: 42px !important;
+        max-height: 42px !important;
         background: linear-gradient(135deg, #8b7bd8, #6b5bb8) !important;
         color: white !important;
-        font-size: 8px !important;
+        font-size: 14px !important;
         font-weight: 600 !important;
-        border-radius: 2px !important;
-        padding: 0 6px !important;
+        border-radius: 8px !important;
+        padding: 0 16px !important;
         box-sizing: border-box !important;
         line-height: 1 !important;
         white-space: nowrap !important;
         overflow: visible !important;
         text-overflow: clip !important;
-        gap: 4px !important;
+        gap: 8px !important;
         border: none !important;
     }
 
     /* Buton içindeki ikon */
     #clear-filters-btn.clear-filters-custom i {
-        font-size: 8px !important;
+        font-size: 14px !important;
         margin: 0 !important;
         flex-shrink: 0 !important;
     }
