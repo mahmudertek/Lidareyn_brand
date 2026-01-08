@@ -22,7 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
             minPrice: null,
             maxPrice: null
         },
-        isLoading: true
+        isLoading: true,
+        pagination: {
+            currentPage: 1,
+            itemsPerPage: 24
+        }
     };
 
     const elements = {
@@ -39,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         closeFiltersBtn: document.getElementById('close-filters'),
         minPrice: document.getElementById('min-price'),
         maxPrice: document.getElementById('max-price'),
-        priceFilterBtn: document.getElementById('price-filter-btn')
+        priceFilterBtn: document.getElementById('price-filter-btn'),
+        paginationContainer: document.getElementById('pagination-container')
     };
 
     // 2. Initialize Page
@@ -281,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const emptyState = document.querySelector('.search-empty-state');
-        const paginationEl = document.getElementById('pagination-container');
+        const paginationEl = elements.paginationContainer;
 
         if (state.filteredProducts.length === 0) {
             if (emptyState) emptyState.style.display = 'block';
@@ -290,10 +295,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (emptyState) emptyState.style.display = 'none';
-        if (paginationEl) paginationEl.style.display = state.filteredProducts.length > 20 ? 'flex' : 'none';
 
-        // Limit to 24 for "page 1" demo
-        const pageProducts = state.filteredProducts.slice(0, 24);
+        // Calculate Pagination
+        const totalItems = state.filteredProducts.length;
+        const totalPages = Math.ceil(totalItems / state.pagination.itemsPerPage);
+
+        // Ensure current page is valid after filtering
+        if (state.pagination.currentPage > totalPages) {
+            state.pagination.currentPage = 1;
+        }
+
+        if (paginationEl) {
+            paginationEl.style.display = totalPages > 1 ? 'flex' : 'none';
+            renderPagination(totalPages);
+        }
+
+        const startIndex = (state.pagination.currentPage - 1) * state.pagination.itemsPerPage;
+        const endIndex = startIndex + state.pagination.itemsPerPage;
+        const pageProducts = state.filteredProducts.slice(startIndex, endIndex);
 
         if (elements.resultCount) {
             elements.resultCount.textContent = `${state.filteredProducts.length} ürün bulundu`;
@@ -366,6 +385,65 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error rendering product card:', err, product);
             }
         });
+    }
+
+    function renderPagination(totalPages) {
+        const container = elements.paginationContainer;
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        // Previous Button
+        if (state.pagination.currentPage > 1) {
+            const prevBtn = document.createElement('a');
+            prevBtn.href = '#';
+            prevBtn.className = 'page-link';
+            prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left"></i>';
+            prevBtn.onclick = (e) => {
+                e.preventDefault();
+                state.pagination.currentPage--;
+                renderResults();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            container.appendChild(prevBtn);
+        }
+
+        // Page Numbers
+        let startPage = Math.max(1, state.pagination.currentPage - 2);
+        let endPage = Math.min(totalPages, startPage + 4);
+
+        if (endPage - startPage < 4) {
+            startPage = Math.max(1, endPage - 4);
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageBtn = document.createElement('a');
+            pageBtn.href = '#';
+            pageBtn.className = `page-link ${i === state.pagination.currentPage ? 'active' : ''}`;
+            pageBtn.textContent = i;
+            pageBtn.onclick = (e) => {
+                e.preventDefault();
+                state.pagination.currentPage = i;
+                renderResults();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            container.appendChild(pageBtn);
+        }
+
+        // Next Button
+        if (state.pagination.currentPage < totalPages) {
+            const nextBtn = document.createElement('a');
+            nextBtn.href = '#';
+            nextBtn.className = 'page-link';
+            nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right"></i>';
+            nextBtn.onclick = (e) => {
+                e.preventDefault();
+                state.pagination.currentPage++;
+                renderResults();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+            container.appendChild(nextBtn);
+        }
     }
 
     // Expose render function for debugging/forcing

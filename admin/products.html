@@ -1654,18 +1654,48 @@
         function renderProducts() {
             const tbody = document.getElementById('productsTableBody');
             const countSpan = document.getElementById('totalProductCount');
-            if (countSpan) countSpan.textContent = products.length;
 
-            if (products.length === 0) {
+            // Get current filter values
+            const searchInput = document.getElementById('searchInput');
+            const brandFilter = document.getElementById('brandFilter');
+            const categoryFilter = document.getElementById('categoryFilter');
+            const stockFilter = document.getElementById('stockFilter');
+
+            const search = searchInput ? searchInput.value.toLowerCase() : '';
+            const brand = brandFilter ? brandFilter.value : '';
+            const category = categoryFilter ? categoryFilter.value : '';
+            const stockStatus = stockFilter ? stockFilter.value : '';
+
+            // 1. FILTER the products
+            const filteredProducts = products.filter(p => {
+                const matchSearch = !search ||
+                    (p.name || '').toLowerCase().includes(search) ||
+                    (p.sku && p.sku.toLowerCase().includes(search)) ||
+                    (p.barcode && p.barcode.toString().toLowerCase().includes(search));
+                const matchBrand = !brand || p.brand === brand;
+                const matchCategory = !category || (p.categorySlug === category || p.category === category);
+
+                let matchStock = true;
+                if (stockStatus === 'high') matchStock = (p.stock || 0) >= 15;
+                else if (stockStatus === 'low') matchStock = (p.stock || 0) > 0 && (p.stock || 0) < 15;
+                else if (stockStatus === 'out') matchStock = (p.stock || 0) === 0;
+
+                return matchSearch && matchBrand && matchCategory && matchStock;
+            });
+
+            if (countSpan) countSpan.textContent = filteredProducts.length;
+
+            if (filteredProducts.length === 0) {
                 tbody.innerHTML = `
                     <tr>
                         <td colspan="7" style="text-align: center; padding: 40px; color: #6b7280;">
                             <i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 10px;"></i>
-                            <p style="margin: 10px 0 0;">Henüz ürün eklenmemiş</p>
+                            <p style="margin: 10px 0 0;">Aranan kriterlere uygun ürün bulunamadı</p>
+                            ${!search && !brand && !category && !stockStatus ? `
                             <button class="add-product-btn" style="margin-top: 16px;" onclick="openAddModal()">
                                 <i class="fa-solid fa-plus"></i>
                                 İlk Ürünü Ekle
-                            </button>
+                            </button>` : ''}
                         </td>
                     </tr>
                 `;
@@ -1674,14 +1704,11 @@
 
             tbody.innerHTML = '';
 
-            // KESİN VE NİHAİ ÇÖZÜM: En yeni ürün en üstte
-            // Önce createdAt'e, yoksa ID'ye göre sırala (Büyükten küçüğe)
-            const sortedProducts = [...products].sort((a, b) => {
-                // createdAt varsa bunu kullan (daha güvenilir)
+            // 2. SORT the filtered products (En yeni ürün en üstte)
+            const sortedProducts = [...filteredProducts].sort((a, b) => {
                 if (a.createdAt && b.createdAt) {
                     return new Date(b.createdAt) - new Date(a.createdAt);
                 }
-                // ID'ye göre sırala (MongoDB ObjectID'ler timestamp içerir)
                 const idA = (a._id || a.id || '').toString();
                 const idB = (b._id || b.id || '').toString();
                 return idB.localeCompare(idA);
@@ -1690,10 +1717,12 @@
             sortedProducts.forEach(product => {
                 let stockClass = 'stock-high';
                 let stockText = 'Stokta';
-                if (product.stock === 0) {
+                const pStock = product.stock || 0;
+
+                if (pStock === 0) {
                     stockClass = 'stock-out';
                     stockText = 'Tükendi';
-                } else if (product.stock < 15) {
+                } else if (pStock < 15) {
                     stockClass = 'stock-low';
                     stockText = 'Düşük';
                 }
@@ -1708,7 +1737,6 @@
                     '<span style="background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px;font-size:10px;">AKTİF</span>' :
                     '<span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:4px;font-size:10px;">PASİF</span>';
 
-                // Marka Vitrini Rozeti
                 let showcaseBadge = '';
                 if (product.brandShowcase) {
                     showcaseBadge = `<span style="background:#fff7ed;color:#c2410c;padding:2px 6px;border-radius:4px;font-size:10px;border:1px solid #ffedd5;font-weight:600;">VİTRİN: ${product.brandShowcase.toUpperCase()}</span>`;
@@ -1729,12 +1757,12 @@
                              <div style="display:flex; flex-direction:column; font-weight:600;">
                                  ${product.salePrice
                         ? `<span style="text-decoration:line-through; color:#9ca3af; font-size:12px;">₺${product.price?.toLocaleString()}</span>
-                                        <span style="color:#e11d48;">₺${parseFloat(product.salePrice).toLocaleString()}</span>`
+                                         <span style="color:#e11d48;">₺${parseFloat(product.salePrice).toLocaleString()}</span>`
                         : `<span>₺${product.price?.toLocaleString() || '0'}</span>`
                     }
                              </div>
                         </td>
-                        <td><span class="product-stock ${stockClass}">${stockText} (${product.stock || 0})</span></td>
+                        <td><span class="product-stock ${stockClass}">${stockText} (${pStock})</span></td>
                         <td>
                             <div class="action-btns">
                                 <button class="action-btn edit-btn" onclick="editProduct('${productId}')">
@@ -1774,6 +1802,7 @@
             }
 
             document.getElementById('productModal').classList.add('active');
+            restoreModal(); // Küçültülmüşse geri aç
         }
 
 
@@ -1869,6 +1898,7 @@
                 }
 
                 document.getElementById('productModal').classList.add('active');
+                restoreModal(); // Küçültülmüşse geri aç
             }
         }
 
@@ -1903,17 +1933,17 @@
 
         // Minimize modal
         function minimizeModal(e) {
-            // DEBUG ALERT
-            // alert('Minimize fonksiyonu tetiklendi! Panel sağ alta alınacak.');
-
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
 
             const modalOverlay = document.getElementById('productModal');
-            if (!modalOverlay) {
-                alert('HATA: Modal bulunamadı!');
+            if (!modalOverlay) return;
+
+            // TOGGLE: Eğer zaten küçültülmüşse geri aç
+            if (modalOverlay.classList.contains('minimized')) {
+                restoreModal();
                 return;
             }
 
@@ -1932,6 +1962,15 @@
                 modalBox.style.margin = '0 20px 20px 0';
                 modalBox.style.overflow = 'hidden';
                 modalBox.style.pointerEvents = 'auto'; // Tıklanabilir olsun
+
+                // Başlığa tıklayınca açılsın
+                modalBox.onclick = function (evt) {
+                    if (evt.target.closest('.modal-close')) {
+                        closeModal();
+                    } else if (modalOverlay.classList.contains('minimized')) {
+                        restoreModal();
+                    }
+                };
             }
 
             // İkonu değiştir
@@ -1940,24 +1979,10 @@
                 minimizeBtn.className = 'fa-solid fa-window-maximize';
             }
 
-            // Header ve Body gizlemeyi CSS yapıyor ama garanti olsun
             const body = modalOverlay.querySelector('.modal-body');
             const footer = modalOverlay.querySelector('.modal-footer');
             if (body) body.style.display = 'none';
             if (footer) footer.style.display = 'none';
-
-            // Gecikmeli restore listener
-            setTimeout(() => {
-                const modalElement = modalOverlay.querySelector('.modal');
-                // Mevcut listener varsa temizle (önemli)
-                modalElement.onclick = null;
-
-                modalElement.onclick = function (evt) {
-                    // Butonlara tıklayınca restore olmasın
-                    if (evt.target.closest('button') || evt.target.closest('.modal-minimize') || evt.target.closest('.modal-close')) return;
-                    restoreModal();
-                };
-            }, 100);
         }
 
         // Restore modal
@@ -2299,34 +2324,10 @@
         document.getElementById('searchInput')?.addEventListener('input', filterProducts);
         document.getElementById('brandFilter')?.addEventListener('change', filterProducts);
         document.getElementById('categoryFilter')?.addEventListener('change', filterProducts);
+        document.getElementById('stockFilter')?.addEventListener('change', filterProducts);
 
         function filterProducts() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const brand = document.getElementById('brandFilter').value;
-            const category = document.getElementById('categoryFilter').value;
-            const stockStatus = document.getElementById('stockFilter').value;
-
-            const filtered = products.filter(p => {
-                const matchSearch = !search ||
-                    p.name.toLowerCase().includes(search) ||
-                    (p.sku && p.sku.toLowerCase().includes(search)) ||
-                    (p.barcode && p.barcode.toString().toLowerCase().includes(search));
-                const matchBrand = !brand || p.brand === brand;
-                const matchCategory = !category || (p.categorySlug === category || p.category === category);
-
-                let matchStock = true;
-                if (stockStatus === 'high') matchStock = p.stock >= 15;
-                else if (stockStatus === 'low') matchStock = p.stock > 0 && p.stock < 15;
-                else if (stockStatus === 'out') matchStock = p.stock === 0;
-
-                return matchSearch && matchBrand && matchCategory && matchStock;
-            });
-
-            // Temporarily show filtered products
-            const originalProducts = products;
-            products = filtered;
-            renderProducts();
-            products = originalProducts;
+            renderProducts(); // renderProducts zaten filtre değerlerini okuyor (v2.1)
         }
 
         // Marka vitrini seçildiğinde marka ve kategoriyi otomatik doldur

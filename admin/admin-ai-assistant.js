@@ -10,6 +10,25 @@ const AdminAIAssistant = {
     conversationHistory: [],
     uploadedImages: [], // Yüklenen görseller
 
+    // Gelişmiş Endüstriyel Teknik Sözlük
+    technicalTerms: {
+        'offset': 'Ofset (Açılı)',
+        'hexagon key wrenches': 'Alyen Anahtar Seti',
+        'high torque': 'Yüksek Torklu',
+        'handles': 'Saplı / Tutamaklı',
+        'support': 'Stand / Askı Aparatı',
+        'set of': 'Parçalı',
+        'wrenches': 'Anahtarlar',
+        'pliers': 'Penseler',
+        'screwdrivers': 'Tornavidalar',
+        'drive': 'Lokma Girişi',
+        'socket': 'Lokma',
+        'ratchet': 'Cırcır',
+        'set': 'Seti',
+        'with': 'ile',
+        'mm': 'mm'
+    },
+
     // Başlat
     init() {
         this.renderUI();
@@ -267,6 +286,35 @@ const AdminAIAssistant = {
         this.processUserMessage(message, imagesToProcess);
     },
 
+    // Teknik Çeviri ve İsim Güzelleştirme
+    enhanceProductData(input) {
+        let text = input.toLowerCase();
+
+        // 1. Teknik Çeviri
+        let translated = input;
+        Object.entries(this.technicalTerms).forEach(([eng, tr]) => {
+            const regex = new RegExp(`\\b${eng}\\b`, 'gi');
+            translated = translated.replace(regex, tr);
+        });
+
+        // 2. Özel Temizlik (Örn: "set of 11" -> "11 Parçalı")
+        translated = translated.replace(/set\s+of\s+(\d+)/gi, '$1 Parçalı');
+
+        // 3. İsim Oluşturma (Ahenkli)
+        let name = translated.split(',')[0].trim();
+        if (name.length < 10) name = translated.substring(0, 50);
+
+        // Marka tespiti (Beta, Bosch vs.)
+        const brands = ['Beta', 'Bosch', 'Makita', 'DeWalt', 'Knipex', 'Stanley'];
+        const foundBrand = brands.find(b => input.toUpperCase().includes(b.toUpperCase())) || 'Beta';
+
+        return {
+            translatedDesc: translated,
+            suggestedName: `${foundBrand} ${name.toUpperCase()}`,
+            brand: foundBrand
+        };
+    },
+
     // Kullanıcı mesajını ekle
     addUserMessage(text, images = []) {
         const container = document.getElementById('aiChatMessages');
@@ -373,6 +421,8 @@ const AdminAIAssistant = {
 
         if (command.type === 'bulk_add_products' || command.type === 'advanced_add') {
             this.showProductAddConfirmation(command);
+        } else if (command.type === 'smart_product_entry') {
+            this.showSmartProductEntry(command);
         } else if (command.type === 'add_product') {
             this.showSingleProductForm(command);
         } else if (command.type === 'update_price') {
@@ -391,7 +441,27 @@ const AdminAIAssistant = {
     // Komutu analiz et (Gelişmiş NLP ve Mantık Sorgulama)
     parseCommand(message) {
         const lowerMsg = message.toLowerCase();
-        const command = { type: 'unknown', count: 1, category: null, subCategory: null, rules: {} };
+        const command = { type: 'unknown', count: 1, category: null, subCategory: null, rules: {}, raw: message };
+
+        // 0. SMART PRODUCT DETECT (Kullanıcı ürün verisi girmişse)
+        const hasSku = message.match(/sku[:\s]+([^\s,]+)/i);
+        const hasPrice = message.match(/(?:fiyat|price)[:\s]+(\d+)/i);
+        const hasDesc = (lowerMsg.includes('açıklama') || lowerMsg.includes('description') || lowerMsg.includes('set of'));
+
+        if (hasSku || (hasPrice && hasDesc)) {
+            command.type = 'smart_product_entry';
+            command.sku = hasSku ? hasSku[1] : null;
+            command.price = hasPrice ? hasPrice[1] : null;
+
+            // Açıklamayı ayıkla
+            let desc = message;
+            if (hasSku) desc = desc.replace(hasSku[0], '');
+            if (hasPrice) desc = desc.replace(hasPrice[0], '');
+
+            const refined = this.enhanceProductData(desc);
+            command.refined = refined;
+            return command;
+        }
 
         // 1. Gelişmiş Matematik ve Döviz Tespiti
         if (lowerMsg.includes('euro') || lowerMsg.includes('€') || lowerMsg.includes('dolar') || lowerMsg.includes('$')) {
@@ -415,8 +485,8 @@ const AdminAIAssistant = {
             command.rules.namePrefix = prefixMatch[1];
         }
 
-        // 4. Miktar Tespiti
-        const countMatch = lowerMsg.match(/(\d+)\s*(?:tane|adet|ürün)/i);
+        // 4. Miktar Tespiti (KRİTİK DÜZELTME: SKU içindeki sayıları yakalamaması için \b eklendi)
+        const countMatch = lowerMsg.match(/\b(\d+)\s*(?:tane|adet|ürün)\b/i);
         if (countMatch) command.count = parseInt(countMatch[1]);
 
         // 5. Kategori ve Alt Kategori Tespiti
@@ -425,7 +495,7 @@ const AdminAIAssistant = {
 
         // Mevcut Regex Yakalamaları (Geriye Dönük Uyumluluk)
         const bulkMatch = lowerMsg.match(
-            /(\d+)\s*(?:tane|adet)?\s*(.+?)\s*(?:üst\s*)?kategori(?:si)?(?:ne|sine)?\s*(.+?)\s*alt\s*kategori(?:si)?(?:ne|sine)?/i
+            /\b(\d+)\s*(?:tane|adet)?\s*(.+?)\s*(?:üst\s*)?kategori(?:si)?(?:ne|sine)?\s*(.+?)\s*alt\s*kategori(?:si)?(?:ne|sine)?/i
         );
 
         if (bulkMatch && command.type === 'unknown') {
@@ -434,7 +504,7 @@ const AdminAIAssistant = {
             command.category = this.findCategory(bulkMatch[2]);
             command.subCategory = this.findSubCategory(bulkMatch[3]);
         } else if (command.type === 'unknown') {
-            if (lowerMsg.includes('ürün ekle') || lowerMsg.includes('yeni ürün')) {
+            if (lowerMsg.includes('ürün ekle') || lowerMsg.includes('yeni ürün') || lowerMsg.includes('gir')) {
                 command.type = (command.count > 1) ? 'bulk_add_products' : 'add_product';
             }
         }
@@ -723,6 +793,89 @@ const AdminAIAssistant = {
 
         products.push(localProduct);
         localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+    },
+
+    // Akıllı Ürün Girişi Onay Ekranı
+    showSmartProductEntry(command) {
+        const refined = command.refined;
+
+        this.addBotMessage(`
+            🚀 <strong>Harika! Ürünü analiz ettim ve teknik çevirisini yaptım.</strong>
+            <br><br>
+            <div class="ai-command-preview">
+                <h4><i class="fa-solid fa-microchip"></i> Akıllı Analiz Sonucu</h4>
+                <ul style="font-size: 13px;">
+                    <li><strong>Önerilen İsim:</strong> ${refined.suggestedName}</li>
+                    <li><strong>SKU / Kod:</strong> ${command.sku || 'Otomatik'}</li>
+                    <li><strong>Fiyat:</strong> ₺${command.price || '?'}</li>
+                    <li><strong>Kategori:</strong> Hırdavat ve El Aletleri</li>
+                    <li><strong>Marka:</strong> ${refined.brand}</li>
+                </ul>
+                
+                <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 12px; border-left: 3px solid #6366f1;">
+                    <strong>Teknik Çeviri / Açıklama:</strong><br>
+                    ${refined.translatedDesc}
+                </div>
+
+                <div class="ai-confirm-btns">
+                    <button class="ai-confirm-btn confirm" id="aiConfirmSmartAdd">
+                        <i class="fa-solid fa-file-export"></i> Formu Doldur ve Aç
+                    </button>
+                    <button class="ai-confirm-btn cancel" id="aiCancelSmartAdd">
+                        <i class="fa-solid fa-xmark"></i> İptal
+                    </button>
+                </div>
+            </div>
+        `);
+
+        setTimeout(() => {
+            document.getElementById('aiConfirmSmartAdd')?.addEventListener('click', () => {
+                this.fillProductForm(command);
+            });
+            document.getElementById('aiCancelSmartAdd')?.addEventListener('click', () => {
+                this.addBotMessage('İşlem iptal edildi.');
+            });
+        }, 100);
+    },
+
+    // Formu doldur
+    fillProductForm(command) {
+        const refined = command.refined;
+
+        // Modal aç
+        if (typeof openModal === 'function') {
+            openModal();
+        } else {
+            const modal = document.getElementById('productModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        // Verileri bas
+        setTimeout(() => {
+            const fields = {
+                'productName': refined.suggestedName,
+                'productSKU': command.sku || '',
+                'productPrice': command.price || '',
+                'productBrand': refined.brand || 'Beta',
+                'productCategory': 'hirdavat-el-aletleri',
+                'productDescription': refined.translatedDesc,
+                'productStock': 50
+            };
+
+            for (const [id, value] of Object.entries(fields)) {
+                const el = document.getElementById(id);
+                if (el) el.value = value;
+            }
+
+            // Kategori seçimi için manual trigger
+            const catSelect = document.getElementById('productCategory');
+            if (catSelect) {
+                catSelect.dispatchEvent(new Event('change'));
+            }
+
+            this.addBotMessage('✅ Tüm veriler forma aktarıldı. Kontrol edip kaydedebilirsiniz!');
+            this.toggleChat(); // Chat'i kapat ki formu görsün
+        }, 600);
     },
 
     // Kategori başlığı al
