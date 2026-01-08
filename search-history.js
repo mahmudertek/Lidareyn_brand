@@ -254,9 +254,18 @@
      * "Önceden Gezdikleriniz" bölümünü oluştur (Slider formatında)
      */
     function createRecentlyViewedSection(currentProductId) {
-        const history = getBrowsingHistoryExcluding(currentProductId);
+        // Debug: Tüm browsing history'yi kontrol et
+        const allHistory = getBrowsingHistory();
+        console.log('📦 Browsing History - Total items:', allHistory.length);
+        console.log('📦 Browsing History - Current Product ID:', currentProductId);
 
-        if (history.length === 0) return null;
+        const history = getBrowsingHistoryExcluding(currentProductId);
+        console.log('📦 Browsing History - After excluding current:', history.length);
+
+        if (history.length === 0) {
+            console.log('📦 Önceden Gezdikleriniz: No items to show (browsing history empty or only current product)');
+            return null;
+        }
 
         const sliderId = 'recently-viewed-slider-' + (++sliderIdCounter);
 
@@ -289,6 +298,7 @@
         // Slider navigasyonunu aktifleştir
         setTimeout(() => initSliderNav(sliderId), 100);
 
+        console.log('📦 Önceden Gezdikleriniz: Section created with', history.length, 'items');
         return section;
     }
 

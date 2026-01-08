@@ -315,6 +315,75 @@ const AdminAIAssistant = {
         };
     },
 
+    // Anahtar:Değer çiftlerini çıkar
+    extractKeyValuePairs(message) {
+        const result = {
+            name: null,
+            price: null,
+            stock: 20, // varsayılan
+            sku: null,
+            brand: null,
+            category: null,
+            description: null
+        };
+
+        // İsim/Ad çıkar
+        const namePatterns = [
+            /isim\s*:\s*([^,\n]+?)(?=\s*(?:sku|marka|fiyat|stok|açıklama|kategori|$))/i,
+            /ürün\s*adı\s*:\s*([^,\n]+?)(?=\s*(?:sku|marka|fiyat|stok|açıklama|kategori|$))/i,
+            /ad\s*:\s*([^,\n]+?)(?=\s*(?:sku|marka|fiyat|stok|açıklama|kategori|$))/i
+        ];
+        for (const pattern of namePatterns) {
+            const match = message.match(pattern);
+            if (match) {
+                result.name = match[1].trim().replace(/^["']|["']$/g, '');
+                break;
+            }
+        }
+
+        // SKU çıkar
+        const skuMatch = message.match(/sku\s*:\s*([^\s,]+)/i);
+        if (skuMatch) result.sku = skuMatch[1].trim();
+
+        // Barkod çıkar (SKU yoksa)
+        if (!result.sku) {
+            const barcodeMatch = message.match(/barkod\s*:\s*([^\s,]+)/i);
+            if (barcodeMatch) result.sku = barcodeMatch[1].trim();
+        }
+
+        // Marka çıkar
+        const brandMatch = message.match(/marka\s*:\s*([^\s,]+)/i);
+        if (brandMatch) result.brand = brandMatch[1].trim();
+
+        // Fiyat çıkar
+        const priceMatch = message.match(/fiyat\s*:\s*(\d+(?:[.,]\d+)?)/i);
+        if (priceMatch) result.price = parseFloat(priceMatch[1].replace(',', '.'));
+
+        // Stok çıkar
+        const stockMatch = message.match(/stok\s*:\s*(\d+)/i);
+        if (stockMatch) result.stock = parseInt(stockMatch[1]);
+
+        // Açıklama çıkar
+        const descPatterns = [
+            /açıklama\s*:\s*["']([^"']+)["']/i,
+            /açıklama\s*:\s*([^,\n]+?)(?=\s*(?:isim|sku|marka|fiyat|stok|kategori|$))/i
+        ];
+        for (const pattern of descPatterns) {
+            const match = message.match(pattern);
+            if (match) {
+                result.description = match[1].trim();
+                break;
+            }
+        }
+
+        // Kategori çıkar
+        const categoryMatch = message.match(/kategori\s*:\s*([^\s,]+)/i);
+        if (categoryMatch) result.category = this.findCategory(categoryMatch[1]);
+
+        console.log('🤖 AI: Extracted data:', result);
+        return result;
+    },
+
     // Kullanıcı mesajını ekle
     addUserMessage(text, images = []) {
         const container = document.getElementById('aiChatMessages');
@@ -445,39 +514,80 @@ const AdminAIAssistant = {
         const lowerMsg = message.toLowerCase();
         const command = { type: 'unknown', count: 1, category: null, subCategory: null, rules: {}, raw: message };
 
-        // ========== YENİ: DOĞRUDAN ÜRÜN GİRİŞİ TESPİTİ ==========
+        // ========== ANAHTAR:DEĞER FORMATI TESPİTİ ==========
+        // "isim:Beta Destekli Set, sku:31/SP6, marka:beta fiyat:3400" gibi komutları algıla
+        const hasKeyValueFormat = message.includes(':') && (
+            lowerMsg.includes('isim:') ||
+            lowerMsg.includes('isim :') ||
+            lowerMsg.includes('ürün adı:') ||
+            lowerMsg.includes('ad:') ||
+            lowerMsg.includes('fiyat:') ||
+            lowerMsg.includes('marka:') ||
+            lowerMsg.includes('sku:') ||
+            lowerMsg.includes('stok:')
+        );
+
+        if (hasKeyValueFormat) {
+            // Anahtar:Değer çiftlerini çıkar
+            const extractedData = this.extractKeyValuePairs(message);
+
+            if (extractedData.name || extractedData.price || extractedData.sku) {
+                command.type = 'direct_product_entry';
+                command.directData = extractedData;
+                console.log('🤖 AI: Parsed key-value format:', extractedData);
+                return command;
+            }
+        }
+
+        // ========== DOĞRUDAN ÜRÜN GİRİŞİ TESPİTİ ==========
         // "bu ürünü gir stok adedi 20 fiyat 2500" gibi komutları algıla
         const hasDirectEntry = lowerMsg.includes('gir') || lowerMsg.includes('ekle') || lowerMsg.includes('kaydet');
         const stockMatch = message.match(/stok\s*(?:adedi|sayısı|miktarı)?[:\s]*(\d+)/i);
         const priceMatch = message.match(/fiyat[ıi]?[:\s]*(\d+(?:[.,]\d+)?)/i);
-        const nameMatch = message.match(/(?:ürün\s*)?(?:adı|ismi)[:\s]*[\"']?([^\"'\n,]+)[\"']?/i);
-        const skuMatch = message.match(/(?:sku|stok\s*kodu|barkod)[:\s]*[\"']?([^\s\"',]+)[\"']?/i);
-        const brandMatch = message.match(/marka[:\s]*[\"']?([^\s\"',]+)[\"']?/i);
-        const categoryMatch = message.match(/kategori[:\s]*[\"']?([^\s\"',]+)[\"']?/i);
+        const nameMatch = message.match(/(?:ürün\s*)?(?:adı|ismi|isim)[:\s]*["']?([^"'\n,]+)["']?/i);
+        const skuMatch = message.match(/(?:sku|stok\s*kodu|barkod)[:\s]*["']?([^\s"',]+)["']?/i);
+        const brandMatch = message.match(/marka[:\s]*["']?([^\s"',]+)["']?/i);
+        const categoryMatch = message.match(/kategori[:\s]*["']?([^\s"',]+)["']?/i);
+        const descMatch = message.match(/açıklama[:\s]*["']?([^"']+)["']?/i);
 
-        // Eğer stok veya fiyat bilgisi varsa ve "gir/ekle" komutu varsa
-        if (hasDirectEntry && (stockMatch || priceMatch)) {
+        // Eğer isim, stok veya fiyat bilgisi varsa ve "gir/ekle" komutu varsa
+        if (hasDirectEntry && (stockMatch || priceMatch || nameMatch)) {
             command.type = 'direct_product_entry';
             command.directData = {
-                stock: stockMatch ? parseInt(stockMatch[1]) : null,
+                stock: stockMatch ? parseInt(stockMatch[1]) : 20, // varsayılan 20
                 price: priceMatch ? parseFloat(priceMatch[1].replace(',', '.')) : null,
                 name: nameMatch ? nameMatch[1].trim() : null,
                 sku: skuMatch ? skuMatch[1].trim() : null,
                 brand: brandMatch ? brandMatch[1].trim() : null,
-                category: categoryMatch ? this.findCategory(categoryMatch[1]) : null
+                category: categoryMatch ? this.findCategory(categoryMatch[1]) : null,
+                description: descMatch ? descMatch[1].trim() : null
             };
             return command;
         }
 
-        // 0. SMART PRODUCT DETECT (Kullanıcı ürün verisi girmişse)
+        // 0. SMART PRODUCT DETECT - Artık direct_product_entry'e yönlendir
         const hasSku = message.match(/sku[:\s]*([^\s,]+)/i);
         const hasPrice = message.match(/(?:fiyat|price|tutarı)[:\s]*(\d+)/i);
         const hasDesc = (lowerMsg.includes('açıklama') || lowerMsg.includes('description') || lowerMsg.includes('set of') || lowerMsg.includes('wrench') || lowerMsg.includes('mm'));
+        const hasName = message.match(/isim[:\s]*([^,\n]+)/i);
 
-        // Önemli: Eğer SKU veya Teknik Terimler varsa, miktar tespitini (bulk) pas geçelim.
+        // SKU, fiyat ve isim varsa direct entry olarak işle
+        if ((hasSku || hasPrice || hasName) && hasDirectEntry) {
+            command.type = 'direct_product_entry';
+            command.directData = {
+                stock: 20,
+                price: hasPrice ? parseFloat(hasPrice[1]) : null,
+                name: hasName ? hasName[1].trim().replace(/['"]/g, '') : null,
+                sku: hasSku ? hasSku[1].trim() : null,
+                brand: brandMatch ? brandMatch[1].trim() : null,
+                description: descMatch ? descMatch[1].trim() : null
+            };
+            return command;
+        }
+
+        // Teknik giriş (eski smart_product_entry - geriye uyumluluk)
         const isTechnicalEntry = hasSku || (hasPrice && hasDesc);
-
-        if (isTechnicalEntry) {
+        if (isTechnicalEntry && !hasDirectEntry) {
             command.type = 'smart_product_entry';
             command.sku = hasSku ? hasSku[1] : null;
             command.price = hasPrice ? hasPrice[1] : null;
@@ -963,6 +1073,7 @@ const AdminAIAssistant = {
         else if (currentBrand) summary.push(`<li><strong>Marka:</strong> ${currentBrand} (mevcut)</li>`);
 
         if (data.sku) summary.push(`<li><strong>SKU/Barkod:</strong> ${data.sku}</li>`);
+        if (data.description) summary.push(`<li><strong>Açıklama:</strong> ${data.description.substring(0, 50)}${data.description.length > 50 ? '...' : ''}</li>`);
         if (data.category) summary.push(`<li><strong>Kategori:</strong> ${this.getCategoryTitle(data.category)}</li>`);
         else if (currentCategory) summary.push(`<li><strong>Kategori:</strong> ${this.getCategoryTitle(currentCategory)} (mevcut)</li>`);
 
@@ -1059,6 +1170,10 @@ const AdminAIAssistant = {
                     el.dispatchEvent(new Event('change'));
                 }
             }
+            if (data.description) {
+                const el = document.getElementById('productDescription');
+                if (el) el.value = data.description;
+            }
 
             // Görsel varsa yükle
             if (images && images.length > 0) {
@@ -1101,7 +1216,7 @@ const AdminAIAssistant = {
             salePrice: null,
             stock: data.stock || 20,
             unit: 'Adet',
-            description: `${data.brand || currentBrand || 'Kaliteli'} marka ürün. Galata Çarşı güvencesiyle.`,
+            description: data.description || `${data.brand || currentBrand || 'Kaliteli'} marka ürün. Galata Çarşı güvencesiyle.`,
             sku: data.sku || `SKU-${Date.now()}`,
             barcode: data.sku || `${Date.now()}`,
             isActive: true,
