@@ -1332,4 +1332,90 @@
     .product-info .old-price {
         font-size: 0.7rem !important;
     }
+
+    /* --- FIXED MOBILE SEARCH OVERLAY --- */
+    .search-container.active {
+        display: flex !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        background: #ffffff !important;
+        z-index: 99999 !important;
+        padding: 20px !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        box-sizing: border-box !important;
+        animation: fadeIn 0.15s ease-out;
+    }
+
+    /* Input Styling in Overlay */
+    .search-container.active .search-input {
+        width: 100% !important;
+        height: 50px !important;
+        font-size: 16px !important;
+        border: 1px solid #eee !important;
+        border-radius: 8px !important;
+        padding: 0 45px 0 15px !important;
+        /* Right padding for search icon */
+        margin-top: 60px !important;
+        /* Space for close button header */
+        background: #f9f9f9 !important;
+        box-shadow: none !important;
+        color: #333 !important;
+        display: block !important;
+        outline: none !important;
+    }
+
+    .search-container.active .search-input:focus {
+        background: #fff !important;
+        border-color: #8b7bd8 !important;
+    }
+
+    /* Search Icon inside Input (Right) */
+    .search-container.active .search-btn {
+        position: absolute !important;
+        top: 80px !important;
+        /* 20px padding + 60px margin top = 80px relative start of input, slightly adjusted */
+        right: 30px !important;
+        background: transparent !important;
+        border: none !important;
+        color: #8b7bd8 !important;
+        font-size: 18px !important;
+        z-index: 100002 !important;
+        display: flex !important;
+        width: 40px !important;
+        height: 50px !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Close Button (Generated via JS) */
+    .mobile-search-close-btn {
+        position: absolute !important;
+        top: 20px !important;
+        right: 15px !important;
+        font-size: 24px !important;
+        color: #333 !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        z-index: 100003 !important;
+        padding: 10px;
+        display: block !important;
+    }
+
+    /* Title for Overlay */
+    .mobile-search-title {
+        position: absolute !important;
+        top: 30px !important;
+        left: 20px !important;
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        color: #000 !important;
+        display: block !important;
+        letter-spacing: -0.5px;
+    }
 }

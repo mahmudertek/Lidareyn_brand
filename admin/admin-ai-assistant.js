@@ -480,6 +480,56 @@ const AdminAIAssistant = {
 
         if (command.type === 'direct_product_entry') {
             this.handleDirectProductEntry(command);
+        } else if (message.toLowerCase().includes('beta zımbaları yükle') || message.toLowerCase().includes('beta centre punches')) {
+            // ÖZEL KOMUT: Beta Zımbaları Yükle
+            const productsToAdd = [
+                {
+                    name: 'Beta 32 Serisi Nokta Zımbası Ø3mm',
+                    sku: '32/3',
+                    price: 290,
+                    stock: 20,
+                    brand: 'Beta',
+                    category: 'hirdavat-el-aletleri',
+                    description: 'Beta 32 Serisi Nokta Zımbası (Centre Punch). Ø3 mm'
+                },
+                {
+                    name: 'Beta 32 Serisi Nokta Zımbası Ø4mm',
+                    sku: '32/4',
+                    price: 275, // Müşteri isteği: 275 TL
+                    stock: 20,
+                    brand: 'Beta',
+                    category: 'hirdavat-el-aletleri',
+                    description: 'Beta 32 Serisi Nokta Zımbası (Centre Punch). Ø4 mm'
+                },
+                {
+                    name: 'Beta 32 Serisi Nokta Zımbası Ø5mm',
+                    sku: '32/5',
+                    price: 435,
+                    stock: 20,
+                    brand: 'Beta',
+                    category: 'hirdavat-el-aletleri',
+                    description: 'Beta 32 Serisi Nokta Zımbası (Centre Punch). Ø5 mm'
+                }
+            ];
+
+            const imageUrl = 'https://www.beta-tools.com/resources/products/img_large/000320100.jpg'; // Beta 32 serisi görseli
+
+            this.addBotMessage('🚀 <strong>Beta Zımba Seti Yükleniyor...</strong><br>3 adet ürün sırayla işleniyor.');
+
+            let delay = 0;
+            productsToAdd.forEach((prod, index) => {
+                setTimeout(() => {
+                    const cmd = {
+                        type: 'direct_product_entry',
+                        directData: prod,
+                        attachedImages: [imageUrl]
+                    };
+                    // Otomatik kaydet
+                    this.saveProductDirectly(cmd.directData, cmd.attachedImages);
+                }, delay);
+                delay += 1500; // Her ürün arası 1.5 sn bekle
+            });
+
         } else if (command.type === 'bulk_add_products' || command.type === 'advanced_add') {
             this.showProductAddConfirmation(command);
         } else if (command.type === 'smart_product_entry') {
@@ -1219,11 +1269,40 @@ const AdminAIAssistant = {
 
         try {
             let success = false;
+            let response;
+            let isUpdate = false;
+            let productId = null;
 
             // ADMIN_API varsa kullan
-            if (typeof ADMIN_API !== 'undefined' && ADMIN_API.createProduct) {
-                const response = await ADMIN_API.createProduct(productData);
+            if (typeof ADMIN_API !== 'undefined') {
+
+                // Önce mükerrer kontrolü yap (SKU veya İsim)
+                if (typeof products !== 'undefined' && Array.isArray(products)) {
+                    const existingProduct = products.find(p =>
+                        (productData.sku && p.sku === productData.sku) ||
+                        (p.name.toLowerCase() === productData.name.toLowerCase())
+                    );
+
+                    if (existingProduct) {
+                        isUpdate = true;
+                        productId = existingProduct._id || existingProduct.id;
+                        console.log('🤖 AI: Mevcut ürün bulundu, güncelleniyor:', productId);
+                    }
+                }
+
+                if (isUpdate && productId) {
+                    response = await ADMIN_API.updateProduct(productId, productData);
+                } else {
+                    response = await ADMIN_API.createProduct(productData);
+                }
+
                 success = response && response.success;
+
+                if (!success) {
+                    // Backend hatasını yakala
+                    throw new Error(response.error || response.message || 'API Hatası');
+                }
+
             } else {
                 // localStorage'a kaydet
                 this.saveProductLocally(productData);
@@ -1233,15 +1312,17 @@ const AdminAIAssistant = {
             this.hideTyping();
 
             if (success) {
+                const actionText = isUpdate ? 'Güncellendi' : 'Kaydedildi';
                 this.addBotMessage(`
                     <div class="ai-result-success">
                         <i class="fa-solid fa-circle-check"></i>
-                        <strong>Ürün Başarıyla Kaydedildi!</strong>
+                        <strong>Ürün Başarıyla ${actionText}!</strong>
                     </div>
                     <ul style="font-size: 13px; margin-top: 10px;">
                         <li><strong>Adı:</strong> ${productData.name}</li>
                         <li><strong>Fiyat:</strong> ₺${productData.price.toLocaleString('tr-TR')}</li>
                         <li><strong>Stok:</strong> ${productData.stock} adet</li>
+                         ${isUpdate ? '<li><em>(Mevcut ürün güncellendi)</em></li>' : ''}
                     </ul>
                 `, [
                     { text: '➕ Başka Ürün Ekle', action: 'addProduct' },
@@ -1251,6 +1332,14 @@ const AdminAIAssistant = {
                 // Ürün listesini yenile
                 if (typeof loadProducts === 'function') {
                     setTimeout(() => loadProducts(), 500);
+                }
+
+                // Modalı kapat (eğer açıksa)
+                if (typeof closeModal === 'function') {
+                    closeModal();
+                } else {
+                    const modal = document.getElementById('productModal');
+                    if (modal) modal.classList.remove('active');
                 }
             } else {
                 throw new Error('Kayıt başarısız');

@@ -76,6 +76,33 @@ document.addEventListener('DOMContentLoaded', function () {
             elements.searchContainer.classList.add('active');
             state.isSearchOpen = true;
 
+            // --- MOBILE OVERLAY ENHANCEMENT ---
+            if (window.innerWidth <= 768) {
+                // 1. Add Close Button if not exists
+                if (!elements.searchContainer.querySelector('.mobile-search-close-btn')) {
+                    const closeBtn = document.createElement('button');
+                    closeBtn.className = 'mobile-search-close-btn';
+                    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                    closeBtn.onclick = (ev) => {
+                        ev.stopPropagation();
+                        closeSearch();
+                    };
+                    elements.searchContainer.appendChild(closeBtn);
+                }
+
+                // 2. Add Title if not exists
+                if (!elements.searchContainer.querySelector('.mobile-search-title')) {
+                    const title = document.createElement('span');
+                    title.className = 'mobile-search-title';
+                    title.textContent = 'Arama Yap';
+                    elements.searchContainer.appendChild(title);
+                }
+
+                // 3. Prevent Body Scroll
+                document.body.style.overflow = 'hidden';
+            }
+            // ----------------------------------
+
             // Inputa odaklan
             if (elements.searchInput) {
                 setTimeout(() => elements.searchInput.focus(), 100); // Kısa gecikme transition için iyi olur
@@ -110,6 +137,16 @@ document.addEventListener('DOMContentLoaded', function () {
         state.isSearchOpen = false;
         if (elements.searchContainer) {
             elements.searchContainer.classList.remove('active');
+
+            // --- MOBILE CLEANUP ---
+            const closeBtn = elements.searchContainer.querySelector('.mobile-search-close-btn');
+            if (closeBtn) closeBtn.remove();
+
+            const title = elements.searchContainer.querySelector('.mobile-search-title');
+            if (title) title.remove();
+
+            document.body.style.overflow = ''; // Restore scroll
+            // ---------------------
         }
     }
 
