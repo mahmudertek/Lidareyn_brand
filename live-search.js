@@ -239,23 +239,59 @@ function initLiveSearch() {
             return;
         }
 
-        // --- DYNAMIC FILTERING LOGIC ---
+        // --- AKILLI ARAMA FONKSİYONU: Kelime sırası önemsiz ---
+        function smartMatch(text, queryWords) {
+            if (!text || !queryWords.length) return { matched: false, score: 0 };
+            const textLower = text.toLowerCase();
+            let matchedCount = 0;
 
-        // 1. Products (Search by name, brand, category)
-        const matchedProducts = dynamicProducts.filter(p =>
-            (p.name && p.name.toLowerCase().includes(query)) ||
-            (p.brand && p.brand.toLowerCase().includes(query)) ||
-            (p.category && p.category.toLowerCase().includes(query))
-        ).slice(0, 5);
+            for (const word of queryWords) {
+                if (textLower.includes(word)) {
+                    matchedCount++;
+                }
+            }
 
-        // 2. Categories (from dynamicCategories)
+            // Eşleşme oranını hesapla
+            const score = matchedCount / queryWords.length;
+            return { matched: matchedCount > 0, score };
+        }
+
+        // Query'yi kelimelere ayır
+        const queryWords = query.split(/\s+/).filter(w => w.length > 0);
+
+        // 1. Products (Akıllı arama - kelime sırası önemsiz)
+        const matchedProducts = dynamicProducts
+            .map(p => {
+                // Aranabilir metin oluştur
+                const searchableText = [
+                    p.name || '',
+                    p.brand || '',
+                    p.category || '',
+                    p.sku || '',
+                    p.description || ''
+                ].join(' ');
+
+                const result = smartMatch(searchableText, queryWords);
+                return { product: p, ...result };
+            })
+            .filter(item => item.matched)
+            .sort((a, b) => b.score - a.score) // En yüksek eşleşme üstte
+            .slice(0, 5)
+            .map(item => item.product);
+
+        // 2. Categories (Akıllı arama)
         const matchedCategories = dynamicCategories
-            .filter(c => c.name.toLowerCase().includes(query))
+            .filter(c => {
+                return queryWords.some(word => c.name.toLowerCase().includes(word));
+            })
             .slice(0, 5);
 
-        // 3. Brands (from dynamicBrands)
+        // 3. Brands (Akıllı arama)
         const matchedBrands = dynamicBrands
-            .filter(b => b && b.toLowerCase().includes(query))
+            .filter(b => {
+                if (!b) return false;
+                return queryWords.some(word => b.toLowerCase().includes(word));
+            })
             .slice(0, 5);
 
         let html = '';
@@ -342,13 +378,26 @@ function initLiveSearch() {
 
     // 4. Keyboard Navigation (Arrow Keys) - Improved Logic
 
-    // A. Input Listener: Jump to Results
+    // A. Input Listener: Jump to Results or Search on Enter
     searchInput.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') {
             const results = dropdown.querySelectorAll('.search-result-item');
             if (results.length > 0) {
                 e.preventDefault();
                 results[0].focus();
+            }
+        } else if (e.key === 'Enter') {
+            // Enter tuşu ile arama sayfasına git
+            const query = searchInput.value.trim();
+            if (query.length > 0) {
+                e.preventDefault();
+
+                // Sayfa konumuna göre doğru yolu belirle
+                const isInSubfolder = window.location.pathname.includes('/kategoriler/') ||
+                    window.location.pathname.includes('/admin/');
+                const basePath = isInSubfolder ? '../' : '';
+
+                window.location.href = basePath + 'arama.html?q=' + encodeURIComponent(query);
             }
         }
     });

@@ -188,17 +188,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 .replace(/ü$/, '');
         };
 
+        // AKILLI ARAMA FONKSİYONU: Kelime sırası önemsiz
+        const smartSearch = (text, queryWords) => {
+            if (!text || !queryWords.length) return { matched: false, score: 0 };
+            const textLower = text.toLowerCase();
+            let matchedCount = 0;
+
+            for (const word of queryWords) {
+                if (textLower.includes(word)) {
+                    matchedCount++;
+                }
+            }
+
+            return {
+                matched: matchedCount > 0,
+                score: matchedCount / queryWords.length
+            };
+        };
+
         if (state.query) {
-            const q = normalize(state.query);
-            results = results.filter(p =>
-                normalize(p.name).includes(q) ||
-                normalize(p.brand).includes(q) ||
-                normalize(p.category).includes(q) ||
-                normalize(p.subCategory).includes(q) ||
-                (p.description && normalize(p.description).includes(q)) ||
-                (p.barcode && p.barcode.includes(state.query)) ||
-                (p.sku && p.sku.includes(state.query))
-            );
+            // Query'yi kelimelere ayır
+            const queryWords = state.query.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+
+            // Her ürün için arama skoru hesapla
+            results = results.map(p => {
+                const searchableText = [
+                    p.name || '',
+                    p.brand || '',
+                    p.category || '',
+                    p.subCategory || '',
+                    p.description || '',
+                    p.barcode || '',
+                    p.sku || ''
+                ].join(' ');
+
+                const result = smartSearch(searchableText, queryWords);
+                return { ...p, _searchScore: result.score, _matched: result.matched };
+            })
+                .filter(p => p._matched)
+                .sort((a, b) => b._searchScore - a._searchScore); // En yüksek eşleşme üstte
         }
 
         if (state.brand) {

@@ -571,9 +571,101 @@
         }
     </style>
     <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+    <style>
+        /* Minimize edilmiş panel kartları için container */
+        .minimized-panels-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 9998;
+            pointer-events: none;
+        }
+
+        .minimized-panel-card {
+            width: 320px;
+            height: 60px;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.3s ease;
+            border: 2px solid #6366f1;
+        }
+
+        .minimized-panel-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 70, 229, 0.5);
+        }
+
+        .minimized-panel-card .card-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            overflow: hidden;
+        }
+
+        .minimized-panel-card .card-info i {
+            font-size: 16px;
+        }
+
+        .minimized-panel-card .card-info span {
+            font-weight: 600;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+        }
+
+        .minimized-panel-card .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .minimized-panel-card .card-actions button {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .minimized-panel-card .card-actions .restore-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .minimized-panel-card .card-actions .restore-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .minimized-panel-card .card-actions .close-btn {
+            background: rgba(220, 38, 38, 0.3);
+            color: white;
+        }
+
+        .minimized-panel-card .card-actions .close-btn:hover {
+            background: rgba(220, 38, 38, 0.5);
+        }
+    </style>
 </head>
 
 <body>
+    <!-- Minimize edilmiş panel kartları container -->
+    <div class="minimized-panels-container" id="minimizedPanelsContainer"></div>
 
     <div class="admin-container">
         <!-- Sidebar - Dynamically loaded by admin-sidebar.js -->
@@ -1666,12 +1758,29 @@
             const category = categoryFilter ? categoryFilter.value : '';
             const stockStatus = stockFilter ? stockFilter.value : '';
 
+            // AKILLI ARAMA FONKSİYONU: Kelime sırası önemsiz
+            function smartSearch(text, query) {
+                if (!query || !text) return true;
+                const textLower = text.toLowerCase();
+                const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 0);
+
+                // Tüm arama kelimeleri metin içinde bulunmalı (sıra önemsiz)
+                return queryWords.every(word => textLower.includes(word));
+            }
+
             // 1. FILTER the products
             const filteredProducts = products.filter(p => {
-                const matchSearch = !search ||
-                    (p.name || '').toLowerCase().includes(search) ||
-                    (p.sku && p.sku.toLowerCase().includes(search)) ||
-                    (p.barcode && p.barcode.toString().toLowerCase().includes(search));
+                // Akıllı arama - ad, sku, barkod, marka, kategori ve açıklamada ara
+                const searchableText = [
+                    p.name || '',
+                    p.sku || '',
+                    p.barcode || '',
+                    p.brand || '',
+                    p.category || '',
+                    p.description || ''
+                ].join(' ');
+
+                const matchSearch = !search || smartSearch(searchableText, search);
                 const matchBrand = !brand || p.brand === brand;
                 const matchCategory = !category || (p.categorySlug === category || p.category === category);
 
@@ -1704,14 +1813,47 @@
 
             tbody.innerHTML = '';
 
-            // 2. SORT the filtered products (En yeni ürün en üstte)
+            // 2. SORT the filtered products (En yeni ürün en üstte - GÜÇLENDİRİLMİŞ)
             const sortedProducts = [...filteredProducts].sort((a, b) => {
+                // MongoDB ObjectID'den zaman damgası çıkar (ilk 8 karakter hex timestamp)
+                const getTimestampFromId = (id) => {
+                    if (!id) return 0;
+                    const idStr = id.toString();
+                    // MongoDB ObjectID: ilk 8 karakter = Unix timestamp (hex)
+                    if (idStr.length >= 24 && /^[a-f0-9]{24}$/i.test(idStr)) {
+                        return parseInt(idStr.substring(0, 8), 16);
+                    }
+                    // local_ ile başlayan ID'ler için sayıyı çıkar
+                    if (idStr.startsWith('local_')) {
+                        return parseInt(idStr.replace('local_', '')) || 0;
+                    }
+                    return 0;
+                };
+
+                // Öncelik 1: createdAt alanı varsa kullan
                 if (a.createdAt && b.createdAt) {
-                    return new Date(b.createdAt) - new Date(a.createdAt);
+                    const dateA = new Date(a.createdAt).getTime();
+                    const dateB = new Date(b.createdAt).getTime();
+                    if (dateA !== dateB) return dateB - dateA;
                 }
-                const idA = (a._id || a.id || '').toString();
-                const idB = (b._id || b.id || '').toString();
-                return idB.localeCompare(idA);
+
+                // Öncelik 2: updatedAt alanı varsa kullan
+                if (a.updatedAt && b.updatedAt) {
+                    const dateA = new Date(a.updatedAt).getTime();
+                    const dateB = new Date(b.updatedAt).getTime();
+                    if (dateA !== dateB) return dateB - dateA;
+                }
+
+                // Öncelik 3: MongoDB ObjectID timestamp'i
+                const idA = a._id || a.id || '';
+                const idB = b._id || b.id || '';
+                const tsA = getTimestampFromId(idA);
+                const tsB = getTimestampFromId(idB);
+
+                if (tsA !== tsB) return tsB - tsA; // Yeni olan üstte
+
+                // Son çare: ID string karşılaştırması (ters sıra)
+                return idB.toString().localeCompare(idA.toString());
             });
 
             sortedProducts.forEach(product => {
@@ -1801,8 +1943,12 @@
                 skuInput.removeAttribute('disabled');
             }
 
-            document.getElementById('productModal').classList.add('active');
-            restoreModal(); // Küçültülmüşse geri aç
+            // Eğer modal minimize durumdaysa, restore et
+            const modal = document.getElementById('productModal');
+            if (modal.classList.contains('minimized')) {
+                restoreModal();
+            }
+            modal.classList.add('active');
         }
 
 
@@ -1897,8 +2043,12 @@
                     skuInput.removeAttribute('disabled');
                 }
 
-                document.getElementById('productModal').classList.add('active');
-                restoreModal(); // Küçültülmüşse geri aç
+                // Eğer modal minimize durumdaysa, önce restore et (aynı modal'ı yeniden açıyoruz)
+                const modal = document.getElementById('productModal');
+                if (modal.classList.contains('minimized')) {
+                    restoreModal();
+                }
+                modal.classList.add('active');
             }
         }
 
@@ -1929,97 +2079,173 @@
             const modal = document.getElementById('productModal');
             modal.classList.remove('active');
             modal.classList.remove('minimized');
+
+            // Inline stilleri temizle
+            modal.style.background = '';
+            modal.style.pointerEvents = '';
+            modal.style.alignItems = '';
+            modal.style.justifyContent = '';
+
+            const modalBox = modal.querySelector('.modal');
+            if (modalBox) {
+                modalBox.style.width = '';
+                modalBox.style.height = '';
+                modalBox.style.margin = '';
+                modalBox.style.overflow = '';
+                modalBox.onclick = null;
+            }
         }
 
-        // Minimize modal
+        // Minimize edilmiş panelleri saklamak için
+        let minimizedPanels = [];
+
+        // Minimize modal - YENİ SİSTEM: Ayrı kart olarak sağ alta taşı
         function minimizeModal(e) {
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
 
-            const modalOverlay = document.getElementById('productModal');
-            if (!modalOverlay) return;
+            // Şu anki düzenlenen ürün bilgilerini al
+            const productId = document.getElementById('productId').value;
+            const productName = document.getElementById('productName').value || 'Yeni Ürün';
+            const isNewProduct = !productId;
 
-            // TOGGLE: Eğer zaten küçültülmüşse geri aç
-            if (modalOverlay.classList.contains('minimized')) {
-                restoreModal();
-                return;
+            // Form verilerini kaydet
+            const formData = {
+                id: productId,
+                name: document.getElementById('productName').value,
+                brand: document.getElementById('productBrand').value,
+                brandSearchInput: document.getElementById('brandSearchInput').value,
+                price: document.getElementById('productPrice').value,
+                salePrice: document.getElementById('productSalePrice').value,
+                stock: document.getElementById('productStock').value,
+                description: document.getElementById('productDescription').value,
+                sku: document.getElementById('productSku').value,
+                barcode: document.getElementById('productBarcode').value,
+                unit: document.getElementById('productUnit').value,
+                subCategory: document.getElementById('productSubCategory').value,
+                isActive: document.getElementById('productIsActive').checked,
+                tagPopular: document.getElementById('tagPopular').checked,
+                tagBestSeller: document.getElementById('tagBestSeller').checked,
+                tagNew: document.getElementById('tagNew').checked,
+                tagFeatured: document.getElementById('tagFeatured').checked,
+                brandShowcase: document.getElementById('brandShowcase').value,
+                imageBase64: uploadedImageBase64,
+                categories: Array.from(document.querySelectorAll('input[name="productCategories"]:checked')).map(cb => cb.value)
+            };
+
+            // Benzersiz bir ID oluştur
+            const minimizedId = 'min_' + (productId || Date.now());
+
+            // Eğer bu ürün zaten minimize edilmişse, güncelle
+            const existingIndex = minimizedPanels.findIndex(p => p.minimizedId === minimizedId);
+            if (existingIndex >= 0) {
+                minimizedPanels[existingIndex].formData = formData;
+            } else {
+                minimizedPanels.push({
+                    minimizedId,
+                    productId,
+                    productName,
+                    isNewProduct,
+                    formData
+                });
             }
 
-            modalOverlay.classList.add('minimized');
+            // Modal'ı kapat
+            closeModal();
 
-            // CSS class yetmezse diye Inline Style ile ZORLA
-            modalOverlay.style.background = 'transparent';
-            modalOverlay.style.pointerEvents = 'none';
-            modalOverlay.style.alignItems = 'flex-end';
-            modalOverlay.style.justifyContent = 'flex-end';
-
-            const modalBox = modalOverlay.querySelector('.modal');
-            if (modalBox) {
-                modalBox.style.width = '320px';
-                modalBox.style.height = '60px';
-                modalBox.style.margin = '0 20px 20px 0';
-                modalBox.style.overflow = 'hidden';
-                modalBox.style.pointerEvents = 'auto'; // Tıklanabilir olsun
-
-                // Başlığa tıklayınca açılsın
-                modalBox.onclick = function (evt) {
-                    if (evt.target.closest('.modal-close')) {
-                        closeModal();
-                    } else if (modalOverlay.classList.contains('minimized')) {
-                        restoreModal();
-                    }
-                };
-            }
-
-            // İkonu değiştir
-            const minimizeBtn = modalOverlay.querySelector('.modal-minimize i');
-            if (minimizeBtn) {
-                minimizeBtn.className = 'fa-solid fa-window-maximize';
-            }
-
-            const body = modalOverlay.querySelector('.modal-body');
-            const footer = modalOverlay.querySelector('.modal-footer');
-            if (body) body.style.display = 'none';
-            if (footer) footer.style.display = 'none';
+            // Küçültülmüş kartları render et
+            renderMinimizedPanels();
         }
 
-        // Restore modal
+        // Minimize edilmiş kartları render et
+        function renderMinimizedPanels() {
+            const container = document.getElementById('minimizedPanelsContainer');
+            if (!container) return;
+
+            container.innerHTML = minimizedPanels.map(panel => `
+                <div class="minimized-panel-card" data-id="${panel.minimizedId}">
+                    <div class="card-info" onclick="restoreMinimizedPanel('${panel.minimizedId}')">
+                        <i class="fa-solid fa-${panel.isNewProduct ? 'plus' : 'pen'}"></i>
+                        <span>${panel.productName || 'Ürün Düzenleme'}</span>
+                    </div>
+                    <div class="card-actions">
+                        <button class="restore-btn" onclick="restoreMinimizedPanel('${panel.minimizedId}')" title="Geri Aç">
+                            <i class="fa-solid fa-window-maximize"></i>
+                        </button>
+                        <button class="close-btn" onclick="removeMinimizedPanel('${panel.minimizedId}')" title="Kapat">
+                            <i class="fa-solid fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Minimize edilmiş paneli geri aç
+        function restoreMinimizedPanel(minimizedId) {
+            const panelIndex = minimizedPanels.findIndex(p => p.minimizedId === minimizedId);
+            if (panelIndex < 0) return;
+
+            const panel = minimizedPanels[panelIndex];
+            const formData = panel.formData;
+
+            // Modal başlığını ayarla
+            document.getElementById('modalTitle').textContent = panel.isNewProduct ? 'Yeni Ürün Ekle' : 'Ürün Düzenle';
+
+            // Form alanlarını doldur
+            document.getElementById('productId').value = formData.id || '';
+            document.getElementById('productName').value = formData.name || '';
+            document.getElementById('productBrand').value = formData.brand || '';
+            document.getElementById('brandSearchInput').value = formData.brandSearchInput || '';
+            document.getElementById('productPrice').value = formData.price || '';
+            document.getElementById('productSalePrice').value = formData.salePrice || '';
+            document.getElementById('productStock').value = formData.stock || '';
+            document.getElementById('productDescription').value = formData.description || '';
+            document.getElementById('productSku').value = formData.sku || '';
+            document.getElementById('productBarcode').value = formData.barcode || '';
+            document.getElementById('productUnit').value = formData.unit || 'adet';
+            document.getElementById('productSubCategory').value = formData.subCategory || '';
+            document.getElementById('productIsActive').checked = formData.isActive !== false;
+            document.getElementById('tagPopular').checked = !!formData.tagPopular;
+            document.getElementById('tagBestSeller').checked = !!formData.tagBestSeller;
+            document.getElementById('tagNew').checked = !!formData.tagNew;
+            document.getElementById('tagFeatured').checked = !!formData.tagFeatured;
+            document.getElementById('brandShowcase').value = formData.brandShowcase || '';
+
+            // Kategori checkbox'larını ayarla
+            document.querySelectorAll('input[name="productCategories"]').forEach(cb => {
+                cb.checked = formData.categories && formData.categories.includes(cb.value);
+            });
+
+            // Görsel
+            if (formData.imageBase64) {
+                uploadedImageBase64 = formData.imageBase64;
+                document.getElementById('productImageBase64').value = formData.imageBase64;
+                document.getElementById('previewImg').src = formData.imageBase64;
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('imagePlaceholder').style.display = 'none';
+            } else {
+                resetImageUpload();
+            }
+
+            // Listeden kaldır
+            minimizedPanels.splice(panelIndex, 1);
+            renderMinimizedPanels();
+
+            // Modal'ı aç
+            document.getElementById('productModal').classList.add('active');
+        }
+
+        // Minimize edilmiş paneli kapat (listeden kaldır)
+        function removeMinimizedPanel(minimizedId) {
+            minimizedPanels = minimizedPanels.filter(p => p.minimizedId !== minimizedId);
+            renderMinimizedPanels();
+        }
+
+        // Restore modal - Eski sistem için geriye uyumluluk (kullanılmıyor artık)
         function restoreModal() {
-            const modalOverlay = document.getElementById('productModal');
-            if (!modalOverlay) return;
-
-            modalOverlay.classList.remove('minimized');
-
-            // Inline stilleri temizle
-            modalOverlay.style.background = '';
-            modalOverlay.style.pointerEvents = '';
-            modalOverlay.style.alignItems = '';
-            modalOverlay.style.justifyContent = '';
-
-            const modalBox = modalOverlay.querySelector('.modal');
-            if (modalBox) {
-                modalBox.style.width = '';
-                modalBox.style.height = '';
-                modalBox.style.margin = '';
-                modalBox.style.overflow = '';
-            }
-
-            const body = modalOverlay.querySelector('.modal-body');
-            const footer = modalOverlay.querySelector('.modal-footer');
-            if (body) body.style.display = '';
-            if (footer) footer.style.display = '';
-
-            // İkonu geri değiştir
-            const minimizeBtn = modalOverlay.querySelector('.modal-minimize i');
-            if (minimizeBtn) {
-                minimizeBtn.className = 'fa-solid fa-minus';
-            }
-
-            // onclick handler'ı kaldır
-            const modalElement = modalOverlay.querySelector('.modal');
-            if (modalElement) modalElement.onclick = null;
+            // Bu fonksiyon artık kullanılmıyor, ama kod uyumluluğu için kalıyor
         }
 
         // Save product
@@ -2245,13 +2471,12 @@
                         localStorage.setItem('galatacarsi_products', JSON.stringify(products));
 
                         renderProducts(); // Hemen tabloyu güncelle
-
-                        alert(`✅ BAŞARILI! (v2.0)\n\nÜrün sistemde güncellendi.\n\nİndirimli Fiyat: ${finalData.salePrice || 'Yok'}\nBarkod: ${finalData.barcode || 'Yok'}\n\nYerel veri tabanı da eşitlendi.`);
                     }
 
-
+                    // ÖNCE MODAL KAPAT, SONRA ALERT GÖSTER
                     closeModal();
-                    alert('✅ Ürün başarıyla kaydedildi!');
+
+                    alert(`✅ Ürün başarıyla kaydedildi!\n\nİndirimli Fiyat: ${productData.salePrice !== null ? '₺' + productData.salePrice : 'Yok'}\nBarkod: ${productData.barcode || 'Yok'}`);
 
                     // Arka planda listeyi tazelemek için
                     setTimeout(() => loadProducts(), 1000);
@@ -2325,6 +2550,14 @@
         document.getElementById('brandFilter')?.addEventListener('change', filterProducts);
         document.getElementById('categoryFilter')?.addEventListener('change', filterProducts);
         document.getElementById('stockFilter')?.addEventListener('change', filterProducts);
+
+        // Enter tuşu ile arama
+        document.getElementById('searchInput')?.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                filterProducts();
+            }
+        });
 
         function filterProducts() {
             renderProducts(); // renderProducts zaten filtre değerlerini okuyor (v2.1)
