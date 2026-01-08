@@ -327,58 +327,48 @@ const AdminAIAssistant = {
             description: null
         };
 
-        // İsim/Ad çıkar
-        const namePatterns = [
-            /isim\s*:\s*([^,\n]+?)(?=\s*(?:sku|marka|fiyat|stok|açıklama|kategori|$))/i,
-            /ürün\s*adı\s*:\s*([^,\n]+?)(?=\s*(?:sku|marka|fiyat|stok|açıklama|kategori|$))/i,
-            /ad\s*:\s*([^,\n]+?)(?=\s*(?:sku|marka|fiyat|stok|açıklama|kategori|$))/i
-        ];
-        for (const pattern of namePatterns) {
-            const match = message.match(pattern);
+        // Bilinen tüm anahtarlar
+        const keysPattern = "(?:isim|ürün\\s*adı|ad|sku|stok\\s*kodu|barkod|marka|fiyat|stok|adet|miktar|açıklama|kategori)";
+
+        // Regex oluşturucu fonksiyon
+        const getValue = (keyPattern) => {
+            // Anahtar kelime ile başla, bir sonraki anahtar kelimeye veya satır sonuna kadar al
+            // [^]*? lazy match ile her şeyi al (newline dahil)
+            // Ama bir sonraki anahtar kelimenin başında dur
+            const regex = new RegExp(`${keyPattern}\\s*:\\s*([^]*?)(?=\\s*(?:,|\\n|\\s+${keysPattern}\\s*:|$))`, "i");
+            const match = message.match(regex);
             if (match) {
-                result.name = match[1].trim().replace(/^["']|["']$/g, '');
-                break;
+                let val = match[1].trim();
+                // Sondaki virgülü temizle (varsa)
+                if (val.endsWith(',')) val = val.slice(0, -1).trim();
+                // Tırnakları temizle
+                if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+                    val = val.slice(1, -1).trim();
+                }
+                return val;
             }
+            return null;
+        };
+
+        result.name = getValue("(?:isim|ürün\\s*adı|ad)");
+        result.sku = getValue("(?:sku|stok\\s*kodu|barkod)");
+        result.brand = getValue("marka");
+        result.description = getValue("açıklama");
+
+        const priceStr = getValue("fiyat");
+        if (priceStr) {
+            result.price = parseFloat(priceStr.replace(',', '.'));
         }
 
-        // SKU çıkar
-        const skuMatch = message.match(/sku\s*:\s*([^\s,]+)/i);
-        if (skuMatch) result.sku = skuMatch[1].trim();
-
-        // Barkod çıkar (SKU yoksa)
-        if (!result.sku) {
-            const barcodeMatch = message.match(/barkod\s*:\s*([^\s,]+)/i);
-            if (barcodeMatch) result.sku = barcodeMatch[1].trim();
+        const stockStr = getValue("(?:stok|adet|miktar)");
+        if (stockStr) {
+            result.stock = parseInt(stockStr);
         }
 
-        // Marka çıkar
-        const brandMatch = message.match(/marka\s*:\s*([^\s,]+)/i);
-        if (brandMatch) result.brand = brandMatch[1].trim();
-
-        // Fiyat çıkar
-        const priceMatch = message.match(/fiyat\s*:\s*(\d+(?:[.,]\d+)?)/i);
-        if (priceMatch) result.price = parseFloat(priceMatch[1].replace(',', '.'));
-
-        // Stok çıkar
-        const stockMatch = message.match(/stok\s*:\s*(\d+)/i);
-        if (stockMatch) result.stock = parseInt(stockMatch[1]);
-
-        // Açıklama çıkar
-        const descPatterns = [
-            /açıklama\s*:\s*["']([^"']+)["']/i,
-            /açıklama\s*:\s*([^,\n]+?)(?=\s*(?:isim|sku|marka|fiyat|stok|kategori|$))/i
-        ];
-        for (const pattern of descPatterns) {
-            const match = message.match(pattern);
-            if (match) {
-                result.description = match[1].trim();
-                break;
-            }
+        const catStr = getValue("kategori");
+        if (catStr) {
+            result.category = this.findCategory(catStr);
         }
-
-        // Kategori çıkar
-        const categoryMatch = message.match(/kategori\s*:\s*([^\s,]+)/i);
-        if (categoryMatch) result.category = this.findCategory(categoryMatch[1]);
 
         console.log('🤖 AI: Extracted data:', result);
         return result;
