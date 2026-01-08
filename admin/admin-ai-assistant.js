@@ -419,7 +419,9 @@ const AdminAIAssistant = {
         await this.delay(500); // Gerçekçi gecikme
         this.hideTyping();
 
-        if (command.type === 'bulk_add_products' || command.type === 'advanced_add') {
+        if (command.type === 'direct_product_entry') {
+            this.handleDirectProductEntry(command);
+        } else if (command.type === 'bulk_add_products' || command.type === 'advanced_add') {
             this.showProductAddConfirmation(command);
         } else if (command.type === 'smart_product_entry') {
             this.showSmartProductEntry(command);
@@ -442,6 +444,30 @@ const AdminAIAssistant = {
     parseCommand(message) {
         const lowerMsg = message.toLowerCase();
         const command = { type: 'unknown', count: 1, category: null, subCategory: null, rules: {}, raw: message };
+
+        // ========== YENİ: DOĞRUDAN ÜRÜN GİRİŞİ TESPİTİ ==========
+        // "bu ürünü gir stok adedi 20 fiyat 2500" gibi komutları algıla
+        const hasDirectEntry = lowerMsg.includes('gir') || lowerMsg.includes('ekle') || lowerMsg.includes('kaydet');
+        const stockMatch = message.match(/stok\s*(?:adedi|sayısı|miktarı)?[:\s]*(\d+)/i);
+        const priceMatch = message.match(/fiyat[ıi]?[:\s]*(\d+(?:[.,]\d+)?)/i);
+        const nameMatch = message.match(/(?:ürün\s*)?(?:adı|ismi)[:\s]*[\"']?([^\"'\n,]+)[\"']?/i);
+        const skuMatch = message.match(/(?:sku|stok\s*kodu|barkod)[:\s]*[\"']?([^\s\"',]+)[\"']?/i);
+        const brandMatch = message.match(/marka[:\s]*[\"']?([^\s\"',]+)[\"']?/i);
+        const categoryMatch = message.match(/kategori[:\s]*[\"']?([^\s\"',]+)[\"']?/i);
+
+        // Eğer stok veya fiyat bilgisi varsa ve "gir/ekle" komutu varsa
+        if (hasDirectEntry && (stockMatch || priceMatch)) {
+            command.type = 'direct_product_entry';
+            command.directData = {
+                stock: stockMatch ? parseInt(stockMatch[1]) : null,
+                price: priceMatch ? parseFloat(priceMatch[1].replace(',', '.')) : null,
+                name: nameMatch ? nameMatch[1].trim() : null,
+                sku: skuMatch ? skuMatch[1].trim() : null,
+                brand: brandMatch ? brandMatch[1].trim() : null,
+                category: categoryMatch ? this.findCategory(categoryMatch[1]) : null
+            };
+            return command;
+        }
 
         // 0. SMART PRODUCT DETECT (Kullanıcı ürün verisi girmişse)
         const hasSku = message.match(/sku[:\s]*([^\s,]+)/i);
@@ -515,11 +541,11 @@ const AdminAIAssistant = {
         // Fiyat güncelleme
         if (lowerMsg.includes('fiyat') && (lowerMsg.includes('güncelle') || lowerMsg.includes('zam') || lowerMsg.includes('indirim'))) {
             const percentMatch = lowerMsg.match(/%?\s*(\d+)\s*%?/);
-            const brandMatch = lowerMsg.match(/(bosch|makita|dewalt|beta|knipex|black\s*decker|stanley|ingco|rtrmax|wilke)/i);
+            const brandMatch2 = lowerMsg.match(/(bosch|makita|dewalt|beta|knipex|black\s*decker|stanley|ingco|rtrmax|wilke)/i);
             return {
                 type: 'update_price',
                 percent: percentMatch ? parseInt(percentMatch[1]) : null,
-                brand: brandMatch ? brandMatch[1] : null,
+                brand: brandMatch2 ? brandMatch2[1] : null,
                 isDiscount: lowerMsg.includes('indirim')
             };
         }
@@ -913,6 +939,231 @@ const AdminAIAssistant = {
                 if (modal) modal.classList.add('active');
             }
         }, 500);
+    },
+
+    // ========== YENİ: DOĞRUDAN ÜRÜN GİRİŞİ ==========
+    // "bu ürünü gir stok adedi 20 fiyat 2500" gibi komutları işle
+    handleDirectProductEntry(command) {
+        const data = command.directData;
+
+        // Mevcut modal'daki değerleri al (eğer açıksa)
+        const currentName = document.getElementById('productName')?.value || '';
+        const currentBrand = document.getElementById('productBrand')?.value || '';
+        const currentCategory = document.getElementById('productCategory')?.value || '';
+        const currentImage = document.getElementById('productImagePreview')?.src || '';
+
+        // Özet oluştur
+        const summary = [];
+        if (data.name) summary.push(`<li><strong>Ürün Adı:</strong> ${data.name}</li>`);
+        else if (currentName) summary.push(`<li><strong>Ürün Adı:</strong> ${currentName} (mevcut)</li>`);
+
+        if (data.price) summary.push(`<li><strong>Fiyat:</strong> ₺${data.price.toLocaleString('tr-TR')}</li>`);
+        if (data.stock) summary.push(`<li><strong>Stok Adedi:</strong> ${data.stock}</li>`);
+        if (data.brand) summary.push(`<li><strong>Marka:</strong> ${data.brand}</li>`);
+        else if (currentBrand) summary.push(`<li><strong>Marka:</strong> ${currentBrand} (mevcut)</li>`);
+
+        if (data.sku) summary.push(`<li><strong>SKU/Barkod:</strong> ${data.sku}</li>`);
+        if (data.category) summary.push(`<li><strong>Kategori:</strong> ${this.getCategoryTitle(data.category)}</li>`);
+        else if (currentCategory) summary.push(`<li><strong>Kategori:</strong> ${this.getCategoryTitle(currentCategory)} (mevcut)</li>`);
+
+        // Görsel varsa ekle
+        if (command.attachedImages && command.attachedImages.length > 0) {
+            summary.push(`<li><strong>Görsel:</strong> ${command.attachedImages.length} adet yüklendi</li>`);
+        } else if (currentImage && !currentImage.includes('placeholder')) {
+            summary.push(`<li><strong>Görsel:</strong> Mevcut görsel kullanılacak</li>`);
+        }
+
+        const bubbleEl = this.addBotMessage(`
+            📝 <strong>Ürün bilgilerini algıladım!</strong>
+            <br><br>
+            <div class="ai-command-preview">
+                <h4><i class="fa-solid fa-box"></i> Ürün Detayları</h4>
+                <ul style="font-size: 13px;">
+                    ${summary.join('')}
+                </ul>
+                
+                ${command.attachedImages?.length > 0 ? `
+                    <div class="ai-image-gallery" style="margin: 10px 0;">
+                        ${command.attachedImages.map(img => `<img src="${img}" style="max-width: 60px; border-radius: 6px;" />`).join('')}
+                    </div>
+                ` : ''}
+
+                <div class="ai-confirm-btns">
+                    <button class="ai-confirm-btn confirm action-fill-form">
+                        <i class="fa-solid fa-edit"></i> Formu Doldur
+                    </button>
+                    <button class="ai-confirm-btn confirm action-save-direct" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                        <i class="fa-solid fa-save"></i> Hemen Kaydet
+                    </button>
+                    <button class="ai-confirm-btn cancel action-cancel-direct">
+                        <i class="fa-solid fa-xmark"></i> İptal
+                    </button>
+                </div>
+            </div>
+        `);
+
+        // Formu Doldur butonu
+        bubbleEl.querySelector('.action-fill-form')?.addEventListener('click', () => {
+            this.fillFormWithDirectData(data, command.attachedImages);
+        });
+
+        // Hemen Kaydet butonu
+        bubbleEl.querySelector('.action-save-direct')?.addEventListener('click', () => {
+            this.saveProductDirectly(data, command.attachedImages);
+        });
+
+        // İptal butonu
+        bubbleEl.querySelector('.action-cancel-direct')?.addEventListener('click', () => {
+            this.addBotMessage('İşlem iptal edildi. Başka bir şey yapmamı ister misiniz?');
+        });
+    },
+
+    // Formu doğrudan verilerle doldur
+    fillFormWithDirectData(data, images = []) {
+        // Modal'ı aç
+        if (typeof openModal === 'function') {
+            openModal();
+        } else {
+            const modal = document.getElementById('productModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        setTimeout(() => {
+            // Mevcut değerleri kontrol et ve sadece yeni değerleri yaz
+            if (data.name) {
+                const el = document.getElementById('productName');
+                if (el) el.value = data.name;
+            }
+            if (data.price) {
+                const el = document.getElementById('productPrice');
+                if (el) el.value = data.price;
+            }
+            if (data.stock !== null) {
+                const el = document.getElementById('productStock');
+                if (el) el.value = data.stock;
+            }
+            if (data.brand) {
+                const el = document.getElementById('productBrand');
+                if (el) el.value = data.brand;
+            }
+            if (data.sku) {
+                const skuEl = document.getElementById('productSKU');
+                const barcodeEl = document.getElementById('productBarcode');
+                if (skuEl) skuEl.value = data.sku;
+                if (barcodeEl) barcodeEl.value = data.sku;
+            }
+            if (data.category) {
+                const el = document.getElementById('productCategory');
+                if (el) {
+                    el.value = data.category;
+                    el.dispatchEvent(new Event('change'));
+                }
+            }
+
+            // Görsel varsa yükle
+            if (images && images.length > 0) {
+                const preview = document.getElementById('productImagePreview');
+                const input = document.getElementById('productMainImage');
+                if (preview) {
+                    preview.src = images[0];
+                    preview.style.display = 'block';
+                }
+                // Base64'ü hidden input'a kaydet
+                const hiddenInput = document.getElementById('productMainImageBase64');
+                if (hiddenInput) {
+                    hiddenInput.value = images[0];
+                }
+            }
+
+            this.addBotMessage('✅ Form dolduruldu! Diğer alanları kontrol edip kaydedebilirsiniz.');
+            this.toggleChat(); // Chat'i kapat ki formu görsün
+        }, 600);
+    },
+
+    // Ürünü doğrudan kaydet
+    async saveProductDirectly(data, images = []) {
+        this.showTyping();
+
+        // Mevcut modal'daki değerleri al
+        const currentName = document.getElementById('productName')?.value || '';
+        const currentBrand = document.getElementById('productBrand')?.value || '';
+        const currentCategory = document.getElementById('productCategory')?.value || 'aksesuarlar';
+        const currentImage = document.getElementById('productImagePreview')?.src || '';
+
+        // Ürün verisi oluştur
+        const productData = {
+            name: data.name || currentName || `Ürün ${Date.now()}`,
+            brand: data.brand || currentBrand || 'Genel',
+            category: this.getCategoryTitle(data.category || currentCategory),
+            categorySlug: data.category || currentCategory,
+            allCategories: [data.category || currentCategory],
+            price: data.price || 0,
+            salePrice: null,
+            stock: data.stock || 20,
+            unit: 'Adet',
+            description: `${data.brand || currentBrand || 'Kaliteli'} marka ürün. Galata Çarşı güvencesiyle.`,
+            sku: data.sku || `SKU-${Date.now()}`,
+            barcode: data.sku || `${Date.now()}`,
+            isActive: true,
+            isNew: true,
+            isPopular: false,
+            mainImage: (images && images.length > 0) ? images[0] :
+                (currentImage && !currentImage.includes('placeholder') ? currentImage :
+                    `https://placehold.co/400x400/6366f1/fff?text=${encodeURIComponent((data.brand || 'G').charAt(0))}`)
+        };
+
+        try {
+            let success = false;
+
+            // ADMIN_API varsa kullan
+            if (typeof ADMIN_API !== 'undefined' && ADMIN_API.createProduct) {
+                const response = await ADMIN_API.createProduct(productData);
+                success = response && response.success;
+            } else {
+                // localStorage'a kaydet
+                this.saveProductLocally(productData);
+                success = true;
+            }
+
+            this.hideTyping();
+
+            if (success) {
+                this.addBotMessage(`
+                    <div class="ai-result-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <strong>Ürün Başarıyla Kaydedildi!</strong>
+                    </div>
+                    <ul style="font-size: 13px; margin-top: 10px;">
+                        <li><strong>Adı:</strong> ${productData.name}</li>
+                        <li><strong>Fiyat:</strong> ₺${productData.price.toLocaleString('tr-TR')}</li>
+                        <li><strong>Stok:</strong> ${productData.stock} adet</li>
+                    </ul>
+                `, [
+                    { text: '➕ Başka Ürün Ekle', action: 'addProduct' },
+                    { text: '🔄 Listeyi Yenile', action: 'refresh' }
+                ]);
+
+                // Ürün listesini yenile
+                if (typeof loadProducts === 'function') {
+                    setTimeout(() => loadProducts(), 500);
+                }
+            } else {
+                throw new Error('Kayıt başarısız');
+            }
+        } catch (error) {
+            this.hideTyping();
+            this.addBotMessage(`
+                <div class="ai-result-error">
+                    <i class="fa-solid fa-exclamation-triangle"></i>
+                    <strong>Kayıt Hatası</strong>
+                </div>
+                Ürün kaydedilemedi. Sunucu bağlantısını kontrol edin.
+                <br><br>
+                <small>Hata: ${error.message}</small>
+            `, [
+                { text: '🔄 Tekrar Dene', action: 'addProduct' }
+            ]);
+        }
     },
 
     // Fiyat güncelleme seçenekleri
