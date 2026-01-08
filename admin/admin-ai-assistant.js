@@ -444,11 +444,14 @@ const AdminAIAssistant = {
         const command = { type: 'unknown', count: 1, category: null, subCategory: null, rules: {}, raw: message };
 
         // 0. SMART PRODUCT DETECT (Kullanıcı ürün verisi girmişse)
-        const hasSku = message.match(/sku[:\s]+([^\s,]+)/i);
-        const hasPrice = message.match(/(?:fiyat|price)[:\s]+(\d+)/i);
-        const hasDesc = (lowerMsg.includes('açıklama') || lowerMsg.includes('description') || lowerMsg.includes('set of'));
+        const hasSku = message.match(/sku[:\s]*([^\s,]+)/i);
+        const hasPrice = message.match(/(?:fiyat|price|tutarı)[:\s]*(\d+)/i);
+        const hasDesc = (lowerMsg.includes('açıklama') || lowerMsg.includes('description') || lowerMsg.includes('set of') || lowerMsg.includes('wrench') || lowerMsg.includes('mm'));
 
-        if (hasSku || (hasPrice && hasDesc)) {
+        // Önemli: Eğer SKU veya Teknik Terimler varsa, miktar tespitini (bulk) pas geçelim.
+        const isTechnicalEntry = hasSku || (hasPrice && hasDesc);
+
+        if (isTechnicalEntry) {
             command.type = 'smart_product_entry';
             command.sku = hasSku ? hasSku[1] : null;
             command.price = hasPrice ? hasPrice[1] : null;
@@ -485,17 +488,17 @@ const AdminAIAssistant = {
             command.rules.namePrefix = prefixMatch[1];
         }
 
-        // 4. Miktar Tespiti (KRİTİK DÜZELTME: SKU içindeki sayıları yakalamaması için \b eklendi)
-        const countMatch = lowerMsg.match(/\b(\d+)\s*(?:tane|adet|ürün)\b/i);
+        // 4. Miktar Tespiti (GELİŞTİRİLDİ: Sadece peşinde "tane/adet" olan bağımsız sayıları miktar say)
+        const countMatch = lowerMsg.match(/\b(\d+)\s+(?:tane|adet|ürün)\b/i);
         if (countMatch) command.count = parseInt(countMatch[1]);
 
         // 5. Kategori ve Alt Kategori Tespiti
         command.category = this.findCategory(lowerMsg);
         command.subCategory = this.findSubCategory(lowerMsg);
 
-        // Mevcut Regex Yakalamaları (Geriye Dönük Uyumluluk)
+        // Mevcut Regex Yakalamaları (GELİŞTİRİLDİ: "tane/adet" zorunlu hale getirildi)
         const bulkMatch = lowerMsg.match(
-            /\b(\d+)\s*(?:tane|adet)?\s*(.+?)\s*(?:üst\s*)?kategori(?:si)?(?:ne|sine)?\s*(.+?)\s*alt\s*kategori(?:si)?(?:ne|sine)?/i
+            /\b(\d+)\s+(?:tane|adet|ürün)\b\s*(.+?)\s*(?:üst\s*)?kategori(?:si)?(?:ne|sine)?\s*(.+?)\s*alt\s*kategori(?:si)?(?:ne|sine)?/i
         );
 
         if (bulkMatch && command.type === 'unknown') {
@@ -619,26 +622,24 @@ const AdminAIAssistant = {
                 ` : ''}
 
                 <div class="ai-confirm-btns">
-                    <button class="ai-confirm-btn confirm" id="aiConfirmBulkAdd">
+                    <button class="ai-confirm-btn confirm action-confirm">
                         <i class="fa-solid fa-check"></i> Devam Et
                     </button>
-                    <button class="ai-confirm-btn cancel" id="aiCancelBulkAdd">
+                    <button class="ai-confirm-btn cancel action-cancel">
                         <i class="fa-solid fa-xmark"></i> İptal
                     </button>
                 </div>
             </div>
         `);
 
-        // Buton eventleri
-        setTimeout(() => {
-            document.getElementById('aiConfirmBulkAdd')?.addEventListener('click', () => {
-                this.startBulkProductAdd(command);
-            });
-            document.getElementById('aiCancelBulkAdd')?.addEventListener('click', () => {
-                this.addBotMessage('İşlem iptal edildi. Başka bir şey yapmamı ister misiniz?');
-                this.pendingCommand = null;
-            });
-        }, 100);
+        // Buton eventleri (Scoped query ile - ID çakışması önlendi)
+        bubbleEl.querySelector('.action-confirm')?.addEventListener('click', () => {
+            this.startBulkProductAdd(command);
+        });
+        bubbleEl.querySelector('.action-cancel')?.addEventListener('click', () => {
+            this.addBotMessage('İşlem iptal edildi. Başka bir şey yapmamı ister misiniz?');
+            this.pendingCommand = null;
+        });
     },
 
     // Toplu ürün ekleme başlat
@@ -799,7 +800,7 @@ const AdminAIAssistant = {
     showSmartProductEntry(command) {
         const refined = command.refined;
 
-        this.addBotMessage(`
+        const bubbleEl = this.addBotMessage(`
             🚀 <strong>Harika! Ürünü analiz ettim ve teknik çevirisini yaptım.</strong>
             <br><br>
             <div class="ai-command-preview">
@@ -818,24 +819,23 @@ const AdminAIAssistant = {
                 </div>
 
                 <div class="ai-confirm-btns">
-                    <button class="ai-confirm-btn confirm" id="aiConfirmSmartAdd">
+                    <button class="ai-confirm-btn confirm action-confirm-smart">
                         <i class="fa-solid fa-file-export"></i> Formu Doldur ve Aç
                     </button>
-                    <button class="ai-confirm-btn cancel" id="aiCancelSmartAdd">
+                    <button class="ai-confirm-btn cancel action-cancel-smart">
                         <i class="fa-solid fa-xmark"></i> İptal
                     </button>
                 </div>
             </div>
         `);
 
-        setTimeout(() => {
-            document.getElementById('aiConfirmSmartAdd')?.addEventListener('click', () => {
-                this.fillProductForm(command);
-            });
-            document.getElementById('aiCancelSmartAdd')?.addEventListener('click', () => {
-                this.addBotMessage('İşlem iptal edildi.');
-            });
-        }, 100);
+        // Buton eventleri (Scoped query)
+        bubbleEl.querySelector('.action-confirm-smart')?.addEventListener('click', () => {
+            this.fillProductForm(command);
+        });
+        bubbleEl.querySelector('.action-cancel-smart')?.addEventListener('click', () => {
+            this.addBotMessage('İşlem iptal edildi.');
+        });
     },
 
     // Formu doldur
