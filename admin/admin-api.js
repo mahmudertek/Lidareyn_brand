@@ -137,9 +137,12 @@ const ADMIN_API = {
         }
     },
 
-    // Delete product
+    // Delete product - ÇÖP KUTUSUNA TAŞI
     async deleteProduct(id) {
         try {
+            // Silmeden ÖNCE ürünü çöp kutusuna kaydet (geri getirme için)
+            await this.moveToTrash(id);
+
             const response = await fetch(`${this.baseUrl}/products/${id}`, {
                 method: 'DELETE',
                 headers: this.getHeaders()
@@ -147,6 +150,145 @@ const ADMIN_API = {
             return await response.json();
         } catch (error) {
             console.error('Delete product error:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // ==================== ÇÖP KUTUSU (TRASH BIN) ====================
+
+    // Ürünü çöp kutusuna taşı
+    async moveToTrash(productId) {
+        try {
+            // Önce ürünü API'den al
+            let product = null;
+            try {
+                const response = await this.getProduct(productId);
+                if (response.success && response.data) {
+                    product = response.data;
+                }
+            } catch (e) {
+                console.log('API\'den ürün alınamadı, localStorage\'a bakılıyor...');
+            }
+
+            // API'den bulunamadıysa localStorage'dan bak
+            if (!product) {
+                const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                product = localProducts.find(p => (p._id || p.id) === productId);
+            }
+
+            if (!product) {
+                const localProducts2 = JSON.parse(localStorage.getItem('galata_products') || '[]');
+                product = localProducts2.find(p => (p._id || p.id) === productId);
+            }
+
+            if (product) {
+                // Çöp kutusu verilerini al
+                let trash = JSON.parse(localStorage.getItem('galatacarsi_trash') || '[]');
+
+                // Ürüne silme tarihi ekle
+                product.deletedAt = new Date().toISOString();
+
+                // En başa ekle (en son silinen en üstte)
+                trash.unshift(product);
+
+                // Maksimum 50 ürün tut (eski olanları temizle)
+                if (trash.length > 50) {
+                    trash = trash.slice(0, 50);
+                }
+
+                // Kaydet
+                localStorage.setItem('galatacarsi_trash', JSON.stringify(trash));
+                console.log('🗑️ Ürün çöp kutusuna taşındı:', product.name);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Çöp kutusuna taşıma hatası:', error);
+            return false;
+        }
+    },
+
+    // Çöp kutusundaki ürünleri getir
+    getTrashProducts() {
+        try {
+            return JSON.parse(localStorage.getItem('galatacarsi_trash') || '[]');
+        } catch (error) {
+            console.error('Çöp kutusu okuma hatası:', error);
+            return [];
+        }
+    },
+
+    // Ürünü çöp kutusundan geri yükle
+    async restoreFromTrash(productId) {
+        try {
+            let trash = JSON.parse(localStorage.getItem('galatacarsi_trash') || '[]');
+            const productIndex = trash.findIndex(p => (p._id || p.id) === productId);
+
+            if (productIndex === -1) {
+                return { success: false, error: 'Ürün çöp kutusunda bulunamadı' };
+            }
+
+            const product = trash[productIndex];
+
+            // Silme tarihini kaldır
+            delete product.deletedAt;
+
+            // Yeni ID oluştur (eski ID çakışma yapabilir)
+            const oldId = product._id || product.id;
+            delete product._id;
+            delete product.id;
+            product.restoredFrom = oldId;
+            product.restoredAt = new Date().toISOString();
+
+            // API'ye tekrar kaydet
+            const response = await this.createProduct(product);
+
+            if (response.success) {
+                // Çöp kutusundan kaldır
+                trash.splice(productIndex, 1);
+                localStorage.setItem('galatacarsi_trash', JSON.stringify(trash));
+                console.log('✅ Ürün geri yüklendi:', product.name);
+                return { success: true, data: response.data, message: 'Ürün başarıyla geri yüklendi!' };
+            } else {
+                // API başarısız olsa bile localStorage'a kaydet
+                this.saveProductToLocalStorage({
+                    ...product,
+                    _id: 'restored_' + Date.now(),
+                    id: 'restored_' + Date.now()
+                });
+
+                // Çöp kutusundan kaldır
+                trash.splice(productIndex, 1);
+                localStorage.setItem('galatacarsi_trash', JSON.stringify(trash));
+
+                return { success: true, savedLocally: true, message: 'Ürün yerel olarak geri yüklendi!' };
+            }
+        } catch (error) {
+            console.error('Geri yükleme hatası:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Çöp kutusundan kalıcı olarak sil
+    permanentlyDeleteFromTrash(productId) {
+        try {
+            let trash = JSON.parse(localStorage.getItem('galatacarsi_trash') || '[]');
+            trash = trash.filter(p => (p._id || p.id) !== productId);
+            localStorage.setItem('galatacarsi_trash', JSON.stringify(trash));
+            return { success: true };
+        } catch (error) {
+            console.error('Kalıcı silme hatası:', error);
+            return { success: false, error: error.message };
+        }
+    },
+
+    // Çöp kutusunu tamamen boşalt
+    emptyTrash() {
+        try {
+            localStorage.removeItem('galatacarsi_trash');
+            return { success: true, message: 'Çöp kutusu boşaltıldı' };
+        } catch (error) {
+            console.error('Çöp kutusu boşaltma hatası:', error);
             return { success: false, error: error.message };
         }
     },

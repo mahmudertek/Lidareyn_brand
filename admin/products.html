@@ -754,6 +754,12 @@
                             style="font-size: 14px; background: #e5e7eb; color: #4b5563; padding: 4px 10px; border-radius: 20px; vertical-align: middle; margin-left: 8px;">0</span>
                     </h2>
                     <div style="display: flex; gap: 10px;">
+                        <button class="add-product-btn" style="background: #dc2626; opacity: 0.9;"
+                            onclick="openTrashModal()">
+                            <i class="fa-solid fa-trash-can"></i>
+                            Çöp Kutusu <span id="trashCount"
+                                style="background: white; color: #dc2626; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: 4px;">0</span>
+                        </button>
                         <button class="add-product-btn" style="background: #059669; opacity: 0.9;"
                             onclick="openPriceIncreaseModal()">
                             <i class="fa-solid fa-percent"></i>
@@ -1203,6 +1209,140 @@
             </div>
         </div>
     </div>
+
+    <!-- ÇÖP KUTUSU MODALI -->
+    <div class="modal-overlay" id="trashModal">
+        <div class="modal" style="max-width: 900px; width: 95%;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">
+                <h3 id="trashModalTitle" style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-trash-can"></i>
+                    Çöp Kutusu
+                    <span id="trashModalCount"
+                        style="background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 15px; font-size: 14px;">0
+                        ürün</span>
+                </h3>
+                <div style="display: flex; gap: 8px;">
+                    <button class="modal-btn" onclick="emptyAllTrash()" style="background: rgba(255,255,255,0.2);"
+                        title="Çöp Kutusunu Boşalt">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                    <button class="modal-btn" onclick="closeTrashModal()">
+                        <i class="fa-solid fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body" style="max-height: 500px; overflow-y: auto; padding: 16px;">
+                <div id="trashProductsList">
+                    <!-- Silinen ürünler burada listelenecek -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* Çöp Kutusu Modal Stilleri */
+        #trashModal .trash-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            transition: all 0.2s ease;
+        }
+
+        #trashModal .trash-item:hover {
+            border-color: #dc2626;
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+        }
+
+        #trashModal .trash-item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #f3f4f6;
+        }
+
+        #trashModal .trash-item-info {
+            flex: 1;
+        }
+
+        #trashModal .trash-item-name {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+
+        #trashModal .trash-item-details {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        #trashModal .trash-item-date {
+            font-size: 12px;
+            color: #9ca3af;
+            background: #f3f4f6;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        #trashModal .trash-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        #trashModal .trash-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        #trashModal .restore-btn {
+            background: #10b981;
+            color: white;
+        }
+
+        #trashModal .restore-btn:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        #trashModal .delete-btn {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        #trashModal .delete-btn:hover {
+            background: #dc2626;
+            color: white;
+        }
+
+        #trashModal .empty-trash {
+            text-align: center;
+            padding: 60px 20px;
+            color: #9ca3af;
+        }
+
+        #trashModal .empty-trash i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        #trashModal .empty-trash p {
+            font-size: 16px;
+            margin: 0;
+        }
+    </style>
 
     <script src="admin-sidebar.js"></script>
     <script>
@@ -2852,6 +2992,147 @@
             renderProducts();
 
             alert(`✅ ${actionText} uygulandı!\n\nBaşarılı: ${successCount} ürün\nBaşarısız: ${failCount} ürün`);
+        }
+
+        // ==================== ÇÖP KUTUSU (TRASH BIN) FONKSİYONLARI ====================
+
+        // Çöp kutusu sayısını güncelle
+        function updateTrashCount() {
+            const trash = ADMIN_API.getTrashProducts();
+            const countEl = document.getElementById('trashCount');
+            if (countEl) {
+                countEl.textContent = trash.length;
+            }
+        }
+
+        // Sayfa yüklendiğinde çöp kutusu sayısını güncelle
+        window.addEventListener('load', function () {
+            setTimeout(updateTrashCount, 1000);
+        });
+
+        // Çöp kutusu modalını aç
+        function openTrashModal() {
+            const modal = document.getElementById('trashModal');
+            modal.classList.add('active');
+            renderTrashProducts();
+        }
+
+        // Çöp kutusu modalını kapat
+        function closeTrashModal() {
+            const modal = document.getElementById('trashModal');
+            modal.classList.remove('active');
+        }
+
+        // Çöp kutusundaki ürünleri listele
+        function renderTrashProducts() {
+            const trash = ADMIN_API.getTrashProducts();
+            const container = document.getElementById('trashProductsList');
+            const countEl = document.getElementById('trashModalCount');
+
+            // Sayıyı güncelle
+            countEl.textContent = `${trash.length} ürün`;
+            document.getElementById('trashCount').textContent = trash.length;
+
+            if (trash.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-trash">
+                        <i class="fa-solid fa-trash-can"></i>
+                        <p>Çöp kutusu boş</p>
+                        <p style="font-size: 13px; margin-top: 8px; color: #6b7280;">Sildiğiniz ürünler burada görünecek</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = trash.map(product => {
+                const productId = product._id || product.id;
+                const image = product.mainImage || `https://placehold.co/60x60/dc2626/fff?text=${(product.brand || 'Ü').charAt(0)}`;
+                const deletedDate = product.deletedAt ? new Date(product.deletedAt).toLocaleString('tr-TR') : 'Bilinmiyor';
+
+                return `
+                    <div class="trash-item" data-id="${productId}">
+                        <img src="${image}" class="trash-item-image" alt="${product.name}" onerror="this.src='https://placehold.co/60x60/6366f1/fff?text=?'">
+                        <div class="trash-item-info">
+                            <div class="trash-item-name">${product.name}</div>
+                            <div class="trash-item-details">
+                                <span><i class="fa-solid fa-tag"></i> ${product.brand || '-'}</span>
+                                <span style="margin-left: 12px;"><i class="fa-solid fa-folder"></i> ${product.category || '-'}</span>
+                                <span style="margin-left: 12px;"><i class="fa-solid fa-turkish-lira-sign"></i> ${product.price?.toLocaleString('tr-TR') || '0'}</span>
+                            </div>
+                        </div>
+                        <div class="trash-item-date">
+                            <i class="fa-regular fa-clock"></i> ${deletedDate}
+                        </div>
+                        <div class="trash-item-actions">
+                            <button class="trash-btn restore-btn" onclick="restoreProduct('${productId}')" title="Geri Yükle">
+                                <i class="fa-solid fa-rotate-left"></i> Geri Yükle
+                            </button>
+                            <button class="trash-btn delete-btn" onclick="permanentDelete('${productId}')" title="Kalıcı Sil">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Ürünü geri yükle
+        async function restoreProduct(productId) {
+            if (!confirm('Bu ürünü geri yüklemek istediğinizden emin misiniz?')) return;
+
+            try {
+                const result = await ADMIN_API.restoreFromTrash(productId);
+
+                if (result.success) {
+                    alert(result.message || '✅ Ürün başarıyla geri yüklendi!');
+                    renderTrashProducts();
+                    updateTrashCount();
+
+                    // Ürün listesini yenile
+                    await loadProducts();
+                } else {
+                    alert('❌ Geri yükleme başarısız: ' + (result.error || 'Bilinmeyen hata'));
+                }
+            } catch (error) {
+                console.error('Geri yükleme hatası:', error);
+                alert('❌ Geri yükleme sırasında bir hata oluştu.');
+            }
+        }
+
+        // Kalıcı olarak sil
+        function permanentDelete(productId) {
+            if (!confirm('⚠️ DİKKAT!\n\nBu ürün kalıcı olarak silinecek ve bir daha geri getirilemez.\n\nDevam etmek istiyor musunuz?')) return;
+
+            const result = ADMIN_API.permanentlyDeleteFromTrash(productId);
+
+            if (result.success) {
+                renderTrashProducts();
+                updateTrashCount();
+            } else {
+                alert('❌ Silme başarısız: ' + (result.error || 'Bilinmeyen hata'));
+            }
+        }
+
+        // Çöp kutusunu tamamen boşalt
+        function emptyAllTrash() {
+            const trash = ADMIN_API.getTrashProducts();
+
+            if (trash.length === 0) {
+                alert('Çöp kutusu zaten boş.');
+                return;
+            }
+
+            if (!confirm(`⚠️ DİKKAT!\n\nÇöp kutusundaki ${trash.length} ürün kalıcı olarak silinecek ve bir daha geri getirilemez.\n\nDevam etmek istiyor musunuz?`)) return;
+
+            const result = ADMIN_API.emptyTrash();
+
+            if (result.success) {
+                renderTrashProducts();
+                updateTrashCount();
+                alert('✅ Çöp kutusu boşaltıldı.');
+            } else {
+                alert('❌ İşlem başarısız.');
+            }
         }
 
     </script>
