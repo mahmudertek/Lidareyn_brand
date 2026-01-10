@@ -2087,6 +2087,7 @@
             if (modal.classList.contains('minimized')) {
                 restoreModal();
             }
+            modal.style.display = ''; // display stilini temizle
             modal.classList.add('active');
         }
 
@@ -2187,6 +2188,7 @@
                 if (modal.classList.contains('minimized')) {
                     restoreModal();
                 }
+                modal.style.display = ''; // display stilini temizle
                 modal.classList.add('active');
             }
         }
@@ -2213,25 +2215,39 @@
             }
         }
 
-        // Close modal
+        // Close modal - GÜÇLENDİRİLMİŞ VERSİYON
         function closeModal() {
-            const modal = document.getElementById('productModal');
-            modal.classList.remove('active');
-            modal.classList.remove('minimized');
+            console.log('🔴 closeModal çağrıldı');
+            try {
+                const modal = document.getElementById('productModal');
+                if (!modal) {
+                    console.error('Modal element bulunamadı!');
+                    return;
+                }
 
-            // Inline stilleri temizle
-            modal.style.background = '';
-            modal.style.pointerEvents = '';
-            modal.style.alignItems = '';
-            modal.style.justifyContent = '';
+                // Her iki yöntemle de kapat
+                modal.style.display = 'none';
+                modal.classList.remove('active');
+                modal.classList.remove('minimized');
 
-            const modalBox = modal.querySelector('.modal');
-            if (modalBox) {
-                modalBox.style.width = '';
-                modalBox.style.height = '';
-                modalBox.style.margin = '';
-                modalBox.style.overflow = '';
-                modalBox.onclick = null;
+                // Inline stilleri temizle
+                modal.style.background = '';
+                modal.style.pointerEvents = '';
+                modal.style.alignItems = '';
+                modal.style.justifyContent = '';
+
+                const modalBox = modal.querySelector('.modal');
+                if (modalBox) {
+                    modalBox.style.width = '';
+                    modalBox.style.height = '';
+                    modalBox.style.margin = '';
+                    modalBox.style.overflow = '';
+                    modalBox.onclick = null;
+                }
+
+                console.log('✅ Modal başarıyla kapatıldı');
+            } catch (err) {
+                console.error('closeModal hatası:', err);
             }
         }
 
@@ -2387,282 +2403,304 @@
             // Bu fonksiyon artık kullanılmıyor, ama kod uyumluluğu için kalıyor
         }
 
-        // Save product
+        // Save product - GÜÇLENDİRİLMİŞ VERSİYON
         async function saveProduct() {
-            // Kritik API Kontrolü
-            if (typeof ADMIN_API === 'undefined') {
-                alert('Sistem Hatası: ADMIN_API yüklenemedi. Lütfen internet bağlantınızı kontrol edin ve sayfayı yenileyin (Ctrl+F5).');
-                return;
-            }
+            console.log('💾 saveProduct başladı');
 
-            const id = document.getElementById('productId').value;
-            const name = document.getElementById('productName').value;
-            const brand = document.getElementById('productBrand').value;
-            const price = parseFloat(document.getElementById('productPrice').value) || 0;
-
-            // İndirimli fiyat mantığını düzelt: 0 girilirse 0 olsun, boş ise null olsun
-            const rawSalePrice = document.getElementById('productSalePrice').value;
-            const salePrice = rawSalePrice !== '' ? parseFloat(rawSalePrice) : null;
-
-            const stock = parseInt(document.getElementById('productStock').value) || 0;
-
-            // ÇOKLU KATEGORİ OKUMA (Checkbox listesinden)
-            const selectedCategoryCheckboxes = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
-            const categorySlugs = selectedCategoryCheckboxes.map(cb => cb.value); // Dizi olarak: ["cat1", "cat2"]
-            const categoryLabel = selectedCategoryCheckboxes.length > 0 ? selectedCategoryCheckboxes[0].parentElement.textContent.trim() : "";
-
-            // Backend uyumlu kategori isimleri (GEÇİCİ ÇÖZÜM - backend deploy edilene kadar)
-            const categoryMapping = {
-                'Elektrikli El Aletleri': 'Elektrikli El Aletleri',
-                'Ölçme Ve Kontrol Aletleri': 'Ölçme Ve Kontrol Aletleri',
-                'El Aletleri': 'El Aletleri',
-                'Aşındırıcı ve Kesici Uçlar': 'Aşındırıcı ve Kesici Uçlar',
-                'Yapıştırıcı, Dolgu ve Kimyasallar': 'Yapıştırıcı, Dolgu ve Kimyasallar',
-                'Kaynak Malzemeleri': 'Kaynak Malzemeleri',
-                'Hırdavat ve El Aletleri': 'Hırdavat ve El Aletleri',
-                'İş Güvenliği': 'İş Güvenliği ve Çalışma Ekipmanları',
-                'Bahçe Aletleri': 'Bahçe Aletleri',
-                'Akülü Aletler': 'Akülü Aletler',
-                'Jeneratörler': 'Jeneratörler',
-                'Hobi Aletleri': 'Hobi Aletleri',
-                'Aksesuarlar': 'Aksesuarlar'
-            };
-
-            // Eğer birden fazla seçilmişse kategori adını virgülle ayır
-            const categoryName = selectedCategoryCheckboxes
-                .map(cb => {
-                    const labelText = cb.parentElement.textContent.trim();
-                    return categoryMapping[labelText] || labelText;
-                })
-                .join(', ');
-
-            const description = document.getElementById('productDescription').value;
-            const sku = document.getElementById('productSku').value;
-            const barcode = document.getElementById('productBarcode').value;
-            const unit = document.getElementById('productUnit').value;
-            const subCategory = document.getElementById('productSubCategory').value;
-
-            // Tüm etiketleri oku
-            const isPopular = document.getElementById('tagPopular').checked;
-            const isBestSeller = document.getElementById('tagBestSeller').checked;
-            const isNew = document.getElementById('tagNew').checked;
-            const isFeatured = document.getElementById('tagFeatured').checked;
-            const brandShowcase = document.getElementById('brandShowcase').value;
-
-            if (!name || !brand) {
-                alert('Lütfen zorunlu alanları doldurun (Ürün Adı, Marka).');
-                return;
-            }
-
-            // Kategori kontrolü
-            if (categorySlugs.length === 0) {
-                alert('Lütfen en az bir kategori seçin.');
-                return;
-            }
-
-            // Yüklenen görseli al veya placeholder kullan
-            const imageToUse = uploadedImageBase64 || `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`;
-
-            // Tags array oluştur (DİKKAT: Popülerlik kontrolü burada çok önemli)
-            const tags = [];
-            if (isPopular) {
-                tags.push('popular');
-                tags.push('Popüler'); // Ekstra güvenlik
-            }
-            if (isNew) tags.push('new');
-            if (isFeatured) tags.push('featured');
-            if (isBestSeller) tags.push('bestseller');
-
-            // Eğer popüler işaretli DEĞİLSE, tags içinden popular kelimelerini temizle
-            if (!isPopular) {
-                // Bu durumda (yukarıda push etmedik zaten ama backend'de kalmış olabilir diye) 
-                // productData.tags boş gidecek.
-            }
-
-            const productData = {
-                name,
-                brand,
-                category: categoryName, // Virgüllü kategori isimleri
-                categorySlug: categorySlugs[0], // İlk kategori (Eskisiyle uyum için)
-                allCategories: categorySlugs,   // TÜM KATEGORİLER (Dizi olarak)
-                subCategory: subCategory,
-
-                price,
-                salePrice, // Düzeltilmiş salePrice
-                stock,
-                unit,
-                description: description || `${brand} ${name} - Galata Çarşı kalitesiyle.`,
-                sku: sku || '',         // Boş string olarak gönder
-                barcode: barcode || '', // Boş string olarak gönder
-
-                // Tüm etiketler (Ayrı ayrı) - ÖNEMLİ: isPopular BOOLEAN olarak gitsin
-                isActive: !!document.getElementById('productIsActive').checked,
-                isPopular: isPopular, // document.getElementById('tagPopular').checked
-                isBestSeller: !!isBestSeller,
-                isNew: !!isNew,
-                isFeatured: !!isFeatured,
-
-                // Tags array (Toplu)
-                tags: tags,
-
-                // Ana sayfa marka vitrini (Hem ayrı alan olarak hem de tag olarak gönderelim)
-                brandShowcase: brandShowcase || '',
-                mainImage: imageToUse
-            };
-
-            // BACKEND SCHEMA YEDEKLEMESİ:
-            // Eğer backend 'brandShowcase' alanını kabul etmiyorsa diye tag içine de ekleyelim
-            if (brandShowcase) {
-                const showcaseTag = `showcase-${brandShowcase}`;
-                if (!productData.tags.includes(showcaseTag)) {
-                    productData.tags.push(showcaseTag);
+            // HER DURUMDA MODAL KAPANSIN - En başta tanımla
+            const forceCloseModal = () => {
+                console.log('🔴 forceCloseModal çağrıldı');
+                const modal = document.getElementById('productModal');
+                if (modal) {
+                    modal.style.display = 'none';
+                    modal.classList.remove('active');
+                    modal.classList.remove('minimized');
                 }
-            }
-
-            console.log('💾 Kaydedilecek Veri (DETAYLI):', {
-                barcode: productData.barcode,
-                salePrice: productData.salePrice,
-                price: productData.price,
-                name: productData.name,
-                brandShowcase: productData.brandShowcase,
-                allCategories: productData.allCategories
-            });
-
-            // Eğer id varsa güncelleme yapıyoruz, mevcut ürünü bulup bazı alanları koruyalım
-            if (id) {
-                const existingProduct = products.find(p => (p._id || p.id) === id);
-                if (existingProduct) {
-                    // Eğer yeni görsel yüklenmediyse eskisini koru
-                    if (!uploadedImageBase64 && existingProduct.mainImage && !existingProduct.mainImage.includes('placehold.co')) {
-                        productData.mainImage = existingProduct.mainImage;
-                    }
-                }
-            }
-
-            console.log('💾 Kaydedilecek Veri:', {
-                barcode: productData.barcode,
-                salePrice: productData.salePrice,
-                tags: productData.tags,
-                isFeatured: productData.isFeatured,
-                isPopular: productData.isPopular
-            });
-
-            showLoading(); // Yükleniyor göster
+            };
 
             try {
-                // Timeout Koruması (90 saniye - Render uyku modundan çıkarken uzun sürebilir)
-                const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('Sunucu zaman aşımı (90sn)')), 90000)
-                );
-
-                // Uzun sürerse kullanıcıyı bilgilendir
-                const notifyUserTimer = setTimeout(() => {
-                    alert("Sunucu uyku modunda olabilir, uyandırılıyor... Lütfen bekleyiniz (Bu işlem 1 dakika sürebilir).");
-                }, 4000);
-
-                let apiCall;
-                if (id) {
-                    apiCall = ADMIN_API.updateProduct(id, productData);
-                } else {
-                    apiCall = ADMIN_API.createProduct(productData);
+                // Kritik API Kontrolü
+                if (typeof ADMIN_API === 'undefined') {
+                    alert('Sistem Hatası: ADMIN_API yüklenemedi. Lütfen internet bağlantınızı kontrol edin ve sayfayı yenileyin (Ctrl+F5).');
+                    return;
                 }
 
-                // API İsteği vs Timeout Yarışı
-                let response = await Promise.race([apiCall, timeoutPromise]);
+                const id = document.getElementById('productId').value;
+                const name = document.getElementById('productName').value;
+                const brand = document.getElementById('productBrand').value;
+                const price = parseFloat(document.getElementById('productPrice').value) || 0;
 
-                clearTimeout(notifyUserTimer); // İşlem biterse uyarıyı iptal et
+                // İndirimli fiyat - güvenli erişim
+                const salePriceEl = document.getElementById('productSalePrice');
+                const rawSalePrice = salePriceEl ? salePriceEl.value : '';
+                const salePrice = rawSalePrice !== '' ? parseFloat(rawSalePrice) : null;
 
-                if (response.success) {
-                    console.log('✅ API Yanıtı Başarılı:', response);
+                const stock = parseInt(document.getElementById('productStock').value) || 0;
 
-                    // --- BAŞLANGIÇ: MERGE VE DÜZELTME ---
-                    // Eğer API yanıtında salePrice/barcode yoksa, gönderdiğimiz productData'dan tamamla!
-                    // Bu çok kritik, çünkü backend bazen bu alanları döndürmeyebilir.
-                    let finalData = response.data || {};
-                    const sentData = productData; // Gönderilen veri
+                // ÇOKLU KATEGORİ OKUMA (Checkbox listesinden)
+                const selectedCategoryCheckboxes = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
+                const categorySlugs = selectedCategoryCheckboxes.map(cb => cb.value); // Dizi olarak: ["cat1", "cat2"]
+                const categoryLabel = selectedCategoryCheckboxes.length > 0 ? selectedCategoryCheckboxes[0].parentElement.textContent.trim() : "";
 
-                    // KRİTİK ALANLARI KORU (Backend bazen eksik dönebilir)
-                    const fieldsToPreserve = [
-                        'salePrice', 'barcode', 'unit', 'description', 'sku',
-                        'isFeatured', 'isPopular', 'isNew', 'isBestSeller', 'isActive',
-                        'tags', 'allCategories', 'brandShowcase'
-                    ];
+                // Backend uyumlu kategori isimleri (GEÇİCİ ÇÖZÜM - backend deploy edilene kadar)
+                const categoryMapping = {
+                    'Elektrikli El Aletleri': 'Elektrikli El Aletleri',
+                    'Ölçme Ve Kontrol Aletleri': 'Ölçme Ve Kontrol Aletleri',
+                    'El Aletleri': 'El Aletleri',
+                    'Aşındırıcı ve Kesici Uçlar': 'Aşındırıcı ve Kesici Uçlar',
+                    'Yapıştırıcı, Dolgu ve Kimyasallar': 'Yapıştırıcı, Dolgu ve Kimyasallar',
+                    'Kaynak Malzemeleri': 'Kaynak Malzemeleri',
+                    'Hırdavat ve El Aletleri': 'Hırdavat ve El Aletleri',
+                    'İş Güvenliği': 'İş Güvenliği ve Çalışma Ekipmanları',
+                    'Bahçe Aletleri': 'Bahçe Aletleri',
+                    'Akülü Aletler': 'Akülü Aletler',
+                    'Jeneratörler': 'Jeneratörler',
+                    'Hobi Aletleri': 'Hobi Aletleri',
+                    'Aksesuarlar': 'Aksesuarlar'
+                };
 
-                    fieldsToPreserve.forEach(field => {
-                        if ((finalData[field] === undefined || finalData[field] === null || finalData[field] === '') &&
-                            (sentData[field] !== undefined && sentData[field] !== null)) {
-                            finalData[field] = sentData[field];
+                // Eğer birden fazla seçilmişse kategori adını virgülle ayır
+                const categoryName = selectedCategoryCheckboxes
+                    .map(cb => {
+                        const labelText = cb.parentElement.textContent.trim();
+                        return categoryMapping[labelText] || labelText;
+                    })
+                    .join(', ');
+
+                const description = document.getElementById('productDescription').value;
+                const sku = document.getElementById('productSku').value;
+                const barcode = document.getElementById('productBarcode').value;
+                const unit = document.getElementById('productUnit').value;
+                const subCategory = document.getElementById('productSubCategory').value;
+
+                // Tüm etiketleri oku
+                const isPopular = document.getElementById('tagPopular').checked;
+                const isBestSeller = document.getElementById('tagBestSeller').checked;
+                const isNew = document.getElementById('tagNew').checked;
+                const isFeatured = document.getElementById('tagFeatured').checked;
+                const brandShowcase = document.getElementById('brandShowcase').value;
+
+                if (!name || !brand) {
+                    alert('Lütfen zorunlu alanları doldurun (Ürün Adı, Marka).');
+                    return;
+                }
+
+                // Kategori kontrolü
+                if (categorySlugs.length === 0) {
+                    alert('Lütfen en az bir kategori seçin.');
+                    return;
+                }
+
+                // Yüklenen görseli al veya placeholder kullan
+                const imageToUse = uploadedImageBase64 || `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`;
+
+                // Tags array oluştur (DİKKAT: Popülerlik kontrolü burada çok önemli)
+                const tags = [];
+                if (isPopular) {
+                    tags.push('popular');
+                    tags.push('Popüler'); // Ekstra güvenlik
+                }
+                if (isNew) tags.push('new');
+                if (isFeatured) tags.push('featured');
+                if (isBestSeller) tags.push('bestseller');
+
+                // Eğer popüler işaretli DEĞİLSE, tags içinden popular kelimelerini temizle
+                if (!isPopular) {
+                    // Bu durumda (yukarıda push etmedik zaten ama backend'de kalmış olabilir diye) 
+                    // productData.tags boş gidecek.
+                }
+
+                const productData = {
+                    name,
+                    brand,
+                    category: categoryName, // Virgüllü kategori isimleri
+                    categorySlug: categorySlugs[0], // İlk kategori (Eskisiyle uyum için)
+                    allCategories: categorySlugs,   // TÜM KATEGORİLER (Dizi olarak)
+                    subCategory: subCategory,
+
+                    price,
+                    salePrice, // Düzeltilmiş salePrice
+                    stock,
+                    unit,
+                    description: description || `${brand} ${name} - Galata Çarşı kalitesiyle.`,
+                    sku: sku || '',         // Boş string olarak gönder
+                    barcode: barcode || '', // Boş string olarak gönder
+
+                    // Tüm etiketler (Ayrı ayrı) - ÖNEMLİ: isPopular BOOLEAN olarak gitsin
+                    isActive: !!document.getElementById('productIsActive').checked,
+                    isPopular: isPopular, // document.getElementById('tagPopular').checked
+                    isBestSeller: !!isBestSeller,
+                    isNew: !!isNew,
+                    isFeatured: !!isFeatured,
+
+                    // Tags array (Toplu)
+                    tags: tags,
+
+                    // Ana sayfa marka vitrini (Hem ayrı alan olarak hem de tag olarak gönderelim)
+                    brandShowcase: brandShowcase || '',
+                    mainImage: imageToUse
+                };
+
+                // BACKEND SCHEMA YEDEKLEMESİ:
+                // Eğer backend 'brandShowcase' alanını kabul etmiyorsa diye tag içine de ekleyelim
+                if (brandShowcase) {
+                    const showcaseTag = `showcase-${brandShowcase}`;
+                    if (!productData.tags.includes(showcaseTag)) {
+                        productData.tags.push(showcaseTag);
+                    }
+                }
+
+                console.log('💾 Kaydedilecek Veri (DETAYLI):', {
+                    barcode: productData.barcode,
+                    salePrice: productData.salePrice,
+                    price: productData.price,
+                    name: productData.name,
+                    brandShowcase: productData.brandShowcase,
+                    allCategories: productData.allCategories
+                });
+
+                // Eğer id varsa güncelleme yapıyoruz, mevcut ürünü bulup bazı alanları koruyalım
+                if (id) {
+                    const existingProduct = products.find(p => (p._id || p.id) === id);
+                    if (existingProduct) {
+                        // Eğer yeni görsel yüklenmediyse eskisini koru
+                        if (!uploadedImageBase64 && existingProduct.mainImage && !existingProduct.mainImage.includes('placehold.co')) {
+                            productData.mainImage = existingProduct.mainImage;
                         }
-                    });
-                    // ------------------------------------
+                    }
+                }
 
-                    // Sunucudan dönen (ve düzelttiğimiz) veriyi hemen yerel listeye yansıt (Load beklemeden)
-                    if (finalData) {
-                        if (id) {
-                            const index = products.findIndex(p => (p._id || p.id) === id);
-                            if (index !== -1) products[index] = finalData;
-                        } else {
-                            products.push(finalData);
-                        }
+                console.log('💾 Kaydedilecek Veri:', {
+                    barcode: productData.barcode,
+                    salePrice: productData.salePrice,
+                    tags: productData.tags,
+                    isFeatured: productData.isFeatured,
+                    isPopular: productData.isPopular
+                });
 
-                        // ÖNEMLİ: API kaydı başarılı olsa bile localStorage'ı güncelle
-                        // Böylece frontend (Carousel/Popüler) API'ye ulaşamazsa bile en güncel veriyi görür.
-                        localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+                showLoading(); // Yükleniyor göster
 
-                        renderProducts(); // Hemen tabloyu güncelle
+                try {
+                    // Timeout Koruması (90 saniye - Render uyku modundan çıkarken uzun sürebilir)
+                    const timeoutPromise = new Promise((_, reject) =>
+                        setTimeout(() => reject(new Error('Sunucu zaman aşımı (90sn)')), 90000)
+                    );
+
+                    // Uzun sürerse kullanıcıyı bilgilendir
+                    const notifyUserTimer = setTimeout(() => {
+                        alert("Sunucu uyku modunda olabilir, uyandırılıyor... Lütfen bekleyiniz (Bu işlem 1 dakika sürebilir).");
+                    }, 4000);
+
+                    let apiCall;
+                    if (id) {
+                        apiCall = ADMIN_API.updateProduct(id, productData);
+                    } else {
+                        apiCall = ADMIN_API.createProduct(productData);
                     }
 
-                    // ÖNCE MODAL KAPAT, SONRA ALERT GÖSTER
+                    // API İsteği vs Timeout Yarışı
+                    let response = await Promise.race([apiCall, timeoutPromise]);
+
+                    clearTimeout(notifyUserTimer); // İşlem biterse uyarıyı iptal et
+
+                    if (response.success) {
+                        console.log('✅ API Yanıtı Başarılı:', response);
+
+                        // --- BAŞLANGIÇ: MERGE VE DÜZELTME ---
+                        // Eğer API yanıtında salePrice/barcode yoksa, gönderdiğimiz productData'dan tamamla!
+                        // Bu çok kritik, çünkü backend bazen bu alanları döndürmeyebilir.
+                        let finalData = response.data || {};
+                        const sentData = productData; // Gönderilen veri
+
+                        // KRİTİK ALANLARI KORU (Backend bazen eksik dönebilir)
+                        const fieldsToPreserve = [
+                            'salePrice', 'barcode', 'unit', 'description', 'sku',
+                            'isFeatured', 'isPopular', 'isNew', 'isBestSeller', 'isActive',
+                            'tags', 'allCategories', 'brandShowcase'
+                        ];
+
+                        fieldsToPreserve.forEach(field => {
+                            if ((finalData[field] === undefined || finalData[field] === null || finalData[field] === '') &&
+                                (sentData[field] !== undefined && sentData[field] !== null)) {
+                                finalData[field] = sentData[field];
+                            }
+                        });
+                        // ------------------------------------
+
+                        // Sunucudan dönen (ve düzelttiğimiz) veriyi hemen yerel listeye yansıt (Load beklemeden)
+                        if (finalData) {
+                            if (id) {
+                                const index = products.findIndex(p => (p._id || p.id) === id);
+                                if (index !== -1) products[index] = finalData;
+                            } else {
+                                products.push(finalData);
+                            }
+
+                            // ÖNEMLİ: API kaydı başarılı olsa bile localStorage'ı güncelle
+                            // Böylece frontend (Carousel/Popüler) API'ye ulaşamazsa bile en güncel veriyi görür.
+                            localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+
+                            renderProducts(); // Hemen tabloyu güncelle
+                        }
+
+                        // ÖNCE MODAL KAPAT, SONRA ALERT GÖSTER
+                        closeModal();
+
+                        alert(`✅ Ürün başarıyla kaydedildi!\n\nİndirimli Fiyat: ${productData.salePrice !== null ? '₺' + productData.salePrice : 'Yok'}\nBarkod: ${productData.barcode || 'Yok'}`);
+
+                        // Arka planda listeyi tazelemek için
+                        setTimeout(() => loadProducts(), 1000);
+                    } else {
+                        // API hata döndü
+                        console.error('API Hatası:', response);
+                        throw new Error(response.message || response.error || 'API Hatası');
+                    }
+                } catch (error) {
+                    // Hata veya Timeout -> Yerel Kayıt (Offline Mode)
+                    console.warn('⚠️ Sunucu hatası, yerel kayıt yapılıyor:', error.message);
+
+                    if (id) {
+                        const index = products.findIndex(p => (p._id || p.id) === id);
+                        if (index !== -1) {
+                            // Mevcut ürünü güncelle - DİKKAT: productData'daki boş alanların eskisini ezmesini engellemek için merge ediyoruz
+                            // Ama formdan gelen boş string gerçekten boş olsun istenmiş olabilir, o yüzden productData öncelikli.
+                            products[index] = { ...products[index], ...productData, _updatedLocal: true };
+                        }
+                    } else {
+                        // Yeni ürün ekle (Geçici ID ile)
+                        products.push({
+                            _id: 'local_' + Date.now(),
+                            id: 'local_' + Date.now(),
+                            ...productData,
+                            _newLocal: true
+                        });
+                    }
+
+                    // localStorage güncelle
+                    localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+
                     closeModal();
+                    renderProducts();
 
-                    alert(`✅ Ürün başarıyla kaydedildi!\n\nİndirimli Fiyat: ${productData.salePrice !== null ? '₺' + productData.salePrice : 'Yok'}\nBarkod: ${productData.barcode || 'Yok'}`);
+                    // Kullanıcıya bilgi ver
+                    const msg = error.message.includes('zaman aşımı')
+                        ? 'Sunucu 90 saniye içinde yanıt vermedi (Render uyuyor olabilir).'
+                        : 'İnternet bağlantısı veya sunucu hatası.';
 
-                    // Arka planda listeyi tazelemek için
-                    setTimeout(() => loadProducts(), 1000);
-                } else {
-                    // API hata döndü
-                    console.error('API Hatası:', response);
-                    throw new Error(response.message || response.error || 'API Hatası');
+                    alert(`⚠️ SUNUCUYA KAYDEDİLEMEDİ!\n\nHATA DETAYI: ${error.message}\n\nDurum: ${msg}\n\nÜrün ŞİMDİLİK bu tarayıcıya (localStorage) kaydedildi. \n\nLÜTFEN DİKKAT: Bilgisayarınızı kapatmadan veya tarayıcıyı temizlemeden önce internetinizin düzeldiğinden ve sunucunun (Render) çalıştığından emin olup tekrar deneyin.`);
+                } finally {
+                    // Her durumda loading state'i kaldır
+                    const tbody = document.getElementById('productsTableBody');
+                    if (tbody && tbody.innerHTML.includes('spinner')) renderProducts();
                 }
-            } catch (error) {
-                // Hata veya Timeout -> Yerel Kayıt (Offline Mode)
-                console.warn('⚠️ Sunucu hatası, yerel kayıt yapılıyor:', error.message);
-
-                if (id) {
-                    const index = products.findIndex(p => (p._id || p.id) === id);
-                    if (index !== -1) {
-                        // Mevcut ürünü güncelle - DİKKAT: productData'daki boş alanların eskisini ezmesini engellemek için merge ediyoruz
-                        // Ama formdan gelen boş string gerçekten boş olsun istenmiş olabilir, o yüzden productData öncelikli.
-                        products[index] = { ...products[index], ...productData, _updatedLocal: true };
-                    }
-                } else {
-                    // Yeni ürün ekle (Geçici ID ile)
-                    products.push({
-                        _id: 'local_' + Date.now(),
-                        id: 'local_' + Date.now(),
-                        ...productData,
-                        _newLocal: true
-                    });
-                }
-
-                // localStorage güncelle
-                localStorage.setItem('galatacarsi_products', JSON.stringify(products));
-
-                closeModal();
-                renderProducts();
-
-                // Kullanıcıya bilgi ver
-                const msg = error.message.includes('zaman aşımı')
-                    ? 'Sunucu 90 saniye içinde yanıt vermedi (Render uyuyor olabilir).'
-                    : 'İnternet bağlantısı veya sunucu hatası.';
-
-                alert(`⚠️ SUNUCUYA KAYDEDİLEMEDİ!\n\nHATA DETAYI: ${error.message}\n\nDurum: ${msg}\n\nÜrün ŞİMDİLİK bu tarayıcıya (localStorage) kaydedildi. \n\nLÜTFEN DİKKAT: Bilgisayarınızı kapatmadan veya tarayıcıyı temizlemeden önce internetinizin düzeldiğinden ve sunucunun (Render) çalıştığından emin olup tekrar deneyin.`);
-            } finally {
-                // Her durumda loading state'i kaldır (renderProducts zaten temizler ama nolur nolmaz)
-                const tbody = document.getElementById('productsTableBody');
-                if (tbody.innerHTML.includes('spinner')) renderProducts();
+            } catch (outerError) {
+                // En dıştaki hata yakalayıcı - HER DURUMDA MODAL KAPANSIN
+                console.error('❌ saveProduct HATA:', outerError);
+                alert('Beklenmeyen bir hata oluştu: ' + outerError.message);
+                forceCloseModal();
             }
         }
+
 
         // Get category name from slug - Backend Enum Değerleriyle Birebir Eşleşmeli
         function getCategoryName(slug) {
