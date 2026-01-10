@@ -842,6 +842,19 @@
 
     <!-- Product Grid Script -->
     <script>
+        // ==========================================
+        // YENİ GELENLER - KATI KURALLAR
+        // ==========================================
+        // 1. Maksimum 36 ürün gösterilir
+        // 2. Ürün ekleme tarihinden 30 gün sonra otomatik gizlenir
+        // 3. Bu kurallar kesindir ve değiştirilemez
+        // ==========================================
+
+        const YENI_GELENLER_CONFIG = {
+            MAX_URUN_SAYISI: 36,           // Maksimum gösterilecek ürün sayısı
+            MAKSIMUM_YASLI_GUN: 30,        // Ürün kaç günden eski olabilir (30 gün = 1 ay)
+        };
+
         document.addEventListener('DOMContentLoaded', async () => {
             const container = document.getElementById('products-container');
             if (!container) return;
@@ -850,22 +863,52 @@
 
             let products = [];
             try {
-                // DÜZELTME: Daha fazla ürün çekip istemci tarafında kesin filtreleme yapıyoruz
                 const res = await window.API.getProducts({ limit: 1000, sort: '-createdAt' });
 
                 if (res.success && res.data && res.data.length > 0) {
-                    // 1. "Yeni" etiketi (tags içinde 'new'/'yeni') veya isNew özelliği olanları filtrele
+                    const now = new Date();
+                    const MAX_AGE_MS = YENI_GELENLER_CONFIG.MAKSIMUM_YASLI_GUN * 24 * 60 * 60 * 1000; // 30 gün = millisaniye
+
+                    // KATI FİLTRE: Sadece "Yeni" etiketli VE 30 günden eski olmayan ürünler
                     products = res.data.filter(p => {
+                        // 1. Yeni etiketi kontrolü
                         const isNewProp = p.isNew === true || String(p.isNew) === 'true';
                         const hasNewTag = p.tags && Array.isArray(p.tags) && p.tags.some(t => t && (t === 'new' || t.toLowerCase() === 'yeni'));
-                        return isNewProp || hasNewTag;
+                        const isNewProduct = isNewProp || hasNewTag;
+
+                        if (!isNewProduct) return false; // Yeni etiketi yoksa gösterme
+
+                        // 2. Yaş kontrolü (30 günden eski mi?)
+                        const createdAt = p.createdAt ? new Date(p.createdAt) : null;
+                        if (createdAt) {
+                            const age = now - createdAt;
+                            if (age > MAX_AGE_MS) {
+                                console.log(`⏰ Ürün 30 günden eski, gizleniyor: ${p.name} (${Math.floor(age / (24 * 60 * 60 * 1000))} gün)`);
+                                return false; // 30 günden eski, gösterme
+                            }
+                        }
+
+                        return true;
                     });
 
-                    console.log(`Yeni gelenler filtresi: ${products.length} ürün bulundu.`);
+                    console.log(`✅ Yeni Gelenler: ${products.length} ürün (max ${YENI_GELENLER_CONFIG.MAX_URUN_SAYISI}, max ${YENI_GELENLER_CONFIG.MAKSIMUM_YASLI_GUN} gün)`);
 
-                    // 2. Eğer "Yeni" işaretli hiç ürün yoksa, son eklenen 24 taneyi göster (Boş kalmasın)
+                    // KATI LİMİT: Maksimum 36 ürün
+                    if (products.length > YENI_GELENLER_CONFIG.MAX_URUN_SAYISI) {
+                        console.log(`📦 ${products.length} ürün bulundu, ${YENI_GELENLER_CONFIG.MAX_URUN_SAYISI}'a kesiliyor`);
+                        products = products.slice(0, YENI_GELENLER_CONFIG.MAX_URUN_SAYISI);
+                    }
+
+                    // Eğer hiç ürün yoksa son eklenen 24 taneyi göster (boş kalmasın)
                     if (products.length === 0) {
-                        products = res.data.slice(0, 24);
+                        console.log('⚠️ Yeni etiketli ürün yok, son eklenenler gösteriliyor');
+                        products = res.data
+                            .filter(p => {
+                                const createdAt = p.createdAt ? new Date(p.createdAt) : null;
+                                if (!createdAt) return true;
+                                return (now - createdAt) <= MAX_AGE_MS;
+                            })
+                            .slice(0, Math.min(24, YENI_GELENLER_CONFIG.MAX_URUN_SAYISI));
                     }
                 }
 
@@ -874,7 +917,7 @@
                     return;
                 }
 
-                // Global veriyi güncelle (Sepete/Favoriye ekleme butonları için)
+                // Global veriyi güncelle
                 window.productsData = products;
 
             } catch (error) {
