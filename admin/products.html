@@ -912,10 +912,6 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Barkod No</label>
-                            <input type="text" id="productBarcode" placeholder="EAN-13 veya Barkod no" tabindex="0">
-                        </div>
-                        <div class="form-group">
                             <label>Birim</label>
                             <select id="productUnit">
                                 <option value="adet">Adet</option>
@@ -1149,10 +1145,6 @@
                         <div class="form-group">
                             <label>Fiyat (TL)</label>
                             <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label>İndirimli Fiyat (TL)</label>
-                            <input type="number" id="productSalePrice" placeholder="0.00" step="0.01" min="0">
                         </div>
                     </div>
 
@@ -2070,13 +2062,8 @@
 
             resetImageUpload(); // Görsel alanını sıfırla
 
-            // Barkod ve SKU alanlarının düzenlenebilir olduğundan emin ol
-            const barcodeInput = document.getElementById('productBarcode');
+            // SKU alanının düzenlenebilir olduğundan emin ol
             const skuInput = document.getElementById('productSku');
-            if (barcodeInput) {
-                barcodeInput.removeAttribute('readonly');
-                barcodeInput.removeAttribute('disabled');
-            }
             if (skuInput) {
                 skuInput.removeAttribute('readonly');
                 skuInput.removeAttribute('disabled');
@@ -2127,13 +2114,10 @@
                 }
 
                 document.getElementById('productPrice').value = product.price || '';
-                // 0 değeri de geçerli bir değerdir, bu yüzden null check yapıyoruz
-                document.getElementById('productSalePrice').value = (product.salePrice !== null && product.salePrice !== undefined) ? product.salePrice : '';
                 document.getElementById('productStock').value = product.stock || 0;
                 document.getElementById('productUnit').value = product.unit || 'adet';
                 document.getElementById('productDescription').value = product.description || '';
                 document.getElementById('productSku').value = product.sku || '';
-                document.getElementById('productBarcode').value = (product.barcode !== null && product.barcode !== undefined) ? product.barcode : '';
 
                 // Tüm etiketleri yükle
                 document.getElementById('productIsActive').checked = product.isActive !== false;
@@ -2171,13 +2155,8 @@
                     console.log('⚠️ Görsel bulunamadı, önizleme sıfırlandı');
                 }
 
-                // Barkod ve SKU alanlarının düzenlenebilir olduğundan emin ol
-                const barcodeInput = document.getElementById('productBarcode');
+                // SKU alanının düzenlenebilir olduğundan emin ol
                 const skuInput = document.getElementById('productSku');
-                if (barcodeInput) {
-                    barcodeInput.removeAttribute('readonly');
-                    barcodeInput.removeAttribute('disabled');
-                }
                 if (skuInput) {
                     skuInput.removeAttribute('readonly');
                     skuInput.removeAttribute('disabled');
@@ -2273,11 +2252,9 @@
                 brand: document.getElementById('productBrand').value,
                 brandSearchInput: document.getElementById('brandSearchInput').value,
                 price: document.getElementById('productPrice').value,
-                salePrice: document.getElementById('productSalePrice').value,
                 stock: document.getElementById('productStock').value,
                 description: document.getElementById('productDescription').value,
                 sku: document.getElementById('productSku').value,
-                barcode: document.getElementById('productBarcode').value,
                 unit: document.getElementById('productUnit').value,
                 subCategory: document.getElementById('productSubCategory').value,
                 isActive: document.getElementById('productIsActive').checked,
@@ -2354,11 +2331,9 @@
             document.getElementById('productBrand').value = formData.brand || '';
             document.getElementById('brandSearchInput').value = formData.brandSearchInput || '';
             document.getElementById('productPrice').value = formData.price || '';
-            document.getElementById('productSalePrice').value = formData.salePrice || '';
             document.getElementById('productStock').value = formData.stock || '';
             document.getElementById('productDescription').value = formData.description || '';
             document.getElementById('productSku').value = formData.sku || '';
-            document.getElementById('productBarcode').value = formData.barcode || '';
             document.getElementById('productUnit').value = formData.unit || 'adet';
             document.getElementById('productSubCategory').value = formData.subCategory || '';
             document.getElementById('productIsActive').checked = formData.isActive !== false;
@@ -2429,11 +2404,7 @@
                 const name = document.getElementById('productName').value;
                 const brand = document.getElementById('productBrand').value;
                 const price = parseFloat(document.getElementById('productPrice').value) || 0;
-
-                // İndirimli fiyat - güvenli erişim
-                const salePriceEl = document.getElementById('productSalePrice');
-                const rawSalePrice = salePriceEl ? salePriceEl.value : '';
-                const salePrice = rawSalePrice !== '' ? parseFloat(rawSalePrice) : null;
+                const salePrice = null; // İndirimli fiyat alanı kaldırıldı
 
                 const stock = parseInt(document.getElementById('productStock').value) || 0;
 
@@ -2469,7 +2440,7 @@
 
                 const description = document.getElementById('productDescription').value;
                 const sku = document.getElementById('productSku').value;
-                const barcode = document.getElementById('productBarcode').value;
+                const barcode = null; // Barkod alanı kaldırıldı
                 const unit = document.getElementById('productUnit').value;
                 const subCategory = document.getElementById('productSubCategory').value;
 

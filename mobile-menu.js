@@ -140,19 +140,116 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // --- Mobile Live Search Integration ---
+    // --- Mobile Live Search Integration with Smart Search & Search History ---
     if (mobileSearchInput) {
         // Create results container
         let resultsContainer = document.querySelector('.mobile-search-results');
         if (!resultsContainer) {
             resultsContainer = document.createElement('div');
             resultsContainer.className = 'mobile-search-results';
-            // Insert after the form
             document.querySelector('.mobile-search-content').appendChild(resultsContainer);
+        }
+
+        // Arama geçmişi yönetimi
+        const SEARCH_HISTORY_KEY = 'galatacarsi_search_history';
+        const MAX_HISTORY_ITEMS = 8;
+
+        function getSearchHistory() {
+            try {
+                return JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || '[]');
+            } catch {
+                return [];
+            }
+        }
+
+        function saveToHistory(query) {
+            if (!query || query.length < 2) return;
+            let history = getSearchHistory();
+            // Aynı arama varsa kaldır
+            history = history.filter(h => h.toLowerCase() !== query.toLowerCase());
+            // Başa ekle
+            history.unshift(query);
+            // Limit uygula
+            history = history.slice(0, MAX_HISTORY_ITEMS);
+            localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+        }
+
+        function removeFromHistory(query) {
+            let history = getSearchHistory();
+            history = history.filter(h => h.toLowerCase() !== query.toLowerCase());
+            localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+            showSearchHistory(); // Refresh
+        }
+
+        function clearAllHistory() {
+            localStorage.removeItem(SEARCH_HISTORY_KEY);
+            showSearchHistory();
+        }
+
+        function showSearchHistory() {
+            const history = getSearchHistory();
+            if (history.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="mobile-search-empty">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <p>Arama yapmaya başlayın</p>
+                        <span>Ürün, marka veya kategori arayabilirsiniz</span>
+                    </div>
+                `;
+            } else {
+                let html = `
+                    <div class="mobile-search-history-header">
+                        <span><i class="fa-solid fa-clock-rotate-left"></i> Son Aramalar</span>
+                        <button onclick="event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('clearHistory'))">Temizle</button>
+                    </div>
+                `;
+                history.forEach(term => {
+                    html += `
+                    <div class="mobile-search-item mobile-search-history-item">
+                        <a href="arama.html?q=${encodeURIComponent(term)}" onclick="event.stopPropagation();">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <span>${term}</span>
+                        </a>
+                        <button class="remove-history-btn" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('removeHistory', {detail: '${term}'}))">
+                            <i class="fa-solid fa-xmark"></i>
+                        </button>
+                    </div>`;
+                });
+                resultsContainer.innerHTML = html;
+            }
+            resultsContainer.style.display = 'block';
+        }
+
+        // Custom events for history management
+        mobileSearchInput.addEventListener('clearHistory', clearAllHistory);
+        mobileSearchInput.addEventListener('removeHistory', (e) => removeFromHistory(e.detail));
+
+        // Focus olunca geçmişi göster
+        mobileSearchInput.addEventListener('focus', function () {
+            if (this.value.trim() === '') {
+                showSearchHistory();
+            }
+        });
+
+        // Form submit olunca geçmişe kaydet
+        const searchForm = document.querySelector('.mobile-search-form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function () {
+                const query = mobileSearchInput.value.trim();
+                if (query) saveToHistory(query);
+            });
         }
 
         // Debounce helper
         let timeout = null;
+
+        // Güncel marka listesi (Hırdavat/El Aletleri odaklı)
+        const knownBrands = [
+            'Bosch', 'Makita', 'DeWalt', 'Black+Decker', 'Knipex',
+            'Beta', 'Stanley', 'Gedore', 'Rtrmax', 'Catpower',
+            'Ingco', 'Tolsen', 'Total', 'Einhell', 'Karcher',
+            'Fein', 'Metabo', 'Milwaukee', 'Hikoki', 'Festool'
+        ];
 
         mobileSearchInput.addEventListener('input', function (e) {
             clearTimeout(timeout);
@@ -160,73 +257,91 @@ document.addEventListener('DOMContentLoaded', function () {
 
             timeout = setTimeout(() => {
                 if (query.length < 1) {
-                    resultsContainer.innerHTML = '';
-                    resultsContainer.style.display = 'none';
+                    showSearchHistory();
                     return;
                 }
 
                 // Use global products data
-                const products = window.productsData || [];
+                const products = window.productsData || JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
 
-                // 1. Matched Products
-                const matchedProducts = products.filter(p =>
-                    p.name.toLowerCase().includes(query) ||
-                    (p.category && p.category.toLowerCase().includes(query))
-                ).slice(0, 4);
+                // Akıllı Arama - Kelime bazlı sıralama
+                const queryWords = query.split(/\s+/).filter(w => w.length > 0);
 
-                // 2. Matched Categories (Derived from product categories for now)
+                const scoredProducts = products.map(p => {
+                    let score = 0;
+                    const name = (p.name || '').toLowerCase();
+                    const brand = (p.brand || p.marka || '').toLowerCase();
+                    const category = (p.category || '').toLowerCase();
+
+                    queryWords.forEach(word => {
+                        if (name.includes(word)) score += 3;
+                        if (brand.includes(word)) score += 2;
+                        if (category.includes(word)) score += 1;
+                    });
+
+                    // Tam eşleşme bonusu
+                    if (name.includes(query)) score += 5;
+
+                    return { ...p, score };
+                }).filter(p => p.score > 0)
+                    .sort((a, b) => b.score - a.score)
+                    .slice(0, 5);
+
+                // Kategoriler
                 const productCategories = [...new Set(products.map(p => p.category ? p.category.split(' > ')[0] : ''))].filter(Boolean);
                 const matchedCategories = productCategories
                     .filter(c => c.toLowerCase().includes(query))
                     .slice(0, 3);
 
-                // 3. Matched Brands (Mock list, similar to desktop)
-                const knownBrands = ['Adidas', 'Nike', 'Puma', 'Zara', 'Mavi', 'Defacto', 'Samsung', 'Apple', 'Bosch', 'Makita'];
+                // Markalar
                 const matchedBrands = knownBrands
                     .filter(b => b.toLowerCase().includes(query))
-                    .slice(0, 3);
+                    .slice(0, 4);
 
                 // Render Results
                 let html = '';
                 let hasResults = false;
 
-                // Categories Section
+                // Kategoriler
                 if (matchedCategories.length > 0) {
                     hasResults = true;
                     html += `<div class="mobile-search-section-title">Kategoriler</div>`;
                     matchedCategories.forEach(cat => {
                         html += `
-                        <a href="arama.html?category=${encodeURIComponent(cat)}" class="mobile-search-item mobile-search-text-only">
+                        <a href="arama.html?category=${encodeURIComponent(cat)}" class="mobile-search-item mobile-search-text-only" onclick="saveToHistory('${cat}')">
                             <i class="fa-solid fa-layer-group"></i>
                             <span>${cat}</span>
                         </a>`;
                     });
                 }
 
-                // Brands Section
+                // Markalar
                 if (matchedBrands.length > 0) {
                     hasResults = true;
                     html += `<div class="mobile-search-section-title">Markalar</div>`;
                     matchedBrands.forEach(brand => {
                         html += `
-                        <a href="arama.html?q=${encodeURIComponent(brand)}" class="mobile-search-item mobile-search-text-only">
+                        <a href="arama.html?q=${encodeURIComponent(brand)}" class="mobile-search-item mobile-search-text-only" onclick="saveToHistory('${brand}')">
                             <i class="fa-solid fa-tag"></i>
                             <span>${brand}</span>
                         </a>`;
                     });
                 }
 
-                // Products Section
-                if (matchedProducts.length > 0) {
+                // Ürünler
+                if (scoredProducts.length > 0) {
                     hasResults = true;
                     html += `<div class="mobile-search-section-title">Ürünler</div>`;
-                    matchedProducts.forEach(prod => {
+                    scoredProducts.forEach(prod => {
+                        const productId = prod._id || prod.id;
+                        const image = prod.mainImage || prod.image || 'https://placehold.co/60x60/6366f1/fff?text=' + (prod.brand || 'G').charAt(0);
+                        const price = prod.salePrice || prod.price || 0;
                         html += `
-                        <a href="urun-detay.html?id=${prod.id}" class="mobile-search-item">
-                            <img src="${prod.image}" alt="${prod.name}">
+                        <a href="urun-detay.html?id=${productId}" class="mobile-search-item" onclick="saveToHistory('${(prod.name || '').replace(/'/g, '')}')">
+                            <img src="${image}" alt="${prod.name}" onerror="this.src='https://placehold.co/60x60/6366f1/fff?text=?'">
                             <div class="mobile-search-info">
                                 <span class="name">${prod.name}</span>
-                                <span class="price">${prod.price}</span>
+                                <span class="price">₺${Number(price).toLocaleString('tr-TR')}</span>
                             </div>
                         </a>`;
                     });
@@ -236,10 +351,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     resultsContainer.innerHTML = html;
                     resultsContainer.style.display = 'block';
                 } else {
-                    resultsContainer.innerHTML = `<div class="mobile-no-results">"${query}" için sonuç bulunamadı</div>`;
+                    resultsContainer.innerHTML = `
+                        <div class="mobile-no-results">
+                            <i class="fa-solid fa-face-frown"></i>
+                            <p>"${query}" için sonuç bulunamadı</p>
+                            <span>Farklı kelimeler deneyin</span>
+                        </div>`;
                     resultsContainer.style.display = 'block';
                 }
-            }, 300);
+            }, 250);
         });
+
+        // Global saveToHistory fonksiyonu (onclick için)
+        window.saveToHistory = saveToHistory;
     }
 });
