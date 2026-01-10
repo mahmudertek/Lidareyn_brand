@@ -91,8 +91,8 @@
             React.useEffect(function () {
                 if (window.API && typeof window.API.getProducts === 'function') {
                     setLoading(true);
-                    window.API.getProducts({ isPopular: true, limit: 120, sort: '-createdAt' }).then(function (res) {
-                        if (res.success && res.data) {
+                    window.API.getProducts({ limit: 1000, sort: '-createdAt' }).then(function (res) {
+                        if (res.success && res.data && res.data.length > 0) {
                             var filtered = res.data.filter(function (p) {
                                 if (p.isPopular === false || p.isPopular === 'false') return false;
                                 var isPopProp = p.isPopular === true || p.isPopular === 'true' || p.isPop === true || p.isPop === 1;
@@ -101,6 +101,12 @@
                                 });
                                 return isPopProp || hasPopTag;
                             });
+
+                            // FALLBACK: Eğer popüler işaretli ürün yoksa, son 24 ürünü göster
+                            if (filtered.length === 0) {
+                                console.log('⚠️ Popüler işaretli ürün bulunamadı, son 24 ürün gösteriliyor');
+                                filtered = res.data.slice(0, 24);
+                            }
 
                             var mapped = filtered.map(function (p) {
                                 var hasSalePrice = p.salePrice && parseFloat(p.salePrice) > 0;

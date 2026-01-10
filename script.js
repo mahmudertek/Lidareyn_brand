@@ -61,54 +61,32 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
-    const handleSearchToggle = (e) => {
-        e.preventDefault(); // Prevent accidental form submits
-        e.stopPropagation(); // Stop clicking through to document
+    let searchOriginalParent = elements.searchContainer ? elements.searchContainer.parentElement : null;
 
-        // toggle mantığı: state değişkenine güvenmek yerine direkt sınıfa bak
+    const handleSearchToggle = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         const isActive = elements.searchContainer.classList.contains('active');
 
         if (isActive) {
-            // Eğer zaten açıksa kapat
             closeSearch();
         } else {
-            // Kapalıysa açalım
+            // MOBİLDE BODY'YE TAŞI (Görünürlük sorununu çözmek için)
+            if (window.innerWidth <= 768 && elements.searchContainer) {
+                if (elements.searchContainer.parentElement !== document.body) {
+                    document.body.appendChild(elements.searchContainer);
+                }
+            }
+
             elements.searchContainer.classList.add('active');
+            document.body.classList.add('mobile-search-active');
             state.isSearchOpen = true;
 
-            // --- MOBILE OVERLAY ENHANCEMENT ---
-            if (window.innerWidth <= 768) {
-                // 1. Add Close Button if not exists
-                if (!elements.searchContainer.querySelector('.mobile-search-close-btn')) {
-                    const closeBtn = document.createElement('button');
-                    closeBtn.className = 'mobile-search-close-btn';
-                    closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
-                    closeBtn.onclick = (ev) => {
-                        ev.stopPropagation();
-                        closeSearch();
-                    };
-                    elements.searchContainer.appendChild(closeBtn);
-                }
-
-                // 2. Add Title if not exists
-                if (!elements.searchContainer.querySelector('.mobile-search-title')) {
-                    const title = document.createElement('span');
-                    title.className = 'mobile-search-title';
-                    title.textContent = 'Arama Yap';
-                    elements.searchContainer.appendChild(title);
-                }
-
-                // 3. Prevent Body Scroll
-                document.body.style.overflow = 'hidden';
-            }
-            // ----------------------------------
-
-            // Inputa odaklan
             if (elements.searchInput) {
-                setTimeout(() => elements.searchInput.focus(), 100); // Kısa gecikme transition için iyi olur
+                setTimeout(() => elements.searchInput.focus(), 50);
             }
 
-            // Diğer menüleri kapat
             closeUserMenu();
             closeSidebar();
         }
@@ -118,6 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
         elements.searchBtn.addEventListener('click', handleSearchToggle);
     }
 
+    // Mobil arama butonu mobile-menu.js tarafından yönetiliyor (mobile-search-overlay)
+    // Bu listener kaldırıldı çünkü çakışma yaratıyordu
+
     if (elements.searchInput) {
         elements.searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -126,7 +107,13 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Close search on ESC
+    // Close search on ESC or BACK button
+    window.addEventListener('popstate', () => {
+        if (state.isSearchOpen) {
+            closeSearch();
+        }
+    });
+
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && state.isSearchOpen) {
             closeSearch();
@@ -137,18 +124,22 @@ document.addEventListener('DOMContentLoaded', function () {
         state.isSearchOpen = false;
         if (elements.searchContainer) {
             elements.searchContainer.classList.remove('active');
+            elements.searchContainer.style.backdropFilter = ''; // Temizlik
+            elements.searchContainer.style.webkitBackdropFilter = '';
+            document.body.classList.remove('mobile-search-active');
 
-            // --- MOBILE CLEANUP ---
-            const closeBtn = elements.searchContainer.querySelector('.mobile-search-close-btn');
-            if (closeBtn) closeBtn.remove();
+            // Dinamik butonu sil
+            const dynBtn = document.getElementById('dynamic-close-btn');
+            if (dynBtn) dynBtn.remove();
 
-            const title = elements.searchContainer.querySelector('.mobile-search-title');
-            if (title) title.remove();
-
-            document.body.style.overflow = ''; // Restore scroll
-            // ---------------------
+            // Orijinal yerine geri taşı
+            if (window.innerWidth <= 768 && searchOriginalParent && elements.searchContainer.parentElement === document.body) {
+                searchOriginalParent.appendChild(elements.searchContainer);
+            }
         }
     }
+
+    // NOT: İkinci handleSearchToggle tanımlaması kaldırıldı - zaten 66. satırda var
 
     // ============================================
     // USER DROPDOWN

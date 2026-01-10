@@ -84,7 +84,7 @@ const ADMIN_API = {
     // LocalStorage'a ürün kaydet
     saveProductToLocalStorage(product) {
         try {
-            let products = JSON.parse(localStorage.getItem('galata_products') || '[]');
+            let products = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
 
             // Eğer mevcut ürün varsa güncelle, yoksa ekle
             const existingIndex = products.findIndex(p => p._id === product._id || p.id === product.id);
@@ -94,7 +94,7 @@ const ADMIN_API = {
                 products.unshift(product); // Yeni ürünü başa ekle
             }
 
-            localStorage.setItem('galata_products', JSON.stringify(products));
+            localStorage.setItem('galatacarsi_products', JSON.stringify(products));
             console.log('✅ Ürün localStorage\'a kaydedildi:', product.name);
         } catch (e) {
             console.error('LocalStorage save error:', e);

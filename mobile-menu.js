@@ -109,6 +109,9 @@ document.addEventListener('DOMContentLoaded', function () {
         mobileSearchBtn.addEventListener('click', function (e) {
             e.preventDefault();
             mobileSearchOverlay.classList.add('active');
+            // Bildirim çubuğunu gizle
+            const devNotice = document.querySelector('.development-notice');
+            if (devNotice) devNotice.style.display = 'none';
             if (mobileSearchInput) {
                 setTimeout(() => mobileSearchInput.focus(), 100);
             }
@@ -120,6 +123,20 @@ document.addEventListener('DOMContentLoaded', function () {
         closeSearchBtn.addEventListener('click', function () {
             mobileSearchOverlay.classList.remove('active');
             document.body.style.overflow = '';
+            // Bildirim çubuğunu geri göster
+            const devNotice = document.querySelector('.development-notice');
+            if (devNotice) devNotice.style.display = '';
+        });
+
+        // Close when clicking on the overlay background (not on content)
+        mobileSearchOverlay.addEventListener('click', function (e) {
+            if (e.target === mobileSearchOverlay) {
+                mobileSearchOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+                // Bildirim çubuğunu geri göster
+                const devNotice = document.querySelector('.development-notice');
+                if (devNotice) devNotice.style.display = '';
+            }
         });
     }
 

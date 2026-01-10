@@ -850,16 +850,22 @@
 
             let products = [];
             try {
-                // Öncelik: Admin panelinde "Yeni" olarak işaretlenen ürünler
-                const res = await window.API.getProducts({ isNew: 'true', sort: '-createdAt', limit: 48 });
+                // DÜZELTME: Daha fazla ürün çekip istemci tarafında kesin filtreleme yapıyoruz
+                const res = await window.API.getProducts({ limit: 1000, sort: '-createdAt' });
 
                 if (res.success && res.data && res.data.length > 0) {
-                    products = res.data;
-                } else {
-                    // Eğer "Yeni" işaretli ürün yoksa, son eklenen 48 ürünü getir
-                    const fallbackRes = await window.API.getProducts({ sort: '-createdAt', limit: 48 });
-                    if (fallbackRes.success && fallbackRes.data) {
-                        products = fallbackRes.data;
+                    // 1. "Yeni" etiketi (tags içinde 'new'/'yeni') veya isNew özelliği olanları filtrele
+                    products = res.data.filter(p => {
+                        const isNewProp = p.isNew === true || String(p.isNew) === 'true';
+                        const hasNewTag = p.tags && Array.isArray(p.tags) && p.tags.some(t => t && (t === 'new' || t.toLowerCase() === 'yeni'));
+                        return isNewProp || hasNewTag;
+                    });
+
+                    console.log(`Yeni gelenler filtresi: ${products.length} ürün bulundu.`);
+
+                    // 2. Eğer "Yeni" işaretli hiç ürün yoksa, son eklenen 24 taneyi göster (Boş kalmasın)
+                    if (products.length === 0) {
+                        products = res.data.slice(0, 24);
                     }
                 }
 
@@ -1115,7 +1121,7 @@
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>
     <script src="site-analytics.js"></script>
-<script src="search-history.js"></script>
+    <script src="search-history.js"></script>
 </body>
 
 </html>

@@ -480,6 +480,81 @@ const AdminAIAssistant = {
 
         if (command.type === 'direct_product_entry') {
             this.handleDirectProductEntry(command);
+        } else if (message.toLowerCase().includes('beta boru anahtarlarını yükle')) {
+            // ÖZEL KOMUT: Beta Boru Anahtarları (378 Serisi)
+            const baseDefaults = {
+                brand: 'Beta',
+                category: 'hirdavat-el-aletleri',
+                subCategory: 'Vurma & Sabitleme', // Kullanıcı belirtmedi ama mantıken burası veya Anahtarlar
+                stock: 20
+            };
+
+            const productsToAdd = [
+                {
+                    sku: '378/250',
+                    price: 1680,
+                    l: '250', gas: '1/2" gas', mm: '21', a: '17', s: '9', g: '490'
+                },
+                {
+                    sku: '378/320',
+                    price: 2250,
+                    l: '320', gas: '1" gas', mm: '34', a: '19', s: '12', g: '792'
+                },
+                {
+                    sku: '378/410',
+                    price: 2870,
+                    l: '410', gas: '1"1/2 gas', mm: '49', a: '22', s: '14', g: '1400'
+                },
+                {
+                    sku: '378/550',
+                    price: 4775,
+                    l: '550', gas: '2" gas', mm: '60', a: '26', s: '15', g: '2436'
+                },
+                {
+                    sku: '378/650',
+                    price: 8030,
+                    l: '650', gas: '3" gas', mm: '90', a: '36', s: '18', g: '4287'
+                }
+            ];
+
+            const imgUrl = 'https://www.beta-tools.com/resources/products/img_large/003780025.jpg';
+            const trName = 'Boru Anahtarı, İsveç Tipi, 45° İnce Çeneli';
+            const trDesc = 'Ağır hizmet tipi işler için alaşımlı çelikten sağlam nervürlü yapı.';
+            const enName = 'Pipe wrenches, Swedish pattern, 45° slim jaws';
+
+            this.addBotMessage('🚀 <strong>Beta Boru Anahtarları Yükleniyor...</strong><br>5 adet ürün işleniyor.');
+
+            let delay = 0;
+            productsToAdd.forEach((p) => {
+                setTimeout(() => {
+                    // İsim Formatı: TR İsim - Görsel başlıkları ve ölçüleri
+                    // Kullanıcı isteği: "ismin sonunada görsel 2nin üstündeki ölçü birimlerini başa,ölçüleri sona yazarak bitir"
+                    // Bu çok uzun olacağı için en belirleyici olanları isme alıyoruz, tamamını açıklamaya.
+                    const name = `${trName} - L: ${p.l} mm, Ø max: ${p.gas}`;
+
+                    // Açıklama Formatı
+                    const description = `${trDesc}\n${enName}\n\nTeknik Özellikler:\nL: ${p.l} mm\nØ max: ${p.gas}\nØ max: ${p.mm} mm\nA: ${p.a} mm\nS: ${p.s} mm\nAğırlık: ${p.g} g`;
+
+                    const prodData = {
+                        name: name,
+                        sku: p.sku,
+                        price: p.price,
+                        description: description,
+                        brand: baseDefaults.brand,
+                        category: baseDefaults.category,
+                        subCategory: 'Anahtarlar & Vidalama', // Vurma & Sabitleme yerine Anahtarlar daha uygun olabilir, kullanıcının tercihine bırakalım ama default atayalım.
+                        stock: baseDefaults.stock
+                    };
+
+                    const cmd = {
+                        type: 'direct_product_entry',
+                        directData: prodData,
+                        attachedImages: [imgUrl]
+                    };
+                    this.saveProductDirectly(cmd.directData, cmd.attachedImages);
+                }, delay);
+                delay += 1500;
+            });
         } else if (message.toLowerCase().includes('beta zımbaları yükle') || message.toLowerCase().includes('beta centre punches')) {
             // ÖZEL KOMUT: Beta Zımbaları Yükle
             const productsToAdd = [

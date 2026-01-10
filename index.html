@@ -103,9 +103,9 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     </noscript>
 
-    <link rel="stylesheet" href="style.css?v=99999">
-    <link rel="stylesheet" href="mobile.css?v=99999">
-    <link rel="stylesheet" href="grid-motion.css?v=99999">
+    <link rel="stylesheet" href="style.css?v=1768077000">
+    <link rel="stylesheet" href="mobile.css?v=1768077000">
+    <link rel="stylesheet" href="grid-motion.css?v=1768077000">
 
 
 
@@ -1475,7 +1475,7 @@
     <script src="api-client.js"></script>
     <script src="auth.js"></script>
     <script src="live-search.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=1768054700"></script>
 
     <script src="slider.js"></script>
     <script src="product-carousel.js"></script>
@@ -1497,23 +1497,25 @@
     <script src="cookie-consent.js"></script>
     <script src="search-history.js"></script>
 
-    <!-- Mobile Search Overlay -->
+    <!-- Mobile Search Overlay - Full Screen Frosted Glass -->
     <div id="mobile-search-overlay" class="mobile-search-overlay">
         <div class="mobile-search-content">
             <form action="arama.html" method="GET" class="mobile-search-form">
                 <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
-                    autocomplete="off">
+                    autocomplete="off" id="mobile-search-input-field">
                 <button type="submit" class="mobile-search-submit">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </form>
-            <button class="close-search-btn" aria-label="Kapat">
+            <button class="close-search-btn" aria-label="Kapat" id="close-search-overlay-btn">
                 <i class="fa-solid fa-xmark"></i>
             </button>
         </div>
+        <!-- Search Results Area -->
+        <div class="mobile-search-results-area" id="mobile-search-results-area"></div>
     </div>
 
-    <script src="mobile-menu.js"></script>
+    <script src="mobile-menu.js?v=1768077000"></script>
     <!-- Brand Showcase Loader moved below with other data scripts -->
 
     <!-- Live Search Script -->
