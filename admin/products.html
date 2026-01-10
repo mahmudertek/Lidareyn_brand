@@ -1196,7 +1196,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeModal()">İptal</button>
-                <button class="btn-save" onclick="saveProduct()">Kaydet</button>
+                <button class="btn-save" onclick="saveAndClose()">Kaydet</button>
             </div>
         </div>
     </div>
@@ -1716,6 +1716,39 @@
             }
         }
 
+        // Base64 görselleri çıkararak localStorage'a kaydet (kota aşımını önler)
+        function saveProductsToLocalStorage(productList) {
+            try {
+                // Base64 görselleri çıkar - çok yer kaplıyor
+                const lightProducts = productList.map(p => {
+                    const { mainImage, image, ...rest } = p;
+                    // Sadece URL görselleri tut, base64 olanları at
+                    const safeImage = (mainImage && !mainImage.startsWith('data:')) ? mainImage :
+                        (image && !image.startsWith('data:')) ? image : null;
+                    return { ...rest, mainImage: safeImage };
+                });
+
+                const jsonStr = JSON.stringify(lightProducts);
+                // 4MB'den büyükse kaydetme (güvenlik payı)
+                if (jsonStr.length > 4 * 1024 * 1024) {
+                    console.warn('⚠️ Ürün verisi çok büyük, localStorage atlanıyor');
+                    return false;
+                }
+
+                localStorage.setItem('galatacarsi_products', jsonStr);
+                console.log('✅ localStorage güncellendi:', lightProducts.length, 'ürün');
+                return true;
+            } catch (e) {
+                console.error('localStorage kayıt hatası:', e);
+                // Kota aşımı olursa eski veriyi temizle
+                if (e.name === 'QuotaExceededError') {
+                    localStorage.removeItem('galatacarsi_products');
+                    console.warn('⚠️ Kota aşımı - eski veri temizlendi');
+                }
+                return false;
+            }
+        }
+
         // Load products from API or localStorage
         async function loadProducts() {
             // Kritik API Kontrolü
@@ -2194,6 +2227,29 @@
             }
         }
 
+        // YENI: Önce modal kapat, sonra arkaplanda kaydet
+        async function saveAndClose() {
+            console.log('💾 saveAndClose çağrıldı');
+
+            // ÖNCE MODALI KAPAT
+            const modal = document.getElementById('productModal');
+            if (modal) {
+                modal.style.display = 'none';
+                modal.classList.remove('active');
+                modal.classList.remove('minimized');
+            }
+            console.log('✅ Modal kapatıldı, kaydetme başlıyor...');
+
+            // SONRA ARKAPLANDA KAYDET
+            try {
+                await saveProduct();
+                console.log('✅ Kaydetme tamamlandı');
+            } catch (err) {
+                console.error('❌ Kaydetme hatası:', err);
+                alert('Kaydetme sırasında hata oluştu: ' + err.message);
+            }
+        }
+
         // Close modal - GÜÇLENDİRİLMİŞ VERSİYON
         function closeModal() {
             console.log('🔴 closeModal çağrıldı');
@@ -2607,9 +2663,9 @@
                                 products.push(finalData);
                             }
 
-                            // ÖNEMLİ: API kaydı başarılı olsa bile localStorage'ı güncelle
+                            // ÖNEMLİ: API kaydı başarılı olsa bile localStorage'ı güncelle (güvenli)
                             // Böylece frontend (Carousel/Popüler) API'ye ulaşamazsa bile en güncel veriyi görür.
-                            localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+                            saveProductsToLocalStorage(products);
 
                             renderProducts(); // Hemen tabloyu güncelle
                         }
@@ -2647,8 +2703,8 @@
                         });
                     }
 
-                    // localStorage güncelle
-                    localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+                    // localStorage güncelle (güvenli)
+                    saveProductsToLocalStorage(products);
 
                     closeModal();
                     renderProducts();
@@ -2992,8 +3048,8 @@
                 }
             }
 
-            // LocalStorage güncelle
-            localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+            // LocalStorage güncelle (güvenli)
+            saveProductsToLocalStorage(products);
 
             // Sonuç
             closePriceIncreaseModal();
