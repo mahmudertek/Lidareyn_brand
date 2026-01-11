@@ -106,69 +106,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // 3. Load Data - Hybrid Mode (Merge API + Local)
     async function loadProductsFromAPI() {
         let apiProducts = [];
-        let localProducts = [];
+        state.isLoading = true;
+        elements.grid.innerHTML = '<div class="search-loader">Ürünler yükleniyor...</div>';
 
-        // Step 1: Fetch from API
+        // 1. API ve LocalStorage Verisini api-client.js üzerinden al
+        // api-client.js zaten akıllı merge (görsel korumalı) işlemini yapıyor
         try {
-            let apiUrl = `${API_URL}/products?limit=500`;
-            if (state.brand) {
-                apiUrl += `&brand=${encodeURIComponent(state.brand)}`;
-            }
-
-            const response = await fetch(apiUrl);
-            if (response.ok) {
-                const data = await response.json();
-                if (data.success && data.data) {
-                    apiProducts = Array.isArray(data.data) ? data.data : [];
-                    console.log('✅ Search: Loaded', apiProducts.length, 'products from API');
-                }
-            }
-        } catch (error) {
-            console.warn('Search: API Fetch failed, will rely on local data', error);
-        }
-
-        // Step 2: Fetch from localStorage and Sync Sources
-        try {
-            const keysToCheck = ['galatacarsi_products', 'galata_products', 'galatat_products_cache', 'products'];
-            for (const key of keysToCheck) {
-                const raw = localStorage.getItem(key);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        localProducts = parsed;
-                        console.log(`✅ Search: Found ${localProducts.length} products in local '${key}'`);
-                        break;
-                    }
-                }
-            }
-
-            // Fallback to global sync function if available
-            if (localProducts.length === 0 && typeof window.getAllProductsSync === 'function') {
-                localProducts = window.getAllProductsSync() || [];
+            const response = await API.getProducts({ limit: 5000 }); // Tüm ürünleri getir
+            if (response.success && response.data) {
+                state.products = response.data;
+                console.log('✅ Search: Loaded', state.products.length, 'products (Merged by API Client)');
+            } else {
+                // Fallback: Manuel LocalStorage kontrolü
+                console.warn('Search: API returned unsuccessful, checking manual local storage fallback');
+                const localRes = await API.getProductsFromLocalStorage();
+                state.products = localRes.data || [];
             }
         } catch (e) {
-            console.error('Search: Local storage read error', e);
+            console.error('Search: Data load error', e);
         }
 
-        // Step 3: Smart Merge & Deduplicate (Preferred API version if ID matches)
-        const productMap = new Map();
-
-        // Load local first as baseline
-        localProducts.forEach(p => {
-            const id = p._id || p.id;
-            if (id) productMap.set(id.toString(), p);
-        });
-
-        // Overwrite/Merge with API data (API is source of truth for same ID)
-        apiProducts.forEach(p => {
-            const id = p._id || p.id;
-            if (id) productMap.set(id.toString(), p);
-        });
-
-        state.products = Array.from(productMap.values());
-        console.log('🚀 Search: Hybrid data ready.', state.products.length, 'unique products found.');
+        // 2. Extra Fallback (Global sync function)
+        if (state.products.length === 0 && typeof window.getAllProductsSync === 'function') {
+            state.products = window.getAllProductsSync() || [];
+            console.log('🚀 Search: Loaded via window.getAllProductsSync');
+        }
 
         state.isLoading = false;
+        console.log('🚀 Search ready with', state.products.length, 'total unique products.');
     }
 
     // 4. Smart Filtering Logic
@@ -359,8 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Fix Image Source for Local File System (file://)
                 // Converts '/gorseller/...' to './gorseller/...' etc.
                 const fixImageSrc = (src) => {
-                    if (!src) return null; // No placeholder - will be filtered
-                    if (src.includes('placehold.co') || src.includes('placeholder')) return null;
+                    if (!src || src === '' || src === 'null' || src === 'undefined') return null;
                     if (src.startsWith('data:')) return src; // Base64 is fine
                     if (src.startsWith('http')) return src;  // External URL is fine
 
@@ -371,10 +335,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     return src;
                 };
 
-                let productImage = fixImageSrc(rawImage) || 'gorseller/no-image.png';
+                // Get image with fallback chain
+                let productImage = fixImageSrc(rawImage);
 
-                // Debug log (can be seen in browser console)
-                // console.log('Product Image:', product.name, rawImage, '->', productImage);
+                // If no valid image, show a branded placeholder instead of hiding
+                if (!productImage) {
+                    const brandInitial = (product.brand || 'G').charAt(0).toUpperCase();
+                    productImage = `https://placehold.co/300x300/f8f9fa/667eea?text=${brandInitial}`;
+                }
+
+                // Debug log (GÖRSEL SORUNU TEŞHİS İÇİN AKTİF)
+                console.log('🖼️ Image Debug:', product.name?.substring(0, 30), '| raw:', rawImage?.substring(0, 50), '| final:', productImage?.substring(0, 50));
 
                 const productBrand = product.brand || '';
                 const productName = product.name || 'İsimsiz Ürün';
@@ -386,6 +357,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const productPrice = formatMoney(displayPrice);
 
+                // Placeholder URL for onerror
+                const placeholderUrl = `https://placehold.co/300x300/f8f9fa/667eea?text=${encodeURIComponent((productBrand || 'G').charAt(0))}`;
+
                 card.innerHTML = `
                     <div class="product-badges">
                         ${product.isNew ? '<span class="badge new">YENİ</span>' : ''}
@@ -396,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                     <a href="urun-detay.html?id=${productId}" class="product-img-wrapper">
                         <img src="${productImage}" loading="lazy" alt="${productName}" 
-                             onerror="this.style.display='none';">
+                             onerror="this.onerror=null; this.src='${placeholderUrl}';">
                     </a>
                     <div class="product-brand">${productBrand}</div>
                     <a href="urun-detay.html?id=${productId}" class="product-title">${productName}</a>
@@ -409,6 +383,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     </button>
                 `;
                 elements.grid.appendChild(card);
+
+                // FIX: Ensure images are visible - add loaded class or force opacity
+                const img = card.querySelector('img');
+                if (img) {
+                    // Force opacity to 1 immediately for base64 images
+                    img.style.opacity = '1';
+                    img.classList.add('loaded');
+
+                    // Also handle load event for external URLs
+                    img.addEventListener('load', function () {
+                        this.style.opacity = '1';
+                        this.classList.add('loaded');
+                    });
+                }
             } catch (err) {
                 console.error('Error rendering product card:', err, product);
             }

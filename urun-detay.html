@@ -881,6 +881,24 @@
         </div>
     </footer>
 
+    <!-- Mobile Search Overlay - Full Screen Frosted Glass -->
+    <div id="mobile-search-overlay" class="mobile-search-overlay">
+        <div class="mobile-search-content">
+            <form action="arama.html" method="GET" class="mobile-search-form">
+                <input type="text" name="q" class="mobile-search-input" placeholder="Ürün, kategori veya marka ara..."
+                    autocomplete="off" id="mobile-search-input-field">
+                <button type="submit" class="mobile-search-submit">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </form>
+            <button class="close-search-btn" aria-label="Kapat" id="close-search-overlay-btn">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <!-- Search Results Area -->
+        <div class="mobile-search-results-area" id="mobile-search-results-area"></div>
+    </div>
+
     <script>
         function changeImage(element, src) {
             // Update active state

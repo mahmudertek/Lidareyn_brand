@@ -33,43 +33,50 @@ const API = {
         const localData = localRes.data || [];
 
         // 3. BİRLEŞTİR (GÖRSEL KORUMALI MERGE)
-        // LocalStorage kota aşımı için base64 görseller silinebilir, bu yüzden
-        // API'den gelen görselleri korumamız gerekiyor
         const mergedMap = new Map();
 
         // Önce API verisini ekle
-        apiData.forEach(p => mergedMap.set(p._id || p.id, p));
+        apiData.forEach(p => {
+            const id = p._id || p.id;
+            if (id) mergedMap.set(id.toString(), p);
+        });
 
         // LocalStorage verisini akıllı birleştir
         localData.forEach(lp => {
             const id = lp._id || lp.id;
-            const existingFromApi = mergedMap.get(id);
+            if (!id) return;
+
+            const existingFromApi = mergedMap.get(id.toString());
 
             if (existingFromApi) {
-                // AKILLI MERGE: LocalStorage'daki veriyi API verisiyle birleştir
-                // Ama GÖRSELLERİ API'den al (localStorage'da silinmiş olabilir)
-                const merged = { ...existingFromApi, ...lp };
-
-                // 🔴 ÖNEMLİ: Görsel alanları API'den koru (localStorage'da silinmiş olabilir)
-                // LocalStorage'da görsel yoksa veya placeholder ise API'deki görseli kullan
+                // GÖRSEL KONTROLÜ: API görseli gerçek mi, Yerel görsel boş mu?
                 const localImage = lp.mainImage || lp.image;
                 const apiImage = existingFromApi.mainImage || existingFromApi.image;
 
-                const isLocalImageEmpty = !localImage ||
+                // API görseli varsa ve yerel görsel placeholder ise API'yi KORU
+                const isLocalPlaceholder = !localImage ||
+                    localImage === '' ||
+                    localImage === 'null' ||
                     localImage.includes('placehold.co') ||
                     localImage.includes('placeholder') ||
-                    localImage === 'null' ||
-                    localImage === '';
+                    (typeof localImage === 'string' && localImage.length < 500 && localImage.startsWith('data:')); // Çok kısa base64'ler genelde icon/placeholderdır
 
-                if (isLocalImageEmpty && apiImage) {
+                const isApiReal = apiImage && apiImage.length > 500; // Gerçek fotoğraflar genelde büyüktür
+
+                const merged = { ...existingFromApi, ...lp };
+
+                if (isApiReal && isLocalPlaceholder) {
+                    merged.mainImage = apiImage;
+                    merged.image = apiImage;
+                    if (lp.images && lp.images[0]) merged.images = [apiImage, ...lp.images.slice(1)];
+                } else if (apiImage && !localImage) {
                     merged.mainImage = apiImage;
                     merged.image = apiImage;
                 }
 
-                mergedMap.set(id, merged);
+                mergedMap.set(id.toString(), merged);
             } else {
-                // API'de yoksa sadece local veriyi ekle
-                mergedMap.set(id, lp);
+                mergedMap.set(id.toString(), lp);
             }
         });
 
@@ -91,8 +98,14 @@ const API = {
     // LocalStorage'dan ürün çekme (fallback)
     getProductsFromLocalStorage(params = {}) {
         try {
-            // Admin panel 'galatacarsi_products' kullanıyor, eski sürüm 'galata_products' veya 'products'
-            const stored = localStorage.getItem('galatacarsi_products') || localStorage.getItem('galata_products') || localStorage.getItem('products');
+            // Tüm olası anahtarları kontrol et
+            const keys = ['galatacarsi_products', 'galata_products', 'products', 'admin_products'];
+            let stored = null;
+            for (const key of keys) {
+                stored = localStorage.getItem(key);
+                if (stored) break;
+            }
+
             if (!stored) {
                 return { success: false, data: [] };
             }

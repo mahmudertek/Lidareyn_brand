@@ -214,7 +214,17 @@ const startShowcaseLoader = async () => {
                 card.className = 'madeniyat-product-card';
                 card.style.cursor = 'pointer';
 
-                const imgSource = product.mainImage || product.image || (product.images && product.images[0]) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
+                // Fix Image Source for Local File System (file://)
+                const fixImageSrc = (src) => {
+                    if (!src || src === '' || src === 'null' || src === 'undefined') return null;
+                    if (src.startsWith('data:')) return src;
+                    if (src.startsWith('http')) return src;
+                    if (src.startsWith('/')) return '.' + src;
+                    return src;
+                };
+
+                const rawImage = product.mainImage || product.image || (product.images && product.images[0]);
+                const imgSource = fixImageSrc(rawImage) || 'https://placehold.co/400x400/eee/999?text=Resim+Yok';
                 const productUrl = `urun-detay.html?id=${product._id || product.id}`;
 
                 const rawPrice = product.priceRaw || product.price;
@@ -230,8 +240,8 @@ const startShowcaseLoader = async () => {
                     <button class="madeniyat-favorite-btn" aria-label="Favoriye Ekle" onclick="event.stopPropagation(); window.toggleFavorite && window.toggleFavorite('${product._id || product.id}')">
                         <i class="fa-regular fa-heart"></i>
                     </button>
-                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image" loading="lazy" 
-                         onerror="this.src='https://placehold.co/400x400/eee/999?text=Resim+Hatası'">
+                    <img src="${imgSource}" alt="${product.name}" class="madeniyat-product-image loaded" style="opacity: 1 !important;" loading="lazy" 
+                         onerror="this.onerror=null; this.src='https://placehold.co/400x400/eee/999?text=Resim+Hatası'; this.style.opacity='1';">
                     <div class="madeniyat-product-info">
                         <h3 class="madeniyat-product-name" title="${product.name}">${product.name}</h3>
                         <p class="madeniyat-product-price">${priceHtml}</p>

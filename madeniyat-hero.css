@@ -613,6 +613,8 @@
     object-fit: contain;
     padding: 20px;
     background: var(--madeniyat-white);
+    opacity: 1 !important;
+    /* Force visibility */
 }
 
 /* Placeholder Box Styling (Matches Product Image) */

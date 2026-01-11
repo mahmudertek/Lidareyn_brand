@@ -290,6 +290,8 @@
     object-fit: contain;
     transition: transform 0.5s;
     padding: 0;
+    opacity: 1 !important;
+    /* FIX: Force images to be visible */
 }
 
 .product-card:hover .product-img-wrapper img {
