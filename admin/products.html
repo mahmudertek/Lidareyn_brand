@@ -1389,6 +1389,8 @@
         setInterval(checkApiStatus, 30000);
 
         // Görsel yükleme fonksiyonu
+        let isImageLoading = false;
+
         function handleImageUpload(input) {
             const file = input.files[0];
             if (!file) return;
@@ -1405,6 +1407,13 @@
                 return;
             }
 
+            // Loading göster
+            isImageLoading = true;
+            document.getElementById('imagePlaceholder').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><p>Görsel işleniyor...</p>';
+
+            const saveBtn = document.querySelector('.btn-save');
+            if (saveBtn) saveBtn.disabled = true;
+
             // Görseli sıkıştır
             compressImage(file, 800, 0.7).then(compressedBase64 => {
                 uploadedImageBase64 = compressedBase64;
@@ -1419,6 +1428,14 @@
             }).catch(err => {
                 console.error('Görsel sıkıştırma hatası:', err);
                 alert('Görsel işlenirken hata oluştu. Lütfen başka bir görsel deneyin.');
+                resetImageUpload();
+            }).finally(() => {
+                isImageLoading = false;
+                if (saveBtn) saveBtn.disabled = false;
+                // Placeholder'ı eski haline getir (eğer hala görünüyorsa)
+                if (document.getElementById('imagePlaceholder').style.display !== 'none') {
+                    document.getElementById('imagePlaceholder').innerHTML = '<i class="fa-solid fa-cloud-upload-alt"></i><p>Görsel yüklemek için tıklayın</p><p style="font-size: 12px; color: #9ca3af;">PNG, JPG, WEBP - Max 5MB</p>';
+                }
             });
         }
 
@@ -1728,34 +1745,58 @@
             }
         }
 
-        // Base64 görselleri çıkararak localStorage'a kaydet (kota aşımını önler)
+        // Base64 görselleri koruyarak localStorage'a kaydet (Kota dostu yeteneklerle)
         function saveProductsToLocalStorage(productList) {
-            try {
-                // Base64 görselleri çıkar - çok yer kaplıyor
-                const lightProducts = productList.map(p => {
-                    const { mainImage, image, ...rest } = p;
-                    // Sadece URL görselleri tut, base64 olanları at
-                    const safeImage = (mainImage && !mainImage.startsWith('data:')) ? mainImage :
-                        (image && !image.startsWith('data:')) ? image : null;
-                    return { ...rest, mainImage: safeImage };
-                });
+            if (!productList || !Array.isArray(productList)) return false;
 
-                const jsonStr = JSON.stringify(lightProducts);
-                // 4MB'den büyükse kaydetme (güvenlik payı)
-                if (jsonStr.length > 4 * 1024 * 1024) {
-                    console.warn('⚠️ Ürün verisi çok büyük, localStorage atlanıyor');
-                    return false;
+            try {
+                // ÖNCE: Tam veriyi kaydetmeyi dene (Görseller dahil)
+                const fullJson = JSON.stringify(productList);
+
+                // Eğer veri 4MB'den küçükse direkt kaydet
+                if (fullJson.length < 4 * 1024 * 1024) {
+                    localStorage.setItem('galatacarsi_products', fullJson);
+                    console.log('✅ localStorage güncellendi (Tam Veri):', productList.length, 'ürün');
+                    return true;
                 }
 
-                localStorage.setItem('galatacarsi_products', jsonStr);
-                console.log('✅ localStorage güncellendi:', lightProducts.length, 'ürün');
+                // EĞER VERİ ÇOK BÜYÜKSE (4MB+): Akıllı temizlik yap
+                console.warn('⚠️ Veri çok büyük, akıllı temizlik uygulanıyor...');
+
+                const lightProducts = productList.map(p => {
+                    const isLocal = (p._id || p.id || '').toString().startsWith('local_');
+
+                    // Yerel ürünlerin veya URL olan görsellerin resmini koru
+                    // Sadece sunucuda olan ve base64 olan görselleri temizle
+                    const hasDataImage = (p.mainImage && p.mainImage.startsWith('data:')) ||
+                        (p.image && p.image.startsWith('data:'));
+
+                    if (isLocal || !hasDataImage) {
+                        return p; // Olduğu gibi bırak
+                    }
+
+                    // Sunucudaki ürün ve base64 resim -> Temizle
+                    const { mainImage, image, ...rest } = p;
+                    return { ...rest, mainImage: null, image: null };
+                });
+
+                localStorage.setItem('galatacarsi_products', JSON.stringify(lightProducts));
+                console.log('✅ localStorage güncellendi (Temizlenmiş Veri):', lightProducts.length, 'ürün');
                 return true;
             } catch (e) {
                 console.error('localStorage kayıt hatası:', e);
-                // Kota aşımı olursa eski veriyi temizle
                 if (e.name === 'QuotaExceededError') {
-                    localStorage.removeItem('galatacarsi_products');
-                    console.warn('⚠️ Kota aşımı - eski veri temizlendi');
+                    // Kota dolduysa sadece en son eklenen 50 ürünü resimsiz tutmayı dene
+                    const minimalProducts = productList.slice(0, 50).map(p => {
+                        const { mainImage, image, ...rest } = p;
+                        return { ...rest, mainImage: null, image: null };
+                    });
+                    try {
+                        localStorage.setItem('galatacarsi_products', JSON.stringify(minimalProducts));
+                        console.warn('⚠️ Kota aşımı! Sadece son 50 ürün resimsiz kaydedildi.');
+                    } catch (e2) {
+                        localStorage.removeItem('galatacarsi_products');
+                    }
                 }
                 return false;
             }
@@ -2466,6 +2507,12 @@
             };
 
             try {
+                // Görsel yükleniyorsa bekle
+                if (isImageLoading) {
+                    alert('Lütfen görselin işlenmesini bekleyin...');
+                    return;
+                }
+
                 // Kritik API Kontrolü
                 if (typeof ADMIN_API === 'undefined') {
                     alert('Sistem Hatası: ADMIN_API yüklenemedi. Lütfen internet bağlantınızı kontrol edin ve sayfayı yenileyin (Ctrl+F5).');
@@ -2581,7 +2628,8 @@
 
                     // Ana sayfa marka vitrini (Hem ayrı alan olarak hem de tag olarak gönderelim)
                     brandShowcase: brandShowcase || '',
-                    mainImage: imageToUse
+                    mainImage: imageToUse,
+                    image: imageToUse // Geriye uyumluluk için hem image hem mainImage set et
                 };
 
                 // BACKEND SCHEMA YEDEKLEMESİ:
@@ -2659,7 +2707,7 @@
                         const fieldsToPreserve = [
                             'salePrice', 'barcode', 'unit', 'description', 'sku',
                             'isFeatured', 'isPopular', 'isNew', 'isBestSeller', 'isActive',
-                            'tags', 'allCategories', 'brandShowcase'
+                            'tags', 'allCategories', 'brandShowcase', 'mainImage', 'image'
                         ];
 
                         fieldsToPreserve.forEach(field => {
