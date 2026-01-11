@@ -1349,6 +1349,18 @@
         let isLoading = false;
         let uploadedImageBase64 = '';
 
+        // ╔══════════════════════════════════════════════════════════════════════════════╗
+        // ║                    ⚠️ ÖNEMLİ KURALLAR - DEĞİŞTİRİLMEZ! ⚠️                    ║
+        // ╠══════════════════════════════════════════════════════════════════════════════╣
+        // ║ 🔴 ÜRÜN SIRALAMA KURALI:                                                      ║
+        // ║    • En yeni ürün EN ÜSTTE görünür                                           ║
+        // ║    • En eski ürün EN ALTTA görünür                                           ║
+        // ║    • Bu kural renderProducts() fonksiyonunda uygulanır                       ║
+        // ║    • Sıralama öncelikleri: createdAt > updatedAt > ObjectID > ID             ║
+        // ║                                                                              ║
+        // ║ ⚠️ BU KURAL HİÇBİR ŞEKİLDE DEĞİŞTİRİLMEMELİDİR!                              ║
+        // ╚══════════════════════════════════════════════════════════════════════════════╝
+
         // API Durum Kontrolü
         async function checkApiStatus() {
             const badge = document.getElementById('api-status-badge');
@@ -1977,46 +1989,92 @@
 
             tbody.innerHTML = '';
 
-            // 2. SORT the filtered products (En yeni ürün en üstte - GÜÇLENDİRİLMİŞ)
+            // ============================================================================
+            // 🔴 ÇOK KATI SIRALAMA KURALI - DEĞİŞTİRİLMEZ! 🔴
+            // ============================================================================
+            // KURAL: EN YENİ ÜRÜN EN ÜSTTE, EN ESKİ ÜRÜN EN ALTTA
+            // 
+            // Sıralama Öncelikleri:
+            //   1️⃣ createdAt (oluşturulma tarihi) - Yeniden eskiye (DESC)
+            //   2️⃣ updatedAt (güncellenme tarihi) - Yeniden eskiye (DESC)  
+            //   3️⃣ MongoDB ObjectID timestamp - Yeniden eskiye (DESC)
+            //   4️⃣ ID string karşılaştırması - Yeniden eskiye (DESC)
+            //
+            // ⚠️ BU SIRALAMA HİÇBİR ŞEKİLDE DEĞİŞTİRİLMEMELİDİR!
+            // ============================================================================
+
             const sortedProducts = [...filteredProducts].sort((a, b) => {
-                // MongoDB ObjectID'den zaman damgası çıkar (ilk 8 karakter hex timestamp)
+                // 📌 YARDIMCI FONKSİYON: MongoDB ObjectID'den Unix timestamp çıkarır
                 const getTimestampFromId = (id) => {
                     if (!id) return 0;
                     const idStr = id.toString();
-                    // MongoDB ObjectID: ilk 8 karakter = Unix timestamp (hex)
+
+                    // MongoDB ObjectID formatı: 24 karakter hex, ilk 8 = Unix timestamp
                     if (idStr.length >= 24 && /^[a-f0-9]{24}$/i.test(idStr)) {
                         return parseInt(idStr.substring(0, 8), 16);
                     }
-                    // local_ ile başlayan ID'ler için sayıyı çıkar
+
+                    // Yerel ID formatı: local_1234567890
                     if (idStr.startsWith('local_')) {
                         return parseInt(idStr.replace('local_', '')) || 0;
                     }
+
                     return 0;
                 };
 
-                // Öncelik 1: createdAt alanı varsa kullan
-                if (a.createdAt && b.createdAt) {
-                    const dateA = new Date(a.createdAt).getTime();
-                    const dateB = new Date(b.createdAt).getTime();
-                    if (dateA !== dateB) return dateB - dateA;
+                // 📌 YARDIMCI FONKSİYON: Tarih string'ini güvenli timestamp'e çevirir
+                const safeGetTime = (dateValue) => {
+                    if (!dateValue) return 0;
+                    const d = new Date(dateValue);
+                    return isNaN(d.getTime()) ? 0 : d.getTime();
+                };
+
+                // ═══════════════════════════════════════════════════════════════════
+                // 1️⃣ BİRİNCİ ÖNCELİK: createdAt (Oluşturulma Tarihi)
+                // ═══════════════════════════════════════════════════════════════════
+                const createdA = safeGetTime(a.createdAt);
+                const createdB = safeGetTime(b.createdAt);
+
+                if (createdA > 0 && createdB > 0 && createdA !== createdB) {
+                    // DESC sıralama: Büyük tarih (yeni) önce gelir
+                    return createdB - createdA;
                 }
 
-                // Öncelik 2: updatedAt alanı varsa kullan
-                if (a.updatedAt && b.updatedAt) {
-                    const dateA = new Date(a.updatedAt).getTime();
-                    const dateB = new Date(b.updatedAt).getTime();
-                    if (dateA !== dateB) return dateB - dateA;
+                // Sadece birinde createdAt varsa, o öne geçer
+                if (createdA > 0 && createdB === 0) return -1; // a daha yeni
+                if (createdB > 0 && createdA === 0) return 1;  // b daha yeni
+
+                // ═══════════════════════════════════════════════════════════════════
+                // 2️⃣ İKİNCİ ÖNCELİK: updatedAt (Güncellenme Tarihi)
+                // ═══════════════════════════════════════════════════════════════════
+                const updatedA = safeGetTime(a.updatedAt);
+                const updatedB = safeGetTime(b.updatedAt);
+
+                if (updatedA > 0 && updatedB > 0 && updatedA !== updatedB) {
+                    return updatedB - updatedA;
                 }
 
-                // Öncelik 3: MongoDB ObjectID timestamp'i
+                if (updatedA > 0 && updatedB === 0) return -1;
+                if (updatedB > 0 && updatedA === 0) return 1;
+
+                // ═══════════════════════════════════════════════════════════════════
+                // 3️⃣ ÜÇÜNCÜ ÖNCELİK: MongoDB ObjectID Timestamp
+                // ═══════════════════════════════════════════════════════════════════
                 const idA = a._id || a.id || '';
                 const idB = b._id || b.id || '';
                 const tsA = getTimestampFromId(idA);
                 const tsB = getTimestampFromId(idB);
 
-                if (tsA !== tsB) return tsB - tsA; // Yeni olan üstte
+                if (tsA > 0 && tsB > 0 && tsA !== tsB) {
+                    return tsB - tsA; // Yeni ID üstte
+                }
 
-                // Son çare: ID string karşılaştırması (ters sıra)
+                if (tsA > 0 && tsB === 0) return -1;
+                if (tsB > 0 && tsA === 0) return 1;
+
+                // ═══════════════════════════════════════════════════════════════════
+                // 4️⃣ SON ÇARE: ID String Karşılaştırması (Ters Alfabetik)
+                // ═══════════════════════════════════════════════════════════════════
                 return idB.toString().localeCompare(idA.toString());
             });
 

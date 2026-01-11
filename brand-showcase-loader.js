@@ -61,7 +61,25 @@ const startShowcaseLoader = async () => {
                             const id = String(p._id || p.id || '');
                             if (id) {
                                 if (idMap.has(id)) {
-                                    idMap.set(id, { ...idMap.get(id), ...p });
+                                    // GÖRSEL KORUMALI MERGE
+                                    const existingFromApi = idMap.get(id);
+                                    const merged = { ...existingFromApi, ...p };
+
+                                    // LocalStorage'da görsel yoksa API'den gelen görseli koru
+                                    const localImage = p.mainImage || p.image;
+                                    const apiImage = existingFromApi.mainImage || existingFromApi.image;
+
+                                    const isLocalImageEmpty = !localImage ||
+                                        localImage.includes('placehold') ||
+                                        localImage === 'null' ||
+                                        localImage === '';
+
+                                    if (isLocalImageEmpty && apiImage) {
+                                        merged.mainImage = apiImage;
+                                        merged.image = apiImage;
+                                    }
+
+                                    idMap.set(id, merged);
                                 } else {
                                     idMap.set(id, p);
                                 }

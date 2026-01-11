@@ -32,14 +32,46 @@ const API = {
         const localRes = this.getProductsFromLocalStorage(params);
         const localData = localRes.data || [];
 
-        // 3. BİRLEŞTİR (Local Veri Öncelikli - ID çakışmasında local kazanır)
+        // 3. BİRLEŞTİR (GÖRSEL KORUMALI MERGE)
+        // LocalStorage kota aşımı için base64 görseller silinebilir, bu yüzden
+        // API'den gelen görselleri korumamız gerekiyor
         const mergedMap = new Map();
 
         // Önce API verisini ekle
         apiData.forEach(p => mergedMap.set(p._id || p.id, p));
 
-        // Sonra Local veriyi ekle (Varsa API'nin üstüne yazar - Güncelleme için kritik)
-        localData.forEach(p => mergedMap.set(p._id || p.id, p));
+        // LocalStorage verisini akıllı birleştir
+        localData.forEach(lp => {
+            const id = lp._id || lp.id;
+            const existingFromApi = mergedMap.get(id);
+
+            if (existingFromApi) {
+                // AKILLI MERGE: LocalStorage'daki veriyi API verisiyle birleştir
+                // Ama GÖRSELLERİ API'den al (localStorage'da silinmiş olabilir)
+                const merged = { ...existingFromApi, ...lp };
+
+                // 🔴 ÖNEMLİ: Görsel alanları API'den koru (localStorage'da silinmiş olabilir)
+                // LocalStorage'da görsel yoksa veya placeholder ise API'deki görseli kullan
+                const localImage = lp.mainImage || lp.image;
+                const apiImage = existingFromApi.mainImage || existingFromApi.image;
+
+                const isLocalImageEmpty = !localImage ||
+                    localImage.includes('placehold.co') ||
+                    localImage.includes('placeholder') ||
+                    localImage === 'null' ||
+                    localImage === '';
+
+                if (isLocalImageEmpty && apiImage) {
+                    merged.mainImage = apiImage;
+                    merged.image = apiImage;
+                }
+
+                mergedMap.set(id, merged);
+            } else {
+                // API'de yoksa sadece local veriyi ekle
+                mergedMap.set(id, lp);
+            }
+        });
 
         let finalProducts = Array.from(mergedMap.values());
 

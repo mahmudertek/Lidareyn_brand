@@ -150,9 +150,43 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.mobile-search-content').appendChild(resultsContainer);
         }
 
-        // Arama geçmişi yönetimi
+        // ╔══════════════════════════════════════════════════════════════════════════════╗
+        // ║     🔍 ULTRA GELİŞMİŞ MOBİL AKILLI ARAMA SİSTEMİ v2.0 🔍                     ║
+        // ║     Popüler aramalar, tarama geçmişi, trend ürünler, fuzzy matching          ║
+        // ╚══════════════════════════════════════════════════════════════════════════════╝
+
+        // Storage Keys
         const SEARCH_HISTORY_KEY = 'galatacarsi_search_history';
-        const MAX_HISTORY_ITEMS = 8;
+        const BROWSING_HISTORY_KEY = 'browsingHistory';
+        const POPULAR_SEARCHES_KEY = 'galatacarsi_popular_searches';
+        const MAX_HISTORY_ITEMS = 10;
+        const MAX_BROWSING_ITEMS = 6;
+
+        // Popüler/Trend Aramalar (varsayılan)
+        const defaultPopularSearches = [
+            'Bosch Matkap', 'Makita Avuç Taşlama', 'DeWalt Set',
+            'Knipex Pense', 'Lokma Takımı', 'Akülü Vidalama',
+            'Beta El Aletleri', 'Ölçüm Aleti'
+        ];
+
+        // Hızlı Kategori Erişimi
+        const quickCategories = [
+            { name: 'Akülü Aletler', icon: 'fa-battery-full', slug: 'akulu-aletler' },
+            { name: 'El Aletleri', icon: 'fa-screwdriver-wrench', slug: 'hirdavat-el-aletleri' },
+            { name: 'Elektrikli Aletler', icon: 'fa-plug', slug: 'elektrikli-el-aletleri' },
+            { name: 'Ölçme Aletleri', icon: 'fa-ruler', slug: 'olcme-ve-kontrol-aletleri' }
+        ];
+
+        // Güncel marka listesi
+        const knownBrands = [
+            'Bosch', 'Makita', 'DeWalt', 'Black+Decker', 'Knipex',
+            'Beta', 'Stanley', 'Gedore', 'Rtrmax', 'Catpower',
+            'Ingco', 'Tolsen', 'Total', 'Einhell', 'Karcher',
+            'Fein', 'Metabo', 'Milwaukee', 'Hikoki', 'Festool',
+            'Wilke', 'Juwex', 'Ridgid', 'Irwin', 'Bahco'
+        ];
+
+        // ==================== GEÇMIŞ YÖNETİMİ ====================
 
         function getSearchHistory() {
             try {
@@ -165,11 +199,8 @@ document.addEventListener('DOMContentLoaded', function () {
         function saveToHistory(query) {
             if (!query || query.length < 2) return;
             let history = getSearchHistory();
-            // Aynı arama varsa kaldır
             history = history.filter(h => h.toLowerCase() !== query.toLowerCase());
-            // Başa ekle
             history.unshift(query);
-            // Limit uygula
             history = history.slice(0, MAX_HISTORY_ITEMS);
             localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
         }
@@ -178,191 +209,455 @@ document.addEventListener('DOMContentLoaded', function () {
             let history = getSearchHistory();
             history = history.filter(h => h.toLowerCase() !== query.toLowerCase());
             localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
-            showSearchHistory(); // Refresh
+            showSmartSearchHome();
         }
 
         function clearAllHistory() {
             localStorage.removeItem(SEARCH_HISTORY_KEY);
-            showSearchHistory();
+            showSmartSearchHome();
         }
 
-        function showSearchHistory() {
+        // ==================== TARAMA GEÇMİŞİ ====================
+
+        function getBrowsingHistory() {
+            try {
+                const data = JSON.parse(localStorage.getItem(BROWSING_HISTORY_KEY) || '[]');
+                return data.sort((a, b) => new Date(b.viewedAt) - new Date(a.viewedAt)).slice(0, MAX_BROWSING_ITEMS);
+            } catch {
+                return [];
+            }
+        }
+
+        // ==================== POPÜLER ARAMALAR ====================
+
+        function getPopularSearches() {
+            try {
+                const stored = JSON.parse(localStorage.getItem(POPULAR_SEARCHES_KEY) || '[]');
+                if (stored.length > 0) return stored.slice(0, 8);
+            } catch { }
+            return defaultPopularSearches;
+        }
+
+        function incrementPopularSearch(query) {
+            if (!query || query.length < 2) return;
+            try {
+                let popular = JSON.parse(localStorage.getItem(POPULAR_SEARCHES_KEY) || '{}');
+                if (typeof popular !== 'object' || Array.isArray(popular)) popular = {};
+                popular[query.toLowerCase()] = (popular[query.toLowerCase()] || 0) + 1;
+
+                // Sort by count and get top 20
+                const sorted = Object.entries(popular)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 20)
+                    .reduce((acc, [k, v]) => ({ ...acc, [k]: v }), {});
+
+                localStorage.setItem(POPULAR_SEARCHES_KEY, JSON.stringify(sorted));
+            } catch { }
+        }
+
+        // ==================== AKILLI ANA SAYFA GÖRÜNTÜLEMESİ ====================
+
+        function showSmartSearchHome() {
             const history = getSearchHistory();
-            if (history.length === 0) {
-                resultsContainer.innerHTML = `
-                    <div class="mobile-search-empty">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+            const browsingHistory = getBrowsingHistory();
+            const popularSearches = getPopularSearches();
+
+            let html = '';
+
+            // 1. Hızlı Kategoriler
+            html += `
+                <div class="smart-search-section">
+                    <div class="smart-section-header">
+                        <span><i class="fa-solid fa-grid-2"></i> Hızlı Erişim</span>
+                    </div>
+                    <div class="quick-categories-grid">
+                        ${quickCategories.map(cat => `
+                            <a href="kategoriler/${cat.slug}.html" class="quick-category-item">
+                                <i class="fa-solid ${cat.icon}"></i>
+                                <span>${cat.name}</span>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // 2. Son Aramalar (varsa)
+            if (history.length > 0) {
+                html += `
+                    <div class="smart-search-section">
+                        <div class="smart-section-header">
+                            <span><i class="fa-solid fa-clock-rotate-left"></i> Son Aramalarınız</span>
+                            <button class="smart-clear-btn" onclick="event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('clearHistory'))">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                        <div class="search-history-chips">
+                            ${history.slice(0, 6).map(term => `
+                                <div class="search-chip">
+                                    <a href="arama.html?q=${encodeURIComponent(term)}" onclick="saveToHistory('${term.replace(/'/g, "\\'")}')">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                        ${term}
+                                    </a>
+                                    <button class="chip-remove" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('removeHistory', {detail: '${term.replace(/'/g, "\\'")}'}))">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 3. Son Gezilen Ürünler (varsa)
+            if (browsingHistory.length > 0) {
+                html += `
+                    <div class="smart-search-section">
+                        <div class="smart-section-header">
+                            <span><i class="fa-solid fa-eye"></i> Son Gezdiğiniz Ürünler</span>
+                        </div>
+                        <div class="browsing-history-scroll">
+                            ${browsingHistory.map(item => `
+                                <a href="urun-detay.html?id=${item.id}" class="browsing-history-item">
+                                    <img src="${item.image || 'https://placehold.co/80x80/f0f0f0/999?text=Ürün'}" 
+                                         alt="${item.name || 'Ürün'}" 
+                                         onerror="this.src='https://placehold.co/80x80/f0f0f0/999?text=Ürün'">
+                                    <span class="browsing-item-name">${(item.name || 'Ürün').substring(0, 30)}${(item.name || '').length > 30 ? '...' : ''}</span>
+                                    <span class="browsing-item-price">₺${Number(item.price || 0).toLocaleString('tr-TR')}</span>
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 4. Popüler Aramalar
+            html += `
+                <div class="smart-search-section">
+                    <div class="smart-section-header">
+                        <span><i class="fa-solid fa-fire-flame-curved"></i> Popüler Aramalar</span>
+                    </div>
+                    <div class="popular-searches-grid">
+                        ${popularSearches.slice(0, 8).map((term, i) => `
+                            <a href="arama.html?q=${encodeURIComponent(term)}" class="popular-search-item" onclick="saveToHistory('${term.replace(/'/g, "\\'")}')">
+                                <span class="popular-rank">${i + 1}</span>
+                                <span class="popular-term">${term}</span>
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+
+            // 5. Eğer hiç geçmiş yoksa hoş mesaj
+            if (history.length === 0 && browsingHistory.length === 0) {
+                html += `
+                    <div class="smart-search-welcome">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
                         <p>Arama yapmaya başlayın</p>
                         <span>Ürün, marka veya kategori arayabilirsiniz</span>
                     </div>
                 `;
-            } else {
-                let html = `
-                    <div class="mobile-search-history-header">
-                        <span><i class="fa-solid fa-clock-rotate-left"></i> Son Aramalar</span>
-                        <button onclick="event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('clearHistory'))">Temizle</button>
-                    </div>
-                `;
-                history.forEach(term => {
-                    html += `
-                    <div class="mobile-search-item mobile-search-history-item">
-                        <a href="arama.html?q=${encodeURIComponent(term)}" onclick="event.stopPropagation();">
-                            <i class="fa-solid fa-clock-rotate-left"></i>
-                            <span>${term}</span>
-                        </a>
-                        <button class="remove-history-btn" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('removeHistory', {detail: '${term}'}))">
-                            <i class="fa-solid fa-xmark"></i>
-                        </button>
-                    </div>`;
-                });
-                resultsContainer.innerHTML = html;
             }
+
+            resultsContainer.innerHTML = html;
             resultsContainer.style.display = 'block';
         }
+
+        // ==================== AKILLI ARAMA (FUZZY MATCHING) ====================
+
+        function fuzzyMatch(text, query) {
+            if (!text || !query) return 0;
+            text = text.toLowerCase();
+            query = query.toLowerCase();
+
+            // Tam eşleşme bonusu
+            if (text === query) return 100;
+            if (text.includes(query)) return 80;
+
+            // Kelime bazlı eşleşme
+            const queryWords = query.split(/\s+/).filter(w => w.length > 0);
+            const textWords = text.split(/\s+/);
+
+            let score = 0;
+            let matchedWords = 0;
+
+            queryWords.forEach(qw => {
+                // Tam kelime eşleşmesi
+                if (textWords.some(tw => tw === qw)) {
+                    score += 30;
+                    matchedWords++;
+                }
+                // Kelime başlangıcı eşleşmesi
+                else if (textWords.some(tw => tw.startsWith(qw))) {
+                    score += 20;
+                    matchedWords++;
+                }
+                // İçerme eşleşmesi
+                else if (text.includes(qw)) {
+                    score += 10;
+                    matchedWords++;
+                }
+                // Fuzzy: 1 karakter toleransı
+                else {
+                    const fuzzyFound = textWords.some(tw => {
+                        if (Math.abs(tw.length - qw.length) > 2) return false;
+                        let diff = 0;
+                        for (let i = 0; i < Math.max(tw.length, qw.length); i++) {
+                            if (tw[i] !== qw[i]) diff++;
+                            if (diff > 1) return false;
+                        }
+                        return true;
+                    });
+                    if (fuzzyFound) {
+                        score += 5;
+                        matchedWords++;
+                    }
+                }
+            });
+
+            // Tüm kelimeler eşleştiyse bonus
+            if (matchedWords === queryWords.length && queryWords.length > 0) {
+                score += 25;
+            }
+
+            return score;
+        }
+
+        function performSmartSearch(query) {
+            const products = window.productsData || JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+
+            // Ürün arama
+            const scoredProducts = products.map(p => {
+                const nameScore = fuzzyMatch(p.name || '', query) * 2;
+                const brandScore = fuzzyMatch(p.brand || p.marka || '', query) * 1.5;
+                const categoryScore = fuzzyMatch(p.category || '', query);
+                const skuScore = (p.sku || '').toLowerCase().includes(query.toLowerCase()) ? 50 : 0;
+
+                return {
+                    ...p,
+                    score: nameScore + brandScore + categoryScore + skuScore
+                };
+            })
+                .filter(p => p.score > 10)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 8);
+
+            // Kategori arama
+            const productCategories = [...new Set(products.map(p => {
+                if (!p.category) return '';
+                return p.category.split(' > ')[0];
+            }))].filter(Boolean);
+
+            const matchedCategories = productCategories
+                .map(c => ({ name: c, score: fuzzyMatch(c, query) }))
+                .filter(c => c.score > 10)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 4)
+                .map(c => c.name);
+
+            // Marka arama
+            const matchedBrands = knownBrands
+                .map(b => ({ name: b, score: fuzzyMatch(b, query) }))
+                .filter(b => b.score > 10)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 4)
+                .map(b => b.name);
+
+            // Öneri oluştur
+            const suggestions = [];
+            if (query.length >= 2) {
+                // Geçmişten öneriler
+                const historyMatches = getSearchHistory()
+                    .filter(h => h.toLowerCase().includes(query.toLowerCase()) && h.toLowerCase() !== query.toLowerCase())
+                    .slice(0, 3);
+                suggestions.push(...historyMatches);
+            }
+
+            return {
+                products: scoredProducts,
+                categories: matchedCategories,
+                brands: matchedBrands,
+                suggestions: suggestions
+            };
+        }
+
+        function renderSearchResults(query, results) {
+            let html = '';
+            const hasAnyResults = results.products.length > 0 || results.categories.length > 0 || results.brands.length > 0;
+
+            // Öneriler
+            if (results.suggestions.length > 0) {
+                html += `<div class="smart-search-section compact">
+                    <div class="suggestions-list">
+                        ${results.suggestions.map(s => `
+                            <a href="arama.html?q=${encodeURIComponent(s)}" class="suggestion-item" onclick="saveToHistory('${s.replace(/'/g, "\\'")}')">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <span>${highlightMatch(s, query)}</span>
+                            </a>
+                        `).join('')}
+                    </div>
+                </div>`;
+            }
+
+            // Kategoriler
+            if (results.categories.length > 0) {
+                html += `
+                    <div class="smart-search-section">
+                        <div class="smart-section-header mini">
+                            <span><i class="fa-solid fa-layer-group"></i> Kategoriler</span>
+                        </div>
+                        ${results.categories.map(cat => `
+                            <a href="arama.html?category=${encodeURIComponent(cat)}" class="mobile-search-item mobile-search-text-only" onclick="saveToHistory('${cat.replace(/'/g, "\\'")}')">
+                                <i class="fa-solid fa-folder"></i>
+                                <span>${highlightMatch(cat, query)}</span>
+                            </a>
+                        `).join('')}
+                    </div>
+                `;
+            }
+
+            // Markalar
+            if (results.brands.length > 0) {
+                html += `
+                    <div class="smart-search-section">
+                        <div class="smart-section-header mini">
+                            <span><i class="fa-solid fa-tag"></i> Markalar</span>
+                        </div>
+                        <div class="brands-chips">
+                            ${results.brands.map(brand => `
+                                <a href="arama.html?q=${encodeURIComponent(brand)}" class="brand-chip" onclick="saveToHistory('${brand.replace(/'/g, "\\'")}')">
+                                    ${highlightMatch(brand, query)}
+                                </a>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Ürünler
+            if (results.products.length > 0) {
+                html += `
+                    <div class="smart-search-section">
+                        <div class="smart-section-header mini">
+                            <span><i class="fa-solid fa-box-open"></i> Ürünler</span>
+                            <span class="results-count">${results.products.length} sonuç</span>
+                        </div>
+                        ${results.products.map(prod => {
+                    const productId = prod._id || prod.id;
+                    const image = prod.mainImage || prod.image || 'https://placehold.co/60x60/6366f1/fff?text=' + (prod.brand || 'G').charAt(0);
+                    const price = prod.salePrice || prod.price || 0;
+                    const hasDiscount = prod.salePrice && prod.price && parseFloat(prod.salePrice) < parseFloat(prod.price);
+
+                    return `
+                                <a href="urun-detay.html?id=${productId}" class="mobile-search-item product-result" onclick="saveToHistory('${(prod.name || '').replace(/'/g, "")}')">
+                                    <img src="${image}" alt="${prod.name}" onerror="this.src='https://placehold.co/60x60/6366f1/fff?text=?'">
+                                    <div class="mobile-search-info">
+                                        <span class="name">${highlightMatch(prod.name || 'Ürün', query)}</span>
+                                        <span class="brand-label">${prod.brand || ''}</span>
+                                        <div class="price-row">
+                                            <span class="price ${hasDiscount ? 'discounted' : ''}">₺${Number(price).toLocaleString('tr-TR')}</span>
+                                            ${hasDiscount ? `<span class="old-price">₺${Number(prod.price).toLocaleString('tr-TR')}</span>` : ''}
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </a>
+                            `;
+                }).join('')}
+                    </div>
+                `;
+            }
+
+            // Sonuç bulunamadı
+            if (!hasAnyResults) {
+                html = `
+                    <div class="smart-no-results">
+                        <i class="fa-solid fa-face-sad-tear"></i>
+                        <p>"${query}" için sonuç bulunamadı</p>
+                        <span>Yazım hatası olabilir mi? Farklı kelimeler deneyin.</span>
+                        <div class="suggestion-buttons">
+                            <button onclick="document.querySelector('.mobile-search-input').value=''; showSmartSearchHome()">
+                                <i class="fa-solid fa-arrow-left"></i> Geri Dön
+                            </button>
+                            <a href="arama.html?q=${encodeURIComponent(query)}">
+                                <i class="fa-solid fa-search"></i> Tam Arama Yap
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Tüm sonuçları gör butonu
+            if (hasAnyResults) {
+                html += `
+                    <div class="see-all-results">
+                        <a href="arama.html?q=${encodeURIComponent(query)}" class="see-all-btn" onclick="saveToHistory('${query.replace(/'/g, "\\'")}'); incrementPopularSearch('${query.replace(/'/g, "\\'")}')">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            Tüm Sonuçları Gör
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                `;
+            }
+
+            resultsContainer.innerHTML = html;
+            resultsContainer.style.display = 'block';
+        }
+
+        function highlightMatch(text, query) {
+            if (!text || !query) return text || '';
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<mark>$1</mark>');
+        }
+
+        // ==================== EVENT LISTENERS ====================
+
+        let searchTimeout = null;
 
         // Custom events for history management
         mobileSearchInput.addEventListener('clearHistory', clearAllHistory);
         mobileSearchInput.addEventListener('removeHistory', (e) => removeFromHistory(e.detail));
 
-        // Focus olunca geçmişi göster
+        // Focus: Ana sayfa göster
         mobileSearchInput.addEventListener('focus', function () {
             if (this.value.trim() === '') {
-                showSearchHistory();
+                showSmartSearchHome();
             }
         });
 
-        // Form submit olunca geçmişe kaydet
+        // Input: Akıllı arama
+        mobileSearchInput.addEventListener('input', function (e) {
+            clearTimeout(searchTimeout);
+            const query = e.target.value.trim();
+
+            if (query.length < 1) {
+                showSmartSearchHome();
+                return;
+            }
+
+            searchTimeout = setTimeout(() => {
+                const results = performSmartSearch(query);
+                renderSearchResults(query, results);
+            }, 200);
+        });
+
+        // Form submit: Geçmişe kaydet
         const searchForm = document.querySelector('.mobile-search-form');
         if (searchForm) {
             searchForm.addEventListener('submit', function () {
                 const query = mobileSearchInput.value.trim();
-                if (query) saveToHistory(query);
+                if (query) {
+                    saveToHistory(query);
+                    incrementPopularSearch(query);
+                }
             });
         }
 
-        // Debounce helper
-        let timeout = null;
-
-        // Güncel marka listesi (Hırdavat/El Aletleri odaklı)
-        const knownBrands = [
-            'Bosch', 'Makita', 'DeWalt', 'Black+Decker', 'Knipex',
-            'Beta', 'Stanley', 'Gedore', 'Rtrmax', 'Catpower',
-            'Ingco', 'Tolsen', 'Total', 'Einhell', 'Karcher',
-            'Fein', 'Metabo', 'Milwaukee', 'Hikoki', 'Festool'
-        ];
-
-        mobileSearchInput.addEventListener('input', function (e) {
-            clearTimeout(timeout);
-            const query = e.target.value.trim().toLowerCase();
-
-            timeout = setTimeout(() => {
-                if (query.length < 1) {
-                    showSearchHistory();
-                    return;
-                }
-
-                // Use global products data
-                const products = window.productsData || JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
-
-                // Akıllı Arama - Kelime bazlı sıralama
-                const queryWords = query.split(/\s+/).filter(w => w.length > 0);
-
-                const scoredProducts = products.map(p => {
-                    let score = 0;
-                    const name = (p.name || '').toLowerCase();
-                    const brand = (p.brand || p.marka || '').toLowerCase();
-                    const category = (p.category || '').toLowerCase();
-
-                    queryWords.forEach(word => {
-                        if (name.includes(word)) score += 3;
-                        if (brand.includes(word)) score += 2;
-                        if (category.includes(word)) score += 1;
-                    });
-
-                    // Tam eşleşme bonusu
-                    if (name.includes(query)) score += 5;
-
-                    return { ...p, score };
-                }).filter(p => p.score > 0)
-                    .sort((a, b) => b.score - a.score)
-                    .slice(0, 5);
-
-                // Kategoriler
-                const productCategories = [...new Set(products.map(p => p.category ? p.category.split(' > ')[0] : ''))].filter(Boolean);
-                const matchedCategories = productCategories
-                    .filter(c => c.toLowerCase().includes(query))
-                    .slice(0, 3);
-
-                // Markalar
-                const matchedBrands = knownBrands
-                    .filter(b => b.toLowerCase().includes(query))
-                    .slice(0, 4);
-
-                // Render Results
-                let html = '';
-                let hasResults = false;
-
-                // Kategoriler
-                if (matchedCategories.length > 0) {
-                    hasResults = true;
-                    html += `<div class="mobile-search-section-title">Kategoriler</div>`;
-                    matchedCategories.forEach(cat => {
-                        html += `
-                        <a href="arama.html?category=${encodeURIComponent(cat)}" class="mobile-search-item mobile-search-text-only" onclick="saveToHistory('${cat}')">
-                            <i class="fa-solid fa-layer-group"></i>
-                            <span>${cat}</span>
-                        </a>`;
-                    });
-                }
-
-                // Markalar
-                if (matchedBrands.length > 0) {
-                    hasResults = true;
-                    html += `<div class="mobile-search-section-title">Markalar</div>`;
-                    matchedBrands.forEach(brand => {
-                        html += `
-                        <a href="arama.html?q=${encodeURIComponent(brand)}" class="mobile-search-item mobile-search-text-only" onclick="saveToHistory('${brand}')">
-                            <i class="fa-solid fa-tag"></i>
-                            <span>${brand}</span>
-                        </a>`;
-                    });
-                }
-
-                // Ürünler
-                if (scoredProducts.length > 0) {
-                    hasResults = true;
-                    html += `<div class="mobile-search-section-title">Ürünler</div>`;
-                    scoredProducts.forEach(prod => {
-                        const productId = prod._id || prod.id;
-                        const image = prod.mainImage || prod.image || 'https://placehold.co/60x60/6366f1/fff?text=' + (prod.brand || 'G').charAt(0);
-                        const price = prod.salePrice || prod.price || 0;
-                        html += `
-                        <a href="urun-detay.html?id=${productId}" class="mobile-search-item" onclick="saveToHistory('${(prod.name || '').replace(/'/g, '')}')">
-                            <img src="${image}" alt="${prod.name}" onerror="this.src='https://placehold.co/60x60/6366f1/fff?text=?'">
-                            <div class="mobile-search-info">
-                                <span class="name">${prod.name}</span>
-                                <span class="price">₺${Number(price).toLocaleString('tr-TR')}</span>
-                            </div>
-                        </a>`;
-                    });
-                }
-
-                if (hasResults) {
-                    resultsContainer.innerHTML = html;
-                    resultsContainer.style.display = 'block';
-                } else {
-                    resultsContainer.innerHTML = `
-                        <div class="mobile-no-results">
-                            <i class="fa-solid fa-face-frown"></i>
-                            <p>"${query}" için sonuç bulunamadı</p>
-                            <span>Farklı kelimeler deneyin</span>
-                        </div>`;
-                    resultsContainer.style.display = 'block';
-                }
-            }, 250);
-        });
-
-        // Global saveToHistory fonksiyonu (onclick için)
+        // Global fonksiyonlar
         window.saveToHistory = saveToHistory;
+        window.showSmartSearchHome = showSmartSearchHome;
+        window.incrementPopularSearch = incrementPopularSearch;
+
+        console.log('🔍 Ultra Gelişmiş Mobil Akıllı Arama Sistemi v2.0 yüklendi!');
     }
 });
+
