@@ -1957,33 +1957,87 @@
         }
 
         // Yerel ürünleri sunucuya senkronize et
+        // Yerel ürünleri sunucuya senkronize et (GÜVENLİ MOD - Veri Kaybı Yok)
         async function syncLocalProducts() {
-            const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+            let localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
             if (localProducts.length === 0) return;
 
-            console.log('🔄 Yerel ürünler senkronize ediliyor...', localProducts.length);
+            console.log('🔄 Yerel ürünler senkronize ediliyor (Güvenli Mod)...', localProducts.length);
             let syncedCount = 0;
+            let updatedLocalProducts = []; // Senkronize edilemeyenler burada kalacak
 
-            for (const product of localProducts) {
+            for (const localProd of localProducts) {
                 try {
-                    // Sunucuya ekle
-                    const response = await ADMIN_API.createProduct(product);
+                    // 1. Kontrol: Bu ürün zaten sunucuda var mı? (İsim veya SKU kontrolü)
+                    const existingProduct = products.find(p =>
+                        (p.name && localProd.name && p.name.trim() === localProd.name.trim()) ||
+                        (p.sku && localProd.sku && p.sku.trim() === localProd.sku.trim() && p.sku.trim() !== '')
+                    );
+
+                    let shouldSkip = false;
+
+                    if (existingProduct) {
+                        // KRİTİK KONTROL: Formdaki HER ŞEY birebir aynıysa ancak silinsin.
+
+                        const isMatch = (
+                            (existingProduct.name || '').trim() === (localProd.name || '').trim() &&
+                            (existingProduct.sku || '').trim() === (localProd.sku || '').trim() &&
+                            (existingProduct.brand || '').trim() === (localProd.brand || '').trim() &&
+                            // Kuruş hassasiyeti
+                            Math.abs(parseFloat(existingProduct.price || 0) - parseFloat(localProd.price || 0)) < 0.01 &&
+                            parseInt(existingProduct.stock || 0) === parseInt(localProd.stock || 0) &&
+                            (existingProduct.description || '').trim() === (localProd.description || '').trim() &&
+                            (existingProduct.unit || 'adet') === (localProd.unit || 'adet') &&
+                            // Kategoriler
+                            (existingProduct.categorySlug || existingProduct.category || '') === (localProd.categorySlug || localProd.category || '') &&
+                            (existingProduct.subCategory || '') === (localProd.subCategory || '') &&
+                            // Etiketler
+                            !!existingProduct.isActive === !!localProd.isActive &&
+                            !!existingProduct.isPopular === !!localProd.isPopular &&
+                            !!existingProduct.isNew === !!localProd.isNew &&
+                            !!existingProduct.isBestSeller === !!localProd.isBestSeller &&
+                            !!existingProduct.isFeatured === !!localProd.isFeatured &&
+                            (existingProduct.brandShowcase || '') === (localProd.brandShowcase || '')
+                        );
+
+                        if (isMatch) {
+                            console.log('🛑 %100 TAM EŞLEŞME (Güvenli):', localProd.name);
+                            console.log('   -> Tüm alanlar sunucudakiyle birebir aynı. Yerel kopya güvenle temizleniyor.');
+                            shouldSkip = true; // Ürünü API'ye gönderme, yerelden sil
+                        } else {
+                            console.warn('⚠️ BENZER AMA FARKLI (Kopyalanacak):', localProd.name);
+                            console.warn('   -> En az bir özellik farklı. Yeni ürün olarak ekleniyor.');
+                            // shouldSkip = false; // Devam et ve ekle
+                        }
+                    }
+
+                    if (shouldSkip) {
+                        syncedCount++;
+                        continue;
+                    }
+
+                    // 2. Sunucuya gönder
+                    // ID'sini sil ki sunucu yeni ID versin
+                    const { _id, id, ...productToSend } = localProd;
+
+                    const response = await ADMIN_API.createProduct(productToSend);
                     if (response.success) {
                         syncedCount++;
-                        console.log('✅ Senkronize edildi:', product.name);
+                        console.log('✅ Sunucuya başarıyla yüklendi:', localProd.name);
+                    } else {
+                        console.error('❌ Yükleme başarısız:', localProd.name, response.error);
+                        updatedLocalProducts.push(localProd);
                     }
                 } catch (err) {
-                    console.error('Senkronizasyon hatası:', product.name, err);
+                    console.error('Senkronizasyon hatası:', localProd.name, err);
+                    updatedLocalProducts.push(localProd);
                 }
             }
 
+            // LocalStorage'ı güncelle
             if (syncedCount > 0) {
-                // Başarılı senkronizasyon - localStorage'ı silmek yerine koruyoruz!
-                // localStorage.removeItem('galatacarsi_products'); // RİSKLİ - Sunucu restart olursa veri kaybı yaşanır.
-                console.log(`🎉 ${syncedCount} yerel ürün sunucuya aktarıldı (Yedek korundu)!`);
-                alert(`🎉 ${syncedCount} yerel ürün sunucuya aktarıldı!`);
-                // Listeyi yenile
-                await loadProducts();
+                localStorage.setItem('galatacarsi_products', JSON.stringify(updatedLocalProducts));
+                console.log(`🎉 İşlem tamamlandı: ${syncedCount} ürün işlendi.`);
             }
         }
 
