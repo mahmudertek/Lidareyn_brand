@@ -1237,7 +1237,7 @@
 
     <!-- Alt Kategori ve Grup Yönetimi Modalı -->
     <div class="modal-overlay" id="subcategoryMgmtModal">
-        <div class="modal" style="max-width: 500px;">
+        <div class="modal" style="max-width: 550px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                 <h3 style="color: white; display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-layer-group"></i>
@@ -1257,19 +1257,28 @@
                 </div>
 
                 <div class="form-group" style="margin-bottom: 20px;">
-                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Grup İsmi
-                        *</label>
-                    <input type="text" id="mgmtGroupName" list="mgmtGroupsDatalist"
-                        placeholder="Örn: Anahtarlar & Vidalama"
+                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Alt Kategori
+                        İsmi *</label>
+                    <input type="text" id="mgmtSubName" list="mgmtSubsDatalist" placeholder="Örn: Boru Anahtarları"
                         style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
-                    <datalist id="mgmtGroupsDatalist"></datalist>
+                    <datalist id="mgmtSubsDatalist"></datalist>
+                    <small style="color: #64748b; font-size: 11px; margin-top: 4px; display: block;">Bu, mega menüdeki
+                        ana alt kategori başlığıdır.</small>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 24px;">
-                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Alt Kategori
-                        İsmi (Opsiyonel)</label>
-                    <input type="text" id="mgmtSubName" placeholder="Örn: İngiliz Anahtarı"
+                    <label
+                        style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+                        <span>Grup İsimleri (virgülle ayırın)</span>
+                        <span style="font-weight: 400; font-size: 11px; color: #64748b;">birden fazla
+                            ekleyebilirsiniz</span>
+                    </label>
+                    <input type="text" id="mgmtGroupName"
+                        placeholder="Örn: Maşalı Boru Anahtarları, Fransız Anahtarları"
                         style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    <datalist id="mgmtGroupsDatalist"></datalist>
+                    <small style="color: #64748b; font-size: 11px; margin-top: 4px; display: block;">Virgülle ayırarak
+                        birden fazla grup ekleyebilirsiniz. Örn: "Grup1, Grup2, Grup3"</small>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -1284,8 +1293,8 @@
                 </div>
 
                 <p style="font-size: 12px; color: #64748b; margin-top: 20px; text-align: center; line-height: 1.5;">
-                    <i class="fa-solid fa-info-circle"></i> (+) Ekle butonu yeni grup veya alt kategori ekler.<br>
-                    (-) Sil butonu belirtilen alt kategoriyi veya grubun tamamını siler.
+                    <i class="fa-solid fa-info-circle"></i> (+) Ekle butonu yeni alt kategori veya grup ekler.<br>
+                    (-) Sil butonu belirtilen grubu veya alt kategorinin tamamını siler.
                 </p>
             </div>
         </div>
@@ -3409,29 +3418,55 @@
 
         function onMgmtCategoryChange() {
             const categorySlug = document.getElementById('mgmtMainCategory').value;
+            const subsDatalist = document.getElementById('mgmtSubsDatalist');
             const groupDatalist = document.getElementById('mgmtGroupsDatalist');
+
+            subsDatalist.innerHTML = '';
             groupDatalist.innerHTML = '';
 
             if (categorySlug && categoriesData[categorySlug] && categoriesData[categorySlug].subcategories) {
+                // Alt kategorileri (group.name) datalist'e ekle
                 categoriesData[categorySlug].subcategories.forEach(group => {
                     const option = document.createElement('option');
                     option.value = group.name;
-                    groupDatalist.appendChild(option);
+                    subsDatalist.appendChild(option);
+
+                    // Grup items'ları da datalist'e ekle
+                    if (group.items && Array.isArray(group.items)) {
+                        group.items.forEach(item => {
+                            const itemOption = document.createElement('option');
+                            itemOption.value = item;
+                            groupDatalist.appendChild(itemOption);
+                        });
+                    }
                 });
             }
         }
 
         async function processSubcategoryAction(action) {
             const categorySlug = document.getElementById('mgmtMainCategory').value;
-            const groupName = document.getElementById('mgmtGroupName').value.trim();
-            const subName = document.getElementById('mgmtSubName').value.trim();
+            // Dikkat: Alan adları ters çevrildi - mgmtSubName artık alt kategori, mgmtGroupName grup
+            const subCategoryName = document.getElementById('mgmtSubName').value.trim(); // Alt Kategori İsmi
+            const groupNamesRaw = document.getElementById('mgmtGroupName').value.trim(); // Grup İsimleri (virgülle ayrılmış)
 
             if (!categorySlug) return alert('Lütfen bir üst kategori seçin!');
-            if (!groupName) return alert('Lütfen bir grup ismi girin!');
+            if (!subCategoryName) return alert('Lütfen bir alt kategori ismi girin!');
 
-            const confirmMsg = action === 'add'
-                ? `${groupName} grubuna ${subName || 'yeni bir grup'} eklemek istediğinize emin misiniz?`
-                : `${groupName} grubundan ${subName || 'grubun tamamını'} silmek istediğinize emin misiniz?`;
+            // Birden fazla grup ekleme desteği
+            const groupNames = groupNamesRaw ? groupNamesRaw.split(',').map(g => g.trim()).filter(g => g) : [];
+
+            let confirmMsg;
+            if (action === 'add') {
+                if (groupNames.length > 1) {
+                    confirmMsg = `"${subCategoryName}" alt kategorisine ${groupNames.length} grup eklemek istediğinize emin misiniz?\n\nGruplar: ${groupNames.join(', ')}`;
+                } else if (groupNames.length === 1) {
+                    confirmMsg = `"${subCategoryName}" alt kategorisine "${groupNames[0]}" grubunu eklemek istediğinize emin misiniz?`;
+                } else {
+                    confirmMsg = `"${subCategoryName}" alt kategorisini (grupsuz) eklemek istediğinize emin misiniz?`;
+                }
+            } else {
+                confirmMsg = `"${subCategoryName}" alt kategorisinden ${groupNames.length > 0 ? `"${groupNames.join(', ')}" gruplarını` : 'tamamını'} silmek istediğinize emin misiniz?`;
+            }
 
             if (!confirm(confirmMsg)) return;
 
@@ -3445,8 +3480,8 @@
                 const response = await ADMIN_API.syncSubcategories({
                     action,
                     categorySlug,
-                    groupName,
-                    subName
+                    subCategoryName,  // Alt kategori ismi (eski groupName)
+                    groupNames        // Grup isimleri dizisi (eski subName)
                 });
 
                 if (response.success) {
