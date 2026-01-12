@@ -2105,24 +2105,35 @@
             const sortedProducts = [...filteredProducts].sort((a, b) => {
                 // 📌 YARDIMCI FONKSİYONLAR
                 const getTimestamp = (p) => {
-                    // 1. createdAt varsa kullan
+                    let time = 0;
+
+                    // 1. createdAt varsa al
                     if (p.createdAt) {
                         const d = new Date(p.createdAt);
-                        if (!isNaN(d.getTime())) return d.getTime();
+                        if (!isNaN(d.getTime())) time = d.getTime();
                     }
 
-                    // 2. ID'den timestamp çıkar (MongoDB formatı)
-                    const id = (p._id || p.id || '').toString();
-                    if (id.length >= 24 && /^[a-f0-9]{24}$/i.test(id)) {
-                        return parseInt(id.substring(0, 8), 16) * 1000;
+                    // 2. updatedAt varsa ve daha yeniyse onu al (Güncellenenler üste çıksın)
+                    if (p.updatedAt) {
+                        const d = new Date(p.updatedAt);
+                        if (!isNaN(d.getTime()) && d.getTime() > time) {
+                            time = d.getTime();
+                        }
                     }
 
-                    // 3. Local ID formatı: local_1234567890
-                    if (id.startsWith('local_')) {
-                        return parseInt(id.replace('local_', '')) || 0;
+                    // 3. Eğer tarih yoksa ID'den timestamp çıkar (MongoDB formatı)
+                    if (time === 0) {
+                        const id = (p._id || p.id || '').toString();
+                        if (id.length >= 24 && /^[a-f0-9]{24}$/i.test(id)) {
+                            time = parseInt(id.substring(0, 8), 16) * 1000;
+                        }
+                        // 4. Local ID formatı: local_1234567890
+                        else if (id.startsWith('local_')) {
+                            time = parseInt(id.replace('local_', '')) || 0;
+                        }
                     }
 
-                    return 0;
+                    return time;
                 };
 
                 const timeA = getTimestamp(a);
