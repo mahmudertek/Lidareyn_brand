@@ -726,6 +726,20 @@ const ADMIN_API = {
             console.error('❌ Fetch hatası detayı:', error);
             throw error;
         }
+    },
+
+    async syncSubcategories(syncData) {
+        try {
+            const response = await fetch(`${this.baseUrl}/categories/sync-subcategory`, {
+                method: 'POST',
+                headers: this.getHeaders(),
+                body: JSON.stringify(syncData)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error('Sync subcategories error:', error);
+            return { success: false, error: error.message };
+        }
     }
 };
 

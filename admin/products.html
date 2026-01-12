@@ -753,6 +753,11 @@
                             style="font-size: 14px; background: #e5e7eb; color: #4b5563; padding: 4px 10px; border-radius: 20px; vertical-align: middle; margin-left: 8px;">0</span>
                     </h2>
                     <div style="display: flex; gap: 10px;">
+                        <button class="add-product-btn" style="background: #7c3aed; opacity: 0.9;"
+                            onclick="openSubcategoryManager()">
+                            <i class="fa-solid fa-layer-group"></i>
+                            alt kategori ve grubu ekle/sil (+/-)
+                        </button>
                         <button class="add-product-btn" style="background: #dc2626; opacity: 0.9;"
                             onclick="openTrashModal()">
                             <i class="fa-solid fa-trash-can"></i>
@@ -791,7 +796,7 @@
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label>Kategori</label>
+                        <label>Üst Kategoriler/Alt Kategoriler</label>
                         <select class="filter-select" id="categoryFilter">
                             <option value="">Tüm Kategoriler</option>
                             <!-- Kategoriler API'den yüklenecek -->
@@ -815,7 +820,7 @@
                             <th>Görsel</th>
                             <th>Ürün Adı</th>
                             <th>Marka</th>
-                            <th>Kategori</th>
+                            <th>Üst Kategoriler/Alt Kategoriler</th>
                             <th>Fiyat</th>
                             <th>Stok</th>
                             <th>İşlemler</th>
@@ -1229,6 +1234,63 @@
             </div>
         </div>
     </div>
+
+    <!-- Alt Kategori ve Grup Yönetimi Modalı -->
+    <div class="modal-overlay" id="subcategoryMgmtModal">
+        <div class="modal" style="max-width: 500px;">
+            <div class="modal-header" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
+                <h3 style="color: white; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Alt Kategori ve Grup Yönetimi
+                </h3>
+                <button class="modal-close" onclick="closeSubcategoryManager()"
+                    style="color: white; opacity: 0.8;">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 24px;">
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Üst Kategori
+                        *</label>
+                    <select id="mgmtMainCategory" onchange="onMgmtCategoryChange()"
+                        style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; background: #fff;">
+                        <option value="">-- Üst Kategori Seçin --</option>
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Grup İsmi
+                        *</label>
+                    <input type="text" id="mgmtGroupName" list="mgmtGroupsDatalist"
+                        placeholder="Örn: Anahtarlar & Vidalama"
+                        style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                    <datalist id="mgmtGroupsDatalist"></datalist>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Alt Kategori
+                        İsmi (Opsiyonel)</label>
+                    <input type="text" id="mgmtSubName" placeholder="Örn: İngiliz Anahtarı"
+                        style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <button onclick="processSubcategoryAction('add')"
+                        style="background: #10b981; color: white; padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s;">
+                        <i class="fa-solid fa-plus"></i> EKLE
+                    </button>
+                    <button onclick="processSubcategoryAction('delete')"
+                        style="background: #ef4444; color: white; padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s;">
+                        <i class="fa-solid fa-minus"></i> SİL
+                    </button>
+                </div>
+
+                <p style="font-size: 12px; color: #64748b; margin-top: 20px; text-align: center; line-height: 1.5;">
+                    <i class="fa-solid fa-info-circle"></i> (+) Ekle butonu yeni grup veya alt kategori ekler.<br>
+                    (-) Sil butonu belirtilen alt kategoriyi veya grubun tamamını siler.
+                </p>
+            </div>
+        </div>
+    </div>
+
 
     <style>
         /* Çöp Kutusu Modal Stilleri */
@@ -2115,7 +2177,7 @@
                             </div>
                         </td>
                         <td><span class="product-brand">${product.brand || '-'}</span></td>
-                        <td>${product.category || '-'}</td>
+                        <td>${product.category || '-'}/${product.subCategory || 'henüz alt kategori seçilmedi'}</td>
                         <td>
                              <div style="display:flex; flex-direction:column; font-weight:600;">
                                  ${product.salePrice
@@ -3263,7 +3325,90 @@
             }
         }
 
+        // Alt kategori ve grup yönetimi
+        function openSubcategoryManager() {
+            document.getElementById('subcategoryMgmtModal').classList.add('active');
+            loadMgmtMainCategories();
+        }
+
+        function closeSubcategoryManager() {
+            document.getElementById('subcategoryMgmtModal').classList.remove('active');
+        }
+
+        function loadMgmtMainCategories() {
+            const select = document.getElementById('mgmtMainCategory');
+            select.innerHTML = '<option value="">-- Üst Kategori Seçin --</option>';
+
+            if (typeof categoriesData !== 'undefined') {
+                Object.keys(categoriesData).forEach(slug => {
+                    const option = document.createElement('option');
+                    option.value = slug;
+                    option.textContent = categoriesData[slug].title || categoriesData[slug].name || slug;
+                    select.appendChild(option);
+                });
+            }
+        }
+
+        function onMgmtCategoryChange() {
+            const categorySlug = document.getElementById('mgmtMainCategory').value;
+            const groupDatalist = document.getElementById('mgmtGroupsDatalist');
+            groupDatalist.innerHTML = '';
+
+            if (categorySlug && categoriesData[categorySlug] && categoriesData[categorySlug].subcategories) {
+                categoriesData[categorySlug].subcategories.forEach(group => {
+                    const option = document.createElement('option');
+                    option.value = group.name;
+                    groupDatalist.appendChild(option);
+                });
+            }
+        }
+
+        async function processSubcategoryAction(action) {
+            const categorySlug = document.getElementById('mgmtMainCategory').value;
+            const groupName = document.getElementById('mgmtGroupName').value.trim();
+            const subName = document.getElementById('mgmtSubName').value.trim();
+
+            if (!categorySlug) return alert('Lütfen bir üst kategori seçin!');
+            if (!groupName) return alert('Lütfen bir grup ismi girin!');
+
+            const confirmMsg = action === 'add'
+                ? `${groupName} grubuna ${subName || 'yeni bir grup'} eklemek istediğinize emin misiniz?`
+                : `${groupName} grubundan ${subName || 'grubun tamamını'} silmek istediğinize emin misiniz?`;
+
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                // UI Loading (Get the event currentTarget or the button)
+                const btn = document.querySelector(`.modal-body button[onclick*="${action}"]`);
+                const originalHTML = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
+
+                const response = await ADMIN_API.syncSubcategories({
+                    action,
+                    categorySlug,
+                    groupName,
+                    subName
+                });
+
+                if (response.success) {
+                    alert(`✅ Başarılı: ${response.message || 'İşlem tamamlandı.'}\n\nDeğişikliklerin sitede görünmesi için 1-2 saniye bekleyebilirsiniz.`);
+                    closeSubcategoryManager();
+                    // Sayfayı yenilemeye gerek yok ama kategori verilerini güncellemek gerekebilir
+                    if (typeof loadCategoriesDropdown === 'function') loadCategoriesDropdown();
+                } else {
+                    alert(`❌ Hata: ${response.message || 'İşlem başarısız.'}`);
+                }
+
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            } catch (error) {
+                console.error('Subcategory action error:', error);
+                alert('❌ Bir hata oluştu. Lütfen bağlantınızı kontrol edin.');
+            }
+        }
     </script>
+
 
     <!-- AI Asistanı JS Kaldırıldı -->
 </body>
