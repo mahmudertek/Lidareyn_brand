@@ -22,7 +22,8 @@ const startShowcaseLoader = async () => {
         'theme-makita': 'Makita',
         'theme-knipex': 'Knipex',
         'theme-dewalt': 'DeWalt',
-        'theme-blackdecker': 'Black+Decker'
+        'theme-milwaukee': 'Milwaukee',
+        'theme-izeltas': 'İzeltaş'
     };
 
     console.log('🚀 Brand Showcase Loader v4.1 Başlatıldı...');

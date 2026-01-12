@@ -292,59 +292,120 @@
     transform: scale(1.2);
 }
 
-/* BLACK+DECKER - Orange/Black Theme */
-.madeniyat-hero.theme-blackdecker .madeniyat-brand-name {
-    color: #FF6600;
+/* MILWAUKEE - Red/Black Theme */
+.madeniyat-hero.theme-milwaukee .madeniyat-brand-name {
+    color: #DB021D;
     text-shadow:
         0 4px 8px rgba(0, 0, 0, 0.4),
-        0 8px 30px rgba(255, 102, 0, 0.3);
+        0 8px 30px rgba(219, 2, 29, 0.3);
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-product-badge {
-    background: #FF6600;
+.madeniyat-hero.theme-milwaukee .madeniyat-product-badge {
+    background: #DB021D;
     color: #ffffff;
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-collection-title::before {
-    color: #FF6600;
+.madeniyat-hero.theme-milwaukee .madeniyat-collection-title::before {
+    color: #DB021D;
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-collection-label {
-    color: #FF6600;
-    background: rgba(255, 102, 0, 0.1);
-    border: 1px solid rgba(255, 102, 0, 0.3);
+.madeniyat-hero.theme-milwaukee .madeniyat-collection-label {
+    color: #DB021D;
+    background: rgba(219, 2, 29, 0.1);
+    border: 1px solid rgba(219, 2, 29, 0.3);
 }
 
-.madeniyat-hero.theme-blackdecker .blackdecker-sub-text {
-    font-size: 12px;
-    color: #b3b3b3;
-    margin-top: 10px;
+.madeniyat-hero.theme-milwaukee .milwaukee-quote {
     font-style: italic;
+    color: #DB021D;
+    font-size: 15px;
+    font-weight: 500;
+    border-left: 3px solid #DB021D;
+    padding-left: 15px;
+    margin: 15px 0;
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-heritage-image::before {
+.madeniyat-hero.theme-milwaukee .madeniyat-heritage-image::before {
     background: transparent !important;
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-view-collection:hover {
-    color: #FF6600;
+.madeniyat-hero.theme-milwaukee .madeniyat-view-collection:hover {
+    color: #DB021D;
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-hero-left {
+.madeniyat-hero.theme-milwaukee .madeniyat-hero-left {
     background: #ffffff !important;
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-brand-overlay {
+.madeniyat-hero.theme-milwaukee .madeniyat-brand-overlay {
     background: #ffffff !important;
     border: none !important;
 }
 
-.madeniyat-hero.theme-blackdecker .madeniyat-brand-logo {
+.madeniyat-hero.theme-milwaukee .madeniyat-brand-logo {
     background: #ffffff !important;
     padding: 10px;
-    width: 95% !important;
+    width: 70% !important;
     max-width: none !important;
-    max-height: 80% !important;
+    max-height: 60% !important;
+}
+
+/* İZELTAŞ - Navy Blue/Red Theme (Turkish Brand) */
+.madeniyat-hero.theme-izeltas .madeniyat-brand-name {
+    color: #1E3A6E;
+    text-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 8px 30px rgba(30, 58, 110, 0.3);
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-product-badge {
+    background: #C71E32;
+    color: #ffffff;
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-collection-title::before {
+    color: #C71E32;
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-collection-label {
+    color: #1E3A6E;
+    background: rgba(30, 58, 110, 0.1);
+    border: 1px solid rgba(30, 58, 110, 0.3);
+}
+
+.madeniyat-hero.theme-izeltas .izeltas-quote {
+    font-style: italic;
+    color: #C71E32;
+    font-size: 15px;
+    font-weight: 500;
+    border-left: 3px solid #C71E32;
+    padding-left: 15px;
+    margin: 15px 0;
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-heritage-image::before {
+    background: transparent !important;
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-view-collection:hover {
+    color: #C71E32;
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-hero-left {
+    background: #ffffff !important;
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-brand-overlay {
+    background: #ffffff !important;
+    border: none !important;
+}
+
+.madeniyat-hero.theme-izeltas .madeniyat-brand-logo {
+    background: #ffffff !important;
+    padding: 10px;
+    width: 80% !important;
+    max-width: none !important;
+    max-height: 70% !important;
 }
 
 /* Section Title for Our Brands */
@@ -745,14 +806,22 @@
         object-fit: contain !important;
     }
 
-    /* BLACK+DECKER logo 20% smaller on mobile */
-    .madeniyat-hero.theme-blackdecker .madeniyat-brand-logo {
-        width: 80% !important;
+    /* MILWAUKEE logo on mobile */
+    .madeniyat-hero.theme-milwaukee .madeniyat-brand-logo {
+        width: 70% !important;
         height: auto !important;
-        max-width: 80% !important;
+        max-width: 70% !important;
         padding: 0 !important;
         object-fit: contain !important;
-        transform: scale(0.8) !important;
+    }
+
+    /* İZELTAŞ logo on mobile */
+    .madeniyat-hero.theme-izeltas .madeniyat-brand-logo {
+        width: 85% !important;
+        height: auto !important;
+        max-width: 85% !important;
+        padding: 0 !important;
+        object-fit: contain !important;
     }
 
     /* Reset DEWALT scale on mobile */
@@ -761,7 +830,8 @@
     }
 
     .madeniyat-hero.theme-dewalt .madeniyat-brand-overlay,
-    .madeniyat-hero.theme-blackdecker .madeniyat-brand-overlay {
+    .madeniyat-hero.theme-milwaukee .madeniyat-brand-overlay,
+    .madeniyat-hero.theme-izeltas .madeniyat-brand-overlay {
         padding: 20px !important;
     }
 
