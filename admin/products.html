@@ -2105,35 +2105,28 @@
             const sortedProducts = [...filteredProducts].sort((a, b) => {
                 // 📌 YARDIMCI FONKSİYONLAR
                 const getTimestamp = (p) => {
-                    let time = 0;
+                    // SADECE OLUŞTURULMA TARİHİNE (createdAt) BAK
+                    // Düzenleme tarihi (updatedAt) sıralamayı etkilememeli.
 
-                    // 1. createdAt varsa al
+                    // 1. createdAt varsa kullan
                     if (p.createdAt) {
                         const d = new Date(p.createdAt);
-                        if (!isNaN(d.getTime())) time = d.getTime();
+                        if (!isNaN(d.getTime())) return d.getTime();
                     }
 
-                    // 2. updatedAt varsa ve daha yeniyse onu al (Güncellenenler üste çıksın)
-                    if (p.updatedAt) {
-                        const d = new Date(p.updatedAt);
-                        if (!isNaN(d.getTime()) && d.getTime() > time) {
-                            time = d.getTime();
-                        }
+                    const id = (p._id || p.id || '').toString();
+
+                    // 2. ID'den timestamp çıkar (MongoDB ID'si oluşturulma zamanını içerir)
+                    if (id.length >= 24 && /^[a-f0-9]{24}$/i.test(id)) {
+                        return parseInt(id.substring(0, 8), 16) * 1000;
                     }
 
-                    // 3. Eğer tarih yoksa ID'den timestamp çıkar (MongoDB formatı)
-                    if (time === 0) {
-                        const id = (p._id || p.id || '').toString();
-                        if (id.length >= 24 && /^[a-f0-9]{24}$/i.test(id)) {
-                            time = parseInt(id.substring(0, 8), 16) * 1000;
-                        }
-                        // 4. Local ID formatı: local_1234567890
-                        else if (id.startsWith('local_')) {
-                            time = parseInt(id.replace('local_', '')) || 0;
-                        }
+                    // 3. Local ID formatı: local_timestamp
+                    if (id.startsWith('local_')) {
+                        return parseInt(id.replace('local_', '')) || 0;
                     }
 
-                    return time;
+                    return 0;
                 };
 
                 const timeA = getTimestamp(a);
