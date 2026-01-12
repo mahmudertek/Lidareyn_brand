@@ -3455,14 +3455,42 @@
                     // Sayfayı yenilemeye gerek yok ama kategori verilerini güncellemek gerekebilir
                     if (typeof loadCategoriesDropdown === 'function') loadCategoriesDropdown();
                 } else {
-                    alert(`❌ Hata: ${response.message || 'İşlem başarısız.'}`);
+                    // Hata mesajını analiz et
+                    let errorMsg = response.message || 'İşlem başarısız.';
+
+                    // ENOENT hatası = Dosya bulunamadı (Sunucu yerel dosyaya erişemiyor)
+                    if (errorMsg.includes('ENOENT') || errorMsg.includes('no such file')) {
+                        errorMsg = `⚠️ BU ÖZELLİK SADECE YEREL SUNUCUDA ÇALIŞIR!\n\n` +
+                            `Canlı sunucu (galatacarsi.com) kategori dosyalarına erişemez.\n\n` +
+                            `Alt kategori eklemek/silmek için:\n` +
+                            `1. Bilgisayarınızda SUNUCUYU_BASLAT.bat çalıştırın\n` +
+                            `2. http://localhost:5000/admin/products.html adresine gidin\n` +
+                            `3. Değişiklikleri orada yapın\n` +
+                            `4. Sonra git push ile siteyi güncelleyin`;
+                    }
+
+                    alert(`❌ Hata: ${errorMsg}`);
                 }
 
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
             } catch (error) {
                 console.error('Subcategory action error:', error);
-                alert('❌ Bir hata oluştu. Lütfen bağlantınızı kontrol edin.');
+
+                // Hata tipine göre kullanıcıya bilgi ver
+                let userMessage = 'Bir hata oluştu. Lütfen bağlantınızı kontrol edin.';
+
+                if (error.message && (error.message.includes('ENOENT') || error.message.includes('no such file'))) {
+                    userMessage = `⚠️ BU ÖZELLİK SADECE YEREL SUNUCUDA ÇALIŞIR!\n\n` +
+                        `Canlı sunucu (galatacarsi.com) kategori dosyalarına erişemez.\n\n` +
+                        `Alt kategori eklemek/silmek için:\n` +
+                        `1. Bilgisayarınızda SUNUCUYU_BASLAT.bat çalıştırın\n` +
+                        `2. http://localhost:5000/admin/products.html adresine gidin\n` +
+                        `3. Değişiklikleri orada yapın\n` +
+                        `4. Sonra git push ile siteyi güncelleyin`;
+                }
+
+                alert(`❌ ${userMessage}`);
             }
         }
     </script>

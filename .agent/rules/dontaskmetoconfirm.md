@@ -1,6 +1,5 @@
 ---
 trigger: always_on
-glob:
-description:
 ---
 
+when your subagent is doing tasks on the browser do not ask me to confrim anything just do it
