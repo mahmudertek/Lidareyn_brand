@@ -330,23 +330,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 `;
             }
 
-            // 4. Popüler Aramalar
-            html += `
-                <div class="smart-search-section">
-                    <div class="smart-section-header">
-                        <span><i class="fa-solid fa-fire-flame-curved"></i> Popüler Aramalar</span>
-                    </div>
-                    <div class="popular-searches-grid">
-                        ${popularSearches.slice(0, 8).map((term, i) => `
-                            <a href="arama.html?q=${encodeURIComponent(term)}" class="popular-search-item" onclick="saveToHistory('${term.replace(/'/g, "\\'")}')">
-                                <span class="popular-rank">${i + 1}</span>
-                                <span class="popular-term">${term}</span>
-                                <i class="fa-solid fa-arrow-trend-up"></i>
-                            </a>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
+            // 4. Popüler Aramalar - KALDIRILDI
+            // html += `...`;
 
             // 5. Eğer hiç geçmiş yoksa hoş mesaj
             if (history.length === 0 && browsingHistory.length === 0) {
@@ -570,16 +555,16 @@ document.addEventListener('DOMContentLoaded', function () {
             // Sonuç bulunamadı
             if (!hasAnyResults) {
                 html = `
-                    <div class="smart-no-results">
-                        <i class="fa-solid fa-face-sad-tear"></i>
-                        <p>"${query}" için sonuç bulunamadı</p>
-                        <span>Yazım hatası olabilir mi? Farklı kelimeler deneyin.</span>
-                        <div class="suggestion-buttons">
-                            <button onclick="document.querySelector('.mobile-search-input').value=''; showSmartSearchHome()">
-                                <i class="fa-solid fa-arrow-left"></i> Geri Dön
+                    <div style="padding: 40px 20px; text-align: center;">
+                        <i class="fa-solid fa-face-sad-tear" style="font-size: 40px; color: #ddd; margin-bottom: 12px; display: block;"></i>
+                        <p style="font-size: 15px; font-weight: 600; color: #333; margin: 0 0 6px 0;">"${query}" için sonuç bulunamadı</p>
+                        <span style="font-size: 12px; color: #888; display: block; margin-bottom: 20px;">Yazım hatası olabilir mi? Farklı kelimeler deneyin.</span>
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <button onclick="document.querySelector('.mobile-search-input').value=''; showSmartSearchHome()" style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; border: 1px solid #e0e0e0; background: #fff; color: #555; font-size: 13px; font-weight: 500; cursor: pointer;">
+                                <i class="fa-solid fa-arrow-left" style="font-size: 11px;"></i> Geri
                             </button>
-                            <a href="arama.html?q=${encodeURIComponent(query)}">
-                                <i class="fa-solid fa-search"></i> Tam Arama Yap
+                            <a href="arama.html?q=${encodeURIComponent(query)}" style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 16px; border-radius: 8px; background: linear-gradient(135deg, #8b7bd8, #6b5bb8); color: #fff; font-size: 13px; font-weight: 500; text-decoration: none;">
+                                <i class="fa-solid fa-search" style="font-size: 11px;"></i> Tam Arama
                             </a>
                         </div>
                     </div>

@@ -467,12 +467,13 @@
      * Tüm search bar'lara arama geçmişi özelliği ekle
      */
     function initSearchHistory() {
-        // Header search bar
-        const headerSearchInput = document.querySelector('.search-container .search-input');
-        const headerSearchContainer = document.querySelector('.search-container');
-        if (headerSearchInput && headerSearchContainer) {
-            attachSearchHistory(headerSearchInput, headerSearchContainer);
-        }
+        // Header search bar - DİKKAT: live-search.js artık bunu yönetiyor
+        // Ayrı bir dropdown oluşturma, çakışma olur
+        // const headerSearchInput = document.querySelector('.search-container .search-input');
+        // const headerSearchContainer = document.querySelector('.search-container');
+        // if (headerSearchInput && headerSearchContainer) {
+        //     attachSearchHistory(headerSearchInput, headerSearchContainer);
+        // }
 
         // Mobile search overlay
         const mobileSearchInput = document.querySelector('.mobile-search-input');
@@ -638,17 +639,23 @@
             .search-history-dropdown-wrapper {
                 position: absolute;
                 top: 100%;
-                left: 0;
                 right: 0;
+                width: 600px;
                 z-index: 10000;
+            }
+            
+            /* Ensure parent container allows dropdown to be seen */
+            .search-container {
+                overflow: visible !important;
+                position: relative;
             }
 
             .search-history-dropdown {
                 background: white;
-                border: 1px solid #e5e5e5;
+                border: 1px solid rgba(0,0,0,0.05);
                 border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-                margin-top: 8px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+                margin-top: 10px;
                 overflow: hidden;
             }
 

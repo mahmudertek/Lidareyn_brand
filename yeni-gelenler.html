@@ -917,6 +917,33 @@
                     return;
                 }
 
+                // 🔄 ADMIN PANEL DEĞİŞİKLİKLERİNİ YANSIT (localStorage merge)
+                try {
+                    const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                    if (localProducts.length > 0) {
+                        let mergedCount = 0;
+                        products.forEach(prod => {
+                            const localMatch = localProducts.find(lp => (lp._id || lp.id) === (prod._id || prod.id));
+                            if (localMatch) {
+                                // Admin panelinden yapılan güncellemeleri yansıt
+                                if (localMatch.name) prod.name = localMatch.name;
+                                if (localMatch.brand) prod.brand = localMatch.brand;
+                                if (localMatch.price !== undefined) prod.price = localMatch.price;
+                                if (localMatch.salePrice !== undefined) prod.salePrice = localMatch.salePrice;
+                                if (localMatch.barcode) prod.barcode = localMatch.barcode;
+                                if (localMatch.image) prod.image = localMatch.image;
+                                if (localMatch.mainImage) prod.mainImage = localMatch.mainImage;
+                                mergedCount++;
+                            }
+                        });
+                        if (mergedCount > 0) {
+                            console.log(`🔄 Yeni Gelenler: ${mergedCount} ürün admin panel değişiklikleri ile güncellendi`);
+                        }
+                    }
+                } catch (mergeErr) {
+                    console.warn('LocalStorage merge hatası:', mergeErr);
+                }
+
                 // Global veriyi güncelle
                 window.productsData = products;
 

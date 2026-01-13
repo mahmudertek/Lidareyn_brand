@@ -108,6 +108,33 @@
                                 filtered = res.data.slice(0, 24);
                             }
 
+                            // 🔄 ADMIN PANEL DEĞİŞİKLİKLERİNİ YANSIT (localStorage merge)
+                            try {
+                                var localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                                if (localProducts.length > 0) {
+                                    var mergedCount = 0;
+                                    filtered.forEach(function (prod) {
+                                        var localMatch = localProducts.find(function (lp) {
+                                            return (lp._id || lp.id) === (prod._id || prod.id);
+                                        });
+                                        if (localMatch) {
+                                            if (localMatch.name) prod.name = localMatch.name;
+                                            if (localMatch.brand) prod.brand = localMatch.brand;
+                                            if (localMatch.price !== undefined) prod.price = localMatch.price;
+                                            if (localMatch.salePrice !== undefined) prod.salePrice = localMatch.salePrice;
+                                            if (localMatch.image) prod.image = localMatch.image;
+                                            if (localMatch.mainImage) prod.mainImage = localMatch.mainImage;
+                                            mergedCount++;
+                                        }
+                                    });
+                                    if (mergedCount > 0) {
+                                        console.log('🔄 Popüler: ' + mergedCount + ' ürün admin panel değişiklikleri ile güncellendi');
+                                    }
+                                }
+                            } catch (mergeErr) {
+                                console.warn('LocalStorage merge hatası:', mergeErr);
+                            }
+
                             var mapped = filtered.map(function (p) {
                                 var hasSalePrice = p.salePrice && parseFloat(p.salePrice) > 0;
                                 return {

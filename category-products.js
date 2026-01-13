@@ -68,18 +68,20 @@
                 allProducts.forEach(prod => {
                     const localMatch = localMergeData.find(lp => (lp._id || lp.id) === (prod._id || prod._id));
                     if (localMatch) {
-                        // İndirimli fiyat eksikse tamamla
-                        if ((prod.salePrice === undefined || prod.salePrice === null) && localMatch.salePrice) {
-                            prod.salePrice = localMatch.salePrice;
-                            mergedCount++;
-                        }
-                        // Barkod eksikse tamamla
-                        if (!prod.barcode && localMatch.barcode) {
-                            prod.barcode = localMatch.barcode;
-                        }
+                        // Admin panelinden yapılan güncellemeleri (localStorage) yansıt
+                        // İsim, Fiyat, Marka gibi temel bilgileri localStorage'dan al
+                        if (localMatch.name) prod.name = localMatch.name;
+                        if (localMatch.brand) prod.brand = localMatch.brand;
+                        if (localMatch.price) prod.price = localMatch.price;
+                        if (localMatch.salePrice) prod.salePrice = localMatch.salePrice;
+                        if (localMatch.barcode) prod.barcode = localMatch.barcode;
+                        if (localMatch.image) prod.image = localMatch.image;
+                        if (localMatch.mainImage) prod.mainImage = localMatch.mainImage;
+
+                        mergedCount++;
                     }
                 });
-                if (mergedCount > 0) console.log(`🔄 Kategori Sayfası: ${mergedCount} ürünün indirim bilgisi yerel veriden kurtarıldı.`);
+                if (mergedCount > 0) console.log(`🔄 Kategori Sayfası: ${mergedCount} ürünün bilgileri (Ad, Fiyat vs.) yerel veriden güncellendi.`);
             }
         } catch (mergeErr) {
             console.error('Merge error:', mergeErr);

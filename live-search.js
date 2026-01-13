@@ -210,6 +210,32 @@ function initLiveSearch() {
                 if (data.success && data.data) {
                     dynamicProducts = data.data;
                     console.log('Live Search: Loaded', dynamicProducts.length, 'products from API');
+
+                    // 🔄 ADMIN PANEL DEĞİŞİKLİKLERİNİ YANSIT (localStorage merge)
+                    try {
+                        const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                        if (localProducts.length > 0) {
+                            let mergedCount = 0;
+                            dynamicProducts.forEach(prod => {
+                                const localMatch = localProducts.find(lp => (lp._id || lp.id) === (prod._id || prod.id));
+                                if (localMatch) {
+                                    if (localMatch.name) prod.name = localMatch.name;
+                                    if (localMatch.brand) prod.brand = localMatch.brand;
+                                    if (localMatch.price !== undefined) prod.price = localMatch.price;
+                                    if (localMatch.salePrice !== undefined) prod.salePrice = localMatch.salePrice;
+                                    if (localMatch.image) prod.image = localMatch.image;
+                                    if (localMatch.mainImage) prod.mainImage = localMatch.mainImage;
+                                    mergedCount++;
+                                }
+                            });
+                            if (mergedCount > 0) {
+                                console.log('Live Search: ' + mergedCount + ' ürün admin panel değişiklikleri ile güncellendi');
+                            }
+                        }
+                    } catch (mergeErr) {
+                        console.warn('Live Search: LocalStorage merge hatası:', mergeErr);
+                    }
+
                     return;
                 }
             }
@@ -230,12 +256,95 @@ function initLiveSearch() {
     loadLiveSearchCategories();
     loadLiveSearchProducts();
 
+    // ============= SEARCH HISTORY INTEGRATION ===================
+    const SEARCH_HISTORY_KEY = 'galata_search_history';
+    const MAX_SEARCH_HISTORY = 10;
+
+    function getSearchHistory() {
+        try {
+            return JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY)) || [];
+        } catch (e) {
+            return [];
+        }
+    }
+
+    function addToSearchHistory(query) {
+        if (!query || query.trim().length < 2) return;
+        const trimmedQuery = query.trim();
+        let history = getSearchHistory();
+        history = history.filter(item => item.toLowerCase() !== trimmedQuery.toLowerCase());
+        history.unshift(trimmedQuery);
+        if (history.length > MAX_SEARCH_HISTORY) {
+            history = history.slice(0, MAX_SEARCH_HISTORY);
+        }
+        localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+    }
+
+    function removeFromSearchHistory(query) {
+        let history = getSearchHistory();
+        history = history.filter(item => item.toLowerCase() !== query.toLowerCase());
+        localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+    }
+
+    function clearSearchHistory() {
+        localStorage.removeItem(SEARCH_HISTORY_KEY);
+    }
+
+    // Render search history in dropdown
+    function renderSearchHistory() {
+        const history = getSearchHistory();
+        if (history.length === 0) {
+            dropdown.innerHTML = `<div class="no-results" style="padding: 30px 20px; text-align: center;">
+                <i class="fa-solid fa-clock-rotate-left" style="font-size: 24px; color: #ddd; margin-bottom: 10px; display: block;"></i>
+                <span style="color: #999;">Henüz arama yapmadınız</span>
+            </div>`;
+            dropdown.classList.add('active');
+            return;
+        }
+
+        let html = `
+            <div class="search-section-title" style="display: flex; justify-content: space-between; align-items: center;">
+                <span><i class="fa-solid fa-clock-rotate-left" style="margin-right: 6px;"></i> Son Aramalar</span>
+                <button onclick="window.clearLiveSearchHistory(); event.stopPropagation();" style="background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 11px; padding: 2px 6px;" title="Tümünü Temizle">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>`;
+
+        history.forEach(item => {
+            html += `
+            <div class="search-result-item search-history-item" style="position: relative;">
+                <a href="arama.html?q=${encodeURIComponent(item)}" style="display: flex; align-items: center; gap: 12px; flex: 1; text-decoration: none; color: inherit;" onclick="window.addToLiveSearchHistory('${item.replace(/'/g, "\\'")}')">
+                    <div class="search-icon-circle" style="background: #f8f7ff;"><i class="fa-solid fa-magnifying-glass" style="color: #8b7bd8;"></i></div>
+                    <span class="search-result-name">${item}</span>
+                </a>
+                <button onclick="window.removeFromLiveSearchHistory('${item.replace(/'/g, "\\'")}'); event.stopPropagation(); event.preventDefault();" style="background: none; border: none; color: #ccc; cursor: pointer; padding: 8px; margin-left: auto;" title="Kaldır">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>`;
+        });
+
+        dropdown.innerHTML = html;
+        dropdown.classList.add('active');
+    }
+
+    // Expose functions globally for inline onclick handlers
+    window.clearLiveSearchHistory = function () {
+        clearSearchHistory();
+        renderSearchHistory();
+    };
+    window.removeFromLiveSearchHistory = function (query) {
+        removeFromSearchHistory(query);
+        renderSearchHistory();
+    };
+    window.addToLiveSearchHistory = addToSearchHistory;
+
     // 3. Input Event Listener for Live Search
     searchInput.addEventListener('input', (e) => {
         const query = e.target.value.trim().toLowerCase();
 
         if (query.length < 1) {
-            dropdown.classList.remove('active');
+            // Show search history when input is empty
+            renderSearchHistory();
             return;
         }
 
@@ -369,10 +478,13 @@ function initLiveSearch() {
     // Force container active style on focus
     searchInput.addEventListener('focus', () => {
         searchContainer.classList.add('active');
-        // If there's text, show dropdown again
+        // If there's text, show dropdown again, else show search history
         if (searchInput.value.trim().length > 0) {
             const event = new Event('input');
             searchInput.dispatchEvent(event);
+        } else {
+            // Show search history when input is empty and focused
+            renderSearchHistory();
         }
     });
 
@@ -391,6 +503,9 @@ function initLiveSearch() {
             const query = searchInput.value.trim();
             if (query.length > 0) {
                 e.preventDefault();
+
+                // Add to search history before navigating
+                addToSearchHistory(query);
 
                 // Sayfa konumuna göre doğru yolu belirle
                 const isInSubfolder = window.location.pathname.includes('/kategoriler/') ||
