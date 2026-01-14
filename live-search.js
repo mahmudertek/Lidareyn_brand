@@ -348,36 +348,69 @@ function initLiveSearch() {
             return;
         }
 
-        // --- AKILLI ARAMA FONKSİYONU: Kelime sırası önemsiz ---
+        // --- AKILLI ARAMA FONKSİYONU: Kelime sırası önemsiz + Sayısal ölçü desteği ---
         function smartMatch(text, queryWords) {
             if (!text || !queryWords.length) return { matched: false, score: 0 };
             const textLower = text.toLowerCase();
             let matchedCount = 0;
+            let bonusScore = 0;
 
             for (const word of queryWords) {
+                // Doğrudan eşleşme
                 if (textLower.includes(word)) {
                     matchedCount++;
+
+                    // Tam kelime eşleşmesi için bonus
+                    const wordBoundaryRegex = new RegExp(`\\b${word}\\b`, 'i');
+                    if (wordBoundaryRegex.test(text)) {
+                        bonusScore += 0.5;
+                    }
+                }
+
+                // Sayısal arama: "400" araması "400 lük", "400mm" ile eşleşmeli
+                if (/^\d+$/.test(word)) {
+                    const numericPatterns = [
+                        new RegExp(`${word}\\s*(mm|cm|m|lük|luk|lik|'li|li|lu|lü|adet|parça|parca)`, 'i'),
+                        new RegExp(`${word}\\s*x\\s*\\d+`, 'i'),
+                        new RegExp(`${word}\\s*-`, 'i'),
+                        new RegExp(`\\b${word}\\b`, 'i')
+                    ];
+
+                    for (const pattern of numericPatterns) {
+                        if (pattern.test(text)) {
+                            if (matchedCount === 0) matchedCount++;
+                            bonusScore += 0.3;
+                            break;
+                        }
+                    }
                 }
             }
 
-            // Eşleşme oranını hesapla
-            const score = matchedCount / queryWords.length;
+            // Tüm kelimeler eşleştiyse bonus
+            if (matchedCount === queryWords.length) {
+                bonusScore += 1;
+            }
+
+            const score = (matchedCount / queryWords.length) + bonusScore;
             return { matched: matchedCount > 0, score };
         }
 
         // Query'yi kelimelere ayır
         const queryWords = query.split(/\s+/).filter(w => w.length > 0);
 
-        // 1. Products (Akıllı arama - kelime sırası önemsiz)
+        // 1. Products (Akıllı arama - kelime sırası önemsiz + sayısal destekli)
         const matchedProducts = dynamicProducts
             .map(p => {
-                // Aranabilir metin oluştur
+                // Aranabilir metin oluştur - genişletilmiş
                 const searchableText = [
                     p.name || '',
                     p.brand || '',
                     p.category || '',
+                    p.subCategory || '',
                     p.sku || '',
-                    p.description || ''
+                    p.description || '',
+                    p.size || p.dimension || p.olcu || '',
+                    String(p.price || '')
                 ].join(' ');
 
                 const result = smartMatch(searchableText, queryWords);
@@ -438,9 +471,28 @@ function initLiveSearch() {
             html += `<div class="search-section-title">Ürünler</div>`;
             matchedProducts.forEach(prod => {
                 const img = prod.mainImage || prod.image || (prod.images && prod.images[0]) || 'https://placehold.co/50x50/f0f0f0/999?text=Ürün';
-                const price = prod.salePrice && parseFloat(prod.salePrice) > 0
-                    ? parseFloat(prod.salePrice).toLocaleString('tr-TR') + ' TL'
-                    : (prod.price ? parseFloat(prod.price).toLocaleString('tr-TR') + ' TL' : '');
+
+                // Fiyat formatla helper
+                const formatPrice = (val) => {
+                    if (val === null || val === undefined || val === '') return '';
+                    if (typeof val === 'number') {
+                        return val > 0 ? val.toLocaleString('tr-TR') + ' TL' : '';
+                    }
+                    if (typeof val === 'string') {
+                        let cleaned = val.replace(/[₺TLtl\s]/g, '').trim();
+                        // Nokta binlik ayırıcı kontrolü
+                        const parts = cleaned.split('.');
+                        if (parts.length >= 2 && parts[parts.length - 1].length === 3) {
+                            cleaned = cleaned.replace(/\./g, '');
+                        }
+                        cleaned = cleaned.replace(',', '.');
+                        const num = parseFloat(cleaned);
+                        return !isNaN(num) && num > 0 ? num.toLocaleString('tr-TR') + ' TL' : '';
+                    }
+                    return '';
+                };
+
+                const price = formatPrice(prod.salePrice) || formatPrice(prod.price) || formatPrice(prod.fiyat) || '';
                 html += `
                 <a href="urun-detay.html?id=${prod._id || prod.id}" class="search-result-item search-result-product" tabindex="0">
                     <img src="${img}" alt="${prod.name || 'Ürün'}" onerror="this.style.display='none';">

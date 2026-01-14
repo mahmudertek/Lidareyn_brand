@@ -153,21 +153,53 @@ document.addEventListener('DOMContentLoaded', () => {
                 .replace(/ü$/, '');
         };
 
-        // AKILLI ARAMA FONKSİYONU: Kelime sırası önemsiz
+        // AKILLI ARAMA FONKSİYONU: Kelime sırası önemsiz + Sayısal ölçü desteği
         const smartSearch = (text, queryWords) => {
             if (!text || !queryWords.length) return { matched: false, score: 0 };
             const textLower = text.toLowerCase();
             let matchedCount = 0;
+            let bonusScore = 0;
 
             for (const word of queryWords) {
+                // Doğrudan eşleşme
                 if (textLower.includes(word)) {
                     matchedCount++;
+
+                    // Tam kelime eşleşmesi için bonus puan
+                    const wordBoundaryRegex = new RegExp(`\\b${word}\\b`, 'i');
+                    if (wordBoundaryRegex.test(text)) {
+                        bonusScore += 0.5;
+                    }
                 }
+
+                // Sayısal arama desteği: "400" araması - "400 lük", "400mm", "400 mm" eşleşmeli
+                if (/^\d+$/.test(word)) {
+                    // Sayı + birim/ek kombinasyonlarını ara
+                    const numericPatterns = [
+                        new RegExp(`${word}\\s*(mm|cm|m|lük|luk|lik|'li|li|lu|lü|adet|parça|parca)`, 'i'),
+                        new RegExp(`${word}\\s*x\\s*\\d+`, 'i'), // 400x200 formatı
+                        new RegExp(`${word}\\s*-`, 'i'), // 400-xxx formatı
+                        new RegExp(`\\b${word}\\b`, 'i') // Tam sayı eşleşmesi
+                    ];
+
+                    for (const pattern of numericPatterns) {
+                        if (pattern.test(text)) {
+                            if (matchedCount === 0) matchedCount++; // İlk eşleşme için sayı
+                            bonusScore += 0.3;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Ürün isminde tüm kelimeler geçiyorsa ekstra bonus
+            if (matchedCount === queryWords.length) {
+                bonusScore += 1;
             }
 
             return {
                 matched: matchedCount > 0,
-                score: matchedCount / queryWords.length
+                score: (matchedCount / queryWords.length) + bonusScore
             };
         };
 
@@ -177,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Her ürün için arama skoru hesapla
             results = results.map(p => {
+                // Aranabilir metni genişlet - sayısal değerleri de içersin
                 const searchableText = [
                     p.name || '',
                     p.brand || '',
@@ -184,7 +217,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     p.subCategory || '',
                     p.description || '',
                     p.barcode || '',
-                    p.sku || ''
+                    p.sku || '',
+                    // Fiyat bilgisini de aranabilir yap (isteğe bağlı)
+                    String(p.price || ''),
+                    // Ölçü/boyut bilgisi varsa
+                    p.size || p.dimension || p.olcu || ''
                 ].join(' ');
 
                 const result = smartSearch(searchableText, queryWords);
@@ -350,10 +387,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 const productBrand = product.brand || '';
                 const productName = product.name || 'İsimsiz Ürün';
 
-                // İndirimli fiyat kontrolü
+                // İndirimli fiyat kontrolü - birden fazla alan için kontrol
                 const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
-                const displayPrice = hasSalePrice ? product.salePrice : product.price;
-                const oldPrice = hasSalePrice ? product.price : (product.oldPrice || product.comparePrice);
+                // Fiyat alanları: price, fiyat, regularPrice
+                const regularPrice = product.price || product.fiyat || product.regularPrice || 0;
+                const displayPrice = hasSalePrice ? product.salePrice : regularPrice;
+                const oldPrice = hasSalePrice ? regularPrice : (product.oldPrice || product.comparePrice);
 
                 const productPrice = formatMoney(displayPrice);
 
@@ -634,9 +673,72 @@ document.addEventListener('DOMContentLoaded', () => {
     function escapeQuotes(str) { return str.replace(/'/g, "\\'"); }
 
     function formatMoney(amount) {
-        const num = parseFloat(amount);
-        if (isNaN(num)) return 'Fiyat Yok';
-        return num.toLocaleString('tr-TR') + ' TL';
+        // Null, undefined veya boş string kontrolü
+        if (amount === null || amount === undefined || amount === '' || amount === 'null') {
+            return 'Fiyat Yok';
+        }
+
+        // Zaten sayı ise direkt kullan
+        if (typeof amount === 'number') {
+            if (isNaN(amount) || amount <= 0) {
+                return 'Fiyat Yok';
+            }
+            return amount.toLocaleString('tr-TR') + ' TL';
+        }
+
+        // String ise formattan sayıyı çıkar
+        if (typeof amount === 'string') {
+            // "₺5.775" veya "5.775 TL" veya "5775" formatlarını destekle
+            let cleaned = amount
+                .replace(/[₺TLtl\s]/g, '') // Para birimi ve boşluk kaldır
+                .trim();
+
+            // Eğer hem nokta hem virgül varsa
+            const hasComma = cleaned.includes(',');
+            const hasDot = cleaned.includes('.');
+
+            if (hasComma && hasDot) {
+                const lastDotIndex = cleaned.lastIndexOf('.');
+                const lastCommaIndex = cleaned.lastIndexOf(',');
+
+                if (lastCommaIndex > lastDotIndex) {
+                    // Türk formatı: 5.775,50 -> nokta binlik, virgül ondalık
+                    cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+                } else {
+                    // Amerikan formatı: 5,775.50 -> virgül binlik, nokta ondalık
+                    cleaned = cleaned.replace(/,/g, '');
+                }
+            } else if (hasComma && !hasDot) {
+                // Sadece virgül var
+                const parts = cleaned.split(',');
+                if (parts.length === 2 && parts[1].length <= 2) {
+                    // Ondalık: 5775,50
+                    cleaned = cleaned.replace(',', '.');
+                } else {
+                    // Binlik: 5,775
+                    cleaned = cleaned.replace(/,/g, '');
+                }
+            } else if (!hasComma && hasDot) {
+                // Sadece nokta var: 5.775 veya 5775.50
+                const parts = cleaned.split('.');
+                if (parts.length === 2 && parts[1].length <= 2) {
+                    // Ondalık ayırıcı olabilir - bırak
+                } else if (parts.length >= 2) {
+                    // Binlik ayırıcı: 5.775 veya 1.234.567 -> hepsini kaldır
+                    cleaned = cleaned.replace(/\./g, '');
+                }
+            }
+
+            const num = parseFloat(cleaned);
+
+            if (isNaN(num) || num <= 0) {
+                return 'Fiyat Yok';
+            }
+
+            return num.toLocaleString('tr-TR') + ' TL';
+        }
+
+        return 'Fiyat Yok';
     }
 
     function formatCategoryName(slug) {
