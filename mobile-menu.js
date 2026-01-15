@@ -296,17 +296,19 @@ document.addEventListener('DOMContentLoaded', function () {
                             </button>
                         </div>
                         <div class="search-history-chips">
-                            ${history.slice(0, 6).map(term => `
+                            ${history.slice(0, 6).map(term => {
+                    const shortTerm = term.length > 12 ? term.substring(0, 12) + '...' : term;
+                    return `
                                 <div class="search-chip">
                                     <a href="arama.html?q=${encodeURIComponent(term)}" onclick="saveToHistory('${term.replace(/'/g, "\\'")}')">
                                         <i class="fa-solid fa-magnifying-glass"></i>
-                                        ${term}
+                                        ${shortTerm}
                                     </a>
                                     <button class="chip-remove" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('removeHistory', {detail: '${term.replace(/'/g, "\\'")}'}))">
                                         <i class="fa-solid fa-xmark"></i>
                                     </button>
                                 </div>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
                 `;
@@ -326,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                          alt="${item.name || 'Ürün'}" 
                                          onerror="this.src='https://placehold.co/80x80/f0f0f0/999?text=Ürün'">
                                     <span class="browsing-item-name">${(item.name || 'Ürün').substring(0, 30)}${(item.name || '').length > 30 ? '...' : ''}</span>
-                                    <span class="browsing-item-price">₺${Number(item.price || 0).toLocaleString('tr-TR')}</span>
+                                    <span class="browsing-item-price">${(function (p) { if (!p || p === 'Fiyat Yok' || p === '---') return '---'; if (typeof p === 'string' && (p.includes('₺') || p.includes('TL'))) return p; var n = parseFloat(String(p).replace(/[^\d.,]/g, '').replace(',', '.')); return isNaN(n) ? '---' : '₺' + n.toLocaleString('tr-TR'); })(item.price)}</span>
                                 </a>
                             `).join('')}
                         </div>
