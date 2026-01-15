@@ -43,27 +43,35 @@ async function fetchProductsFromAPI() {
             const data = await response.json();
 
             if (data.success && data.data) {
-                galataProductsData = data.data.map(product => ({
-                    id: product._id || product.id,
-                    name: product.name,
-                    price: product.price ? `₺${parseFloat(product.price).toLocaleString('tr-TR')}` : '---',
-                    priceRaw: product.price,
-                    image: product.mainImage || product.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
-                    images: product.images || [],
-                    brand: product.brand,
-                    category: product.category,
-                    description: product.description,
-                    stockCode: product.stockCode || product.sku || product._id,
-                    barcode: product.barcode || product.ean || '',
-                    stock: product.stock || 0,
-                    specs: product.specs || product.features || [],
-                    tags: product.tags || [],
-                    isPopular: product.isPopular || false,
-                    isNew: product.isNew || false,
-                    isFeatured: product.isFeatured || false,
-                    isBestSeller: product.isBestSeller || false,
-                    brandShowcase: product.brandShowcase || false
-                }));
+                galataProductsData = data.data.map(product => {
+                    const price = product.price || 0;
+                    const salePrice = product.salePrice || null;
+                    const displayPrice = salePrice ? salePrice : price;
+
+                    return {
+                        id: product._id || product.id,
+                        name: product.name,
+                        price: displayPrice ? `₺${parseFloat(displayPrice).toLocaleString('tr-TR')}` : '---',
+                        oldPrice: salePrice ? `₺${parseFloat(price).toLocaleString('tr-TR')}` : null,
+                        priceRaw: price,
+                        salePrice: salePrice,
+                        image: product.mainImage || product.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                        images: product.images || [],
+                        brand: product.brand,
+                        category: product.category,
+                        description: product.description,
+                        stockCode: product.stockCode || product.sku || product._id,
+                        barcode: product.barcode || product.ean || '',
+                        stock: product.stock || 0,
+                        specs: product.specs || product.features || [],
+                        tags: product.tags || [],
+                        isPopular: product.isPopular || false,
+                        isNew: product.isNew || false,
+                        isFeatured: product.isFeatured || false,
+                        isBestSeller: product.isBestSeller || false,
+                        brandShowcase: product.brandShowcase || false
+                    };
+                });
 
                 productsLoaded = true;
                 console.log(`✅ ${galataProductsData.length} ürün yüklendi.`);
@@ -105,27 +113,35 @@ async function updateFromAPIBackground() {
         const data = await response.json();
 
         if (data.success && data.data) {
-            const newData = data.data.map(product => ({
-                id: product._id || product.id,
-                name: product.name,
-                price: product.price ? `₺${parseFloat(product.price).toLocaleString('tr-TR')}` : '---',
-                priceRaw: product.price,
-                image: product.mainImage || product.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
-                images: product.images || [],
-                brand: product.brand,
-                category: product.category,
-                description: product.description,
-                stockCode: product.stockCode || product.sku || product._id,
-                barcode: product.barcode || product.ean || '',
-                stock: product.stock || 0,
-                specs: product.specs || product.features || [],
-                tags: product.tags || [],
-                isPopular: product.isPopular || false,
-                isNew: product.isNew || false,
-                isFeatured: product.isFeatured || false,
-                isBestSeller: product.isBestSeller || false,
-                brandShowcase: product.brandShowcase || false
-            }));
+            const newData = data.data.map(product => {
+                const price = product.price || 0;
+                const salePrice = product.salePrice || null;
+                const displayPrice = salePrice ? salePrice : price;
+
+                return {
+                    id: product._id || product.id,
+                    name: product.name,
+                    price: displayPrice ? `₺${parseFloat(displayPrice).toLocaleString('tr-TR')}` : '---',
+                    oldPrice: salePrice ? `₺${parseFloat(price).toLocaleString('tr-TR')}` : null,
+                    priceRaw: price,
+                    salePrice: salePrice,
+                    image: product.mainImage || product.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                    images: product.images || [],
+                    brand: product.brand,
+                    category: product.category,
+                    description: product.description,
+                    stockCode: product.stockCode || product.sku || product._id,
+                    barcode: product.barcode || product.ean || '',
+                    stock: product.stock || 0,
+                    specs: product.specs || product.features || [],
+                    tags: product.tags || [],
+                    isPopular: product.isPopular || false,
+                    isNew: product.isNew || false,
+                    isFeatured: product.isFeatured || false,
+                    isBestSeller: product.isBestSeller || false,
+                    brandShowcase: product.brandShowcase || false
+                };
+            });
 
             galataProductsData = newData;
             localStorage.setItem('galata_products_cache', JSON.stringify(newData));

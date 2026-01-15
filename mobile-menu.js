@@ -143,11 +143,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // --- Mobile Live Search Integration with Smart Search & Search History ---
     if (mobileSearchInput) {
         // Create results container
-        let resultsContainer = document.querySelector('.mobile-search-results');
+        // Use the existing results area from HTML
+        let resultsContainer = document.getElementById('mobile-search-results-area');
+        if (!resultsContainer) {
+            resultsContainer = document.querySelector('.mobile-search-results');
+        }
         if (!resultsContainer) {
             resultsContainer = document.createElement('div');
             resultsContainer.className = 'mobile-search-results';
-            document.querySelector('.mobile-search-content').appendChild(resultsContainer);
+            document.getElementById('mobile-search-overlay').appendChild(resultsContainer);
         }
 
         // ╔══════════════════════════════════════════════════════════════════════════════╗
@@ -409,7 +413,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function performSmartSearch(query) {
-            const products = window.productsData || JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+            const products = window.galataProductsData || [];
 
             // Ürün arama
             const scoredProducts = products.map(p => {
@@ -540,8 +544,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <span class="name">${highlightMatch(prod.name || 'Ürün', query)}</span>
                                         <span class="brand-label">${prod.brand || ''}</span>
                                         <div class="price-row">
-                                            <span class="price ${hasDiscount ? 'discounted' : ''}">₺${Number(price).toLocaleString('tr-TR')}</span>
-                                            ${hasDiscount ? `<span class="old-price">₺${Number(prod.price).toLocaleString('tr-TR')}</span>` : ''}
+                                            <span class="price ${prod.salePrice ? 'discounted' : ''}">${prod.price}</span>
+                                            ${prod.oldPrice ? `<span class="old-price">${prod.oldPrice}</span>` : ''}
                                         </div>
                                     </div>
                                     <i class="fa-solid fa-chevron-right"></i>
