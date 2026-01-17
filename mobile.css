@@ -1071,9 +1071,10 @@ body:has(.mobile-search-overlay.active) .development-notice {
     gap: 8px;
     padding: 12px 16px;
     overflow: hidden;
-    width: calc(100% - 32px);
-    max-width: calc(100vw - 32px);
+    width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
+    margin: 0;
 }
 
 .search-chip {
@@ -1082,9 +1083,10 @@ body:has(.mobile-search-overlay.active) .development-notice {
     background: #f8f9ff;
     border: 1px solid #eef0ff;
     border-radius: 10px;
-    max-width: calc(100% - 32px);
+    max-width: calc(100% - 16px);
     overflow: hidden;
     transition: all 0.2s;
+    flex-shrink: 1;
 }
 
 .search-chip:active {

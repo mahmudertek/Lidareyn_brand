@@ -49,19 +49,40 @@
 
         const checkAndTrack = () => {
             const productNameEl = document.querySelector('.product-name, .product-title, h1, #product-title');
-            const productPriceEl = document.querySelector('.product-price, .price, #product-price');
+            const productPriceEl = document.querySelector('.product-price, .price, #product-price, .current-price');
             const productImageEl = document.querySelector('.product-image, .main-image img, .product-img, #mainImage');
 
-            // Ürün adı yüklendi mi kontrol et
-            const hasData = productNameEl &&
+            // Ürün adı ve fiyat yüklendi mi kontrol et
+            const nameLoaded = productNameEl &&
                 productNameEl.textContent.trim() &&
                 !productNameEl.textContent.includes('Yükleniyor');
 
+            // Fiyatın da yüklenmiş olmasını bekle (placeholder değilse)
+            const priceLoaded = productPriceEl &&
+                !productPriceEl.textContent.includes('---') &&
+                !productPriceEl.textContent.includes('Yükleniyor');
+
+            const hasData = nameLoaded && priceLoaded;
+
             if (hasData) {
+                // Fiyatı düzgün şekilde al
+                let priceValue = 'Fiyat Yok';
+                if (productPriceEl) {
+                    const priceText = productPriceEl.textContent.trim();
+                    // "--- TL", "---", "Yükleniyor" gibi placeholder değerleri filtrele
+                    if (priceText &&
+                        !priceText.includes('---') &&
+                        !priceText.includes('Yükleniyor') &&
+                        priceText !== 'Fiyat Yok' &&
+                        priceText !== 'Fiyat Bilgisi Yok') {
+                        priceValue = priceText;
+                    }
+                }
+
                 const productData = {
                     id: productId,
                     name: productNameEl.textContent.trim(),
-                    price: productPriceEl ? productPriceEl.textContent.trim() : 'Fiyat Yok',
+                    price: priceValue,
                     image: productImageEl ? (productImageEl.src || productImageEl.getAttribute('data-src') || 'https://placehold.co/200') : 'https://placehold.co/200'
                 };
 

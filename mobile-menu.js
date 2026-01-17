@@ -285,34 +285,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
-            // 2. Son Aramalar (varsa)
-            if (history.length > 0) {
-                html += `
-                    <div class="smart-search-section">
-                        <div class="smart-section-header">
-                            <span><i class="fa-solid fa-clock-rotate-left"></i> Son Aramalarınız</span>
-                            <button class="smart-clear-btn" onclick="event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('clearHistory'))">
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                        <div class="search-history-chips">
-                            ${history.slice(0, 6).map(term => {
-                    const shortTerm = term.length > 12 ? term.substring(0, 12) + '...' : term;
-                    return `
-                                <div class="search-chip">
-                                    <a href="arama.html?q=${encodeURIComponent(term)}" onclick="saveToHistory('${term.replace(/'/g, "\\'")}')">
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                        ${shortTerm}
-                                    </a>
-                                    <button class="chip-remove" onclick="event.preventDefault(); event.stopPropagation(); document.querySelector('.mobile-search-input').dispatchEvent(new CustomEvent('removeHistory', {detail: '${term.replace(/'/g, "\\'")}'}))">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
-                            `}).join('')}
-                        </div>
-                    </div>
-                `;
-            }
+            // 2. Son Aramalar - Chip'ler kaldırıldı (altta liste olarak gösteriliyor)
 
             // 3. Son Gezilen Ürünler (varsa)
             if (browsingHistory.length > 0) {
@@ -322,15 +295,41 @@ document.addEventListener('DOMContentLoaded', function () {
                             <span><i class="fa-solid fa-eye"></i> Son Gezdiğiniz Ürünler</span>
                         </div>
                         <div class="browsing-history-scroll">
-                            ${browsingHistory.map(item => `
+                            ${browsingHistory.map(item => {
+                    // Fiyat formatlama fonksiyonu
+                    const formatPrice = (p) => {
+                        // Null, undefined veya boş kontrolleri
+                        if (!p || p === 'Fiyat Yok' || p === '---' || p === 'Fiyat Bilgisi Yok') return '---';
+
+                        // String değerlerde placeholder kontrolü
+                        if (typeof p === 'string') {
+                            // "---" içeren değerleri reddet
+                            if (p.includes('---')) return '---';
+                            // Zaten formatlanmış fiyat (₺ veya TL içeriyor ve geçerli rakam var)
+                            if ((p.includes('₺') || p.includes('TL'))) {
+                                // Rakam kontrolü yap
+                                const numMatch = p.match(/[\d.,]+/);
+                                if (numMatch && parseFloat(numMatch[0].replace(',', '.')) > 0) {
+                                    return p;
+                                }
+                                return '---';
+                            }
+                        }
+
+                        // Sayısal dönüşüm dene
+                        const n = parseFloat(String(p).replace(/[^\d.,]/g, '').replace(',', '.'));
+                        return isNaN(n) || n <= 0 ? '---' : '₺' + n.toLocaleString('tr-TR');
+                    };
+
+                    return `
                                 <a href="urun-detay.html?id=${item.id}" class="browsing-history-item">
                                     <img src="${item.image || 'https://placehold.co/80x80/f0f0f0/999?text=Ürün'}" 
                                          alt="${item.name || 'Ürün'}" 
                                          onerror="this.src='https://placehold.co/80x80/f0f0f0/999?text=Ürün'">
                                     <span class="browsing-item-name">${(item.name || 'Ürün').substring(0, 30)}${(item.name || '').length > 30 ? '...' : ''}</span>
-                                    <span class="browsing-item-price">${(function (p) { if (!p || p === 'Fiyat Yok' || p === '---') return '---'; if (typeof p === 'string' && (p.includes('₺') || p.includes('TL'))) return p; var n = parseFloat(String(p).replace(/[^\d.,]/g, '').replace(',', '.')); return isNaN(n) ? '---' : '₺' + n.toLocaleString('tr-TR'); })(item.price)}</span>
+                                    <span class="browsing-item-price">${formatPrice(item.price)}</span>
                                 </a>
-                            `).join('')}
+                            `}).join('')}
                         </div>
                     </div>
                 `;
@@ -476,19 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let html = '';
             const hasAnyResults = results.products.length > 0 || results.categories.length > 0 || results.brands.length > 0;
 
-            // Öneriler
-            if (results.suggestions.length > 0) {
-                html += `<div class="smart-search-section compact">
-                    <div class="suggestions-list">
-                        ${results.suggestions.map(s => `
-                            <a href="arama.html?q=${encodeURIComponent(s)}" class="suggestion-item" onclick="saveToHistory('${s.replace(/'/g, "\\'")}')">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                <span>${highlightMatch(s, query)}</span>
-                            </a>
-                        `).join('')}
-                    </div>
-                </div>`;
-            }
+            // Arama önerileri kaldırıldı (kullanıcı geçmişi zaten başka yerde gösteriliyor)
 
             // Kategoriler
             if (results.categories.length > 0) {

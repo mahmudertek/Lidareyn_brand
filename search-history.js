@@ -475,12 +475,14 @@
         //     attachSearchHistory(headerSearchInput, headerSearchContainer);
         // }
 
-        // Mobile search overlay
+        // Mobile search overlay - mobile-menu.js tarafından yönetildiği için devre dışı bırakıldı
+        /*
         const mobileSearchInput = document.querySelector('.mobile-search-input');
         const mobileSearchForm = document.querySelector('.mobile-search-form');
         if (mobileSearchInput && mobileSearchForm) {
             attachSearchHistory(mobileSearchInput, mobileSearchForm);
         }
+        */
 
         // Gelişmiş arama sayfasındaki search bar'lar
         const advancedSearchInputs = document.querySelectorAll('.advanced-search-input, #general-search-input, #brand-search-input');
