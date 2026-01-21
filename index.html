@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -119,7 +119,8 @@
 
     <link rel="stylesheet" href="popular-section.css">
     <link rel="stylesheet" href="unified-layout.css">
-    <link rel="stylesheet" href="advanced-search.css?v=1766859876">
+    <!-- Gelişmiş Arama Kaldırıldı -->
+    <!-- <link rel="stylesheet" href="advanced-search.css?v=1766859876"> -->
 
     <link rel="stylesheet" href="madeniyat-hero.css?v=1766859876">
 
@@ -765,119 +766,7 @@
         <section class="categories-section" id="kategoriler" aria-labelledby="categories-title">
         </section>
 
-        <!-- Advanced Search Panel / Gelişmiş Arama Bölmesi -->
-        <section class="advanced-search-section" aria-label="Gelişmiş Arama">
-            <!-- Dış Başlık (Bölme Üstünde) -->
-            <!-- Dış Başlık (Bölme Üstünde) -->
-            <h2 class="our-brands-section-title" style="margin-bottom: 20px;">
-                <i class="fa-solid fa-sliders" style="margin-right: 12px; color: #8b7bd8;"></i>
-                GELİŞMİŞ ARAMA SEÇENEKLERİ
-            </h2>
 
-            <div class="advanced-search-panel">
-                <!-- İç Başlık (Bölme İçinde - Eski Hali) -->
-                <h2 class="advanced-search-title">
-                    <i class="fa-solid fa-filter"></i>
-                    Filtre Seçenekleriyle Arayın
-                </h2>
-
-                <div class="search-options-grid">
-                    <!-- Marka Araması -->
-                    <div class="search-option-row full-width">
-                        <span class="search-option-label">
-                            <i class="fa-solid fa-tag"></i>
-                            Markaya göre arayın
-                        </span>
-                        <div class="search-input-wrapper">
-                            <input type="text" id="brand-search-input"
-                                placeholder="Marka adı yazın... (örn: Bosch, Makita)">
-                            <button type="button" class="search-btn-inline" id="brand-search-btn">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                Ara
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Arama + Sıralama Satırı -->
-                    <div class="search-option-row full-width responsive-search-row">
-                        <!-- Arama Kutusu (Sol) -->
-                        <div class="responsive-search-input-container">
-                            <span class="search-option-label" style="margin-bottom: 8px; display: block;">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                Sayfa, marka, ürün, alt veya üst kategori arayın
-                            </span>
-                            <div class="search-input-wrapper">
-                                <input type="text" id="general-search-input" placeholder="Arama yapın..."
-                                    style="width: 100%;" autocomplete="off">
-                                <button type="button" class="search-btn-inline" id="general-search-btn">
-                                    <i class="fa-solid fa-magnifying-glass"></i>
-                                    Ara
-                                </button>
-                            </div>
-                            <!-- Live Search Dropdown -->
-                            <div id="live-search-results"
-                                style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 2px solid #e5e7eb; border-top: none; border-radius: 0 0 8px 8px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-                            </div>
-                        </div>
-
-                        <!-- Sıralama Butonları (Sağ) -->
-                        <div class="responsive-sort-buttons">
-                            <button type="button" class="sort-btn-compact" data-sort="price-asc">
-                                <i class="fa-solid fa-arrow-down-short-wide"></i>
-                                <span>Düşük → Yüksek</span>
-                            </button>
-                            <button type="button" class="sort-btn-compact" data-sort="price-desc">
-                                <i class="fa-solid fa-arrow-up-wide-short"></i>
-                                <span>Yüksek → Düşük</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Barkod Numarasına Göre Arama -->
-                    <div class="search-option-row">
-                        <span class="search-option-label">
-                            <i class="fa-solid fa-barcode"></i>
-                            Barkod numarasına göre arayın
-                        </span>
-                        <div class="search-input-wrapper">
-                            <input type="text" id="barcode-search-input" placeholder="Barkod numarası girin...">
-                            <button type="button" class="search-btn-inline" id="barcode-search-btn">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                Ara
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Stok Koduna Göre Arama -->
-                    <div class="search-option-row">
-                        <span class="search-option-label">
-                            <i class="fa-solid fa-box"></i>
-                            Stok koduna göre arayın
-                        </span>
-                        <div class="search-input-wrapper">
-                            <input type="text" id="stock-search-input" placeholder="Stok kodu girin...">
-                            <button type="button" class="search-btn-inline" id="stock-search-btn">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                                Ara
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Filtreleri Temizle Butonu (Yapısı diğer rowlarla birebir aynı) -->
-                    <div class="search-option-row full-width clear-filters-container">
-                        <div class="search-input-wrapper">
-                            <button type="button" id="clear-filters-btn" class="search-btn-inline clear-filters-custom">
-                                <i class="fa-solid fa-broom"></i>
-                                Filtreleri Temizle
-                            </button>
-                        </div>
-                    </div>
-
-
-
-                </div>
-            </div>
-        </section>
 
         <!-- ÇOK SATAN MARKALAR Section Title -->
         <h2 class="our-brands-section-title">ÇOK SATAN MARKALAR</h2>
@@ -1807,7 +1696,8 @@
         });
     </script>
 
-    <script src="advanced-search.js?v=1766859876"></script>
+    <!-- Gelişmiş Arama Kaldırıldı -->
+    <!-- <script src="advanced-search.js?v=1766859876"></script> -->
     <script src="brand-showcase-loader.js?v=1767222500"></script>
     <script src="mega-menu-links.js?v=1767222500"></script>
 </body>

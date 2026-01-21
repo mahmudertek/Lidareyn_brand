@@ -2420,20 +2420,36 @@
             }
         }
 
-        // YENI: Önce modal kapat, sonra arkaplanda kaydet
+        // YENI: Önce validation yap, başarılı olursa kaydet ve kapat
         async function saveAndClose() {
             console.log('💾 saveAndClose çağrıldı');
 
-            // ÖNCE MODALI KAPAT
-            const modal = document.getElementById('productModal');
-            if (modal) {
-                modal.style.display = 'none';
-                modal.classList.remove('active');
-                modal.classList.remove('minimized');
-            }
-            console.log('✅ Modal kapatıldı, kaydetme başlıyor...');
+            // ÖNCE VALIDATION YAP (Modal kapatmadan önce!)
+            const name = document.getElementById('productName').value;
+            const brand = document.getElementById('productBrand').value;
+            const selectedCategoryCheckboxes = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
 
-            // SONRA ARKAPLANDA KAYDET
+            // Zorunlu alan kontrolü
+            if (!name || !brand) {
+                alert('Lütfen zorunlu alanları doldurun (Ürün Adı, Marka).');
+                // Modal AÇIK KALSIN - kullanıcı düzeltsin
+                return;
+            }
+
+            // Kategori kontrolü
+            if (selectedCategoryCheckboxes.length === 0) {
+                alert('Lütfen en az bir kategori seçin.');
+                // Modal AÇIK KALSIN - kullanıcı düzeltsin
+                return;
+            }
+
+            // Görsel yükleniyorsa bekle
+            if (isImageLoading) {
+                alert('Lütfen görselin işlenmesini bekleyin...');
+                return;
+            }
+
+            // VALIDATION BAŞARILI - SONRA KAYDET VE KAPAT
             try {
                 await saveProduct();
                 console.log('✅ Kaydetme tamamlandı');
