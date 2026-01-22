@@ -1828,7 +1828,32 @@
             if (!productList || !Array.isArray(productList)) return false;
 
             try {
-                // ÖNCE: Tam veriyi kaydetmeyi dene (Görseller dahil)
+                // KRİTİK: Önce local_ prefix'li ürünleri ayrı güvenli listeye kaydet
+                // Bu liste ASLA üzerine yazılmaz ve hard refresh'te korunur
+                const localOnlyProducts = productList.filter(p => {
+                    const pid = (p._id || p.id || '').toString();
+                    return pid.startsWith('local_') || pid.startsWith('restored_');
+                });
+
+                if (localOnlyProducts.length > 0) {
+                    // Mevcut pending listeyi al ve yenileriyle birleştir
+                    let existingPending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
+
+                    localOnlyProducts.forEach(newProd => {
+                        const newId = (newProd._id || newProd.id || '').toString();
+                        const existingIdx = existingPending.findIndex(p => (p._id || p.id) === newId);
+                        if (existingIdx >= 0) {
+                            existingPending[existingIdx] = newProd; // Güncelle
+                        } else {
+                            existingPending.unshift(newProd); // Başa ekle
+                        }
+                    });
+
+                    localStorage.setItem('galatacarsi_pending_products', JSON.stringify(existingPending));
+                    console.log('🔒 Pending listesine kaydedildi (güvenli):', localOnlyProducts.length, 'ürün');
+                }
+
+                // SONRA: Normal listeyi kaydet
                 const fullJson = JSON.stringify(productList);
 
                 // Eğer veri 4MB'den küçükse direkt kaydet
@@ -1865,15 +1890,22 @@
                 console.error('localStorage kayıt hatası:', e);
                 if (e.name === 'QuotaExceededError') {
                     // Kota dolduysa sadece en son eklenen 50 ürünü resimsiz tutmayı dene
-                    const minimalProducts = productList.slice(0, 50).map(p => {
+                    // AMA local_ ürünleri mutlaka dahil et!
+                    const localProducts = productList.filter(p => (p._id || p.id || '').toString().startsWith('local_'));
+                    const apiProducts = productList.filter(p => !(p._id || p.id || '').toString().startsWith('local_')).slice(0, 50 - localProducts.length);
+
+                    const minimalProducts = [...localProducts, ...apiProducts].map(p => {
+                        const isLocal = (p._id || p.id || '').toString().startsWith('local_');
+                        if (isLocal) return p; // Yerel ürünleri olduğu gibi tut
                         const { mainImage, image, ...rest } = p;
                         return { ...rest, mainImage: null, image: null };
                     });
                     try {
                         localStorage.setItem('galatacarsi_products', JSON.stringify(minimalProducts));
-                        console.warn('⚠️ Kota aşımı! Sadece son 50 ürün resimsiz kaydedildi.');
+                        console.warn('⚠️ Kota aşımı! Yerel ürünler + son API ürünleri kaydedildi.');
                     } catch (e2) {
-                        localStorage.removeItem('galatacarsi_products');
+                        // En kötü durumda sadece pending listesi kalacak (bu her zaman güvende)
+                        console.error('❌ localStorage tamamen dolu! Pending listesi güvende.');
                     }
                 }
                 return false;
