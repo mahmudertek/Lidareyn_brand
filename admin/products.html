@@ -18,6 +18,7 @@
     <script src="../config.js"></script>
     <script src="../categories-data.js"></script>
     <script src="admin-api.js?v=1767579001"></script>
+    <script src="indexed-db-storage.js?v=1"></script>
     <script>
         (function () {
             // Bakım sayfası ise kontrol etme
@@ -1824,8 +1825,16 @@
         }
 
         // Base64 görselleri koruyarak localStorage'a kaydet (Kota dostu yeteneklerle)
+        // ARTIK IndexedDB'ye de kaydediyor (50MB+ depolama!)
         function saveProductsToLocalStorage(productList) {
             if (!productList || !Array.isArray(productList)) return false;
+
+            // IndexedDB'ye kaydet (Asenkron, arka planda)
+            if (typeof GalataDB !== 'undefined') {
+                GalataDB.saveProducts(productList).catch(err => {
+                    console.warn('IndexedDB kayıt hatası (devam ediliyor):', err);
+                });
+            }
 
             try {
                 // KRİTİK: Önce local_ prefix'li ürünleri ayrı güvenli listeye kaydet
@@ -2027,7 +2036,22 @@
             } catch (error) {
                 console.error('Load products error:', error);
 
-                const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                // Önce IndexedDB'den dene (50MB+ depolama)
+                let localProducts = [];
+                try {
+                    if (typeof GalataDB !== 'undefined') {
+                        localProducts = await GalataDB.getProducts();
+                        console.log('📦 IndexedDB\'den yüklendi:', localProducts.length);
+                    }
+                } catch (dbErr) {
+                    console.warn('IndexedDB okunamadı, localStorage deneniyor...');
+                }
+
+                // IndexedDB boşsa localStorage'a bak
+                if (localProducts.length === 0) {
+                    localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                }
+
                 if (localProducts.length > 0) {
                     products = localProducts;
                     renderProducts();
