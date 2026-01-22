@@ -96,6 +96,21 @@ const ADMIN_API = {
 
             localStorage.setItem('galatacarsi_products', JSON.stringify(products));
             console.log('✅ Ürün localStorage\'a kaydedildi:', product.name);
+
+            // KRİTİK: Eğer bu local_ prefix'li bir ürünse, ayrı bir listeye de kaydet
+            // Bu liste asla üzerine yazılmaz ve sunucuya kaydedilene kadar korunur
+            const productId = (product._id || product.id || '').toString();
+            if (productId.startsWith('local_') || productId.startsWith('restored_')) {
+                let pendingProducts = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
+                const pendingIndex = pendingProducts.findIndex(p => (p._id || p.id) === productId);
+                if (pendingIndex >= 0) {
+                    pendingProducts[pendingIndex] = product;
+                } else {
+                    pendingProducts.unshift(product);
+                }
+                localStorage.setItem('galatacarsi_pending_products', JSON.stringify(pendingProducts));
+                console.log('🔒 Ürün pending listesine de kaydedildi (güvenli):', product.name);
+            }
         } catch (e) {
             console.error('LocalStorage save error:', e);
         }

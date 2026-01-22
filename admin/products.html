@@ -1903,7 +1903,30 @@
 
                 if (response.success && response.data) {
                     products = response.data;
-                    // Yerel ürünleri de ekle veya birleştir (GÜÇLENDİRİLMİŞ MERGE)
+
+                    // KRİTİK: Önce pending (güvenli) listesini merge et - bu asla üzerine yazılmaz
+                    const pendingProducts = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
+                    if (pendingProducts.length > 0) {
+                        console.log('🔒 Pending ürünler merge ediliyor (güvenli liste):', pendingProducts.length);
+                        pendingProducts.forEach(pp => {
+                            const ppId = (pp._id || pp.id || '').toString();
+                            const ppName = (pp.name || '').trim().toLowerCase();
+
+                            // API'de bu ürün var mı kontrol et
+                            let existsInApi = products.find(p =>
+                                (p._id || p.id) === ppId ||
+                                ((p.name || '').trim().toLowerCase() === ppName &&
+                                    (p.brand || '').trim().toLowerCase() === (pp.brand || '').trim().toLowerCase())
+                            );
+
+                            if (!existsInApi) {
+                                console.log('➕ Pending ürün listeye ekleniyor:', pp.name);
+                                products.push(pp);
+                            }
+                        });
+                    }
+
+                    // Sonra normal yerel listeyi de merge et (GÜÇLENDİRİLMİŞ MERGE)
                     const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
                     if (localProducts.length > 0) {
                         console.log('🔀 Yerel ürünler merge ediliyor:', localProducts.length);
@@ -1956,6 +1979,11 @@
                     }
                     renderProducts();
                     console.log('✅ Ürünler yüklendi:', products.length);
+
+                    // KRİTİK: Merge edilmiş listeyi localStorage'a kaydet
+                    // Böylece yerel ürünler bir sonraki refresh'te korunur
+                    saveProductsToLocalStorage(products);
+                    console.log('💾 Merge edilmiş liste localStorage\'a kaydedildi');
 
                     // NOT: syncLocalProducts geçici olarak devre dışı - veri kaybına neden oluyordu
                     // Ürünler manuel olarak sunucuya kaydedilmeli
@@ -2938,16 +2966,9 @@
 
                         alert(`✅ Ürün başarıyla kaydedildi!\n\nİndirimli Fiyat: ${productData.salePrice !== null ? '₺' + productData.salePrice : 'Yok'}\nBarkod: ${productData.barcode || 'Yok'}`);
 
-                        // Arka planda listeyi tazelemek için - 5 saniye bekle (API'nin işlemesi için yeterli süre)
-                        // NOT: Bu sadece UI tazelemesi - yerel ürünler zaten korunuyor
-                        setTimeout(async () => {
-                            console.log('🔄 Ürün listesi arka planda tazeleniyor...');
-                            try {
-                                await loadProducts();
-                            } catch (e) {
-                                console.warn('Arka plan tazeleme başarısız, yerel veriler korunuyor');
-                            }
-                        }, 5000);
+                        // NOT: Otomatik yenileme kaldırıldı - ürün zaten tabloda ve localStorage'da
+                        // Kullanıcı isterse manuel yenileyebilir (F5)
+                        console.log('✅ Ürün kaydedildi. Otomatik yenileme yapılmıyor.');
                     } else {
                         // API hata döndü
                         console.error('API Hatası:', response);
