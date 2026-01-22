@@ -1,13 +1,17 @@
 /**
- * Category Brands Dropdown - Mobile Only
- * Handles brand filtering and pagination within category pages
+ * Category Brands Dropdown - Mobile & Web
+ * Handles brand filtering dynamically based on products in the current category
  */
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    // Ürünlerin yüklenmesini bekle (products-data.js)
+    if (window.fetchProductsFromAPI) {
+        await window.fetchProductsFromAPI();
+    }
     initBrandsDropdown();
 });
 
-function initBrandsDropdown() {
+async function initBrandsDropdown() {
     const wrapper = document.querySelector('.brands-dropdown-wrapper');
     if (!wrapper) return;
 
@@ -19,14 +23,56 @@ function initBrandsDropdown() {
     const prevBtn = wrapper.querySelector('.pagination-prev');
     const nextBtn = wrapper.querySelector('.pagination-next');
 
-    // Sample brands data - will be replaced with actual data
-    const allBrands = [
-        'Bosch', 'Makita', 'Dewalt', 'Stanley', 'Knipex',
-        'Beta', 'Milwaukee', 'Izeltaş', 'Einhell', 'Black+Decker',
-        'Fisco', 'WD-40', 'Bahco', 'Irwin', 'Tork Craft',
-        'Gedore', 'Wiha', 'Wera', 'Stahlwille', 'Hazet',
-        'Facom', 'SK11', 'Tone', 'Vessel', 'Proxxon'
-    ];
+    // 1. Kategori slug'ını belirle
+    const path = window.location.pathname;
+    const categorySlug = path.split('/').pop().replace('.html', '');
+
+    // 2. Bu kategorideki ürünleri bul
+    let allProducts = [];
+    if (typeof window.getAllProductsSync === 'function') {
+        allProducts = window.getAllProductsSync();
+    } else {
+        // Fallback
+        const cached = localStorage.getItem('galata_products_cache');
+        if (cached) allProducts = JSON.parse(cached);
+    }
+
+    // Kategoriye göre filtrele (category-products.js mantığıyla paralel)
+    function matchesCategory(product, slug) {
+        if (!product) return false;
+        if (product.categorySlug === slug) return true;
+        if (product.category) {
+            const cat = product.category.toLowerCase();
+            const s = slug.toLowerCase().replace(/-/g, ' ');
+            if (cat.includes(s)) return true;
+
+            // Özel eşleştirmeler
+            const mapping = {
+                'hirdavat-el-aletleri': ['hırdavat', 'el aletleri', 'hirdavat'],
+                'elektrikli-el-aletleri': ['elektrikli', 'elektrikli el aletleri'],
+                'asindirici-kesici': ['aşındırıcı', 'kesici'],
+                'yapi-kimyasallari': ['yapıştırıcı', 'dolgu', 'kimyasal'],
+                'kaynak-malzemeleri': ['kaynak'],
+                'is-guvenligi-ve-calisma-ekipmanlari': ['iş güvenliği', 'güvenlik'],
+                'olcme-ve-kontrol-aletleri': ['ölçme', 'kontrol', 'ölçü']
+            };
+            if (mapping[slug]) return mapping[slug].some(term => cat.includes(term));
+        }
+        return false;
+    }
+
+    const categoryProducts = allProducts.filter(p => matchesCategory(p, categorySlug));
+
+    // 3. Benzersiz markaları çıkar
+    const brandSet = new Set();
+    categoryProducts.forEach(p => {
+        if (p.brand && p.brand.trim() !== '') {
+            brandSet.add(p.brand.trim());
+        }
+    });
+
+    const allBrands = Array.from(brandSet).sort();
+    console.log(`🏷️ ${categorySlug} kategorisi için ${allBrands.length} marka bulundu.`);
 
     // 3x3 grid = 9 items per page
     const ITEMS_PER_PAGE = 9;
@@ -57,6 +103,11 @@ function initBrandsDropdown() {
         const end = start + ITEMS_PER_PAGE;
         const pageBrands = filteredBrands.slice(start, end);
 
+        if (allBrands.length === 0) {
+            brandsGrid.innerHTML = '<div class="no-brands-found">Bu kategoride henüz markalı ürün bulunmuyor</div>';
+            return;
+        }
+
         if (pageBrands.length === 0) {
             brandsGrid.innerHTML = '<div class="no-brands-found">Marka bulunamadı</div>';
             return;
@@ -71,10 +122,10 @@ function initBrandsDropdown() {
             item.addEventListener('click', function (e) {
                 e.preventDefault();
                 const brandName = this.dataset.brand;
-                // Filter products by brand (to be implemented)
-                console.log('Filter by brand:', brandName);
-                // You can redirect or filter here
-                // window.location.href = `../arama.html?marka=${encodeURIComponent(brandName)}`;
+                // Arama sayfasına yönlendir (o kategorideki o marka)
+                // Veya mevcut sayfada filtrele (ileride eklenebilir)
+                const searchPath = window.location.pathname.includes('/kategoriler/') ? '../arama.html' : 'arama.html';
+                window.location.href = `${searchPath}?q=${encodeURIComponent(brandName)}`;
             });
         });
     }
@@ -82,6 +133,13 @@ function initBrandsDropdown() {
     // Render pagination
     function renderPagination() {
         const totalPages = Math.ceil(filteredBrands.length / ITEMS_PER_PAGE);
+
+        if (totalPages <= 1) {
+            paginationDots.parentElement.style.display = 'none';
+            return;
+        } else {
+            paginationDots.parentElement.style.display = 'flex';
+        }
 
         // Update arrows
         prevBtn.disabled = currentPage === 0;
@@ -125,3 +183,4 @@ function initBrandsDropdown() {
     renderBrands();
     renderPagination();
 }
+

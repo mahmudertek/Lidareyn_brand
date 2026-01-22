@@ -935,7 +935,8 @@
                                     <!-- Arama ve Seçim Alanı -->
                                     <div style="position: relative; flex: 1;">
                                         <input type="text" id="brandSearchInput" placeholder="Marka ara veya seç..."
-                                            onfocus="showBrandList()" oninput="filterBrandList(this.value)"
+                                            onfocus="showBrandList()"
+                                            oninput="filterBrandList(this.value); document.getElementById('productBrand').value = this.value.trim();"
                                             style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; background: #fff;">
                                         <i class="fa-solid fa-chevron-down"
                                             style="position: absolute; right: 15px; top: 15px; color: #9ca3af; pointer-events: none;"></i>
@@ -1902,17 +1903,41 @@
 
                 if (response.success && response.data) {
                     products = response.data;
-                    // Yerel ürünleri de ekle veya birleştir
+                    // Yerel ürünleri de ekle veya birleştir (GÜÇLENDİRİLMİŞ MERGE)
                     const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
                     if (localProducts.length > 0) {
+                        console.log('🔀 Yerel ürünler merge ediliyor:', localProducts.length);
                         localProducts.forEach(lp => {
-                            const existingProduct = products.find(p => (p._id || p.id) === (lp._id || lp.id));
+                            const lpId = (lp._id || lp.id || '').toString();
+                            const lpName = (lp.name || '').trim().toLowerCase();
 
+                            // ÖNCE ID BAZLI EŞLEŞME
+                            let existingProduct = products.find(p =>
+                                (p._id || p.id) === (lp._id || lp.id)
+                            );
+
+                            // SONRA İSİM BAZLI EŞLEŞME (Aynı isim + aynı marka)
+                            if (!existingProduct && lpName) {
+                                existingProduct = products.find(p =>
+                                    (p.name || '').trim().toLowerCase() === lpName &&
+                                    (p.brand || '').trim().toLowerCase() === (lp.brand || '').trim().toLowerCase()
+                                );
+                            }
+
+                            // YEREL ÜRÜN API'DE YOK - EKLE
                             if (!existingProduct) {
-                                // API'de yoksa ekle
-                                products.push(lp);
+                                // local_ prefix'li ürünler henüz API'ye kaydedilmemiş demek
+                                // Bunları mutlaka listeye ekle
+                                if (lpId.startsWith('local_') || lpId.startsWith('restored_')) {
+                                    console.log('➕ Yerel ürün listeye ekleniyor:', lp.name);
+                                    products.push(lp);
+                                } else {
+                                    // Backend ID'si olan ama API'de olmayan ürün - yine de ekle
+                                    console.log('➕ Backend ürünü (cache) listeye ekleniyor:', lp.name);
+                                    products.push(lp);
+                                }
                             } else {
-                                // API'de varsa ama eksikse, Local'den tamamla (Merge)
+                                // API'de var - eksik alanları Local'den tamamla (Merge)
                                 if ((existingProduct.salePrice === undefined || existingProduct.salePrice === null) && lp.salePrice) {
                                     existingProduct.salePrice = lp.salePrice;
                                 }
@@ -1922,7 +1947,7 @@
                                 if ((existingProduct.stock === undefined || existingProduct.stock === null) && lp.stock) {
                                     existingProduct.stock = lp.stock;
                                 }
-                                // Unit merging - Local deger varsa ve API'den farkli ise Local'i al
+                                // Unit merging - Local değer varsa ve API'den farklı ise Local'i al
                                 if (lp.unit && lp.unit !== 'adet' && existingProduct.unit !== lp.unit) {
                                     existingProduct.unit = lp.unit;
                                 }
@@ -1932,7 +1957,9 @@
                     renderProducts();
                     console.log('✅ Ürünler yüklendi:', products.length);
 
-                    await syncLocalProducts();
+                    // NOT: syncLocalProducts geçici olarak devre dışı - veri kaybına neden oluyordu
+                    // Ürünler manuel olarak sunucuya kaydedilmeli
+                    // await syncLocalProducts();
                 } else {
                     console.warn('API yanıtı başarısız:', response);
                     throw new Error(response.error || 'Sunucudan veri alınamadı');
@@ -2426,8 +2453,16 @@
 
             // ÖNCE VALIDATION YAP (Modal kapatmadan önce!)
             const name = document.getElementById('productName').value;
-            const brand = document.getElementById('productBrand').value;
+            let brand = document.getElementById('productBrand').value;
+            const brandSearchInput = document.getElementById('brandSearchInput').value.trim();
             const selectedCategoryCheckboxes = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
+
+            // MARKA OTOMATİK DOLDURMA: Eğer hidden input boş ama kullanıcı text input'a yazmışsa, onu kullan
+            if (!brand && brandSearchInput) {
+                brand = brandSearchInput;
+                document.getElementById('productBrand').value = brand;
+                console.log('⚡ Marka otomatik atandı:', brand);
+            }
 
             // Zorunlu alan kontrolü
             if (!name || !brand) {
@@ -2675,7 +2710,16 @@
 
                 const id = document.getElementById('productId').value;
                 const name = document.getElementById('productName').value;
-                const brand = document.getElementById('productBrand').value;
+                let brand = document.getElementById('productBrand').value;
+
+                // MARKA OTOMATİK DOLDURMA: Eğer hidden input boş ama text input'a yazmışsa
+                const brandSearchInputVal = document.getElementById('brandSearchInput').value.trim();
+                if (!brand && brandSearchInputVal) {
+                    brand = brandSearchInputVal;
+                    document.getElementById('productBrand').value = brand;
+                    console.log('⚡ saveProduct: Marka otomatik atandı:', brand);
+                }
+
                 const price = parseFloat(document.getElementById('productPrice').value) || 0;
                 const salePriceValue = document.getElementById('productSalePrice').value;
                 const salePrice = salePriceValue ? parseFloat(salePriceValue) : null;
@@ -2894,8 +2938,16 @@
 
                         alert(`✅ Ürün başarıyla kaydedildi!\n\nİndirimli Fiyat: ${productData.salePrice !== null ? '₺' + productData.salePrice : 'Yok'}\nBarkod: ${productData.barcode || 'Yok'}`);
 
-                        // Arka planda listeyi tazelemek için
-                        setTimeout(() => loadProducts(), 1000);
+                        // Arka planda listeyi tazelemek için - 5 saniye bekle (API'nin işlemesi için yeterli süre)
+                        // NOT: Bu sadece UI tazelemesi - yerel ürünler zaten korunuyor
+                        setTimeout(async () => {
+                            console.log('🔄 Ürün listesi arka planda tazeleniyor...');
+                            try {
+                                await loadProducts();
+                            } catch (e) {
+                                console.warn('Arka plan tazeleme başarısız, yerel veriler korunuyor');
+                            }
+                        }, 5000);
                     } else {
                         // API hata döndü
                         console.error('API Hatası:', response);
