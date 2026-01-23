@@ -3010,9 +3010,44 @@
                                 products.push(finalData);
                             }
 
-                            // ÖNEMLİ: API kaydı başarılı olsa bile localStorage'ı güncelle (güvenli)
-                            // Böylece frontend (Carousel/Popüler) API'ye ulaşamazsa bile en güncel veriyi görür.
-                            saveProductsToLocalStorage(products);
+                            // ===== GARANTİLİ KAYIT SİSTEMİ =====
+                            // 1. ADMIN_API ile tek ürün olarak kaydet
+                            try {
+                                if (typeof ADMIN_API !== 'undefined' && ADMIN_API.saveProductToLocalStorage) {
+                                    ADMIN_API.saveProductToLocalStorage(finalData);
+                                    console.log('✅ [1/3] ADMIN_API ile localStorage\'a kaydedildi');
+                                }
+                            } catch (e1) {
+                                console.error('❌ [1/3] ADMIN_API kayıt hatası:', e1);
+                            }
+
+                            // 2. IndexedDB'ye kaydet (50MB+ depolama)
+                            try {
+                                if (typeof GalataDB !== 'undefined') {
+                                    GalataDB.saveProduct(finalData);
+                                    console.log('✅ [2/3] IndexedDB\'ye kaydedildi');
+                                }
+                            } catch (e2) {
+                                console.error('❌ [2/3] IndexedDB kayıt hatası:', e2);
+                            }
+
+                            // 3. Tüm listeyi localStorage'a kaydet
+                            try {
+                                saveProductsToLocalStorage(products);
+                                console.log('✅ [3/3] Tüm liste localStorage\'a kaydedildi');
+                            } catch (e3) {
+                                console.error('❌ [3/3] Liste kayıt hatası:', e3);
+                            }
+
+                            // 4. Doğrudan localStorage'a da yaz (failsafe)
+                            try {
+                                const directKey = 'galatacarsi_last_saved_product';
+                                localStorage.setItem(directKey, JSON.stringify(finalData));
+                                console.log('✅ [FAILSAFE] Doğrudan localStorage\'a kaydedildi');
+                            } catch (e4) {
+                                console.error('❌ [FAILSAFE] Doğrudan kayıt hatası:', e4);
+                            }
+                            // ===================================
 
                             renderProducts(); // Hemen tabloyu güncelle
                         }
