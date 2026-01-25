@@ -2334,12 +2334,33 @@
         async function deleteProduct(id) {
             if (confirm('Bu ürünü silmek istediğinizden emin misiniz?')) {
                 try {
+                    // Ürünü çöp kutusuna taşımayı garanti et (API silmeden önce)
+                    const productToMove = products.find(p => (p._id || p.id) === id);
+                    if (productToMove && typeof ADMIN_API !== 'undefined') {
+                        // Eğer API silme fonksiyonu zaten moveToTrash çağırıyorsa bile 
+                        // burada manuel kontrol yapmak daha güvenli (redundancy)
+                        let trash = JSON.parse(localStorage.getItem('galatacarsi_trash') || '[]');
+                        const isAlreadyInTrash = trash.some(p => (p._id || p.id) === id);
+
+                        if (!isAlreadyInTrash) {
+                            productToMove.deletedAt = new Date().toISOString();
+                            trash.unshift({ ...productToMove });
+                            if (trash.length > 50) trash = trash.slice(0, 50);
+                            localStorage.setItem('galatacarsi_trash', JSON.stringify(trash));
+                            console.log('🗑️ Ürün yerel çöp kutusuna taşındı (Manual)');
+                            updateTrashCount();
+                        }
+                    }
+
                     const response = await ADMIN_API.deleteProduct(id);
                     if (response.success) {
                         await loadProducts();
                         alert('Ürün başarıyla silindi!');
                     } else {
-                        alert(response.message || 'Silme işlemi başarısız');
+                        // API başarısız olsa bile yerel listeden kaldır (Offline/Demo uyumu)
+                        products = products.filter(p => (p._id || p.id) !== id);
+                        renderProducts();
+                        alert(response.message || 'Ürün yerel olarak silindi (Sunucuda bulunamadı)');
                     }
                 } catch (error) {
                     console.error('Delete error:', error);
@@ -2347,13 +2368,22 @@
                     products = products.filter(p => (p._id || p.id) !== id);
                     renderProducts();
                     alert('Ürün silindi (demo mod)');
+                } finally {
+                    updateTrashCount();
                 }
             }
         }
 
         // YENI: Önce validation yap, başarılı olursa kaydet ve kapat
+        let isSaving = false; // Mükerrer kayıt önleyici
+
         async function saveAndClose() {
             console.log('💾 saveAndClose çağrıldı');
+
+            if (isSaving) {
+                console.warn('⚠️ Zaten bir kayıt işlemi devam ediyor...');
+                return;
+            }
 
             // ÖNCE VALIDATION YAP (Modal kapatmadan önce!)
             const name = document.getElementById('productName').value;
@@ -2383,18 +2413,32 @@
             }
 
             // Görsel yükleniyorsa bekle
-            if (isImageLoading) {
+            if (window.isImageLoading) {
                 alert('Lütfen görselin işlenmesini bekleyin...');
                 return;
             }
 
             // VALIDATION BAŞARILI - SONRA KAYDET VE KAPAT
             try {
+                isSaving = true;
+                const saveBtn = document.querySelector('.btn-save');
+                if (saveBtn) {
+                    saveBtn.disabled = true;
+                    saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Kaydediliyor...';
+                }
+
                 await saveProduct();
                 console.log('✅ Kaydetme tamamlandı');
             } catch (err) {
                 console.error('❌ Kaydetme hatası:', err);
                 alert('Kaydetme sırasında hata oluştu: ' + err.message);
+            } finally {
+                isSaving = false;
+                const saveBtn = document.querySelector('.btn-save');
+                if (saveBtn) {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = 'Kaydet ve Kapat';
+                }
             }
         }
 

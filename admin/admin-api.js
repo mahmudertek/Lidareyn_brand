@@ -156,15 +156,31 @@ const ADMIN_API = {
     async deleteProduct(id) {
         try {
             // Silmeden ÖNCE ürünü çöp kutusuna kaydet (geri getirme için)
-            await this.moveToTrash(id);
+            // Hata olsa bile devam et (silme işlemi kritik)
+            try {
+                await this.moveToTrash(id);
+            } catch (trashError) {
+                console.warn('Çöp kutusuna taşıma başarısız, silmeye devam ediliyor:', trashError);
+            }
 
             const response = await fetch(`${this.baseUrl}/products/${id}`, {
                 method: 'DELETE',
                 headers: this.getHeaders()
             });
-            return await response.json();
+
+            const result = await response.json();
+
+            // Sildikten sonra yerel listeden de kaldır
+            if (result.success) {
+                let products = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
+                products = products.filter(p => (p._id || p.id) !== id);
+                localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+            }
+
+            return result;
         } catch (error) {
             console.error('Delete product error:', error);
+            // Sunucuya ulaşılamasa bile yerel listeden siliyoruz (UI'da silinmiş görünüyor)
             return { success: false, error: error.message };
         }
     },
