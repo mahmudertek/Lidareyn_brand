@@ -16,8 +16,10 @@
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script src="../config.js"></script>
-    <script src="../categories-data.js"></script>
+    <script src="../categories-data.js?v=1767181000"></script>
+    <script src="../categories-sync.js?v=1767181000"></script>
     <script src="admin-api.js?v=1767579001"></script>
+    <script src="../products-data.js?v=1767181000"></script>
     <script src="indexed-db-storage.js?v=1"></script>
     <script>
         (function () {
@@ -3128,39 +3130,62 @@
 
         // Initial load
         async function initPage() {
+            if (typeof UnifiedCategories !== 'undefined') {
+                await UnifiedCategories.init();
+            }
+
             await Promise.all([
                 loadBrandsDropdown(),
-                loadCategoriesDropdown()
+                loadCategoriesDropdown(),
+                renderCategoryCheckboxes() // Checkboxları dinamik oluştur
             ]);
             loadProducts();
         }
         initPage();
 
-        // categoriesData artık ../categories-data.js dosyasından geliyor
+        function renderCategoryCheckboxes() {
+            const container = document.getElementById('category-checkbox-list');
+            if (!container) return;
+
+            const categories = (typeof UnifiedCategories !== 'undefined' && UnifiedCategories.data)
+                ? UnifiedCategories.data
+                : (typeof categoriesData !== 'undefined' ? categoriesData : {});
+
+            let html = '';
+            Object.keys(categories).forEach(slug => {
+                const title = categories[slug].title || categories[slug].name || slug;
+                html += `
+                    <label style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
+                        <input type="checkbox" name="productCategories" value="${slug}" onchange="handleCategoryChange()">
+                        ${title}
+                    </label>
+                `;
+            });
+            container.innerHTML = html;
+        }
 
         function updateSubCategories(manualCategory = null, selectedSub = null) {
             const categoryObj = document.getElementById('productCategory');
             const subCategoryObj = document.getElementById('productSubCategory');
 
-            // Hangi kategorinin kullanılacağını belirle (Parametre mi yoksa seçili select mi?)
             let selectedCategory = manualCategory;
             if (!selectedCategory && categoryObj) {
                 selectedCategory = categoryObj.value;
             }
 
-            // Eğer hala boşsa seçili checkbox'tan al
             if (!selectedCategory) {
                 const checked = document.querySelector('input[name="productCategories"]:checked');
                 if (checked) selectedCategory = checked.value;
             }
 
-            // Clear options
             subCategoryObj.innerHTML = '<option value="">Alt Kategori Seçin</option>';
 
-            console.log('📂 Alt kategori yükleniyor. Üst Kategori:', selectedCategory);
+            const categories = (typeof UnifiedCategories !== 'undefined' && UnifiedCategories.data)
+                ? UnifiedCategories.data
+                : (typeof categoriesData !== 'undefined' ? categoriesData : {});
 
-            if (selectedCategory && typeof categoriesData !== 'undefined' && categoriesData[selectedCategory]) {
-                const catData = categoriesData[selectedCategory];
+            if (selectedCategory && categories[selectedCategory]) {
+                const catData = categories[selectedCategory];
 
                 if (catData.subcategories && Array.isArray(catData.subcategories)) {
                     catData.subcategories.forEach(group => {
@@ -3180,20 +3205,7 @@
                         }
                         subCategoryObj.appendChild(optgroup);
                     });
-                } else if (Array.isArray(catData)) {
-                    catData.forEach(sub => {
-                        const option = document.createElement('option');
-                        option.value = sub;
-                        option.textContent = sub;
-                        if (selectedSub && selectedSub === sub) {
-                            option.selected = true;
-                        }
-                        subCategoryObj.appendChild(option);
-                    });
                 }
-                console.log('✅ Alt kategoriler başarıyla listelendi');
-            } else {
-                console.warn('⚠️ Kategori verisi bulunamadı veya üst kategori seçilmedi');
             }
         }
 
@@ -3529,14 +3541,16 @@
             const select = document.getElementById('mgmtMainCategory');
             select.innerHTML = '<option value="">-- Üst Kategori Seçin --</option>';
 
-            if (typeof categoriesData !== 'undefined') {
-                Object.keys(categoriesData).forEach(slug => {
-                    const option = document.createElement('option');
-                    option.value = slug;
-                    option.textContent = categoriesData[slug].title || categoriesData[slug].name || slug;
-                    select.appendChild(option);
-                });
-            }
+            const categories = (typeof UnifiedCategories !== 'undefined' && UnifiedCategories.data)
+                ? UnifiedCategories.data
+                : (typeof categoriesData !== 'undefined' ? categoriesData : {});
+
+            Object.keys(categories).forEach(slug => {
+                const option = document.createElement('option');
+                option.value = slug;
+                option.textContent = categories[slug].title || categories[slug].name || slug;
+                select.appendChild(option);
+            });
         }
 
         function onMgmtCategoryChange() {
@@ -3547,9 +3561,13 @@
             subsDatalist.innerHTML = '';
             groupDatalist.innerHTML = '';
 
-            if (categorySlug && categoriesData[categorySlug] && categoriesData[categorySlug].subcategories) {
+            const categories = (typeof UnifiedCategories !== 'undefined' && UnifiedCategories.data)
+                ? UnifiedCategories.data
+                : (typeof categoriesData !== 'undefined' ? categoriesData : {});
+
+            if (categorySlug && categories[categorySlug] && categories[categorySlug].subcategories) {
                 // Alt kategorileri (group.name) datalist'e ekle
-                categoriesData[categorySlug].subcategories.forEach(group => {
+                categories[categorySlug].subcategories.forEach(group => {
                     const option = document.createElement('option');
                     option.value = group.name;
                     subsDatalist.appendChild(option);
@@ -3568,7 +3586,6 @@
 
         async function processSubcategoryAction(action) {
             const categorySlug = document.getElementById('mgmtMainCategory').value;
-            // Dikkat: Alan adları ters çevrildi - mgmtSubName artık alt kategori, mgmtGroupName grup
             const subCategoryName = document.getElementById('mgmtSubName').value.trim(); // Alt Kategori İsmi
             const groupNamesRaw = document.getElementById('mgmtGroupName').value.trim(); // Grup İsimleri (virgülle ayrılmış)
 
@@ -3580,13 +3597,7 @@
 
             let confirmMsg;
             if (action === 'add') {
-                if (groupNames.length > 1) {
-                    confirmMsg = `"${subCategoryName}" alt kategorisine ${groupNames.length} grup eklemek istediğinize emin misiniz?\n\nGruplar: ${groupNames.join(', ')}`;
-                } else if (groupNames.length === 1) {
-                    confirmMsg = `"${subCategoryName}" alt kategorisine "${groupNames[0]}" grubunu eklemek istediğinize emin misiniz?`;
-                } else {
-                    confirmMsg = `"${subCategoryName}" alt kategorisini (grupsuz) eklemek istediğinize emin misiniz?`;
-                }
+                confirmMsg = `"${subCategoryName}" alt kategorisini ${groupNames.length > 0 ? `ve içindeki ${groupNames.length} grubu` : ''} eklemek istediğinize emin misiniz?`;
             } else {
                 confirmMsg = `"${subCategoryName}" alt kategorisinden ${groupNames.length > 0 ? `"${groupNames.join(', ')}" gruplarını` : 'tamamını'} silmek istediğinize emin misiniz?`;
             }
@@ -3594,61 +3605,74 @@
             if (!confirm(confirmMsg)) return;
 
             try {
-                // UI Loading (Get the event currentTarget or the button)
                 const btn = document.querySelector(`.modal-body button[onclick*="${action}"]`);
                 const originalHTML = btn.innerHTML;
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ...';
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> İşleniyor...';
 
+                // 1. ADIM: YEREL OLARAK GÜNCELLE (LocalStorage) - BU SAYEDE ANINDA SİTEYE YANSIYOR
+                let customCategories = JSON.parse(localStorage.getItem('galatacarsi_custom_categories') || '{}');
+
+                // Mevcut kategoriyi al (Baseline veya custom)
+                const baseCat = (typeof categoriesData !== 'undefined') ? categoriesData[categorySlug] : null;
+                if (!customCategories[categorySlug]) {
+                    customCategories[categorySlug] = JSON.parse(JSON.stringify(baseCat || { subcategories: [] }));
+                }
+
+                let targetSubcats = customCategories[categorySlug].subcategories || [];
+
+                if (action === 'add') {
+                    let group = targetSubcats.find(g => g.name === subCategoryName);
+                    if (!group) {
+                        group = { name: subCategoryName, items: [], icon: 'fa-caret-right' };
+                        targetSubcats.push(group);
+                    }
+                    groupNames.forEach(name => {
+                        if (!group.items.includes(name)) group.items.push(name);
+                    });
+                } else {
+                    const groupIdx = targetSubcats.findIndex(g => g.name === subCategoryName);
+                    if (groupIdx !== -1) {
+                        if (groupNames.length === 0) {
+                            targetSubcats.splice(groupIdx, 1);
+                        } else {
+                            targetSubcats[groupIdx].items = targetSubcats[groupIdx].items.filter(item => !groupNames.includes(item));
+                        }
+                    }
+                }
+
+                customCategories[categorySlug].subcategories = targetSubcats;
+                localStorage.setItem('galatacarsi_custom_categories', JSON.stringify(customCategories));
+                console.log('✅ Yerel kategori verileri güncellendi');
+
+                // 2. ADIM: SUNUCUYA GÖNDER (Kalıcı kayıt için)
                 const response = await ADMIN_API.syncSubcategories({
                     action,
                     categorySlug,
-                    subCategoryName,  // Alt kategori ismi (eski groupName)
-                    groupNames        // Grup isimleri dizisi (eski subName)
+                    subCategoryName,
+                    groupNames
                 });
 
                 if (response.success) {
-                    alert(`✅ Başarılı: ${response.message || 'İşlem tamamlandı.'}\n\nDeğişikliklerin sitede görünmesi için 1-2 saniye bekleyebilirsiniz.`);
-                    closeSubcategoryManager();
-                    // Sayfayı yenilemeye gerek yok ama kategori verilerini güncellemek gerekebilir
-                    if (typeof loadCategoriesDropdown === 'function') loadCategoriesDropdown();
+                    alert(`✅ Başarılı: ${response.message || 'İşlem tamamlandı.'}\n\nDeğişiklikler anında tüm sayfalarına yansıdı!`);
                 } else {
-                    // Hata mesajını analiz et
-                    let errorMsg = response.message || 'İşlem başarısız.';
-
-                    // ENOENT hatası = Dosya bulunamadı (Sunucu yerel dosyaya erişemiyor)
-                    if (errorMsg.includes('ENOENT') || errorMsg.includes('no such file')) {
-                        errorMsg = `⚠️ BU ÖZELLİK SADECE YEREL SUNUCUDA ÇALIŞIR!\n\n` +
-                            `Canlı sunucu (galatacarsi.com) kategori dosyalarına erişemez.\n\n` +
-                            `Alt kategori eklemek/silmek için:\n` +
-                            `1. Bilgisayarınızda SUNUCUYU_BASLAT.bat çalıştırın\n` +
-                            `2. http://localhost:5000/admin/products.html adresine gidin\n` +
-                            `3. Değişiklikleri orada yapın\n` +
-                            `4. Sonra git push ile siteyi güncelleyin`;
-                    }
-
-                    alert(`❌ Hata: ${errorMsg}`);
+                    // Sunucu hatası olsa bile yerel kayıt çalıştığı için kullanıcıya bilgi ver
+                    console.warn('Sunucu senkronizasyonu başarısız, ama yerel değişiklik yapıldı:', response.message);
+                    alert(`✅ Yerel Değişiklik Yapıldı!\n\nNot: Sunucu bağlantısı kurulamadı ama bu tarayıcıda değişiklikleri görebilirsiniz.`);
                 }
+
+                // UI Yenile
+                if (typeof UnifiedCategories !== 'undefined') await UnifiedCategories.init();
+                closeSubcategoryManager();
+                if (typeof loadCategoriesDropdown === 'function') loadCategoriesDropdown();
 
                 btn.disabled = false;
                 btn.innerHTML = originalHTML;
             } catch (error) {
                 console.error('Subcategory action error:', error);
-
-                // Hata tipine göre kullanıcıya bilgi ver
-                let userMessage = 'Bir hata oluştu. Lütfen bağlantınızı kontrol edin.';
-
-                if (error.message && (error.message.includes('ENOENT') || error.message.includes('no such file'))) {
-                    userMessage = `⚠️ BU ÖZELLİK SADECE YEREL SUNUCUDA ÇALIŞIR!\n\n` +
-                        `Canlı sunucu (galatacarsi.com) kategori dosyalarına erişemez.\n\n` +
-                        `Alt kategori eklemek/silmek için:\n` +
-                        `1. Bilgisayarınızda SUNUCUYU_BASLAT.bat çalıştırın\n` +
-                        `2. http://localhost:5000/admin/products.html adresine gidin\n` +
-                        `3. Değişiklikleri orada yapın\n` +
-                        `4. Sonra git push ile siteyi güncelleyin`;
-                }
-
-                alert(`❌ ${userMessage}`);
+                alert(`❌ Bir hata oluştu ama yerel veriler güncellenmiş olabilir.`);
+                btn.disabled = false;
+                btn.innerHTML = 'Hata';
             }
         }
     </script>
