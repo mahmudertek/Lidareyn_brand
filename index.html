@@ -1,144 +1,120 @@
-<!DOCTYPE html>
-<html lang="tr">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<head>
-    <!-- Optimized Favicons (Absolute for Google) -->
-    <link rel="icon" type="image/x-icon" href="https://galatacarsi.com/favicon.ico?v=1.1">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://galatacarsi.com/favicon.png?v=1.1">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://galatacarsi.com/favicon.png?v=1.1">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://galatacarsi.com/favicon.png?v=1.1">
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#8b7bd8">
+<!-- Google Search Results Favicon (144x144 - Required) -->
+<link rel="icon" type="image/png" sizes="144x144" href="./favicon-google.png">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-google.png">
+<link rel="icon" type="image/png" sizes="48x48" href="./favicon-google.png">
 
-    <!-- SEO & Social Media Meta Tags -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://galatacarsi.com/">
-    <meta property="og:title" content="Galata Çarşı - Premium E-Ticaret">
-    <meta property="og:description"
-        content="En kaliteli hırdavat ve el aletlerini en uygun fiyatlarla Galata Çarşı'da bulun.">
-    <meta property="og:image" content="https://galatacarsi.com/favicon.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Galata Çarşı - Premium E-Ticaret">
-    <meta name="twitter:description" content="Kaliteli el aletleri ve hırdavat ürünleri.">
-    <meta name="twitter:image" content="https://galatacarsi.com/favicon.png">
+<!-- Fallback for browsers -->
+<link rel="icon" type="image/x-icon" href="./favicon.ico">
+<link rel="apple-touch-icon" href="./favicon-google.png">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#8b7bd8">
+
+<title>Galata Çarşı - Premium E-Ticaret | Kaliteli Ürünler Uygun Fiyatlar</title>
+<meta name="description"
+    content="Galata Çarşı - En kaliteli hırdavat ve el aletlerini en uygun fiyatlarla satın alın. Bakı, boya, nalbur ve profesyonel ekipmanlar.">
+<meta name="keywords"
+    content="e-ticaret, online alışveriş, hırdavat, el aletleri, nalbur, uygun fiyat, kaliteli ürünler">
+<meta name="author" content="Galata Çarşı">
+<meta name="robots" content="index, follow">
+
+<!-- Open Graph (Facebook / WhatsApp) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://galatacarsi.com/">
+<meta property="og:title" content="Galata Çarşı - Premium E-Ticaret">
+<meta property="og:description"
+    content="En kaliteli hırdavat ve el aletlerini en uygun fiyatlarla Galata Çarşı'da bulun.">
+<meta property="og:image" content="https://galatacarsi.com/favicon.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Galata Çarşı - Premium E-Ticaret">
+<meta name="twitter:description"
+    content="En kaliteli hırdavat ve el aletlerini en uygun fiyatlarla Galata Çarşı'da bulun.">
+<meta name="twitter:image" content="https://galatacarsi.com/favicon.png">
 
 
-    <!-- Bakım Modu Sistemi (JS Only) -->
-    <script src="bakim-ayari.js?v=3"></script>
-    <script>
-        (function () {
-            if (window.location.pathname.includes('bakimda.html')) return;
-            // Yetki kontrolü
-            const auth = localStorage.getItem('admin_session') || localStorage.getItem('adminToken');
-            // Bakım aktifse ve yetki yoksa yönlendir
-            if (window.BAKIM_MODU_AKTIF && !auth) {
-                document.documentElement.style.display = 'none';
-                window.location.href = 'bakimda.html';
-            }
-        })();
-    </script>
-    <!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX'); // BU ID'Yİ KENDİ GA4 ID'NİZLE DEĞİŞTİRİN
-    </script>
-    <!-- Google Analytics Sonu -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <script>
-        history.scrollRestoration = "manual";
-        window.onbeforeunload = function () {
-            window.scrollTo(0, 0);
+<!-- Bakım Modu Sistemi (JS Only) -->
+<script src="bakim-ayari.js?v=3"></script>
+<script>
+    (function () {
+        if (window.location.pathname.includes('bakimda.html')) return;
+        // Yetki kontrolü
+        const auth = localStorage.getItem('admin_session') || localStorage.getItem('adminToken');
+        // Bakım aktifse ve yetki yoksa yönlendir
+        if (window.BAKIM_MODU_AKTIF && !auth) {
+            document.documentElement.style.display = 'none';
+            window.location.href = 'bakimda.html';
         }
-    </script>
-    <title>Galata Çarşı - Premium E-Ticaret | Kaliteli Ürünler Uygun Fiyatlar</title>
-    <meta name="description"
-        content="Galata Çarşı - En kaliteli ürünleri en uygun fiyatlarla satın alın. Elektronik, moda, ev & yaşam ve daha fazlası.">
+    })();
+</script>
+<!-- Google Analytics GA4 - TRACKING ID'NİZİ GİRİN -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX'); // BU ID'Yİ KENDİ GA4 ID'NİZLE DEĞİŞTİRİN
+</script>
+<!-- Google Analytics Sonu -->
+<link rel="canonical" href="https://galatacarsi.com/">
+
+<!-- Preload Critical Resources -->
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    as="style">
+<link rel="preload" href="style.css?v=1766859876" as="style">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Font Awesome for Icons -->
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" media="print"
+    onload="this.media='all'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</noscript>
+
+<link rel="stylesheet" href="style.css?v=1768084900">
+<link rel="stylesheet" href="mobile.css?v=1768084900">
+<link rel="stylesheet" href="grid-motion.css?v=1768084900">
 
 
 
 
 
 
-    <!-- SEO Meta Tags -->
-    <meta name="keywords"
-        content="e-ticaret, online alışveriş, elektronik, moda, ev yaşam, nalbur, hırdavat, uygun fiyat, kaliteli ürünler">
-    <meta name="author" content="Galata Çarşı">
-    <meta name="robots" content="index, follow">
+<link rel="stylesheet" href="slider.css">
+<link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
+<link rel="stylesheet" href="categories-carousel.css">
+<link rel="stylesheet" href="brands-single-row.css?v=1766859876">
 
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Galata Çarşı - Premium E-Ticaret">
-    <meta property="og:description" content="En kaliteli ürünleri en uygun fiyatlarla satın alın.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://galatacarsi.com">
-    <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
+<link rel="stylesheet" href="popular-section.css">
+<link rel="stylesheet" href="unified-layout.css">
+<!-- Gelişmiş Arama Kaldırıldı -->
+<!-- <link rel="stylesheet" href="advanced-search.css?v=1766859876"> -->
 
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Galata Çarşı - Premium E-Ticaret">
-    <meta name="twitter:description" content="En kaliteli ürünleri en uygun fiyatlarla satın alın.">
-    <meta name="twitter:image" content="./assets/hero-banner-1.png">
+<link rel="stylesheet" href="madeniyat-hero.css?v=1766859876">
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://galatacarsi.com">
-
-    <!-- Preload Critical Resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        as="style">
-    <link rel="preload" href="style.css?v=1766859876" as="style">
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Font Awesome for Icons -->
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" as="style">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-        media="print" onload="this.media='all'">
-    <noscript>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    </noscript>
-
-    <link rel="stylesheet" href="style.css?v=1768084900">
-    <link rel="stylesheet" href="mobile.css?v=1768084900">
-    <link rel="stylesheet" href="grid-motion.css?v=1768084900">
+<link rel="stylesheet" href="product-carousel.css?v=1766859876">
 
 
 
 
 
 
-    <link rel="stylesheet" href="slider.css">
-    <link rel="stylesheet" href="mega_menu_styles.css?v=1766859876">
-    <link rel="stylesheet" href="categories-carousel.css">
-    <link rel="stylesheet" href="brands-single-row.css?v=1766859876">
+<!-- Google Fonts for MADENIYAT -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&display=swap"
+    rel="stylesheet">
 
-    <link rel="stylesheet" href="popular-section.css">
-    <link rel="stylesheet" href="unified-layout.css">
-    <!-- Gelişmiş Arama Kaldırıldı -->
-    <!-- <link rel="stylesheet" href="advanced-search.css?v=1766859876"> -->
-
-    <link rel="stylesheet" href="madeniyat-hero.css?v=1766859876">
-
-    <link rel="stylesheet" href="product-carousel.css?v=1766859876">
-
-
-
-
-
-
-    <!-- Google Fonts for MADENIYAT -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&display=swap"
-        rel="stylesheet">
-
-    <!-- Structured Data -->
-    <script type="application/ld+json">
+<!-- Structured Data -->
+<script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -154,7 +130,7 @@
     </script>
 
 
-    <link rel="stylesheet" href="header-simetri-duzeltme.css">
+<link rel="stylesheet" href="header-simetri-duzeltme.css">
 </head>
 
 <body>

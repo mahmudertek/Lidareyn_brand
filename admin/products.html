@@ -2502,8 +2502,8 @@
             if (!container) return;
 
             container.innerHTML = minimizedPanels.map(panel => `
-                <div class="minimized-panel-card" data-id="${panel.minimizedId}">
-                    <div class="card-info" onclick="event.stopPropagation(); restoreMinimizedPanel('${panel.minimizedId}')">
+                <div class="minimized-panel-card" data-id="${panel.minimizedId}" onclick="restoreMinimizedPanel('${panel.minimizedId}')">
+                    <div class="card-info">
                         <i class="fa-solid fa-${panel.isNewProduct ? 'plus' : 'pen'}"></i>
                         <span>${panel.productName || 'Ürün Düzenleme'}</span>
                     </div>
@@ -2570,7 +2570,11 @@
             renderMinimizedPanels();
 
             // Modal'ı aç
-            document.getElementById('productModal').classList.add('active');
+            const modal = document.getElementById('productModal');
+            if (modal) {
+                modal.style.display = ''; // display: none'ı temizle
+                modal.classList.add('active');
+            }
         }
 
         // Minimize edilmiş paneli kapat (listeden kaldır)
