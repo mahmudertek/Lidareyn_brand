@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -10,14 +10,14 @@
 
     <!-- Standardized Favicons (Auto-Injected) -->
 
-    <!-- Bakým Modu Sistemi (En Tepede) -->
+    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
 
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // Bakým sayfasý ise kontrol etme
+            // BakÄ±m sayfasÄ± ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -39,21 +39,21 @@
                 return;
             }
 
-            // Eðer bakýmda deðilse veya yetkiliyse sayfayý göster
+            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('?? Bakým Modu: Eriþim onaylandý.');
+            console.log('?? BakÄ±m Modu: EriÅŸim onaylandÄ±.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sipariþ Yönetimi - Galata Çarþý Admin</title>
+    <title>SipariÅŸ YÃ¶netimi - Galata Ã‡arÅŸÄ± Admin</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
-    <!-- AI Asistaný -->
-    <!-- AI Asistaný Kaldýrýldý -->
+    <!-- AI AsistanÄ± -->
+    <!-- AI AsistanÄ± KaldÄ±rÄ±ldÄ± -->
     <style>
         /* Order Management Specific Styles */
         .filters-bar {
@@ -493,7 +493,7 @@
         <main class="main-content">
             <!-- Topbar -->
             <header class="topbar">
-                <div class="page-title">Sipariþ Yönetimi</div>
+                <div class="page-title">SipariÅŸ YÃ¶netimi</div>
                 <div class="topbar-right">
                     <button class="notification-btn">
                         <i class="fa-regular fa-bell"></i>
@@ -502,7 +502,7 @@
                     <div class="admin-profile">
                         <div class="admin-info">
                             <span class="admin-name">Admin User</span>
-                            <span class="admin-role">Süper Yönetici</span>
+                            <span class="admin-role">SÃ¼per YÃ¶netici</span>
                         </div>
                         <div class="admin-avatar">A</div>
                     </div>
@@ -514,17 +514,17 @@
                 <!-- Filters -->
                 <div class="filters-bar">
                     <div class="filter-group">
-                        <button class="filter-btn active" data-status="all">Tümü</button>
+                        <button class="filter-btn active" data-status="all">TÃ¼mÃ¼</button>
                         <button class="filter-btn" data-status="pending">Bekleyen</button>
-                        <button class="filter-btn" data-status="confirmed">Onaylý</button>
-                        <button class="filter-btn" data-status="processing">Hazýrlanýyor</button>
+                        <button class="filter-btn" data-status="confirmed">OnaylÄ±</button>
+                        <button class="filter-btn" data-status="processing">HazÄ±rlanÄ±yor</button>
                         <button class="filter-btn" data-status="shipped">Kargoda</button>
                         <button class="filter-btn" data-status="delivered">Teslim</button>
-                        <button class="filter-btn" data-status="cancelled">Ýptal</button>
+                        <button class="filter-btn" data-status="cancelled">Ä°ptal</button>
                     </div>
                     <div class="search-box">
                         <i class="fa-solid fa-search"></i>
-                        <input type="text" id="search-input" placeholder="Sipariþ no, müþteri adý ara...">
+                        <input type="text" id="search-input" placeholder="SipariÅŸ no, mÃ¼ÅŸteri adÄ± ara...">
                     </div>
                 </div>
 
@@ -534,14 +534,14 @@
                         <table class="orders-table">
                             <thead>
                                 <tr>
-                                    <th>Sipariþ No</th>
-                                    <th>Müþteri</th>
-                                    <th>Ürünler</th>
+                                    <th>SipariÅŸ No</th>
+                                    <th>MÃ¼ÅŸteri</th>
+                                    <th>ÃœrÃ¼nler</th>
                                     <th>Tutar</th>
                                     <th>Durum</th>
                                     <th>Kargo</th>
                                     <th>Tarih</th>
-                                    <th>Ýþlemler</th>
+                                    <th>Ä°ÅŸlemler</th>
                                 </tr>
                             </thead>
                             <tbody id="orders-tbody">
@@ -563,12 +563,12 @@
     <div class="modal" id="order-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Sipariþ Detayý - <span id="modal-order-id"></span></h3>
+                <h3 class="modal-title">SipariÅŸ DetayÄ± - <span id="modal-order-id"></span></h3>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
 
             <div class="order-detail-section">
-                <h4>Müþteri Bilgileri</h4>
+                <h4>MÃ¼ÅŸteri Bilgileri</h4>
                 <div class="detail-grid">
                     <div class="detail-item">
                         <span class="detail-label">Ad Soyad</span>
@@ -591,22 +591,22 @@
             </div>
 
             <div class="order-detail-section">
-                <h4>Sipariþ Kalemleri</h4>
+                <h4>SipariÅŸ Kalemleri</h4>
                 <div id="modal-items"></div>
             </div>
 
             <div class="order-detail-section">
-                <h4>Sipariþ Durumu</h4>
+                <h4>SipariÅŸ Durumu</h4>
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Durum Deðiþtir</label>
+                        <label>Durum DeÄŸiÅŸtir</label>
                         <select id="modal-status">
                             <option value="pending">Beklemede</option>
-                            <option value="confirmed">Onaylandý</option>
-                            <option value="processing">Hazýrlanýyor</option>
+                            <option value="confirmed">OnaylandÄ±</option>
+                            <option value="processing">HazÄ±rlanÄ±yor</option>
                             <option value="shipped">Kargoya Verildi</option>
                             <option value="delivered">Teslim Edildi</option>
-                            <option value="cancelled">Ýptal Edildi</option>
+                            <option value="cancelled">Ä°ptal Edildi</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -617,7 +617,7 @@
             </div>
 
             <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeModal()">Ýptal</button>
+                <button class="btn-secondary" onclick="closeModal()">Ä°ptal</button>
                 <button class="btn-primary" onclick="updateOrderStatus()">
                     <i class="fa-solid fa-save"></i> Kaydet
                 </button>
@@ -629,20 +629,20 @@
     <div class="modal" id="cargo-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Kargo Oluþtur - <span id="cargo-order-id"></span></h3>
+                <h3 class="modal-title">Kargo OluÅŸtur - <span id="cargo-order-id"></span></h3>
                 <button class="modal-close" onclick="closeCargoModal()">&times;</button>
             </div>
 
             <div class="cargo-form">
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Kargo Firmasý</label>
+                        <label>Kargo FirmasÄ±</label>
                         <select id="cargo-provider">
-                            <option value="yurtici">Yurtiçi Kargo</option>
+                            <option value="yurtici">YurtiÃ§i Kargo</option>
                             <option value="mng">MNG Kargo</option>
                             <option value="aras">Aras Kargo</option>
                             <option value="ptt">PTT Kargo</option>
-                            <option value="surat">Sürat Kargo</option>
+                            <option value="surat">SÃ¼rat Kargo</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -653,32 +653,32 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Aðýrlýk (kg)</label>
+                        <label>AÄŸÄ±rlÄ±k (kg)</label>
                         <input type="number" id="cargo-weight" value="1" min="0.1" step="0.1">
                     </div>
                     <div class="form-group">
-                        <label>Tahmini Kargo Ücreti</label>
+                        <label>Tahmini Kargo Ãœcreti</label>
                         <input type="text" id="cargo-cost" readonly>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Paket Notu (opsiyonel)</label>
-                    <input type="text" id="cargo-note" placeholder="Kýrýlacak, dikkatli taþýyýn...">
+                    <input type="text" id="cargo-note" placeholder="KÄ±rÄ±lacak, dikkatli taÅŸÄ±yÄ±n...">
                 </div>
 
                 <div class="form-group">
                     <label>
                         <input type="checkbox" id="send-notification" checked>
-                        Müþteriye kargo bildirimi gönder
+                        MÃ¼ÅŸteriye kargo bildirimi gÃ¶nder
                     </label>
                 </div>
             </div>
 
             <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeCargoModal()">Ýptal</button>
+                <button class="btn-secondary" onclick="closeCargoModal()">Ä°ptal</button>
                 <button class="btn-primary" onclick="createShipment()">
-                    <i class="fa-solid fa-truck"></i> Kargo Oluþtur
+                    <i class="fa-solid fa-truck"></i> Kargo OluÅŸtur
                 </button>
             </div>
         </div>
@@ -688,24 +688,24 @@
     <div class="modal" id="email-modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">E-posta Gönder</h3>
+                <h3 class="modal-title">E-posta GÃ¶nder</h3>
                 <button class="modal-close" onclick="closeEmailModal()">&times;</button>
             </div>
 
             <div class="cargo-form">
                 <div class="form-group">
-                    <label>E-posta Þablonu</label>
+                    <label>E-posta Åžablonu</label>
                     <select id="email-template">
-                        <option value="order_confirmed">Sipariþ Onayý</option>
+                        <option value="order_confirmed">SipariÅŸ OnayÄ±</option>
                         <option value="order_shipped">Kargo Bildirimi</option>
                         <option value="order_delivered">Teslimat Bildirimi</option>
-                        <option value="order_cancelled">Ýptal Bildirimi</option>
-                        <option value="custom">Özel Mesaj</option>
+                        <option value="order_cancelled">Ä°ptal Bildirimi</option>
+                        <option value="custom">Ã–zel Mesaj</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label>Alýcý</label>
+                    <label>AlÄ±cÄ±</label>
                     <input type="email" id="email-recipient" readonly>
                 </div>
 
@@ -716,14 +716,14 @@
 
                 <div class="form-group" id="custom-message-group" style="display: none;">
                     <label>Mesaj</label>
-                    <textarea id="email-message" rows="5" placeholder="Mesajýnýzý yazýn..."></textarea>
+                    <textarea id="email-message" rows="5" placeholder="MesajÄ±nÄ±zÄ± yazÄ±n..."></textarea>
                 </div>
             </div>
 
             <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeEmailModal()">Ýptal</button>
+                <button class="btn-secondary" onclick="closeEmailModal()">Ä°ptal</button>
                 <button class="btn-primary" onclick="sendEmail()">
-                    <i class="fa-solid fa-paper-plane"></i> Gönder
+                    <i class="fa-solid fa-paper-plane"></i> GÃ¶nder
                 </button>
             </div>
         </div>
@@ -749,8 +749,8 @@
             {
                 _id: '1',
                 orderNumber: 'GC2024001',
-                user: { name: 'Ahmet Yýlmaz', email: 'ahmet@example.com' },
-                shippingAddress: { fullName: 'Ahmet Yýlmaz', phone: '0532 123 4567', city: 'Ýstanbul', address: 'Beyoðlu, Taksim Meydaný No:5' },
+                user: { name: 'Ahmet YÄ±lmaz', email: 'ahmet@example.com' },
+                shippingAddress: { fullName: 'Ahmet YÄ±lmaz', phone: '0532 123 4567', city: 'Ä°stanbul', address: 'BeyoÄŸlu, Taksim MeydanÄ± No:5' },
                 items: [{ name: 'Bosch Matkap', quantity: 1, price: 1250 }],
                 pricing: { total: 1250 },
                 status: 'pending',
@@ -760,9 +760,9 @@
             {
                 _id: '2',
                 orderNumber: 'GC2024002',
-                user: { name: 'Ayþe Demir', email: 'ayse@example.com' },
-                shippingAddress: { fullName: 'Ayþe Demir', phone: '0533 456 7890', city: 'Ankara', address: 'Çankaya, Kültür Cad. No:12' },
-                items: [{ name: 'Makita Taþlama', quantity: 2, price: 450 }],
+                user: { name: 'AyÅŸe Demir', email: 'ayse@example.com' },
+                shippingAddress: { fullName: 'AyÅŸe Demir', phone: '0533 456 7890', city: 'Ankara', address: 'Ã‡ankaya, KÃ¼ltÃ¼r Cad. No:12' },
+                items: [{ name: 'Makita TaÅŸlama', quantity: 2, price: 450 }],
                 pricing: { total: 900 },
                 status: 'confirmed',
                 tracking: null,
@@ -772,7 +772,7 @@
                 _id: '3',
                 orderNumber: 'GC2024003',
                 user: { name: 'Mehmet Kaya', email: 'mehmet@example.com' },
-                shippingAddress: { fullName: 'Mehmet Kaya', phone: '0534 789 0123', city: 'Ýzmir', address: 'Konak, Alsancak Mah. No:8' },
+                shippingAddress: { fullName: 'Mehmet Kaya', phone: '0534 789 0123', city: 'Ä°zmir', address: 'Konak, Alsancak Mah. No:8' },
                 items: [{ name: 'Beta Anahtar Seti', quantity: 1, price: 3400 }],
                 pricing: { total: 3400 },
                 status: 'processing',
@@ -782,20 +782,20 @@
             {
                 _id: '4',
                 orderNumber: 'GC2024004',
-                user: { name: 'Zeynep Çelik', email: 'zeynep@example.com' },
-                shippingAddress: { fullName: 'Zeynep Çelik', phone: '0535 012 3456', city: 'Bursa', address: 'Nilüfer, Özlüce Mah. No:15' },
+                user: { name: 'Zeynep Ã‡elik', email: 'zeynep@example.com' },
+                shippingAddress: { fullName: 'Zeynep Ã‡elik', phone: '0535 012 3456', city: 'Bursa', address: 'NilÃ¼fer, Ã–zlÃ¼ce Mah. No:15' },
                 items: [{ name: 'Knipex Pense', quantity: 3, price: 297 }],
                 pricing: { total: 890 },
                 status: 'shipped',
-                tracking: { company: 'Yurtiçi Kargo', trackingNumber: 'YK12345678901', url: 'https://yurticikargo.com/track/YK12345678901' },
+                tracking: { company: 'YurtiÃ§i Kargo', trackingNumber: 'YK12345678901', url: 'https://yurticikargo.com/track/YK12345678901' },
                 createdAt: new Date(Date.now() - 259200000).toISOString()
             },
             {
                 _id: '5',
                 orderNumber: 'GC2024005',
                 user: { name: 'Caner Erkin', email: 'caner@example.com' },
-                shippingAddress: { fullName: 'Caner Erkin', phone: '0536 345 6789', city: 'Antalya', address: 'Muratpaþa, Lara Cad. No:22' },
-                items: [{ name: 'Hilti Kýrýcý', quantity: 1, price: 2100 }],
+                shippingAddress: { fullName: 'Caner Erkin', phone: '0536 345 6789', city: 'Antalya', address: 'MuratpaÅŸa, Lara Cad. No:22' },
+                items: [{ name: 'Hilti KÄ±rÄ±cÄ±', quantity: 1, price: 2100 }],
                 pricing: { total: 2100 },
                 status: 'delivered',
                 tracking: { company: 'MNG Kargo', trackingNumber: 'MNG98765432101', url: 'https://mngkargo.com/track/MNG98765432101' },
@@ -819,7 +819,7 @@
                 <tr>
                     <td colspan="8" style="text-align: center; padding: 40px; color: #6b7280;">
                         <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <p style="margin: 10px 0 0;">Sipariþler yükleniyor...</p>
+                        <p style="margin: 10px 0 0;">SipariÅŸler yÃ¼kleniyor...</p>
                     </td>
                 </tr>
             `;
@@ -832,13 +832,13 @@
                 const response = await ADMIN_API.getOrders({ status: currentFilter !== 'all' ? currentFilter : '', page: currentPage });
                 if (response.success && response.data) {
                     currentOrders = response.data;
-                    console.log('? API\'den sipariþler yüklendi:', currentOrders.length);
+                    console.log('? API\'den sipariÅŸler yÃ¼klendi:', currentOrders.length);
                 } else {
-                    console.log('?? API yanýtý boþ, demo veriler kullanýlýyor');
+                    console.log('?? API yanÄ±tÄ± boÅŸ, demo veriler kullanÄ±lÄ±yor');
                     currentOrders = demoOrders;
                 }
             } catch (error) {
-                console.log('? API hatasý, demo veriler kullanýlýyor:', error.message);
+                console.log('? API hatasÄ±, demo veriler kullanÄ±lÄ±yor:', error.message);
                 currentOrders = demoOrders;
             }
 
@@ -860,7 +860,7 @@
                     <tr>
                         <td colspan="8" style="text-align: center; padding: 2rem; color: #999;">
                             <i class="fa-solid fa-inbox" style="font-size: 2rem; margin-bottom: 1rem; display: block;"></i>
-                            Bu filtrede sipariþ bulunmuyor
+                            Bu filtrede sipariÅŸ bulunmuyor
                         </td>
                     </tr>
                 `;
@@ -894,15 +894,15 @@
                                 <i class="fa-solid fa-eye"></i>
                             </button>
                             ${!order.tracking && order.status !== 'cancelled' && order.status !== 'delivered' ? `
-                                <button class="btn-icon btn-ship" title="Kargo Oluþtur" onclick="openCargoModal('${order._id}')">
+                                <button class="btn-icon btn-ship" title="Kargo OluÅŸtur" onclick="openCargoModal('${order._id}')">
                                     <i class="fa-solid fa-truck"></i>
                                 </button>
                             ` : ''}
-                            <button class="btn-icon btn-email" title="E-posta Gönder" onclick="openEmailModal('${order._id}')">
+                            <button class="btn-icon btn-email" title="E-posta GÃ¶nder" onclick="openEmailModal('${order._id}')">
                                 <i class="fa-solid fa-envelope"></i>
                             </button>
                             ${order.status === 'pending' ? `
-                                <button class="btn-icon btn-cancel" title="Ýptal Et" onclick="cancelOrder('${order._id}')">
+                                <button class="btn-icon btn-cancel" title="Ä°ptal Et" onclick="cancelOrder('${order._id}')">
                                     <i class="fa-solid fa-times"></i>
                                 </button>
                             ` : ''}
@@ -916,13 +916,13 @@
         function getStatusText(status) {
             const statusMap = {
                 pending: 'Beklemede',
-                confirmed: 'Onaylandý',
-                processing: 'Hazýrlanýyor',
+                confirmed: 'OnaylandÄ±',
+                processing: 'HazÄ±rlanÄ±yor',
                 shipped: 'Kargoda',
                 in_transit: 'Yolda',
                 delivered: 'Teslim Edildi',
-                cancelled: 'Ýptal',
-                returned: 'Ýade'
+                cancelled: 'Ä°ptal',
+                returned: 'Ä°ade'
             };
             return statusMap[status] || status;
         }
@@ -1005,14 +1005,14 @@
                 const response = await ADMIN_API.updateOrderStatus(selectedOrderId, status);
 
                 if (response.success) {
-                    showToast('Sipariþ durumu güncellendi', 'success');
+                    showToast('SipariÅŸ durumu gÃ¼ncellendi', 'success');
                     closeModal();
                     loadOrders();
                 } else {
                     // Demo mode - update locally
                     const order = currentOrders.find(o => o._id === selectedOrderId);
                     if (order) order.status = status;
-                    showToast('Sipariþ durumu güncellendi (Demo)', 'success');
+                    showToast('SipariÅŸ durumu gÃ¼ncellendi (Demo)', 'success');
                     closeModal();
                     renderOrders();
                 }
@@ -1020,7 +1020,7 @@
                 // Demo mode
                 const order = currentOrders.find(o => o._id === selectedOrderId);
                 if (order) order.status = status;
-                showToast('Sipariþ durumu güncellendi (Demo)', 'success');
+                showToast('SipariÅŸ durumu gÃ¼ncellendi (Demo)', 'success');
                 closeModal();
                 renderOrders();
             }
@@ -1085,7 +1085,7 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    showToast(`Kargo oluþturuldu: ${data.data.tracking.trackingNumber}`, 'success');
+                    showToast(`Kargo oluÅŸturuldu: ${data.data.tracking.trackingNumber}`, 'success');
 
                     if (sendNotification) {
                         // Send email notification
@@ -1105,7 +1105,7 @@
                             url: '#'
                         };
                     }
-                    showToast('Kargo oluþturuldu (Demo)', 'success');
+                    showToast('Kargo oluÅŸturuldu (Demo)', 'success');
                     closeCargoModal();
                     renderOrders();
                 }
@@ -1120,7 +1120,7 @@
                         url: '#'
                     };
                 }
-                showToast('Kargo oluþturuldu (Demo)', 'success');
+                showToast('Kargo oluÅŸturuldu (Demo)', 'success');
                 closeCargoModal();
                 renderOrders();
             }
@@ -1128,7 +1128,7 @@
 
         // Get provider name
         function getProviderName(id) {
-            const names = { yurtici: 'Yurtiçi Kargo', mng: 'MNG Kargo', aras: 'Aras Kargo', ptt: 'PTT Kargo', surat: 'Sürat Kargo' };
+            const names = { yurtici: 'YurtiÃ§i Kargo', mng: 'MNG Kargo', aras: 'Aras Kargo', ptt: 'PTT Kargo', surat: 'SÃ¼rat Kargo' };
             return names[id] || id;
         }
 
@@ -1143,7 +1143,7 @@
             selectedOrderId = orderId;
             const order = currentOrders.find(o => o._id === orderId);
             document.getElementById('email-recipient').value = order?.user?.email || '';
-            document.getElementById('email-subject').value = `Sipariþiniz Hakkýnda - ${order?.orderNumber}`;
+            document.getElementById('email-subject').value = `SipariÅŸiniz HakkÄ±nda - ${order?.orderNumber}`;
             document.getElementById('email-modal').classList.add('active');
         }
 
@@ -1168,10 +1168,10 @@
                 customGroup.style.display = 'none';
 
                 const subjects = {
-                    order_confirmed: `Sipariþiniz Onaylandý - ${order?.orderNumber}`,
-                    order_shipped: `Sipariþiniz Kargoya Verildi - ${order?.orderNumber}`,
-                    order_delivered: `Sipariþiniz Teslim Edildi - ${order?.orderNumber}`,
-                    order_cancelled: `Sipariþiniz Ýptal Edildi - ${order?.orderNumber}`
+                    order_confirmed: `SipariÅŸiniz OnaylandÄ± - ${order?.orderNumber}`,
+                    order_shipped: `SipariÅŸiniz Kargoya Verildi - ${order?.orderNumber}`,
+                    order_delivered: `SipariÅŸiniz Teslim Edildi - ${order?.orderNumber}`,
+                    order_cancelled: `SipariÅŸiniz Ä°ptal Edildi - ${order?.orderNumber}`
                 };
 
                 document.getElementById('email-subject').value = subjects[template] || '';
@@ -1202,12 +1202,12 @@
                 });
 
                 if (response.ok) {
-                    showToast('E-posta gönderildi', 'success');
+                    showToast('E-posta gÃ¶nderildi', 'success');
                 } else {
-                    showToast('E-posta gönderildi (Demo)', 'success');
+                    showToast('E-posta gÃ¶nderildi (Demo)', 'success');
                 }
             } catch {
-                showToast('E-posta gönderildi (Demo)', 'success');
+                showToast('E-posta gÃ¶nderildi (Demo)', 'success');
             }
 
             closeEmailModal();
@@ -1235,7 +1235,7 @@
 
         // Cancel order
         async function cancelOrder(orderId) {
-            if (!confirm('Bu sipariþi iptal etmek istediðinize emin misiniz?')) return;
+            if (!confirm('Bu sipariÅŸi iptal etmek istediÄŸinize emin misiniz?')) return;
 
             try {
                 const response = await fetch(`${API_BASE_URL}/orders/${orderId}/cancel`, {
@@ -1244,22 +1244,22 @@
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${authToken}`
                     },
-                    body: JSON.stringify({ reason: 'Admin tarafýndan iptal edildi' })
+                    body: JSON.stringify({ reason: 'Admin tarafÄ±ndan iptal edildi' })
                 });
 
                 if (response.ok) {
-                    showToast('Sipariþ iptal edildi', 'success');
+                    showToast('SipariÅŸ iptal edildi', 'success');
                     loadOrders();
                 } else {
                     const order = currentOrders.find(o => o._id === orderId);
                     if (order) order.status = 'cancelled';
-                    showToast('Sipariþ iptal edildi (Demo)', 'success');
+                    showToast('SipariÅŸ iptal edildi (Demo)', 'success');
                     renderOrders();
                 }
             } catch {
                 const order = currentOrders.find(o => o._id === orderId);
                 if (order) order.status = 'cancelled';
-                showToast('Sipariþ iptal edildi (Demo)', 'success');
+                showToast('SipariÅŸ iptal edildi (Demo)', 'success');
                 renderOrders();
             }
         }
@@ -1278,8 +1278,9 @@
         }
     </script>
 
-    <!-- AI Asistaný -->
-    <!-- AI Asistaný JS Kaldýrýldý -->
+    <!-- AI AsistanÄ± -->
+    <!-- AI AsistanÄ± JS KaldÄ±rÄ±ldÄ± -->
 </body>
 
 </html>
+

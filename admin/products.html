@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -10,7 +10,7 @@
 
     <!-- Standardized Favicons (Auto-Injected) -->
 
-    <!-- Bakým Modu Sistemi (En Tepede) -->
+    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
 
     </style>
@@ -23,7 +23,7 @@
     <script src="indexed-db-storage.js?v=1"></script>
     <script>
         (function () {
-            // Bakým sayfasý ise kontrol etme
+            // BakÄ±m sayfasÄ± ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -45,20 +45,20 @@
                 return;
             }
 
-            // Eðer bakýmda deðilse veya yetkiliyse sayfayý göster
+            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('?? Bakým Modu: Eriþim onaylandý.');
+            console.log('?? BakÄ±m Modu: EriÅŸim onaylandÄ±.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ürün Yönetimi - Galata Çarþý Admin</title>
+    <title>ÃœrÃ¼n YÃ¶netimi - Galata Ã‡arÅŸÄ± Admin</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
-    <!-- AI Asistaný Kaldýrýldý -->
+    <!-- AI AsistanÄ± KaldÄ±rÄ±ldÄ± -->
     <style>
         /* Product Management Styles */
         .products-header {
@@ -473,7 +473,7 @@
             color: #374151;
         }
 
-        /* Minimized Modal - Sað Alta Küçültme */
+        /* Minimized Modal - SaÄŸ Alta KÃ¼Ã§Ã¼ltme */
         .modal-overlay.minimized {
             background: transparent !important;
             pointer-events: none;
@@ -482,14 +482,14 @@
             padding: 0 !important;
             z-index: 9999 !important;
             display: flex !important;
-            /* En üstte durmasý için */
+            /* En Ã¼stte durmasÄ± iÃ§in */
         }
 
         .modal-overlay.minimized .modal {
             width: 320px;
             height: 60px;
             margin: 0 20px 20px 0;
-            /* Sað alt köþe */
+            /* SaÄŸ alt kÃ¶ÅŸe */
             overflow: hidden;
             pointer-events: auto;
             border-radius: 12px;
@@ -532,7 +532,7 @@
             gap: 8px;
         }
 
-        /* Küçülünce baþlýðýn önüne ikon ekle */
+        /* KÃ¼Ã§Ã¼lÃ¼nce baÅŸlÄ±ÄŸÄ±n Ã¶nÃ¼ne ikon ekle */
         .modal-overlay.minimized .modal-header h2::before {
             content: '\f044';
             /* fa-edit */
@@ -574,7 +574,7 @@
     </style>
     <meta property="og:image" content="https://galatacarsi.com/gorseller/sosyal_medya_gorseli.png">
     <style>
-        /* Minimize edilmiþ panel kartlarý için container */
+        /* Minimize edilmiÅŸ panel kartlarÄ± iÃ§in container */
         .minimized-panels-container {
             position: fixed;
             bottom: 20px;
@@ -666,7 +666,7 @@
 </head>
 
 <body>
-    <!-- Minimize edilmiþ panel kartlarý container -->
+    <!-- Minimize edilmiÅŸ panel kartlarÄ± container -->
     <div class="minimized-panels-container" id="minimizedPanelsContainer"></div>
 
     <div class="admin-container">
@@ -677,10 +677,10 @@
         <main class="main-content">
             <!-- Topbar -->
             <header class="topbar">
-                <div class="page-title" style="color:#8b7bd8 !important; font-weight:bold;">Ürün Yönetimi v2.0 (DEBUG)
+                <div class="page-title" style="color:#8b7bd8 !important; font-weight:bold;">ÃœrÃ¼n YÃ¶netimi v2.0 (DEBUG)
                     <span id="api-status-badge"
                         style="font-size: 10px; padding: 2px 8px; border-radius: 10px; margin-left: 10px; background: #fee2e2; color: #991b1b; vertical-align: middle;">
-                        <i class="fa-solid fa-circle-nodes"></i> KONTROL EDÝLÝYOR...
+                        <i class="fa-solid fa-circle-nodes"></i> KONTROL EDÄ°LÄ°YOR...
                     </span>
                 </div>
 
@@ -692,7 +692,7 @@
                     <div class="admin-profile">
                         <div class="admin-info">
                             <span class="admin-name">Admin User</span>
-                            <span class="admin-role">Süper Yönetici</span>
+                            <span class="admin-role">SÃ¼per YÃ¶netici</span>
                         </div>
                         <div class="admin-avatar">A</div>
                     </div>
@@ -716,16 +716,16 @@
                         const icon = document.getElementById('api-status-icon');
                         const text = document.getElementById('api-status-text');
 
-                        // 1. ADMIN_API var mý?
+                        // 1. ADMIN_API var mÄ±?
                         if (typeof ADMIN_API === 'undefined') {
                             icon.textContent = '?';
                             panel.style.background = '#dc2626';
-                            text.innerHTML = '<strong>HATA:</strong> admin-api.js yüklenemedi! Sayfa bozuk. Lütfen Ctrl+F5 ile yenileyin.';
+                            text.innerHTML = '<strong>HATA:</strong> admin-api.js yÃ¼klenemedi! Sayfa bozuk. LÃ¼tfen Ctrl+F5 ile yenileyin.';
                             return;
                         }
 
-                        // 2. Sunucuya baðlan
-                        text.textContent = 'Sunucuya baðlanýlýyor...';
+                        // 2. Sunucuya baÄŸlan
+                        text.textContent = 'Sunucuya baÄŸlanÄ±lÄ±yor...';
 
                         fetch(ADMIN_API.baseUrl + '/products?limit=1', {
                             method: 'GET',
@@ -735,7 +735,7 @@
                                 if (res.ok) {
                                     icon.textContent = '?';
                                     panel.style.background = '#16a34a';
-                                    text.innerHTML = '<strong>SUNUCU BAÐLANTISI BAÞARILI!</strong> Ürünler yükleniyor...';
+                                    text.innerHTML = '<strong>SUNUCU BAÄžLANTISI BAÅžARILI!</strong> ÃœrÃ¼nler yÃ¼kleniyor...';
                                     // 3 saniye sonra paneli gizle
                                     setTimeout(() => { panel.style.display = 'none'; }, 3000);
                                 } else {
@@ -745,14 +745,14 @@
                             .catch(err => {
                                 icon.textContent = '??';
                                 panel.style.background = '#ea580c';
-                                text.innerHTML = '<strong>SUNUCU YANITLAMIYOR!</strong> (' + err.message + ')<br>Sunucu uyku modunda olabilir. 1-2 dk bekleyip yenileyin veya yerel veriler gösterilecek.';
+                                text.innerHTML = '<strong>SUNUCU YANITLAMIYOR!</strong> (' + err.message + ')<br>Sunucu uyku modunda olabilir. 1-2 dk bekleyip yenileyin veya yerel veriler gÃ¶sterilecek.';
                             });
                     })();
                 </script>
 
                 <!-- Header -->
                 <div class="products-header">
-                    <h2 style="margin: 0; color: #1f2937;">Tüm Ürünler <span id="totalProductCount"
+                    <h2 style="margin: 0; color: #1f2937;">TÃ¼m ÃœrÃ¼nler <span id="totalProductCount"
                             style="font-size: 14px; background: #e5e7eb; color: #4b5563; padding: 4px 10px; border-radius: 20px; vertical-align: middle; margin-left: 8px;">0</span>
                     </h2>
                     <div style="display: flex; gap: 10px;">
@@ -764,22 +764,22 @@
                         <button class="add-product-btn" style="background: #dc2626; opacity: 0.9;"
                             onclick="openTrashModal()">
                             <i class="fa-solid fa-trash-can"></i>
-                            Çöp Kutusu <span id="trashCount"
+                            Ã‡Ã¶p Kutusu <span id="trashCount"
                                 style="background: white; color: #dc2626; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: 4px;">0</span>
                         </button>
                         <button class="add-product-btn" style="background: #059669; opacity: 0.9;"
                             onclick="openPriceIncreaseModal()">
                             <i class="fa-solid fa-percent"></i>
-                            Markaya Göre Fiyat Deðiþimi
+                            Markaya GÃ¶re Fiyat DeÄŸiÅŸimi
                         </button>
                         <button class="add-product-btn" style="background: #4f46e5; opacity: 0.9;"
                             onclick="window.location.href='brands.html'">
                             <i class="fa-solid fa-tags"></i>
-                            Marka Yönetimi
+                            Marka YÃ¶netimi
                         </button>
                         <button class="add-product-btn" onclick="openAddModal()">
                             <i class="fa-solid fa-plus"></i>
-                            Yeni Ürün Ekle
+                            Yeni ÃœrÃ¼n Ekle
                         </button>
                     </div>
                 </div>
@@ -788,30 +788,30 @@
                 <div class="products-filters">
                     <div class="filter-group">
                         <label>Ara (Ad, SKU, Barkod)</label>
-                        <input type="text" class="filter-input" placeholder="Ürün adý, SKU veya Barkod..."
+                        <input type="text" class="filter-input" placeholder="ÃœrÃ¼n adÄ±, SKU veya Barkod..."
                             id="searchInput">
                     </div>
                     <div class="filter-group">
                         <label>Marka</label>
                         <select class="filter-select" id="brandFilter">
-                            <option value="">Tüm Markalar</option>
+                            <option value="">TÃ¼m Markalar</option>
                             <!-- Brands loaded from API -->
                         </select>
                     </div>
                     <div class="filter-group">
-                        <label>Üst Kategoriler/Alt Kategoriler</label>
+                        <label>Ãœst Kategoriler/Alt Kategoriler</label>
                         <select class="filter-select" id="categoryFilter">
-                            <option value="">Tüm Kategoriler</option>
-                            <!-- Kategoriler API'den yüklenecek -->
+                            <option value="">TÃ¼m Kategoriler</option>
+                            <!-- Kategoriler API'den yÃ¼klenecek -->
                         </select>
                     </div>
                     <div class="filter-group">
                         <label>Stok Durumu</label>
                         <select class="filter-select" id="stockFilter">
-                            <option value="">Tümü</option>
+                            <option value="">TÃ¼mÃ¼</option>
                             <option value="high">Stokta</option>
-                            <option value="low">Düþük Stok</option>
-                            <option value="out">Tükendi</option>
+                            <option value="low">DÃ¼ÅŸÃ¼k Stok</option>
+                            <option value="out">TÃ¼kendi</option>
                         </select>
                     </div>
                 </div>
@@ -820,13 +820,13 @@
                 <table class="products-table">
                     <thead>
                         <tr>
-                            <th>Görsel</th>
-                            <th>Ürün Adý</th>
+                            <th>GÃ¶rsel</th>
+                            <th>ÃœrÃ¼n AdÄ±</th>
                             <th>Marka</th>
-                            <th>Üst Kategoriler/Alt Kategoriler</th>
+                            <th>Ãœst Kategoriler/Alt Kategoriler</th>
                             <th>Fiyat</th>
                             <th>Stok</th>
-                            <th>Ýþlemler</th>
+                            <th>Ä°ÅŸlemler</th>
                         </tr>
                     </thead>
                     <tbody id="productsTableBody">
@@ -842,44 +842,44 @@
     <div class="modal-overlay" id="priceIncreaseModal">
         <div class="modal" style="max-width: 500px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #4f46e5, #4338ca);">
-                <h2 style="color: white;"><i class="fa-solid fa-percent"></i> Markaya Göre Fiyat Deðiþimi</h2>
+                <h2 style="color: white;"><i class="fa-solid fa-percent"></i> Markaya GÃ¶re Fiyat DeÄŸiÅŸimi</h2>
                 <button class="modal-close" onclick="closePriceIncreaseModal()" style="color: white;">&times;</button>
             </div>
             <div class="modal-body" style="padding: 24px;">
                 <div class="form-group">
-                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Marka Seçin *</label>
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Marka SeÃ§in *</label>
                     <select id="zamBrandSelect"
                         style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
-                        <option value="">-- Marka Seçin --</option>
+                        <option value="">-- Marka SeÃ§in --</option>
                     </select>
                 </div>
 
                 <div class="form-group" style="margin-top: 16px;">
-                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Ýþlem Türü *</label>
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Ä°ÅŸlem TÃ¼rÃ¼ *</label>
                     <select id="priceChangeType"
                         style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;"
                         onchange="updateZamPreview()">
-                        <option value="increase">?? Zam Yap (Fiyat Artýr)</option>
-                        <option value="discount">?? Ýndirim Yap (Fiyat Düþür)</option>
+                        <option value="increase">?? Zam Yap (Fiyat ArtÄ±r)</option>
+                        <option value="discount">?? Ä°ndirim Yap (Fiyat DÃ¼ÅŸÃ¼r)</option>
                     </select>
                 </div>
 
                 <div class="form-group" style="margin-top: 16px;">
-                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Oran Yüzdesi (%) *</label>
-                    <input type="number" id="zamPercentage" placeholder="Örn: 10" min="0" max="99" step="0.1"
+                    <label style="font-weight: 600; margin-bottom: 8px; display: block;">Oran YÃ¼zdesi (%) *</label>
+                    <input type="number" id="zamPercentage" placeholder="Ã–rn: 10" min="0" max="99" step="0.1"
                         style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px;">
-                    <small style="color: #6b7280; margin-top: 4px; display: block;">Sadece pozitif sayý girin (Örn: 10).
-                        Ýndirim seçerseniz fiyat düþer.</small>
+                    <small style="color: #6b7280; margin-top: 4px; display: block;">Sadece pozitif sayÄ± girin (Ã–rn: 10).
+                        Ä°ndirim seÃ§erseniz fiyat dÃ¼ÅŸer.</small>
                 </div>
                 <div id="zamPreview"
                     style="margin-top: 16px; padding: 12px; background: #f3f4f6; border-radius: 8px; display: none;">
-                    <strong>Önizleme:</strong>
+                    <strong>Ã–nizleme:</strong>
                     <p id="zamPreviewText" style="margin: 8px 0 0; color: #374151;"></p>
                 </div>
                 <div style="margin-top: 24px; display: flex; gap: 12px; justify-content: flex-end;">
                     <button onclick="closePriceIncreaseModal()"
                         style="padding: 12px 24px; background: #6b7280; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
-                        Ýptal
+                        Ä°ptal
                     </button>
                     <button onclick="applyPriceIncrease()"
                         style="padding: 12px 24px; background: #4f46e5; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
@@ -894,9 +894,9 @@
     <div class="modal-overlay" id="productModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="modalTitle">Yeni Ürün Ekle</h2>
+                <h2 id="modalTitle">Yeni ÃœrÃ¼n Ekle</h2>
                 <div style="display: flex; gap: 10px;">
-                    <button type="button" class="modal-minimize" onclick="minimizeModal(event)" title="Küçült">
+                    <button type="button" class="modal-minimize" onclick="minimizeModal(event)" title="KÃ¼Ã§Ã¼lt">
                         <i class="fa-solid fa-minus"></i>
                     </button>
                     <button class="modal-close" onclick="closeModal()">&times;</button>
@@ -909,12 +909,12 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Ürün Adý *</label>
-                            <input type="text" id="productName" required placeholder="Ürün adýný girin">
+                            <label>ÃœrÃ¼n AdÄ± *</label>
+                            <input type="text" id="productName" required placeholder="ÃœrÃ¼n adÄ±nÄ± girin">
                         </div>
                         <div class="form-group">
-                            <label>SKU (Ürün Kodu)</label>
-                            <input type="text" id="productSku" placeholder="Örn: BOS-GSR18V">
+                            <label>SKU (ÃœrÃ¼n Kodu)</label>
+                            <input type="text" id="productSku" placeholder="Ã–rn: BOS-GSR18V">
                         </div>
                     </div>
 
@@ -932,12 +932,12 @@
 
                     <div class="form-row">
                         <div class="form-group full-width">
-                            <label>Marka Seçimi (Ara veya Yeni Ekle) *</label>
+                            <label>Marka SeÃ§imi (Ara veya Yeni Ekle) *</label>
                             <div class="custom-brand-dropdown-wrapper" style="position: relative; width: 100%;">
                                 <div style="display: flex; gap: 10px; align-items: center;">
-                                    <!-- Arama ve Seçim Alaný -->
+                                    <!-- Arama ve SeÃ§im AlanÄ± -->
                                     <div style="position: relative; flex: 1;">
-                                        <input type="text" id="brandSearchInput" placeholder="Marka ara veya seç..."
+                                        <input type="text" id="brandSearchInput" placeholder="Marka ara veya seÃ§..."
                                             onfocus="showBrandList()"
                                             oninput="filterBrandList(this.value); document.getElementById('productBrand').value = this.value.trim();"
                                             style="width: 100%; padding: 12px 16px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; background: #fff;">
@@ -948,12 +948,12 @@
                                         <div id="brandListDropdown"
                                             style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid #d1d5db; border-radius: 8px; margin-top: 5px; max-height: 300px; overflow-y: auto; z-index: 1000; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);">
                                             <div id="brandListContainer">
-                                                <!-- Markalar JS ile buraya yüklenecek -->
+                                                <!-- Markalar JS ile buraya yÃ¼klenecek -->
                                             </div>
                                         </div>
                                     </div>
 
-                                    <!-- Yeni Marka Ekle Butonu (Input'taki deðer yeni ise) -->
+                                    <!-- Yeni Marka Ekle Butonu (Input'taki deÄŸer yeni ise) -->
                                     <button type="button" onclick="addNewBrandFromSearch()"
                                         style="white-space: nowrap; padding: 0 20px; height: 44px; background: #6366f1; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
                                         <i class="fa-solid fa-plus"></i> Yeni Ekle
@@ -964,20 +964,20 @@
                         </div>
                         <div class="form-group full-width">
                             <label style="font-weight: 700; color: #1e293b; margin-bottom: 10px; display: block;">Ana
-                                Kategoriler (Birden Fazla Seçebilirsiniz) *</label>
+                                Kategoriler (Birden Fazla SeÃ§ebilirsiniz) *</label>
                             <div id="category-checkbox-list"
                                 style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; background: #fff; padding: 15px; border: 1px solid #d1d5db; border-radius: 8px;">
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories" value="akulu-aletler"
                                         onchange="handleCategoryChange()">
-                                    Akülü Aletler
+                                    AkÃ¼lÃ¼ Aletler
                                 </label>
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories" value="jeneratorler"
                                         onchange="handleCategoryChange()">
-                                    Jeneratörler
+                                    JeneratÃ¶rler
                                 </label>
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
@@ -1001,19 +1001,19 @@
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories" value="olcme-ve-kontrol-aletleri"
                                         onchange="handleCategoryChange()">
-                                    Ölçme Ve Kontrol Aletleri
+                                    Ã–lÃ§me Ve Kontrol Aletleri
                                 </label>
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories" value="asindirici-kesici"
                                         onchange="handleCategoryChange()">
-                                    Aþýndýrýcý ve Kesici Uçlar
+                                    AÅŸÄ±ndÄ±rÄ±cÄ± ve Kesici UÃ§lar
                                 </label>
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories" value="yapi-kimyasallari"
                                         onchange="handleCategoryChange()">
-                                    Yapýþtýrýcý, Dolgu ve Kimyasallar
+                                    YapÄ±ÅŸtÄ±rÄ±cÄ±, Dolgu ve Kimyasallar
                                 </label>
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
@@ -1025,19 +1025,19 @@
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories" value="hirdavat-el-aletleri"
                                         onchange="handleCategoryChange()">
-                                    Hýrdavat ve El Aletleri
+                                    HÄ±rdavat ve El Aletleri
                                 </label>
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories"
                                         value="is-guvenligi-ve-calisma-ekipmanlari" onchange="handleCategoryChange()">
-                                    Ýþ Güvenliði ve Çalýþma Ekipmanlarý
+                                    Ä°ÅŸ GÃ¼venliÄŸi ve Ã‡alÄ±ÅŸma EkipmanlarÄ±
                                 </label>
                                 <label
                                     style="display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer;">
                                     <input type="checkbox" name="productCategories" value="bahce-aletleri"
                                         onchange="handleCategoryChange()">
-                                    Bahçe Aletleri
+                                    BahÃ§e Aletleri
                                 </label>
                             </div>
                         </div>
@@ -1047,32 +1047,32 @@
                         <div class="form-group full-width">
                             <label>Alt Kategori</label>
                             <select id="productSubCategory">
-                                <option value="">Önce Üst Kategori Seçiniz</option>
+                                <option value="">Ã–nce Ãœst Kategori SeÃ§iniz</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- SAYFA ETÝKETLERÝ - ÖNEMLÝ BÖLÜM -->
+                    <!-- SAYFA ETÄ°KETLERÄ° - Ã–NEMLÄ° BÃ–LÃœM -->
                     <div class="form-group full-width"
                         style="background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 20px; border-radius: 12px; border: 2px solid #e2e8f0; margin: 16px 0;">
                         <label
                             style="font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 12px; display: block;">
-                            ?? Ürünün Görüneceði Sayfalar
+                            ?? ÃœrÃ¼nÃ¼n GÃ¶rÃ¼neceÄŸi Sayfalar
                         </label>
-                        <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">Ürünün hangi özel sayfalarda
-                            görüneceðini seçin:</p>
+                        <p style="font-size: 13px; color: #64748b; margin-bottom: 16px;">ÃœrÃ¼nÃ¼n hangi Ã¶zel sayfalarda
+                            gÃ¶rÃ¼neceÄŸini seÃ§in:</p>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                            <!-- AKTÝF / PASÝF DURUMU (EN ÜSTE EKLENDÝ) -->
+                            <!-- AKTÄ°F / PASÄ°F DURUMU (EN ÃœSTE EKLENDÄ°) -->
                             <label
                                 style="display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #fafaf9; border-radius: 10px; border: 2px solid #a8a29e; cursor: pointer; grid-column: span 2; margin-bottom: 8px;">
                                 <input type="checkbox" id="productIsActive" checked
                                     style="width: 24px; height: 24px; accent-color: #0ea5e9;">
                                 <div>
-                                    <span style="font-weight: 700; color: #1c1917; font-size: 16px;">?? ÜRÜN AKTÝF
-                                        SÝTEDE GÖSTER</span>
-                                    <small style="display: block; color: #44403c; font-size: 12px;">Bu seçenek iþaretli
-                                        olmazsa ürün sitede hiçbir yerde görünmez.</small>
+                                    <span style="font-weight: 700; color: #1c1917; font-size: 16px;">?? ÃœRÃœN AKTÄ°F
+                                        SÄ°TEDE GÃ–STER</span>
+                                    <small style="display: block; color: #44403c; font-size: 12px;">Bu seÃ§enek iÅŸaretli
+                                        olmazsa Ã¼rÃ¼n sitede hiÃ§bir yerde gÃ¶rÃ¼nmez.</small>
                                 </div>
                             </label>
 
@@ -1081,9 +1081,9 @@
                                 <input type="checkbox" id="tagPopular"
                                     style="width: 20px; height: 20px; accent-color: #22c55e;">
                                 <div>
-                                    <span style="font-weight: 600; color: #166534;">?? POPÜLER ÜRÜNLER</span>
+                                    <span style="font-weight: 600; color: #166534;">?? POPÃœLER ÃœRÃœNLER</span>
                                     <small style="display: block; color: #15803d; font-size: 11px;">populer.html
-                                        sayfasýnda görünür</small>
+                                        sayfasÄ±nda gÃ¶rÃ¼nÃ¼r</small>
                                 </div>
                             </label>
 
@@ -1092,9 +1092,9 @@
                                 <input type="checkbox" id="tagNew"
                                     style="width: 20px; height: 20px; accent-color: #3b82f6;">
                                 <div>
-                                    <span style="font-weight: 600; color: #1e40af;">?? YENÝ GELENLER</span>
+                                    <span style="font-weight: 600; color: #1e40af;">?? YENÄ° GELENLER</span>
                                     <small style="display: block; color: #1d4ed8; font-size: 11px;">yeni-gelenler.html
-                                        sayfasýnda görünür</small>
+                                        sayfasÄ±nda gÃ¶rÃ¼nÃ¼r</small>
                                 </div>
                             </label>
 
@@ -1103,9 +1103,9 @@
                                 <input type="checkbox" id="tagBestSeller"
                                     style="width: 20px; height: 20px; accent-color: #eab308;">
                                 <div>
-                                    <span style="font-weight: 600; color: #854d0e;">? ÇOK SATAN</span>
-                                    <small style="display: block; color: #a16207; font-size: 11px;">Üründe "Çok Satan"
-                                        rozeti görünür</small>
+                                    <span style="font-weight: 600; color: #854d0e;">? Ã‡OK SATAN</span>
+                                    <small style="display: block; color: #a16207; font-size: 11px;">ÃœrÃ¼nde "Ã‡ok Satan"
+                                        rozeti gÃ¶rÃ¼nÃ¼r</small>
                                 </div>
                             </label>
 
@@ -1114,9 +1114,9 @@
                                 <input type="checkbox" id="tagFeatured"
                                     style="width: 20px; height: 20px; accent-color: #a855f7;">
                                 <div>
-                                    <span style="font-weight: 600; color: #6b21a8;">? ÖNE ÇIKAN</span>
-                                    <small style="display: block; color: #7e22ce; font-size: 11px;">Ana sayfada öne
-                                        çýkan bölümünde</small>
+                                    <span style="font-weight: 600; color: #6b21a8;">? Ã–NE Ã‡IKAN</span>
+                                    <small style="display: block; color: #7e22ce; font-size: 11px;">Ana sayfada Ã¶ne
+                                        Ã§Ä±kan bÃ¶lÃ¼mÃ¼nde</small>
                                 </div>
                             </label>
                         </div>
@@ -1129,23 +1129,23 @@
                             ?? Ana Sayfa Marka Vitrini
                         </label>
                         <p style="font-size: 13px; color: #a16207; margin-bottom: 16px;">
-                            Bu ürünü ana sayfadaki marka bölümlerinden birinde sergilemek istiyorsanýz seçin (Marka ve
-                            Kategori Otomatik Seçilir):
+                            Bu Ã¼rÃ¼nÃ¼ ana sayfadaki marka bÃ¶lÃ¼mlerinden birinde sergilemek istiyorsanÄ±z seÃ§in (Marka ve
+                            Kategori Otomatik SeÃ§ilir):
                         </p>
 
                         <select id="brandShowcase" onchange="autoFillBrandAndCategory(this.value)"
                             style="width: 100%; padding: 14px 16px; border: 2px solid #f59e0b; border-radius: 10px; font-size: 15px; background: white; cursor: pointer;">
-                            <option value="">? Marka vitrininde gösterme</option>
-                            <option value="beta">?? Beta - Ana Sayfada Göster</option>
-                            <option value="bosch">?? Bosch - Ana Sayfada Göster</option>
-                            <option value="makita">?? Makita - Ana Sayfada Göster</option>
-                            <option value="knipex">?? Knipex - Ana Sayfada Göster</option>
-                            <option value="dewalt">?? DeWalt - Ana Sayfada Göster</option>
-                            <option value="blackdecker">? Black+Decker - Ana Sayfada Göster</option>
+                            <option value="">? Marka vitrininde gÃ¶sterme</option>
+                            <option value="beta">?? Beta - Ana Sayfada GÃ¶ster</option>
+                            <option value="bosch">?? Bosch - Ana Sayfada GÃ¶ster</option>
+                            <option value="makita">?? Makita - Ana Sayfada GÃ¶ster</option>
+                            <option value="knipex">?? Knipex - Ana Sayfada GÃ¶ster</option>
+                            <option value="dewalt">?? DeWalt - Ana Sayfada GÃ¶ster</option>
+                            <option value="blackdecker">? Black+Decker - Ana Sayfada GÃ¶ster</option>
                         </select>
 
                         <p style="font-size: 11px; color: #b45309; margin-top: 10px;">
-                            ?? Her marka için maksimum 3 ürün gösterilir. Fazlasý otomatik gizlenir.
+                            ?? Her marka iÃ§in maksimum 3 Ã¼rÃ¼n gÃ¶sterilir. FazlasÄ± otomatik gizlenir.
                         </p>
                     </div>
 
@@ -1156,7 +1156,7 @@
                             <input type="number" id="productPrice" placeholder="0.00" step="0.01" min="0" required>
                         </div>
                         <div class="form-group">
-                            <label>Ýndirimli Fiyat (TL - Opsiyonel)</label>
+                            <label>Ä°ndirimli Fiyat (TL - Opsiyonel)</label>
                             <input type="number" id="productSalePrice" placeholder="0.00" step="0.01" min="0">
                         </div>
                     </div>
@@ -1169,31 +1169,31 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Ürün Açýklamasý</label>
-                        <textarea id="productDescription" placeholder="Ürün hakkýnda detaylý açýklama..."></textarea>
+                        <label>ÃœrÃ¼n AÃ§Ä±klamasÄ±</label>
+                        <textarea id="productDescription" placeholder="ÃœrÃ¼n hakkÄ±nda detaylÄ± aÃ§Ä±klama..."></textarea>
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Ürün Görseli</label>
+                        <label>ÃœrÃ¼n GÃ¶rseli</label>
                         <div class="image-upload" id="imageUploadArea" onclick="handleImageAreaClick(event)">
                             <div id="imagePreview" style="display: none;">
-                                <img id="previewImg" src="" alt="Önizleme"
+                                <img id="previewImg" src="" alt="Ã–nizleme"
                                     style="max-width: 200px; max-height: 200px; border-radius: 8px;">
-                                <p style="margin-top: 10px; color: #22c55e;">? Görsel yüklendi</p>
+                                <p style="margin-top: 10px; color: #22c55e;">? GÃ¶rsel yÃ¼klendi</p>
                                 <div style="display: flex; gap: 10px; margin-top: 10px;">
                                     <button type="button" onclick="changeImage(event)"
                                         style="padding: 8px 16px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">
-                                        ?? Deðiþtir
+                                        ?? DeÄŸiÅŸtir
                                     </button>
                                     <button type="button" onclick="removeImage(event)"
                                         style="padding: 8px 16px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px;">
-                                        ??? Kaldýr
+                                        ??? KaldÄ±r
                                     </button>
                                 </div>
                             </div>
                             <div id="imagePlaceholder">
                                 <i class="fa-solid fa-cloud-upload-alt"></i>
-                                <p>Görsel yüklemek için týklayýn</p>
+                                <p>GÃ¶rsel yÃ¼klemek iÃ§in tÄ±klayÄ±n</p>
                                 <p style="font-size: 12px; color: #9ca3af;">PNG, JPG, WEBP - Max 5MB</p>
                             </div>
                         </div>
@@ -1208,7 +1208,7 @@
 
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal()">Ýptal</button>
+                <button class="btn-cancel" onclick="closeModal()">Ä°ptal</button>
                 <button class="btn-save" onclick="saveAndClose()"
                     style="background: linear-gradient(135deg, #10b981, #059669);">
                     <i class="fa-solid fa-save" style="margin-right: 8px;"></i>Kaydet ve Kapat
@@ -1217,20 +1217,20 @@
         </div>
     </div>
 
-    <!-- ÇÖP KUTUSU MODALI -->
+    <!-- Ã‡Ã–P KUTUSU MODALI -->
     <div class="modal-overlay" id="trashModal">
         <div class="modal" style="max-width: 900px; width: 95%;">
             <div class="modal-header" style="background: linear-gradient(135deg, #dc2626, #b91c1c);">
                 <h3 id="trashModalTitle" style="display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-trash-can"></i>
-                    Çöp Kutusu
+                    Ã‡Ã¶p Kutusu
                     <span id="trashModalCount"
                         style="background: rgba(255,255,255,0.2); padding: 2px 10px; border-radius: 15px; font-size: 14px;">0
-                        ürün</span>
+                        Ã¼rÃ¼n</span>
                 </h3>
                 <div style="display: flex; gap: 8px;">
                     <button class="modal-btn" onclick="emptyAllTrash()" style="background: rgba(255,255,255,0.2);"
-                        title="Çöp Kutusunu Boþalt">
+                        title="Ã‡Ã¶p Kutusunu BoÅŸalt">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                     <button class="modal-btn" onclick="closeTrashModal()">
@@ -1240,56 +1240,56 @@
             </div>
             <div class="modal-body" style="max-height: 500px; overflow-y: auto; padding: 16px;">
                 <div id="trashProductsList">
-                    <!-- Silinen ürünler burada listelenecek -->
+                    <!-- Silinen Ã¼rÃ¼nler burada listelenecek -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Alt Kategori ve Grup Yönetimi Modalý -->
+    <!-- Alt Kategori ve Grup YÃ¶netimi ModalÄ± -->
     <div class="modal-overlay" id="subcategoryMgmtModal">
         <div class="modal" style="max-width: 550px;">
             <div class="modal-header" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);">
                 <h3 style="color: white; display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-layer-group"></i>
-                    Alt Kategori ve Grup Yönetimi
+                    Alt Kategori ve Grup YÃ¶netimi
                 </h3>
                 <button class="modal-close" onclick="closeSubcategoryManager()"
                     style="color: white; opacity: 0.8;">&times;</button>
             </div>
             <div class="modal-body" style="padding: 24px;">
                 <div class="form-group" style="margin-bottom: 20px;">
-                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Üst Kategori
+                    <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Ãœst Kategori
                         *</label>
                     <select id="mgmtMainCategory" onchange="onMgmtCategoryChange()"
                         style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; background: #fff;">
-                        <option value="">-- Üst Kategori Seçin --</option>
+                        <option value="">-- Ãœst Kategori SeÃ§in --</option>
                     </select>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Alt Kategori
-                        Ýsmi *</label>
-                    <input type="text" id="mgmtSubName" list="mgmtSubsDatalist" placeholder="Örn: Boru Anahtarlarý"
+                        Ä°smi *</label>
+                    <input type="text" id="mgmtSubName" list="mgmtSubsDatalist" placeholder="Ã–rn: Boru AnahtarlarÄ±"
                         style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
                     <datalist id="mgmtSubsDatalist"></datalist>
-                    <small style="color: #64748b; font-size: 11px; margin-top: 4px; display: block;">Bu, mega menüdeki
-                        ana alt kategori baþlýðýdýr.</small>
+                    <small style="color: #64748b; font-size: 11px; margin-top: 4px; display: block;">Bu, mega menÃ¼deki
+                        ana alt kategori baÅŸlÄ±ÄŸÄ±dÄ±r.</small>
                 </div>
 
                 <div class="form-group" style="margin-bottom: 24px;">
                     <label
                         style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
-                        <span>Grup Ýsimleri (virgülle ayýrýn)</span>
+                        <span>Grup Ä°simleri (virgÃ¼lle ayÄ±rÄ±n)</span>
                         <span style="font-weight: 400; font-size: 11px; color: #64748b;">birden fazla
                             ekleyebilirsiniz</span>
                     </label>
                     <input type="text" id="mgmtGroupName"
-                        placeholder="Örn: Maþalý Boru Anahtarlarý, Fransýz Anahtarlarý"
+                        placeholder="Ã–rn: MaÅŸalÄ± Boru AnahtarlarÄ±, FransÄ±z AnahtarlarÄ±"
                         style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; box-sizing: border-box;">
                     <datalist id="mgmtGroupsDatalist"></datalist>
-                    <small style="color: #64748b; font-size: 11px; margin-top: 4px; display: block;">Virgülle ayýrarak
-                        birden fazla grup ekleyebilirsiniz. Örn: "Grup1, Grup2, Grup3"</small>
+                    <small style="color: #64748b; font-size: 11px; margin-top: 4px; display: block;">VirgÃ¼lle ayÄ±rarak
+                        birden fazla grup ekleyebilirsiniz. Ã–rn: "Grup1, Grup2, Grup3"</small>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
@@ -1299,13 +1299,13 @@
                     </button>
                     <button onclick="processSubcategoryAction('delete')"
                         style="background: #ef4444; color: white; padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: all 0.2s;">
-                        <i class="fa-solid fa-minus"></i> SÝL
+                        <i class="fa-solid fa-minus"></i> SÄ°L
                     </button>
                 </div>
 
                 <p style="font-size: 12px; color: #64748b; margin-top: 20px; text-align: center; line-height: 1.5;">
                     <i class="fa-solid fa-info-circle"></i> (+) Ekle butonu yeni alt kategori veya grup ekler.<br>
-                    (-) Sil butonu belirtilen grubu veya alt kategorinin tamamýný siler.
+                    (-) Sil butonu belirtilen grubu veya alt kategorinin tamamÄ±nÄ± siler.
                 </p>
             </div>
         </div>
@@ -1313,7 +1313,7 @@
 
 
     <style>
-        /* Çöp Kutusu Modal Stilleri */
+        /* Ã‡Ã¶p Kutusu Modal Stilleri */
         #trashModal .trash-item {
             display: flex;
             align-items: center;
@@ -1431,25 +1431,25 @@
         let isLoading = false;
         let uploadedImageBase64 = '';
 
-        // -==============================================================================¬
-        // ¦                    ?? ÖNEMLÝ KURALLAR - DEÐÝÞTÝRÝLMEZ! ??                    ¦
-        // ¦==============================================================================¦
-        // ¦ ?? ÜRÜN SIRALAMA KURALI:                                                      ¦
-        // ¦    • En yeni ürün EN ÜSTTE görünür                                           ¦
-        // ¦    • En eski ürün EN ALTTA görünür                                           ¦
-        // ¦    • Bu kural renderProducts() fonksiyonunda uygulanýr                       ¦
-        // ¦    • Sýralama öncelikleri: createdAt > updatedAt > ObjectID > ID             ¦
-        // ¦                                                                              ¦
-        // ¦ ?? BU KURAL HÝÇBÝR ÞEKÝLDE DEÐÝÞTÝRÝLMEMELÝDÝR!                              ¦
+        // -==============================================================================Â¬
+        // Â¦                    ?? Ã–NEMLÄ° KURALLAR - DEÄžÄ°ÅžTÄ°RÄ°LMEZ! ??                    Â¦
+        // Â¦==============================================================================Â¦
+        // Â¦ ?? ÃœRÃœN SIRALAMA KURALI:                                                      Â¦
+        // Â¦    â€¢ En yeni Ã¼rÃ¼n EN ÃœSTTE gÃ¶rÃ¼nÃ¼r                                           Â¦
+        // Â¦    â€¢ En eski Ã¼rÃ¼n EN ALTTA gÃ¶rÃ¼nÃ¼r                                           Â¦
+        // Â¦    â€¢ Bu kural renderProducts() fonksiyonunda uygulanÄ±r                       Â¦
+        // Â¦    â€¢ SÄ±ralama Ã¶ncelikleri: createdAt > updatedAt > ObjectID > ID             Â¦
+        // Â¦                                                                              Â¦
+        // Â¦ ?? BU KURAL HÄ°Ã‡BÄ°R ÅžEKÄ°LDE DEÄžÄ°ÅžTÄ°RÄ°LMEMELÄ°DÄ°R!                              Â¦
         // L==============================================================================-
 
-        // API Durum Kontrolü
+        // API Durum KontrolÃ¼
         async function checkApiStatus() {
             const badge = document.getElementById('api-status-badge');
             if (!badge) return;
 
             try {
-                // Basit bir getProducts çaðrýsý ile test et (limit 1)
+                // Basit bir getProducts Ã§aÄŸrÄ±sÄ± ile test et (limit 1)
                 const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000));
                 const apiPromise = ADMIN_API.getProducts({ limit: 1 });
 
@@ -1458,70 +1458,70 @@
                 if (result) {
                     badge.style.background = '#dcfce7';
                     badge.style.color = '#166534';
-                    badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> SÝSTEM CANLI';
+                    badge.innerHTML = '<i class="fa-solid fa-circle-check"></i> SÄ°STEM CANLI';
                 }
             } catch (err) {
                 badge.style.background = '#fee2e2';
                 badge.style.color = '#991b1b';
-                badge.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> SUNUCUYA ERÝÞÝLEMÝYOR';
+                badge.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> SUNUCUYA ERÄ°ÅžÄ°LEMÄ°YOR';
             }
         }
 
         // 30 saniyede bir kontrol et
         setInterval(checkApiStatus, 30000);
 
-        // Görsel yükleme fonksiyonu
+        // GÃ¶rsel yÃ¼kleme fonksiyonu
         let isImageLoading = false;
 
         function handleImageUpload(input) {
             const file = input.files[0];
             if (!file) return;
 
-            // Dosya boyutu kontrolü (5MB)
+            // Dosya boyutu kontrolÃ¼ (5MB)
             if (file.size > 5 * 1024 * 1024) {
-                alert('Dosya boyutu 5MB\'dan büyük olamaz!');
+                alert('Dosya boyutu 5MB\'dan bÃ¼yÃ¼k olamaz!');
                 return;
             }
 
-            // Dosya tipi kontrolü
+            // Dosya tipi kontrolÃ¼
             if (!file.type.startsWith('image/')) {
-                alert('Lütfen geçerli bir görsel dosyasý seçin!');
+                alert('LÃ¼tfen geÃ§erli bir gÃ¶rsel dosyasÄ± seÃ§in!');
                 return;
             }
 
-            // Loading göster
+            // Loading gÃ¶ster
             isImageLoading = true;
-            document.getElementById('imagePlaceholder').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><p>Görsel iþleniyor...</p>';
+            document.getElementById('imagePlaceholder').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i><p>GÃ¶rsel iÅŸleniyor...</p>';
 
             const saveBtn = document.querySelector('.btn-save');
             if (saveBtn) saveBtn.disabled = true;
 
-            // Görseli sýkýþtýr
+            // GÃ¶rseli sÄ±kÄ±ÅŸtÄ±r
             compressImage(file, 800, 0.7).then(compressedBase64 => {
                 uploadedImageBase64 = compressedBase64;
                 document.getElementById('productImageBase64').value = compressedBase64;
 
-                // Önizleme göster
+                // Ã–nizleme gÃ¶ster
                 document.getElementById('previewImg').src = compressedBase64;
                 document.getElementById('imagePreview').style.display = 'block';
                 document.getElementById('imagePlaceholder').style.display = 'none';
 
-                console.log('? Görsel sýkýþtýrýldý ve yüklendi:', file.name);
+                console.log('? GÃ¶rsel sÄ±kÄ±ÅŸtÄ±rÄ±ldÄ± ve yÃ¼klendi:', file.name);
             }).catch(err => {
-                console.error('Görsel sýkýþtýrma hatasý:', err);
-                alert('Görsel iþlenirken hata oluþtu. Lütfen baþka bir görsel deneyin.');
+                console.error('GÃ¶rsel sÄ±kÄ±ÅŸtÄ±rma hatasÄ±:', err);
+                alert('GÃ¶rsel iÅŸlenirken hata oluÅŸtu. LÃ¼tfen baÅŸka bir gÃ¶rsel deneyin.');
                 resetImageUpload();
             }).finally(() => {
                 isImageLoading = false;
                 if (saveBtn) saveBtn.disabled = false;
-                // Placeholder'ý eski haline getir (eðer hala görünüyorsa)
+                // Placeholder'Ä± eski haline getir (eÄŸer hala gÃ¶rÃ¼nÃ¼yorsa)
                 if (document.getElementById('imagePlaceholder').style.display !== 'none') {
-                    document.getElementById('imagePlaceholder').innerHTML = '<i class="fa-solid fa-cloud-upload-alt"></i><p>Görsel yüklemek için týklayýn</p><p style="font-size: 12px; color: #9ca3af;">PNG, JPG, WEBP - Max 5MB</p>';
+                    document.getElementById('imagePlaceholder').innerHTML = '<i class="fa-solid fa-cloud-upload-alt"></i><p>GÃ¶rsel yÃ¼klemek iÃ§in tÄ±klayÄ±n</p><p style="font-size: 12px; color: #9ca3af;">PNG, JPG, WEBP - Max 5MB</p>';
                 }
             });
         }
 
-        // Görsel sýkýþtýrma fonksiyonu
+        // GÃ¶rsel sÄ±kÄ±ÅŸtÄ±rma fonksiyonu
         function compressImage(file, maxSize, quality) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -1532,7 +1532,7 @@
                         let width = img.width;
                         let height = img.height;
 
-                        // Boyut sýnýrla
+                        // Boyut sÄ±nÄ±rla
                         if (width > height) {
                             if (width > maxSize) {
                                 height = Math.round((height * maxSize) / width);
@@ -1550,7 +1550,7 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // JPEG olarak sýkýþtýr
+                        // JPEG olarak sÄ±kÄ±ÅŸtÄ±r
                         const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
                         resolve(compressedBase64);
                     };
@@ -1563,7 +1563,7 @@
         }
 
 
-        // Modal açýldýðýnda görsel alanýný sýfýrla
+        // Modal aÃ§Ä±ldÄ±ÄŸÄ±nda gÃ¶rsel alanÄ±nÄ± sÄ±fÄ±rla
         function resetImageUpload() {
             uploadedImageBase64 = '';
             document.getElementById('productImageBase64').value = '';
@@ -1581,21 +1581,21 @@
             document.getElementById('brandShowcase').value = '';
         }
 
-        // Görsel alanýna týklama
+        // GÃ¶rsel alanÄ±na tÄ±klama
         function handleImageAreaClick(event) {
-            // Eðer görsel yüklü deðilse dosya seçiciyi aç
+            // EÄŸer gÃ¶rsel yÃ¼klÃ¼ deÄŸilse dosya seÃ§iciyi aÃ§
             if (document.getElementById('imagePlaceholder').style.display !== 'none') {
                 document.getElementById('productImage').click();
             }
         }
 
-        // Görseli deðiþtir
+        // GÃ¶rseli deÄŸiÅŸtir
         function changeImage(event) {
             event.stopPropagation();
             document.getElementById('productImage').click();
         }
 
-        // Görseli kaldýr
+        // GÃ¶rseli kaldÄ±r
         function removeImage(event) {
             event.stopPropagation();
             resetImageUpload();
@@ -1610,7 +1610,7 @@
 
                     const filterSelect = document.getElementById('brandFilter');
                     if (filterSelect) {
-                        filterSelect.innerHTML = '<option value="">Tüm Markalar</option>';
+                        filterSelect.innerHTML = '<option value="">TÃ¼m Markalar</option>';
                         allBrands.forEach(brand => {
                             const option = document.createElement('option');
                             option.value = brand.name;
@@ -1620,7 +1620,7 @@
                     }
 
                     renderBrandSearchList();
-                    console.log('? Markalar yüklendi:', allBrands.length);
+                    console.log('? Markalar yÃ¼klendi:', allBrands.length);
                 }
             } catch (error) {
                 console.error('Load brands error:', error);
@@ -1634,7 +1634,7 @@
             const filtered = allBrands.filter(b => b.name.toLowerCase().includes(filter.toLowerCase()));
 
             if (filtered.length === 0) {
-                container.innerHTML = '<div style="padding: 12px; color: #9ca3af; text-align: center; font-size: 13px;">Sonuç bulunamadý</div>';
+                container.innerHTML = '<div style="padding: 12px; color: #9ca3af; text-align: center; font-size: 13px;">SonuÃ§ bulunamadÄ±</div>';
                 return;
             }
 
@@ -1650,11 +1650,11 @@
                     <span style="font-size: 14px; font-weight: 500; color: #374151;">${brand.name}</span>
                     <div style="display:flex; gap:2px; align-items:center;">
                         <button type="button" onclick="event.stopPropagation(); editBrandFromSearch('${id}', '${safeName}')" 
-                             style="color: #3b82f6; background: none; border: none; cursor: pointer; padding: 6px;" title="Markayý Düzenle">
+                             style="color: #3b82f6; background: none; border: none; cursor: pointer; padding: 6px;" title="MarkayÄ± DÃ¼zenle">
                              <i class="fa-solid fa-pen"></i>
                         </button>
                         <button type="button" onclick="event.stopPropagation(); deleteBrandFromSearch('${id}', '${safeName}')" 
-                            style="color: #ef4444; background: none; border: none; cursor: pointer; padding: 6px;" title="Markayý Sil">
+                            style="color: #ef4444; background: none; border: none; cursor: pointer; padding: 6px;" title="MarkayÄ± Sil">
                             <i class="fa-solid fa-trash-can"></i>
                         </button>
                     </div>
@@ -1664,7 +1664,7 @@
 
         function showBrandList() {
             document.getElementById('brandListDropdown').style.display = 'block';
-            // Her açýldýðýnda TÜM markalarý göster (filtreyi temizle)
+            // Her aÃ§Ä±ldÄ±ÄŸÄ±nda TÃœM markalarÄ± gÃ¶ster (filtreyi temizle)
             renderBrandSearchList('');
         }
 
@@ -1678,7 +1678,7 @@
             document.getElementById('brandListDropdown').style.display = 'none';
         }
 
-        // Dýþarý týklayýnca kapat
+        // DÄ±ÅŸarÄ± tÄ±klayÄ±nca kapat
         document.addEventListener('click', function (e) {
             const wrapper = document.querySelector('.custom-brand-dropdown-wrapper');
             if (wrapper && !wrapper.contains(e.target)) {
@@ -1690,17 +1690,17 @@
         async function addNewBrandFromSearch() {
             const name = document.getElementById('brandSearchInput').value.trim();
             if (!name) {
-                alert('Lütfen bir marka adý girin');
+                alert('LÃ¼tfen bir marka adÄ± girin');
                 return;
             }
 
-            if (confirm(`'${name}' markasýný yeni olarak eklemek istiyor musunuz?`)) {
+            if (confirm(`'${name}' markasÄ±nÄ± yeni olarak eklemek istiyor musunuz?`)) {
                 try {
                     const response = await ADMIN_API.createBrand({ name });
                     if (response.success) {
                         await loadBrandsDropdown();
                         selectBrandFromList(name);
-                        alert('? Marka baþarýyla eklendi');
+                        alert('? Marka baÅŸarÄ±yla eklendi');
                     }
                 } catch (e) {
                     const newBrand = { _id: 'local_' + Date.now(), name };
@@ -1713,48 +1713,48 @@
         }
 
         async function editBrandFromSearch(id, currentName) {
-            const newName = prompt('Marka adýný düzenle:', currentName);
+            const newName = prompt('Marka adÄ±nÄ± dÃ¼zenle:', currentName);
             if (!newName || newName.trim() === '' || newName === currentName) return;
             const safeNewName = newName.trim();
 
             try {
-                // 1. Markayý Güncelle
+                // 1. MarkayÄ± GÃ¼ncelle
                 const response = await ADMIN_API.updateBrand(id, { name: safeNewName });
 
                 if (response.success) {
-                    // Listeyi güncelle
+                    // Listeyi gÃ¼ncelle
                     const brand = allBrands.find(b => (b._id || b.id) === id);
                     if (brand) brand.name = safeNewName;
 
                     renderBrandSearchList(document.getElementById('brandSearchInput').value);
 
-                    // Input güncelle
+                    // Input gÃ¼ncelle
                     if (document.getElementById('productBrand').value === currentName) {
                         document.getElementById('productBrand').value = safeNewName;
                         document.getElementById('brandSearchInput').value = safeNewName;
                     }
 
-                    // 2. Ürünleri Güncelle (Bulk Update)
+                    // 2. ÃœrÃ¼nleri GÃ¼ncelle (Bulk Update)
                     const productsToUpdate = products.filter(p => p.brand === currentName);
 
                     if (productsToUpdate.length > 0) {
-                        if (confirm(`? Marka ismi güncellendi.\n\n?? DÝKKAT: Bu markaya ait ${productsToUpdate.length} ürün bulundu.\nBu ürünlerin de marka ismini "${safeNewName}" olarak güncellemek ister misiniz?`)) {
+                        if (confirm(`? Marka ismi gÃ¼ncellendi.\n\n?? DÄ°KKAT: Bu markaya ait ${productsToUpdate.length} Ã¼rÃ¼n bulundu.\nBu Ã¼rÃ¼nlerin de marka ismini "${safeNewName}" olarak gÃ¼ncellemek ister misiniz?`)) {
 
                             let successCount = 0;
-                            // Loading state? Alert ile idare edelim bloklamasýn.
+                            // Loading state? Alert ile idare edelim bloklamasÄ±n.
 
                             for (const product of productsToUpdate) {
                                 try {
-                                    // Ürünü kopyala ve markayý güncelle
+                                    // ÃœrÃ¼nÃ¼ kopyala ve markayÄ± gÃ¼ncelle
                                     const updatedProduct = { ...product, brand: safeNewName };
 
-                                    // Local ürünse _id ile, server ürünüyse id ile
+                                    // Local Ã¼rÃ¼nse _id ile, server Ã¼rÃ¼nÃ¼yse id ile
                                     const procId = product._id || product.id;
 
                                     const res = await ADMIN_API.updateProduct(procId, updatedProduct);
                                     if (res.success) {
                                         successCount++;
-                                        // Hafýzadaki veriyi de güncelle
+                                        // HafÄ±zadaki veriyi de gÃ¼ncelle
                                         product.brand = safeNewName;
                                     }
                                 } catch (err) {
@@ -1763,11 +1763,11 @@
                             }
 
                             renderProducts(); // Tabloyu yenile
-                            alert(`Ýþlem Tamamlandý!\n${successCount} ürün güncellendi.`);
+                            alert(`Ä°ÅŸlem TamamlandÄ±!\n${successCount} Ã¼rÃ¼n gÃ¼ncellendi.`);
                         }
                     } else {
-                        // Ürün yoksa sadece baþarýlý mesajý
-                        alert('? Marka ismi güncellendi.');
+                        // ÃœrÃ¼n yoksa sadece baÅŸarÄ±lÄ± mesajÄ±
+                        alert('? Marka ismi gÃ¼ncellendi.');
                     }
 
                 } else {
@@ -1775,12 +1775,12 @@
                 }
             } catch (e) {
                 console.error(e);
-                alert('Marka güncellenirken hata oluþtu.');
+                alert('Marka gÃ¼ncellenirken hata oluÅŸtu.');
             }
         }
 
         async function deleteBrandFromSearch(id, name) {
-            if (confirm(`'${name}' markasýný tamamen silmek istediðinizden emin misiniz?`)) {
+            if (confirm(`'${name}' markasÄ±nÄ± tamamen silmek istediÄŸinizden emin misiniz?`)) {
                 try {
                     const response = await ADMIN_API.deleteBrand(id);
                     if (response.success) {
@@ -1807,9 +1807,9 @@
                     const select = document.getElementById('categoryFilter');
                     const modalSelect = document.getElementById('productCategory');
 
-                    // Temizle (baþlýk opsiyonu hariç)
-                    if (select) select.innerHTML = '<option value="">Tüm Kategoriler</option>';
-                    if (modalSelect) modalSelect.innerHTML = '<option value="">Kategori Seçin</option>';
+                    // Temizle (baÅŸlÄ±k opsiyonu hariÃ§)
+                    if (select) select.innerHTML = '<option value="">TÃ¼m Kategoriler</option>';
+                    if (modalSelect) modalSelect.innerHTML = '<option value="">Kategori SeÃ§in</option>';
 
                     allCategories.forEach(cat => {
                         const option = document.createElement('option');
@@ -1822,67 +1822,67 @@
                             modalSelect.appendChild(modalOption);
                         }
                     });
-                    console.log('? Kategoriler yüklendi:', allCategories.length);
+                    console.log('? Kategoriler yÃ¼klendi:', allCategories.length);
                 }
             } catch (error) {
                 console.error('Load categories error:', error);
             }
         }
 
-        // Base64 görselleri koruyarak localStorage'a kaydet (Kota dostu yeteneklerle)
+        // Base64 gÃ¶rselleri koruyarak localStorage'a kaydet (Kota dostu yeteneklerle)
         // ARTIK IndexedDB'ye de kaydediyor (50MB+ depolama!)
-        // ÖNEMLÝ: localStorage kotasý sýnýrlý olduðu için ana veri IndexedDB'de tutulur
+        // Ã–NEMLÄ°: localStorage kotasÄ± sÄ±nÄ±rlÄ± olduÄŸu iÃ§in ana veri IndexedDB'de tutulur
         function saveProductsToLocalStorage(productList) {
             if (!productList || !Array.isArray(productList)) return false;
 
             // IndexedDB'ye kaydet (Asenkron, arka planda) - ANA DEPOLAMA
             if (typeof GalataDB !== 'undefined') {
                 GalataDB.saveProducts(productList).catch(err => {
-                    console.warn('IndexedDB kayýt hatasý (devam ediliyor):', err);
+                    console.warn('IndexedDB kayÄ±t hatasÄ± (devam ediliyor):', err);
                 });
             }
 
-            // NOT: localStorage'ý SÝLMÝYORUZ - IndexedDB baþarýsýz olursa yedek olarak kalýr
-            // Eski kod siliyordu ama bu veri kaybýna neden oluyordu
+            // NOT: localStorage'Ä± SÄ°LMÄ°YORUZ - IndexedDB baÅŸarÄ±sÄ±z olursa yedek olarak kalÄ±r
+            // Eski kod siliyordu ama bu veri kaybÄ±na neden oluyordu
 
             try {
-                // KRÝTÝK: Önce local_ prefix'li ürünleri ayrý güvenli listeye kaydet
-                // Bu liste ASLA üzerine yazýlmaz ve hard refresh'te korunur
+                // KRÄ°TÄ°K: Ã–nce local_ prefix'li Ã¼rÃ¼nleri ayrÄ± gÃ¼venli listeye kaydet
+                // Bu liste ASLA Ã¼zerine yazÄ±lmaz ve hard refresh'te korunur
                 const localOnlyProducts = productList.filter(p => {
                     const pid = (p._id || p.id || '').toString();
                     return pid.startsWith('local_') || pid.startsWith('restored_');
                 });
 
                 if (localOnlyProducts.length > 0) {
-                    // Mevcut pending listeyi al ve yenileriyle birleþtir
+                    // Mevcut pending listeyi al ve yenileriyle birleÅŸtir
                     let existingPending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
 
                     localOnlyProducts.forEach(newProd => {
                         const newId = (newProd._id || newProd.id || '').toString();
                         const existingIdx = existingPending.findIndex(p => (p._id || p.id) === newId);
                         if (existingIdx >= 0) {
-                            existingPending[existingIdx] = newProd; // Güncelle
+                            existingPending[existingIdx] = newProd; // GÃ¼ncelle
                         } else {
-                            existingPending.unshift(newProd); // Baþa ekle
+                            existingPending.unshift(newProd); // BaÅŸa ekle
                         }
                     });
 
                     localStorage.setItem('galatacarsi_pending_products', JSON.stringify(existingPending));
-                    console.log('?? Pending listesine kaydedildi (güvenli):', localOnlyProducts.length, 'ürün');
+                    console.log('?? Pending listesine kaydedildi (gÃ¼venli):', localOnlyProducts.length, 'Ã¼rÃ¼n');
                 }
 
                 // SONRA: Normal listeyi kaydet
                 const fullJson = JSON.stringify(productList);
 
-                // Eðer veri 4MB'den küçükse direkt kaydet
+                // EÄŸer veri 4MB'den kÃ¼Ã§Ã¼kse direkt kaydet
                 if (fullJson.length < 4 * 1024 * 1024) {
                     localStorage.setItem('galatacarsi_products', fullJson);
-                    console.log('? localStorage güncellendi (Tam Veri):', productList.length, 'ürün');
+                    console.log('? localStorage gÃ¼ncellendi (Tam Veri):', productList.length, 'Ã¼rÃ¼n');
                     return true;
                 }
 
-                // EÐER VERÝ ÇOK BÜYÜKSE (4MB+): Akýllý temizlik yap
-                console.warn('?? Veri çok büyük (4MB+), localStorage kotasýný korumak için resimler ayýklanýyor...');
+                // EÄžER VERÄ° Ã‡OK BÃœYÃœKSE (4MB+): AkÄ±llÄ± temizlik yap
+                console.warn('?? Veri Ã§ok bÃ¼yÃ¼k (4MB+), localStorage kotasÄ±nÄ± korumak iÃ§in resimler ayÄ±klanÄ±yor...');
 
                 const lightProducts = productList.map(p => {
                     const isLocal = (p._id || p.id || '').toString().startsWith('local_');
@@ -1890,13 +1890,13 @@
                     // Resim bir base64 verisi mi?
                     const hasBase64Image = (p.mainImage && p.mainImage.startsWith('data:image'));
 
-                    // Eðer ürün sunucuda kayýtlýysa ve resmi base64 ise, localStorage versiyonunda resmi temizle
-                    // (Resim zaten IndexedDB'de ve sunucuda güvenle duruyor)
+                    // EÄŸer Ã¼rÃ¼n sunucuda kayÄ±tlÄ±ysa ve resmi base64 ise, localStorage versiyonunda resmi temizle
+                    // (Resim zaten IndexedDB'de ve sunucuda gÃ¼venle duruyor)
                     if (!isLocal && hasBase64Image) {
                         const { mainImage, image, ...lightProduct } = p;
                         return {
                             ...lightProduct,
-                            mainImage: `https://placehold.co/100x100?text=${encodeURIComponent(p.brand || 'Ü')}`, // Hafif placeholder
+                            mainImage: `https://placehold.co/100x100?text=${encodeURIComponent(p.brand || 'Ãœ')}`, // Hafif placeholder
                             _imageStoredInDB: true
                         };
                     }
@@ -1905,11 +1905,11 @@
 
                 const lightJson = JSON.stringify(lightProducts);
                 localStorage.setItem('galatacarsi_products', lightJson);
-                console.log('? localStorage "Hafifletilmiþ" verilerle güncellendi:', lightProducts.length, 'ürün');
+                console.log('? localStorage "HafifletilmiÅŸ" verilerle gÃ¼ncellendi:', lightProducts.length, 'Ã¼rÃ¼n');
                 return true;
             } catch (e) {
-                console.error('?? Kritik Kayýt Hatasý:', e);
-                // En son çare: Sadece yerel (yeni eklenen) ürünleri kurtar
+                console.error('?? Kritik KayÄ±t HatasÄ±:', e);
+                // En son Ã§are: Sadece yerel (yeni eklenen) Ã¼rÃ¼nleri kurtar
                 try {
                     const locals = productList.filter(p => (p._id || p.id || '').toString().startsWith('local_'));
                     localStorage.setItem('galatacarsi_pending_products', JSON.stringify(locals));
@@ -1919,7 +1919,7 @@
             }
         }
 
-        // Ürünleri API veya Önbellekten (IndexedDB) yükle
+        // ÃœrÃ¼nleri API veya Ã–nbellekten (IndexedDB) yÃ¼kle
         async function loadProducts() {
             if (typeof ADMIN_API === 'undefined') return;
 
@@ -1927,17 +1927,17 @@
             showLoading();
 
             try {
-                // 1. ÖNCE INDEXEDDB'DEN (HIZLI ÖNÝZLEME)
+                // 1. Ã–NCE INDEXEDDB'DEN (HIZLI Ã–NÄ°ZLEME)
                 if (typeof GalataDB !== 'undefined') {
                     const cachedProducts = await GalataDB.getProducts();
                     if (cachedProducts && cachedProducts.length > 0) {
                         products = cachedProducts;
                         renderProducts();
-                        console.log('? IndexedDB önbelleði yüklendi:', products.length);
+                        console.log('? IndexedDB Ã¶nbelleÄŸi yÃ¼klendi:', products.length);
                     }
                 }
 
-                // 2. ARKA PLANDA API'DEN GÜNCEL VERÝYÝ ÇEK
+                // 2. ARKA PLANDA API'DEN GÃœNCEL VERÄ°YÄ° Ã‡EK
                 const response = await ADMIN_API.getProducts({ limit: 300 });
 
                 if (response.success && response.data) {
@@ -1954,20 +1954,20 @@
                         });
                     }
 
-                    // IndexedDB'yi güncelle (Ana Depo)
+                    // IndexedDB'yi gÃ¼ncelle (Ana Depo)
                     if (typeof GalataDB !== 'undefined') {
                         await GalataDB.saveProducts(products);
                     }
                     renderProducts();
                 }
             } catch (error) {
-                console.warn('?? API Hatasý veya Zaman Aþýmý, önbellek kullanýlýyor.');
+                console.warn('?? API HatasÄ± veya Zaman AÅŸÄ±mÄ±, Ã¶nbellek kullanÄ±lÄ±yor.');
             } finally {
                 isLoading = false;
             }
         }
 
-        // Yerel ürünleri sunucuya senkronize et (GÜVENLÝ MOD)
+        // Yerel Ã¼rÃ¼nleri sunucuya senkronize et (GÃœVENLÄ° MOD)
         async function syncLocalProducts() {
             const pending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
             if (pending.length === 0) return;
@@ -1978,13 +1978,13 @@
                     const { _id, id, ...productToSend } = localProd;
                     const response = await ADMIN_API.createProduct(productToSend);
                     if (response.success) {
-                        // Baþarýlýysa pending'den çýkar
+                        // BaÅŸarÄ±lÄ±ysa pending'den Ã§Ä±kar
                         const updatedPending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]')
                             .filter(p => (p._id || p.id) !== (localProd._id || localProd.id));
                         localStorage.setItem('galatacarsi_pending_products', JSON.stringify(updatedPending));
                     }
                 } catch (err) {
-                    console.error('Senkronizasyon hatasý:', err);
+                    console.error('Senkronizasyon hatasÄ±:', err);
                 }
             }
         }
@@ -2004,7 +2004,7 @@
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 40px; color: #6b7280;">
                         <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <p style="margin: 10px 0 0;">Ürünler yükleniyor...</p>
+                        <p style="margin: 10px 0 0;">ÃœrÃ¼nler yÃ¼kleniyor...</p>
                     </td>
                 </tr>
             `;
@@ -2039,19 +2039,19 @@
             const category = categoryFilter ? categoryFilter.value : '';
             const stockStatus = stockFilter ? stockFilter.value : '';
 
-            // AKILLI ARAMA FONKSÝYONU: Kelime sýrasý önemsiz
+            // AKILLI ARAMA FONKSÄ°YONU: Kelime sÄ±rasÄ± Ã¶nemsiz
             function smartSearch(text, query) {
                 if (!query || !text) return true;
                 const textLower = text.toLowerCase();
                 const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 0);
 
-                // Tüm arama kelimeleri metin içinde bulunmalý (sýra önemsiz)
+                // TÃ¼m arama kelimeleri metin iÃ§inde bulunmalÄ± (sÄ±ra Ã¶nemsiz)
                 return queryWords.every(word => textLower.includes(word));
             }
 
             // 1. FILTER the products
             const filteredProducts = products.filter(p => {
-                // Akýllý arama - ad, sku, barkod, marka, kategori ve açýklamada ara
+                // AkÄ±llÄ± arama - ad, sku, barkod, marka, kategori ve aÃ§Ä±klamada ara
                 const searchableText = [
                     p.name || '',
                     p.sku || '',
@@ -2080,11 +2080,11 @@
                     <tr>
                         <td colspan="7" style="text-align: center; padding: 40px; color: #6b7280;">
                             <i class="fa-solid fa-box-open" style="font-size: 40px; margin-bottom: 10px;"></i>
-                            <p style="margin: 10px 0 0;">Aranan kriterlere uygun ürün bulunamadý</p>
+                            <p style="margin: 10px 0 0;">Aranan kriterlere uygun Ã¼rÃ¼n bulunamadÄ±</p>
                             ${!search && !brand && !category && !stockStatus ? `
                             <button class="add-product-btn" style="margin-top: 16px;" onclick="openAddModal()">
                                 <i class="fa-solid fa-plus"></i>
-                                Ýlk Ürünü Ekle
+                                Ä°lk ÃœrÃ¼nÃ¼ Ekle
                             </button>` : ''}
                         </td>
                     </tr>
@@ -2095,20 +2095,20 @@
             tbody.innerHTML = '';
 
             // ============================================================================
-            // ?? KRONOLOJÝK SIRALAMA KURALI (STRICT ENFORCEMENT)
+            // ?? KRONOLOJÄ°K SIRALAMA KURALI (STRICT ENFORCEMENT)
             // ============================================================================
-            // Kural: En yeni ürün her zaman en üstte, en eski ürün en altta.
-            // Sýralama Önceliði:
-            //   1?? createdAt (Oluþturulma Tarihi) - DESC (Yeniden eskiye)
-            //   2?? ID'den çýkarýlan Timestamp (MongoDB ObjectID) - DESC
-            //   3?? ID String Karþýlaþtýrmasý - DESC
+            // Kural: En yeni Ã¼rÃ¼n her zaman en Ã¼stte, en eski Ã¼rÃ¼n en altta.
+            // SÄ±ralama Ã–nceliÄŸi:
+            //   1?? createdAt (OluÅŸturulma Tarihi) - DESC (Yeniden eskiye)
+            //   2?? ID'den Ã§Ä±karÄ±lan Timestamp (MongoDB ObjectID) - DESC
+            //   3?? ID String KarÅŸÄ±laÅŸtÄ±rmasÄ± - DESC
             // ============================================================================
 
             const sortedProducts = [...filteredProducts].sort((a, b) => {
-                // ?? YARDIMCI FONKSÝYONLAR
+                // ?? YARDIMCI FONKSÄ°YONLAR
                 const getTimestamp = (p) => {
-                    // SADECE OLUÞTURULMA TARÝHÝNE (createdAt) BAK
-                    // Düzenleme tarihi (updatedAt) sýralamayý etkilememeli.
+                    // SADECE OLUÅžTURULMA TARÄ°HÄ°NE (createdAt) BAK
+                    // DÃ¼zenleme tarihi (updatedAt) sÄ±ralamayÄ± etkilememeli.
 
                     // 1. createdAt varsa kullan
                     if (p.createdAt) {
@@ -2118,12 +2118,12 @@
 
                     const id = (p._id || p.id || '').toString();
 
-                    // 2. ID'den timestamp çýkar (MongoDB ID'si oluþturulma zamanýný içerir)
+                    // 2. ID'den timestamp Ã§Ä±kar (MongoDB ID'si oluÅŸturulma zamanÄ±nÄ± iÃ§erir)
                     if (id.length >= 24 && /^[a-f0-9]{24}$/i.test(id)) {
                         return parseInt(id.substring(0, 8), 16) * 1000;
                     }
 
-                    // 3. Local ID formatý: local_timestamp
+                    // 3. Local ID formatÄ±: local_timestamp
                     if (id.startsWith('local_')) {
                         return parseInt(id.replace('local_', '')) || 0;
                     }
@@ -2134,12 +2134,12 @@
                 const timeA = getTimestamp(a);
                 const timeB = getTimestamp(b);
 
-                // Zaman damgalarý farklýysa büyük olan (yeni) üstte
+                // Zaman damgalarÄ± farklÄ±ysa bÃ¼yÃ¼k olan (yeni) Ã¼stte
                 if (timeA !== timeB) {
                     return timeB - timeA;
                 }
 
-                // Zaman damgalarý aynýysa (veya 0 ise) ID'ye göre ters alfabetik (yeni ID genelde "büyüktür")
+                // Zaman damgalarÄ± aynÄ±ysa (veya 0 ise) ID'ye gÃ¶re ters alfabetik (yeni ID genelde "bÃ¼yÃ¼ktÃ¼r")
                 const idA = (a._id || a.id || '').toString();
                 const idB = (b._id || b.id || '').toString();
                 return idB.localeCompare(idA);
@@ -2152,25 +2152,25 @@
 
                 if (pStock === 0) {
                     stockClass = 'stock-out';
-                    stockText = 'Tükendi';
+                    stockText = 'TÃ¼kendi';
                 } else if (pStock < 15) {
                     stockClass = 'stock-low';
-                    stockText = 'Düþük';
+                    stockText = 'DÃ¼ÅŸÃ¼k';
                 }
 
                 const image = product.mainImage || `https://placehold.co/60x60/6366f1/fff?text=${(product.brand || 'P').charAt(0)}`;
                 const productId = product._id || product.id;
-                const featuredBadge = product.isFeatured ? '<span style="background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;font-size:10px;">ÖNE ÇIKAN</span>' : '';
-                const newBadge = product.isNew ? '<span style="background:#dbeafe;color:#2563eb;padding:2px 6px;border-radius:4px;font-size:10px;">YENÝ</span>' : '';
-                const popularBadge = product.isPopular ? '<span style="background:#fce7f3;color:#be185d;padding:2px 6px;border-radius:4px;font-size:10px;">POPÜLER</span>' : '';
-                const bestsellerBadge = product.isBestSeller ? '<span style="background:#fef9c3;color:#a16207;padding:2px 6px;border-radius:4px;font-size:10px;">ÇOK SATAN</span>' : '';
+                const featuredBadge = product.isFeatured ? '<span style="background:#fef3c7;color:#d97706;padding:2px 6px;border-radius:4px;font-size:10px;">Ã–NE Ã‡IKAN</span>' : '';
+                const newBadge = product.isNew ? '<span style="background:#dbeafe;color:#2563eb;padding:2px 6px;border-radius:4px;font-size:10px;">YENÄ°</span>' : '';
+                const popularBadge = product.isPopular ? '<span style="background:#fce7f3;color:#be185d;padding:2px 6px;border-radius:4px;font-size:10px;">POPÃœLER</span>' : '';
+                const bestsellerBadge = product.isBestSeller ? '<span style="background:#fef9c3;color:#a16207;padding:2px 6px;border-radius:4px;font-size:10px;">Ã‡OK SATAN</span>' : '';
                 const isActiveBadge = product.isActive !== false ?
-                    '<span style="background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px;font-size:10px;">AKTÝF</span>' :
-                    '<span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:4px;font-size:10px;">PASÝF</span>';
+                    '<span style="background:#dcfce7;color:#166534;padding:2px 6px;border-radius:4px;font-size:10px;">AKTÄ°F</span>' :
+                    '<span style="background:#fee2e2;color:#991b1b;padding:2px 6px;border-radius:4px;font-size:10px;">PASÄ°F</span>';
 
                 let showcaseBadge = '';
                 if (product.brandShowcase) {
-                    showcaseBadge = `<span style="background:#fff7ed;color:#c2410c;padding:2px 6px;border-radius:4px;font-size:10px;border:1px solid #ffedd5;font-weight:600;">VÝTRÝN: ${product.brandShowcase.toUpperCase()}</span>`;
+                    showcaseBadge = `<span style="background:#fff7ed;color:#c2410c;padding:2px 6px;border-radius:4px;font-size:10px;border:1px solid #ffedd5;font-weight:600;">VÄ°TRÄ°N: ${product.brandShowcase.toUpperCase()}</span>`;
                 }
 
                 tbody.innerHTML += `
@@ -2183,7 +2183,7 @@
                             </div>
                         </td>
                         <td><span class="product-brand">${product.brand || '-'}</span></td>
-                        <td>${product.category || '-'}/${product.subCategory || 'henüz alt kategori seçilmedi'}</td>
+                        <td>${product.category || '-'}/${product.subCategory || 'henÃ¼z alt kategori seÃ§ilmedi'}</td>
                         <td>
                              <div style="display:flex; flex-direction:column; font-weight:600;">
                                  ${product.salePrice
@@ -2211,23 +2211,23 @@
 
         // Open add modal
         function openAddModal() {
-            document.getElementById('modalTitle').textContent = 'Yeni Ürün Ekle';
+            document.getElementById('modalTitle').textContent = 'Yeni ÃœrÃ¼n Ekle';
             document.getElementById('productForm').reset();
             document.getElementById('productId').value = '';
 
-            // Checkbox listesini sýfýrla
+            // Checkbox listesini sÄ±fÄ±rla
             document.querySelectorAll('input[name="productCategories"]').forEach(cb => cb.checked = false);
 
-            resetImageUpload(); // Görsel alanýný sýfýrla
+            resetImageUpload(); // GÃ¶rsel alanÄ±nÄ± sÄ±fÄ±rla
 
-            // SKU alanýnýn düzenlenebilir olduðundan emin ol
+            // SKU alanÄ±nÄ±n dÃ¼zenlenebilir olduÄŸundan emin ol
             const skuInput = document.getElementById('productSku');
             if (skuInput) {
                 skuInput.removeAttribute('readonly');
                 skuInput.removeAttribute('disabled');
             }
 
-            // Eðer modal minimize durumdaysa, restore et
+            // EÄŸer modal minimize durumdaysa, restore et
             const modal = document.getElementById('productModal');
             if (modal.classList.contains('minimized')) {
                 restoreModal();
@@ -2241,19 +2241,19 @@
         async function editProduct(id) {
             const product = products.find(p => (p._id || p.id) === id);
             if (product) {
-                document.getElementById('modalTitle').textContent = 'Ürün Düzenle';
+                document.getElementById('modalTitle').textContent = 'ÃœrÃ¼n DÃ¼zenle';
                 document.getElementById('productId').value = id;
                 document.getElementById('productName').value = product.name || '';
 
-                // Markayý hem inputta hem gizli inputta set et
+                // MarkayÄ± hem inputta hem gizli inputta set et
                 document.getElementById('productBrand').value = product.brand || '';
                 document.getElementById('brandSearchInput').value = product.brand || '';
 
-                // KATEGORÝ TEMÝZLE VE ÝÞARETLE (Çoklu Seçim v2.0)
+                // KATEGORÄ° TEMÄ°ZLE VE Ä°ÅžARETLE (Ã‡oklu SeÃ§im v2.0)
                 const categoryCheckboxes = document.querySelectorAll('input[name="productCategories"]');
-                categoryCheckboxes.forEach(cb => cb.checked = false); // Önce hepsini temizle
+                categoryCheckboxes.forEach(cb => cb.checked = false); // Ã–nce hepsini temizle
 
-                // Ürünün kategorilerini belirle (allCategories dizisi varsa onu kullan, yoksa tekli slug'ý al)
+                // ÃœrÃ¼nÃ¼n kategorilerini belirle (allCategories dizisi varsa onu kullan, yoksa tekli slug'Ä± al)
                 const productCats = product.allCategories || (product.categorySlug ? [product.categorySlug] : []);
 
                 categoryCheckboxes.forEach(cb => {
@@ -2262,7 +2262,7 @@
                     }
                 });
 
-                // Alt kategorileri güncelle (Ýlk seçili kategoriye göre)
+                // Alt kategorileri gÃ¼ncelle (Ä°lk seÃ§ili kategoriye gÃ¶re)
                 if (productCats[0]) {
                     const categorySelect = document.getElementById('productCategory');
                     if (categorySelect) {
@@ -2278,22 +2278,22 @@
                 document.getElementById('productDescription').value = product.description || '';
                 document.getElementById('productSku').value = product.sku || '';
 
-                // Tüm etiketleri yükle
+                // TÃ¼m etiketleri yÃ¼kle
                 document.getElementById('productIsActive').checked = product.isActive !== false;
                 document.getElementById('tagPopular').checked = !!product.isPopular;
                 document.getElementById('tagBestSeller').checked = !!product.isBestSeller;
                 document.getElementById('tagNew').checked = !!product.isNew;
                 document.getElementById('tagFeatured').checked = !!product.isFeatured;
 
-                // Marka vitrini seçimi
+                // Marka vitrini seÃ§imi
                 document.getElementById('brandShowcase').value = product.brandShowcase || '';
 
-                // Mevcut görseli önizleme olarak göster
+                // Mevcut gÃ¶rseli Ã¶nizleme olarak gÃ¶ster
                 const existingImage = product.mainImage || product.image;
-                console.log('?? Mevcut görsel:', existingImage ? existingImage.substring(0, 50) + '...' : 'YOK');
+                console.log('?? Mevcut gÃ¶rsel:', existingImage ? existingImage.substring(0, 50) + '...' : 'YOK');
 
                 if (existingImage && existingImage.length > 10) {
-                    // Placeholder kontrolü - sadece placehold.co içerenleri atla
+                    // Placeholder kontrolÃ¼ - sadece placehold.co iÃ§erenleri atla
                     const isPlaceholder = existingImage.includes('placehold.co') ||
                         existingImage.includes('placeholder') ||
                         existingImage.includes('text=');
@@ -2304,24 +2304,24 @@
                         document.getElementById('previewImg').src = existingImage;
                         document.getElementById('imagePreview').style.display = 'block';
                         document.getElementById('imagePlaceholder').style.display = 'none';
-                        console.log('? Görsel önizlemeye yüklendi');
+                        console.log('? GÃ¶rsel Ã¶nizlemeye yÃ¼klendi');
                     } else {
                         resetImageUpload();
-                        console.log('?? Placeholder görsel, önizleme sýfýrlandý');
+                        console.log('?? Placeholder gÃ¶rsel, Ã¶nizleme sÄ±fÄ±rlandÄ±');
                     }
                 } else {
                     resetImageUpload();
-                    console.log('?? Görsel bulunamadý, önizleme sýfýrlandý');
+                    console.log('?? GÃ¶rsel bulunamadÄ±, Ã¶nizleme sÄ±fÄ±rlandÄ±');
                 }
 
-                // SKU alanýnýn düzenlenebilir olduðundan emin ol
+                // SKU alanÄ±nÄ±n dÃ¼zenlenebilir olduÄŸundan emin ol
                 const skuInput = document.getElementById('productSku');
                 if (skuInput) {
                     skuInput.removeAttribute('readonly');
                     skuInput.removeAttribute('disabled');
                 }
 
-                // Eðer modal minimize durumdaysa, önce restore et (ayný modal'ý yeniden açýyoruz)
+                // EÄŸer modal minimize durumdaysa, Ã¶nce restore et (aynÄ± modal'Ä± yeniden aÃ§Ä±yoruz)
                 const modal = document.getElementById('productModal');
                 if (modal.classList.contains('minimized')) {
                     restoreModal();
@@ -2334,13 +2334,13 @@
 
         // Delete product
         async function deleteProduct(id) {
-            if (confirm('Bu ürünü silmek istediðinizden emin misiniz?')) {
+            if (confirm('Bu Ã¼rÃ¼nÃ¼ silmek istediÄŸinizden emin misiniz?')) {
                 try {
-                    // Ürünü çöp kutusuna taþýmayý garanti et (API silmeden önce)
+                    // ÃœrÃ¼nÃ¼ Ã§Ã¶p kutusuna taÅŸÄ±mayÄ± garanti et (API silmeden Ã¶nce)
                     const productToMove = products.find(p => (p._id || p.id) === id);
                     if (productToMove && typeof ADMIN_API !== 'undefined') {
-                        // Eðer API silme fonksiyonu zaten moveToTrash çaðýrýyorsa bile 
-                        // burada manuel kontrol yapmak daha güvenli (redundancy)
+                        // EÄŸer API silme fonksiyonu zaten moveToTrash Ã§aÄŸÄ±rÄ±yorsa bile 
+                        // burada manuel kontrol yapmak daha gÃ¼venli (redundancy)
                         let trash = JSON.parse(localStorage.getItem('galatacarsi_trash') || '[]');
                         const isAlreadyInTrash = trash.some(p => (p._id || p.id) === id);
 
@@ -2349,7 +2349,7 @@
                             trash.unshift({ ...productToMove });
                             if (trash.length > 50) trash = trash.slice(0, 50);
                             localStorage.setItem('galatacarsi_trash', JSON.stringify(trash));
-                            console.log('??? Ürün yerel çöp kutusuna taþýndý (Manual)');
+                            console.log('??? ÃœrÃ¼n yerel Ã§Ã¶p kutusuna taÅŸÄ±ndÄ± (Manual)');
                             updateTrashCount();
                         }
                     }
@@ -2357,70 +2357,70 @@
                     const response = await ADMIN_API.deleteProduct(id);
                     if (response.success) {
                         await loadProducts();
-                        alert('Ürün baþarýyla silindi!');
+                        alert('ÃœrÃ¼n baÅŸarÄ±yla silindi!');
                     } else {
-                        // API baþarýsýz olsa bile yerel listeden kaldýr (Offline/Demo uyumu)
+                        // API baÅŸarÄ±sÄ±z olsa bile yerel listeden kaldÄ±r (Offline/Demo uyumu)
                         products = products.filter(p => (p._id || p.id) !== id);
                         renderProducts();
-                        alert(response.message || 'Ürün yerel olarak silindi (Sunucuda bulunamadý)');
+                        alert(response.message || 'ÃœrÃ¼n yerel olarak silindi (Sunucuda bulunamadÄ±)');
                     }
                 } catch (error) {
                     console.error('Delete error:', error);
                     // Fallback for demo mode
                     products = products.filter(p => (p._id || p.id) !== id);
                     renderProducts();
-                    alert('Ürün silindi (demo mod)');
+                    alert('ÃœrÃ¼n silindi (demo mod)');
                 } finally {
                     updateTrashCount();
                 }
             }
         }
 
-        // YENI: Önce validation yap, baþarýlý olursa kaydet ve kapat
-        let isSaving = false; // Mükerrer kayýt önleyici
+        // YENI: Ã–nce validation yap, baÅŸarÄ±lÄ± olursa kaydet ve kapat
+        let isSaving = false; // MÃ¼kerrer kayÄ±t Ã¶nleyici
 
         async function saveAndClose() {
-            console.log('?? saveAndClose çaðrýldý');
+            console.log('?? saveAndClose Ã§aÄŸrÄ±ldÄ±');
 
             if (isSaving) {
-                console.warn('?? Zaten bir kayýt iþlemi devam ediyor...');
+                console.warn('?? Zaten bir kayÄ±t iÅŸlemi devam ediyor...');
                 return;
             }
 
-            // ÖNCE VALIDATION YAP (Modal kapatmadan önce!)
+            // Ã–NCE VALIDATION YAP (Modal kapatmadan Ã¶nce!)
             const name = document.getElementById('productName').value;
             let brand = document.getElementById('productBrand').value;
             const brandSearchInput = document.getElementById('brandSearchInput').value.trim();
             const selectedCategoryCheckboxes = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
 
-            // MARKA OTOMATÝK DOLDURMA: Eðer hidden input boþ ama kullanýcý text input'a yazmýþsa, onu kullan
+            // MARKA OTOMATÄ°K DOLDURMA: EÄŸer hidden input boÅŸ ama kullanÄ±cÄ± text input'a yazmÄ±ÅŸsa, onu kullan
             if (!brand && brandSearchInput) {
                 brand = brandSearchInput;
                 document.getElementById('productBrand').value = brand;
-                console.log('? Marka otomatik atandý:', brand);
+                console.log('? Marka otomatik atandÄ±:', brand);
             }
 
-            // Zorunlu alan kontrolü
+            // Zorunlu alan kontrolÃ¼
             if (!name || !brand) {
-                alert('Lütfen zorunlu alanlarý doldurun (Ürün Adý, Marka).');
-                // Modal AÇIK KALSIN - kullanýcý düzeltsin
+                alert('LÃ¼tfen zorunlu alanlarÄ± doldurun (ÃœrÃ¼n AdÄ±, Marka).');
+                // Modal AÃ‡IK KALSIN - kullanÄ±cÄ± dÃ¼zeltsin
                 return;
             }
 
-            // Kategori kontrolü
+            // Kategori kontrolÃ¼
             if (selectedCategoryCheckboxes.length === 0) {
-                alert('Lütfen en az bir kategori seçin.');
-                // Modal AÇIK KALSIN - kullanýcý düzeltsin
+                alert('LÃ¼tfen en az bir kategori seÃ§in.');
+                // Modal AÃ‡IK KALSIN - kullanÄ±cÄ± dÃ¼zeltsin
                 return;
             }
 
-            // Görsel yükleniyorsa bekle
+            // GÃ¶rsel yÃ¼kleniyorsa bekle
             if (window.isImageLoading) {
-                alert('Lütfen görselin iþlenmesini bekleyin...');
+                alert('LÃ¼tfen gÃ¶rselin iÅŸlenmesini bekleyin...');
                 return;
             }
 
-            // VALIDATION BAÞARILI - SONRA KAYDET VE KAPAT
+            // VALIDATION BAÅžARILI - SONRA KAYDET VE KAPAT
             try {
                 isSaving = true;
                 const saveBtn = document.querySelector('.btn-save');
@@ -2430,10 +2430,10 @@
                 }
 
                 await saveProduct();
-                console.log('? Kaydetme tamamlandý');
+                console.log('? Kaydetme tamamlandÄ±');
             } catch (err) {
-                console.error('? Kaydetme hatasý:', err);
-                alert('Kaydetme sýrasýnda hata oluþtu: ' + err.message);
+                console.error('? Kaydetme hatasÄ±:', err);
+                alert('Kaydetme sÄ±rasÄ±nda hata oluÅŸtu: ' + err.message);
             } finally {
                 isSaving = false;
                 const saveBtn = document.querySelector('.btn-save');
@@ -2444,17 +2444,17 @@
             }
         }
 
-        // Close modal - GÜÇLENDÝRÝLMÝÞ VERSÝYON
+        // Close modal - GÃœÃ‡LENDÄ°RÄ°LMÄ°Åž VERSÄ°YON
         function closeModal() {
-            console.log('?? closeModal çaðrýldý');
+            console.log('?? closeModal Ã§aÄŸrÄ±ldÄ±');
             try {
                 const modal = document.getElementById('productModal');
                 if (!modal) {
-                    console.error('Modal element bulunamadý!');
+                    console.error('Modal element bulunamadÄ±!');
                     return;
                 }
 
-                // Her iki yöntemle de kapat
+                // Her iki yÃ¶ntemle de kapat
                 modal.style.display = 'none';
                 modal.classList.remove('active');
                 modal.classList.remove('minimized');
@@ -2474,25 +2474,25 @@
                     modalBox.onclick = null;
                 }
 
-                console.log('? Modal baþarýyla kapatýldý');
+                console.log('? Modal baÅŸarÄ±yla kapatÄ±ldÄ±');
             } catch (err) {
-                console.error('closeModal hatasý:', err);
+                console.error('closeModal hatasÄ±:', err);
             }
         }
 
-        // Minimize edilmiþ panelleri saklamak için
+        // Minimize edilmiÅŸ panelleri saklamak iÃ§in
         let minimizedPanels = [];
 
-        // Minimize modal - YENÝ SÝSTEM: Ayrý kart olarak sað alta taþý
+        // Minimize modal - YENÄ° SÄ°STEM: AyrÄ± kart olarak saÄŸ alta taÅŸÄ±
         function minimizeModal(e) {
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
 
-            // Þu anki düzenlenen ürün bilgilerini al
+            // Åžu anki dÃ¼zenlenen Ã¼rÃ¼n bilgilerini al
             const productId = document.getElementById('productId').value;
-            const productName = document.getElementById('productName').value || 'Yeni Ürün';
+            const productName = document.getElementById('productName').value || 'Yeni ÃœrÃ¼n';
             const isNewProduct = !productId;
 
             // Form verilerini kaydet
@@ -2518,10 +2518,10 @@
                 categories: Array.from(document.querySelectorAll('input[name="productCategories"]:checked')).map(cb => cb.value)
             };
 
-            // Benzersiz bir ID oluþtur
+            // Benzersiz bir ID oluÅŸtur
             const minimizedId = 'min_' + (productId || Date.now());
 
-            // Eðer bu ürün zaten minimize edilmiþse, güncelle
+            // EÄŸer bu Ã¼rÃ¼n zaten minimize edilmiÅŸse, gÃ¼ncelle
             const existingIndex = minimizedPanels.findIndex(p => p.minimizedId === minimizedId);
             if (existingIndex >= 0) {
                 minimizedPanels[existingIndex].formData = formData;
@@ -2535,14 +2535,14 @@
                 });
             }
 
-            // Modal'ý kapat
+            // Modal'Ä± kapat
             closeModal();
 
-            // Küçültülmüþ kartlarý render et
+            // KÃ¼Ã§Ã¼ltÃ¼lmÃ¼ÅŸ kartlarÄ± render et
             renderMinimizedPanels();
         }
 
-        // Minimize edilmiþ kartlarý render et
+        // Minimize edilmiÅŸ kartlarÄ± render et
         function renderMinimizedPanels() {
             const container = document.getElementById('minimizedPanelsContainer');
             if (!container) return;
@@ -2551,10 +2551,10 @@
                 <div class="minimized-panel-card" data-id="${panel.minimizedId}" onclick="restoreMinimizedPanel('${panel.minimizedId}')">
                     <div class="card-info">
                         <i class="fa-solid fa-${panel.isNewProduct ? 'plus' : 'pen'}"></i>
-                        <span>${panel.productName || 'Ürün Düzenleme'}</span>
+                        <span>${panel.productName || 'ÃœrÃ¼n DÃ¼zenleme'}</span>
                     </div>
                     <div class="card-actions" onclick="event.stopPropagation()">
-                        <button class="restore-btn" onclick="event.stopPropagation(); restoreMinimizedPanel('${panel.minimizedId}')" title="Geri Aç">
+                        <button class="restore-btn" onclick="event.stopPropagation(); restoreMinimizedPanel('${panel.minimizedId}')" title="Geri AÃ§">
                             <i class="fa-solid fa-window-maximize"></i>
                         </button>
                         <button class="close-btn" onclick="event.stopPropagation(); removeMinimizedPanel('${panel.minimizedId}')" title="Kapat">
@@ -2565,7 +2565,7 @@
             `).join('');
         }
 
-        // Minimize edilmiþ paneli geri aç
+        // Minimize edilmiÅŸ paneli geri aÃ§
         function restoreMinimizedPanel(minimizedId) {
             const panelIndex = minimizedPanels.findIndex(p => p.minimizedId === minimizedId);
             if (panelIndex < 0) return;
@@ -2573,10 +2573,10 @@
             const panel = minimizedPanels[panelIndex];
             const formData = panel.formData;
 
-            // Modal baþlýðýný ayarla
-            document.getElementById('modalTitle').textContent = panel.isNewProduct ? 'Yeni Ürün Ekle' : 'Ürün Düzenle';
+            // Modal baÅŸlÄ±ÄŸÄ±nÄ± ayarla
+            document.getElementById('modalTitle').textContent = panel.isNewProduct ? 'Yeni ÃœrÃ¼n Ekle' : 'ÃœrÃ¼n DÃ¼zenle';
 
-            // Form alanlarýný doldur
+            // Form alanlarÄ±nÄ± doldur
             document.getElementById('productId').value = formData.id || '';
             document.getElementById('productName').value = formData.name || '';
             document.getElementById('productBrand').value = formData.brand || '';
@@ -2595,12 +2595,12 @@
             document.getElementById('tagFeatured').checked = !!formData.tagFeatured;
             document.getElementById('brandShowcase').value = formData.brandShowcase || '';
 
-            // Kategori checkbox'larýný ayarla
+            // Kategori checkbox'larÄ±nÄ± ayarla
             document.querySelectorAll('input[name="productCategories"]').forEach(cb => {
                 cb.checked = formData.categories && formData.categories.includes(cb.value);
             });
 
-            // Görsel
+            // GÃ¶rsel
             if (formData.imageBase64) {
                 uploadedImageBase64 = formData.imageBase64;
                 document.getElementById('productImageBase64').value = formData.imageBase64;
@@ -2611,36 +2611,36 @@
                 resetImageUpload();
             }
 
-            // Listeden kaldýr
+            // Listeden kaldÄ±r
             minimizedPanels.splice(panelIndex, 1);
             renderMinimizedPanels();
 
-            // Modal'ý aç
+            // Modal'Ä± aÃ§
             const modal = document.getElementById('productModal');
             if (modal) {
-                modal.style.display = ''; // display: none'ý temizle
+                modal.style.display = ''; // display: none'Ä± temizle
                 modal.classList.add('active');
             }
         }
 
-        // Minimize edilmiþ paneli kapat (listeden kaldýr)
+        // Minimize edilmiÅŸ paneli kapat (listeden kaldÄ±r)
         function removeMinimizedPanel(minimizedId) {
             minimizedPanels = minimizedPanels.filter(p => p.minimizedId !== minimizedId);
             renderMinimizedPanels();
         }
 
-        // Restore modal - Eski sistem için geriye uyumluluk (kullanýlmýyor artýk)
+        // Restore modal - Eski sistem iÃ§in geriye uyumluluk (kullanÄ±lmÄ±yor artÄ±k)
         function restoreModal() {
-            // Bu fonksiyon artýk kullanýlmýyor, ama kod uyumluluðu için kalýyor
+            // Bu fonksiyon artÄ±k kullanÄ±lmÄ±yor, ama kod uyumluluÄŸu iÃ§in kalÄ±yor
         }
 
-        // Save product - GÜÇLENDÝRÝLMÝÞ VERSÝYON
+        // Save product - GÃœÃ‡LENDÄ°RÄ°LMÄ°Åž VERSÄ°YON
         async function saveProduct() {
-            console.log('?? saveProduct baþladý');
+            console.log('?? saveProduct baÅŸladÄ±');
 
-            // HER DURUMDA MODAL KAPANSIN - En baþta tanýmla
+            // HER DURUMDA MODAL KAPANSIN - En baÅŸta tanÄ±mla
             const forceCloseModal = () => {
-                console.log('?? forceCloseModal çaðrýldý');
+                console.log('?? forceCloseModal Ã§aÄŸrÄ±ldÄ±');
                 const modal = document.getElementById('productModal');
                 if (modal) {
                     modal.style.display = 'none';
@@ -2650,15 +2650,15 @@
             };
 
             try {
-                // Görsel yükleniyorsa bekle
+                // GÃ¶rsel yÃ¼kleniyorsa bekle
                 if (isImageLoading) {
-                    alert('Lütfen görselin iþlenmesini bekleyin...');
+                    alert('LÃ¼tfen gÃ¶rselin iÅŸlenmesini bekleyin...');
                     return;
                 }
 
-                // Kritik API Kontrolü
+                // Kritik API KontrolÃ¼
                 if (typeof ADMIN_API === 'undefined') {
-                    alert('Sistem Hatasý: ADMIN_API yüklenemedi. Lütfen internet baðlantýnýzý kontrol edin ve sayfayý yenileyin (Ctrl+F5).');
+                    alert('Sistem HatasÄ±: ADMIN_API yÃ¼klenemedi. LÃ¼tfen internet baÄŸlantÄ±nÄ±zÄ± kontrol edin ve sayfayÄ± yenileyin (Ctrl+F5).');
                     return;
                 }
 
@@ -2666,12 +2666,12 @@
                 const name = document.getElementById('productName').value;
                 let brand = document.getElementById('productBrand').value;
 
-                // MARKA OTOMATÝK DOLDURMA: Eðer hidden input boþ ama text input'a yazmýþsa
+                // MARKA OTOMATÄ°K DOLDURMA: EÄŸer hidden input boÅŸ ama text input'a yazmÄ±ÅŸsa
                 const brandSearchInputVal = document.getElementById('brandSearchInput').value.trim();
                 if (!brand && brandSearchInputVal) {
                     brand = brandSearchInputVal;
                     document.getElementById('productBrand').value = brand;
-                    console.log('? saveProduct: Marka otomatik atandý:', brand);
+                    console.log('? saveProduct: Marka otomatik atandÄ±:', brand);
                 }
 
                 const price = parseFloat(document.getElementById('productPrice').value) || 0;
@@ -2680,29 +2680,29 @@
 
                 const stock = parseInt(document.getElementById('productStock').value) || 0;
 
-                // ÇOKLU KATEGORÝ OKUMA (Checkbox listesinden)
+                // Ã‡OKLU KATEGORÄ° OKUMA (Checkbox listesinden)
                 const selectedCategoryCheckboxes = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
                 const categorySlugs = selectedCategoryCheckboxes.map(cb => cb.value); // Dizi olarak: ["cat1", "cat2"]
                 const categoryLabel = selectedCategoryCheckboxes.length > 0 ? selectedCategoryCheckboxes[0].parentElement.textContent.trim() : "";
 
-                // Backend uyumlu kategori isimleri (GEÇÝCÝ ÇÖZÜM - backend deploy edilene kadar)
+                // Backend uyumlu kategori isimleri (GEÃ‡Ä°CÄ° Ã‡Ã–ZÃœM - backend deploy edilene kadar)
                 const categoryMapping = {
                     'Elektrikli El Aletleri': 'Elektrikli El Aletleri',
-                    'Ölçme Ve Kontrol Aletleri': 'Ölçme Ve Kontrol Aletleri',
+                    'Ã–lÃ§me Ve Kontrol Aletleri': 'Ã–lÃ§me Ve Kontrol Aletleri',
                     'El Aletleri': 'El Aletleri',
-                    'Aþýndýrýcý ve Kesici Uçlar': 'Aþýndýrýcý ve Kesici Uçlar',
-                    'Yapýþtýrýcý, Dolgu ve Kimyasallar': 'Yapýþtýrýcý, Dolgu ve Kimyasallar',
-                    'Kaynak Malzemeleri': 'Kaynak Malzemeleri',
-                    'Hýrdavat ve El Aletleri': 'Hýrdavat ve El Aletleri',
-                    'Ýþ Güvenliði': 'Ýþ Güvenliði ve Çalýþma Ekipmanlarý',
-                    'Bahçe Aletleri': 'Bahçe Aletleri',
-                    'Akülü Aletler': 'Akülü Aletler',
-                    'Jeneratörler': 'Jeneratörler',
+                    'AÅŸÄ±ndÄ±rÄ±cÄ± ve Kesici UÃ§lar': 'AÅŸÄ±ndÄ±rÄ±cÄ± ve Kesici UÃ§lar',
+                    'YapÄ±ÅŸtÄ±rÄ±cÄ±, Dolgu ve Kimyasallar': 'YapÄ±ÅŸtÄ±rÄ±cÄ±, Dolgu ve Kimyasallar',
+                    'Kaynak Malzemeleri ve AksesuarlarÄ±': 'Kaynak Malzemeleri ve AksesuarlarÄ±',
+                    'HÄ±rdavat ve El Aletleri': 'HÄ±rdavat ve El Aletleri',
+                    'Ä°ÅŸ GÃ¼venliÄŸi': 'Ä°ÅŸ GÃ¼venliÄŸi ve Ã‡alÄ±ÅŸma EkipmanlarÄ±',
+                    'BahÃ§e Aletleri': 'BahÃ§e Aletleri',
+                    'AkÃ¼lÃ¼ Aletler': 'AkÃ¼lÃ¼ Aletler',
+                    'JeneratÃ¶rler': 'JeneratÃ¶rler',
                     'Hobi Aletleri': 'Hobi Aletleri',
                     'Aksesuarlar': 'Aksesuarlar'
                 };
 
-                // Eðer birden fazla seçilmiþse kategori adýný virgülle ayýr
+                // EÄŸer birden fazla seÃ§ilmiÅŸse kategori adÄ±nÄ± virgÃ¼lle ayÄ±r
                 const categoryName = selectedCategoryCheckboxes
                     .map(cb => {
                         const labelText = cb.parentElement.textContent.trim();
@@ -2712,11 +2712,11 @@
 
                 const description = document.getElementById('productDescription').value;
                 const sku = document.getElementById('productSku').value;
-                const barcode = null; // Barkod alaný kaldýrýldý
+                const barcode = null; // Barkod alanÄ± kaldÄ±rÄ±ldÄ±
                 const unit = document.getElementById('productUnit').value;
                 const subCategory = document.getElementById('productSubCategory').value;
 
-                // Tüm etiketleri oku
+                // TÃ¼m etiketleri oku
                 const isPopular = document.getElementById('tagPopular').checked;
                 const isBestSeller = document.getElementById('tagBestSeller').checked;
                 const isNew = document.getElementById('tagNew').checked;
@@ -2724,52 +2724,52 @@
                 const brandShowcase = document.getElementById('brandShowcase').value;
 
                 if (!name || !brand) {
-                    alert('Lütfen zorunlu alanlarý doldurun (Ürün Adý, Marka).');
+                    alert('LÃ¼tfen zorunlu alanlarÄ± doldurun (ÃœrÃ¼n AdÄ±, Marka).');
                     return;
                 }
 
-                // Kategori kontrolü
+                // Kategori kontrolÃ¼
                 if (categorySlugs.length === 0) {
-                    alert('Lütfen en az bir kategori seçin.');
+                    alert('LÃ¼tfen en az bir kategori seÃ§in.');
                     return;
                 }
 
-                // Yüklenen görseli al veya placeholder kullan
+                // YÃ¼klenen gÃ¶rseli al veya placeholder kullan
                 const imageToUse = uploadedImageBase64 || `https://placehold.co/400x400/6366f1/fff?text=${brand.charAt(0)}`;
 
-                // Tags array oluþtur (DÝKKAT: Popülerlik kontrolü burada çok önemli)
+                // Tags array oluÅŸtur (DÄ°KKAT: PopÃ¼lerlik kontrolÃ¼ burada Ã§ok Ã¶nemli)
                 const tags = [];
                 if (isPopular) {
                     tags.push('popular');
-                    tags.push('Popüler'); // Ekstra güvenlik
+                    tags.push('PopÃ¼ler'); // Ekstra gÃ¼venlik
                 }
                 if (isNew) tags.push('new');
                 if (isFeatured) tags.push('featured');
                 if (isBestSeller) tags.push('bestseller');
 
-                // Eðer popüler iþaretli DEÐÝLSE, tags içinden popular kelimelerini temizle
+                // EÄŸer popÃ¼ler iÅŸaretli DEÄžÄ°LSE, tags iÃ§inden popular kelimelerini temizle
                 if (!isPopular) {
-                    // Bu durumda (yukarýda push etmedik zaten ama backend'de kalmýþ olabilir diye) 
-                    // productData.tags boþ gidecek.
+                    // Bu durumda (yukarÄ±da push etmedik zaten ama backend'de kalmÄ±ÅŸ olabilir diye) 
+                    // productData.tags boÅŸ gidecek.
                 }
 
                 const productData = {
                     name,
                     brand,
-                    category: categoryName, // Virgüllü kategori isimleri
-                    categorySlug: categorySlugs[0], // Ýlk kategori (Eskisiyle uyum için)
-                    allCategories: categorySlugs,   // TÜM KATEGORÝLER (Dizi olarak)
+                    category: categoryName, // VirgÃ¼llÃ¼ kategori isimleri
+                    categorySlug: categorySlugs[0], // Ä°lk kategori (Eskisiyle uyum iÃ§in)
+                    allCategories: categorySlugs,   // TÃœM KATEGORÄ°LER (Dizi olarak)
                     subCategory: subCategory,
 
                     price,
-                    salePrice, // Düzeltilmiþ salePrice
+                    salePrice, // DÃ¼zeltilmiÅŸ salePrice
                     stock,
                     unit,
-                    description: description || `${brand} ${name} - Galata Çarþý kalitesiyle.`,
-                    sku: sku || '',         // Boþ string olarak gönder
-                    barcode: barcode || '', // Boþ string olarak gönder
+                    description: description || `${brand} ${name} - Galata Ã‡arÅŸÄ± kalitesiyle.`,
+                    sku: sku || '',         // BoÅŸ string olarak gÃ¶nder
+                    barcode: barcode || '', // BoÅŸ string olarak gÃ¶nder
 
-                    // Tüm etiketler (Ayrý ayrý) - ÖNEMLÝ: isPopular BOOLEAN olarak gitsin
+                    // TÃ¼m etiketler (AyrÄ± ayrÄ±) - Ã–NEMLÄ°: isPopular BOOLEAN olarak gitsin
                     isActive: !!document.getElementById('productIsActive').checked,
                     isPopular: isPopular, // document.getElementById('tagPopular').checked
                     isBestSeller: !!isBestSeller,
@@ -2779,14 +2779,14 @@
                     // Tags array (Toplu)
                     tags: tags,
 
-                    // Ana sayfa marka vitrini (Hem ayrý alan olarak hem de tag olarak gönderelim)
+                    // Ana sayfa marka vitrini (Hem ayrÄ± alan olarak hem de tag olarak gÃ¶nderelim)
                     brandShowcase: brandShowcase || '',
                     mainImage: imageToUse,
-                    image: imageToUse // Geriye uyumluluk için hem image hem mainImage set et
+                    image: imageToUse // Geriye uyumluluk iÃ§in hem image hem mainImage set et
                 };
 
-                // BACKEND SCHEMA YEDEKLEMESÝ:
-                // Eðer backend 'brandShowcase' alanýný kabul etmiyorsa diye tag içine de ekleyelim
+                // BACKEND SCHEMA YEDEKLEMESÄ°:
+                // EÄŸer backend 'brandShowcase' alanÄ±nÄ± kabul etmiyorsa diye tag iÃ§ine de ekleyelim
                 if (brandShowcase) {
                     const showcaseTag = `showcase-${brandShowcase}`;
                     if (!productData.tags.includes(showcaseTag)) {
@@ -2803,11 +2803,11 @@
                     allCategories: productData.allCategories
                 });
 
-                // Eðer id varsa güncelleme yapýyoruz, mevcut ürünü bulup bazý alanlarý koruyalým
+                // EÄŸer id varsa gÃ¼ncelleme yapÄ±yoruz, mevcut Ã¼rÃ¼nÃ¼ bulup bazÄ± alanlarÄ± koruyalÄ±m
                 if (id) {
                     const existingProduct = products.find(p => (p._id || p.id) === id);
                     if (existingProduct) {
-                        // Eðer yeni görsel yüklenmediyse eskisini koru
+                        // EÄŸer yeni gÃ¶rsel yÃ¼klenmediyse eskisini koru
                         if (!uploadedImageBase64 && existingProduct.mainImage && !existingProduct.mainImage.includes('placehold.co')) {
                             productData.mainImage = existingProduct.mainImage;
                         }
@@ -2822,17 +2822,17 @@
                     isPopular: productData.isPopular
                 });
 
-                showLoading(); // Yükleniyor göster
+                showLoading(); // YÃ¼kleniyor gÃ¶ster
 
                 try {
-                    // Timeout Korumasý (90 saniye - Render uyku modundan çýkarken uzun sürebilir)
+                    // Timeout KorumasÄ± (90 saniye - Render uyku modundan Ã§Ä±karken uzun sÃ¼rebilir)
                     const timeoutPromise = new Promise((_, reject) =>
-                        setTimeout(() => reject(new Error('Sunucu zaman aþýmý (90sn)')), 90000)
+                        setTimeout(() => reject(new Error('Sunucu zaman aÅŸÄ±mÄ± (90sn)')), 90000)
                     );
 
-                    // Uzun sürerse kullanýcýyý bilgilendir
+                    // Uzun sÃ¼rerse kullanÄ±cÄ±yÄ± bilgilendir
                     const notifyUserTimer = setTimeout(() => {
-                        alert("Sunucu uyku modunda olabilir, uyandýrýlýyor... Lütfen bekleyiniz (Bu iþlem 1 dakika sürebilir).");
+                        alert("Sunucu uyku modunda olabilir, uyandÄ±rÄ±lÄ±yor... LÃ¼tfen bekleyiniz (Bu iÅŸlem 1 dakika sÃ¼rebilir).");
                     }, 4000);
 
                     let apiCall;
@@ -2842,21 +2842,21 @@
                         apiCall = ADMIN_API.createProduct(productData);
                     }
 
-                    // API Ýsteði vs Timeout Yarýþý
+                    // API Ä°steÄŸi vs Timeout YarÄ±ÅŸÄ±
                     let response = await Promise.race([apiCall, timeoutPromise]);
 
-                    clearTimeout(notifyUserTimer); // Ýþlem biterse uyarýyý iptal et
+                    clearTimeout(notifyUserTimer); // Ä°ÅŸlem biterse uyarÄ±yÄ± iptal et
 
                     if (response.success) {
-                        console.log('? API Yanýtý Baþarýlý:', response);
+                        console.log('? API YanÄ±tÄ± BaÅŸarÄ±lÄ±:', response);
 
-                        // --- BAÞLANGIÇ: MERGE VE DÜZELTME ---
-                        // Eðer API yanýtýnda salePrice/barcode yoksa, gönderdiðimiz productData'dan tamamla!
-                        // Bu çok kritik, çünkü backend bazen bu alanlarý döndürmeyebilir.
+                        // --- BAÅžLANGIÃ‡: MERGE VE DÃœZELTME ---
+                        // EÄŸer API yanÄ±tÄ±nda salePrice/barcode yoksa, gÃ¶nderdiÄŸimiz productData'dan tamamla!
+                        // Bu Ã§ok kritik, Ã§Ã¼nkÃ¼ backend bazen bu alanlarÄ± dÃ¶ndÃ¼rmeyebilir.
                         let finalData = response.data || {};
-                        const sentData = productData; // Gönderilen veri
+                        const sentData = productData; // GÃ¶nderilen veri
 
-                        // KRÝTÝK ALANLARI KORU (Backend bazen eksik dönebilir)
+                        // KRÄ°TÄ°K ALANLARI KORU (Backend bazen eksik dÃ¶nebilir)
                         const fieldsToPreserve = [
                             'salePrice', 'barcode', 'unit', 'description', 'sku',
                             'isFeatured', 'isPopular', 'isNew', 'isBestSeller', 'isActive',
@@ -2871,7 +2871,7 @@
                         });
                         // ------------------------------------
 
-                        // Sunucudan dönen (ve düzelttiðimiz) veriyi hemen yerel listeye yansýt (Load beklemeden)
+                        // Sunucudan dÃ¶nen (ve dÃ¼zelttiÄŸimiz) veriyi hemen yerel listeye yansÄ±t (Load beklemeden)
                         if (finalData) {
                             if (id) {
                                 const index = products.findIndex(p => (p._id || p.id) === id);
@@ -2880,15 +2880,15 @@
                                 products.push(finalData);
                             }
 
-                            // ===== GARANTÝLÝ KAYIT SÝSTEMÝ =====
-                            // 1. ADMIN_API ile tek ürün olarak kaydet
+                            // ===== GARANTÄ°LÄ° KAYIT SÄ°STEMÄ° =====
+                            // 1. ADMIN_API ile tek Ã¼rÃ¼n olarak kaydet
                             try {
                                 if (typeof ADMIN_API !== 'undefined' && ADMIN_API.saveProductToLocalStorage) {
                                     ADMIN_API.saveProductToLocalStorage(finalData);
                                     console.log('? [1/3] ADMIN_API ile localStorage\'a kaydedildi');
                                 }
                             } catch (e1) {
-                                console.error('? [1/3] ADMIN_API kayýt hatasý:', e1);
+                                console.error('? [1/3] ADMIN_API kayÄ±t hatasÄ±:', e1);
                             }
 
                             // 2. IndexedDB'ye kaydet (50MB+ depolama)
@@ -2898,71 +2898,71 @@
                                     console.log('? [2/3] IndexedDB\'ye kaydedildi');
                                 }
                             } catch (e2) {
-                                console.error('? [2/3] IndexedDB kayýt hatasý:', e2);
+                                console.error('? [2/3] IndexedDB kayÄ±t hatasÄ±:', e2);
                             }
 
-                            // 3. Tüm listeyi localStorage'a kaydet
+                            // 3. TÃ¼m listeyi localStorage'a kaydet
                             try {
                                 saveProductsToLocalStorage(products);
-                                console.log('? [3/3] Tüm liste localStorage\'a kaydedildi');
+                                console.log('? [3/3] TÃ¼m liste localStorage\'a kaydedildi');
                             } catch (e3) {
-                                console.error('? [3/3] Liste kayýt hatasý:', e3);
+                                console.error('? [3/3] Liste kayÄ±t hatasÄ±:', e3);
                             }
 
-                            // 4. Doðrudan localStorage'a da yaz (failsafe)
+                            // 4. DoÄŸrudan localStorage'a da yaz (failsafe)
                             try {
                                 const directKey = 'galatacarsi_last_saved_product';
                                 localStorage.setItem(directKey, JSON.stringify(finalData));
-                                console.log('? [FAILSAFE] Doðrudan localStorage\'a kaydedildi');
+                                console.log('? [FAILSAFE] DoÄŸrudan localStorage\'a kaydedildi');
                             } catch (e4) {
-                                console.error('? [FAILSAFE] Doðrudan kayýt hatasý:', e4);
+                                console.error('? [FAILSAFE] DoÄŸrudan kayÄ±t hatasÄ±:', e4);
                             }
                             // ===================================
 
-                            renderProducts(); // Hemen tabloyu güncelle
+                            renderProducts(); // Hemen tabloyu gÃ¼ncelle
                         }
 
-                        // ÖNCE MODAL KAPAT, SONRA ALERT GÖSTER
+                        // Ã–NCE MODAL KAPAT, SONRA ALERT GÃ–STER
                         closeModal();
 
-                        alert(`? Ürün baþarýyla kaydedildi!\n\nÝndirimli Fiyat: ${productData.salePrice !== null ? '?' + productData.salePrice : 'Yok'}\nBarkod: ${productData.barcode || 'Yok'}`);
+                        alert(`? ÃœrÃ¼n baÅŸarÄ±yla kaydedildi!\n\nÄ°ndirimli Fiyat: ${productData.salePrice !== null ? '?' + productData.salePrice : 'Yok'}\nBarkod: ${productData.barcode || 'Yok'}`);
 
-                        // NOT: Otomatik yenileme kaldýrýldý - ürün zaten tabloda ve localStorage'da
-                        // Kullanýcý isterse manuel yenileyebilir (F5)
-                        console.log('? Ürün kaydedildi. Otomatik yenileme yapýlmýyor.');
+                        // NOT: Otomatik yenileme kaldÄ±rÄ±ldÄ± - Ã¼rÃ¼n zaten tabloda ve localStorage'da
+                        // KullanÄ±cÄ± isterse manuel yenileyebilir (F5)
+                        console.log('? ÃœrÃ¼n kaydedildi. Otomatik yenileme yapÄ±lmÄ±yor.');
                     } else {
-                        // API hata döndü
-                        console.error('API Hatasý:', response);
-                        throw new Error(response.message || response.error || 'API Hatasý');
+                        // API hata dÃ¶ndÃ¼
+                        console.error('API HatasÄ±:', response);
+                        throw new Error(response.message || response.error || 'API HatasÄ±');
                     }
                 } catch (error) {
-                    // Hata veya Timeout -> Yerel Kayýt (Offline Mode)
-                    console.warn('?? Sunucu hatasý, yerel kayýt yapýlýyor:', error.message);
+                    // Hata veya Timeout -> Yerel KayÄ±t (Offline Mode)
+                    console.warn('?? Sunucu hatasÄ±, yerel kayÄ±t yapÄ±lÄ±yor:', error.message);
 
-                    // SLUG DUPLICATE HATASINI ÖZEL OLARAK YAKALA
+                    // SLUG DUPLICATE HATASINI Ã–ZEL OLARAK YAKALA
                     const isSlugDuplicateError = error.message.includes('slug zaten') ||
                         error.message.includes('slug already') ||
                         error.message.includes('duplicate') ||
                         error.message.includes('E11000');
 
                     if (isSlugDuplicateError && !id) {
-                        // Bu bir yeni ürün ekleme ve slug duplicate hatasý
+                        // Bu bir yeni Ã¼rÃ¼n ekleme ve slug duplicate hatasÄ±
                         const userChoice = confirm(
-                            `?? AYNI ÝSÝMDE ÜRÜN ZATEN VAR!\n\n` +
-                            `"${productData.name}" isimli bir ürün sunucuda zaten mevcut.\n\n` +
-                            `SEÇENEKLER:\n` +
-                            `• [TAMAM] = Ürün adýna tarih/saat ekleyerek benzersiz bir isimle kaydet\n` +
-                            `• [ÝPTAL] = Formu açýk býrak, manuel olarak adý deðiþtir`
+                            `?? AYNI Ä°SÄ°MDE ÃœRÃœN ZATEN VAR!\n\n` +
+                            `"${productData.name}" isimli bir Ã¼rÃ¼n sunucuda zaten mevcut.\n\n` +
+                            `SEÃ‡ENEKLER:\n` +
+                            `â€¢ [TAMAM] = ÃœrÃ¼n adÄ±na tarih/saat ekleyerek benzersiz bir isimle kaydet\n` +
+                            `â€¢ [Ä°PTAL] = Formu aÃ§Ä±k bÄ±rak, manuel olarak adÄ± deÄŸiÅŸtir`
                         );
 
                         if (userChoice) {
-                            // Otomatik benzersiz isim oluþtur
+                            // Otomatik benzersiz isim oluÅŸtur
                             const timestamp = new Date().toLocaleString('tr-TR', {
                                 day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
                             }).replace(/[\/\s:]/g, '-');
                             productData.name = `${productData.name} (${timestamp})`;
 
-                            // Yeniden API'ye göndermeyi dene
+                            // Yeniden API'ye gÃ¶ndermeyi dene
                             try {
                                 const retryResponse = await ADMIN_API.createProduct(productData);
                                 if (retryResponse.success) {
@@ -2970,26 +2970,26 @@
                                     saveProductsToLocalStorage(products);
                                     closeModal();
                                     renderProducts();
-                                    alert(`? Ürün "${productData.name}" olarak baþarýyla kaydedildi!`);
-                                    return; // Baþarýlý, fonksiyondan çýk
+                                    alert(`? ÃœrÃ¼n "${productData.name}" olarak baÅŸarÄ±yla kaydedildi!`);
+                                    return; // BaÅŸarÄ±lÄ±, fonksiyondan Ã§Ä±k
                                 }
                             } catch (retryError) {
-                                console.error('Retry de baþarýsýz:', retryError);
+                                console.error('Retry de baÅŸarÄ±sÄ±z:', retryError);
                             }
                         } else {
-                            // Kullanýcý iptal etti, formu açýk býrak
-                            return; // Modal kapanmadan fonksiyondan çýk
+                            // KullanÄ±cÄ± iptal etti, formu aÃ§Ä±k bÄ±rak
+                            return; // Modal kapanmadan fonksiyondan Ã§Ä±k
                         }
                     }
 
-                    // Normal hata akýþý devam eder
+                    // Normal hata akÄ±ÅŸÄ± devam eder
                     if (id) {
                         const index = products.findIndex(p => (p._id || p.id) === id);
                         if (index !== -1) {
                             products[index] = { ...products[index], ...productData, _updatedLocal: true };
                         }
                     } else {
-                        // Yeni ürün ekle - SLUG DUPLICATE durumunda farklý ID kullan
+                        // Yeni Ã¼rÃ¼n ekle - SLUG DUPLICATE durumunda farklÄ± ID kullan
                         const uniqueId = isSlugDuplicateError
                             ? 'dup_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
                             : 'local_' + Date.now();
@@ -3005,64 +3005,64 @@
 
                         products.push(newProduct);
 
-                        // Pending listesine de ayrýca kaydet (garantili koruma)
+                        // Pending listesine de ayrÄ±ca kaydet (garantili koruma)
                         try {
                             const pendingProducts = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
                             pendingProducts.unshift(newProduct);
                             localStorage.setItem('galatacarsi_pending_products', JSON.stringify(pendingProducts));
-                            console.log('?? Ürün pending listesine kaydedildi (garantili)');
+                            console.log('?? ÃœrÃ¼n pending listesine kaydedildi (garantili)');
                         } catch (e) {
-                            console.error('Pending kayýt hatasý:', e);
+                            console.error('Pending kayÄ±t hatasÄ±:', e);
                         }
                     }
 
-                    // localStorage güncelle (güvenli)
+                    // localStorage gÃ¼ncelle (gÃ¼venli)
                     saveProductsToLocalStorage(products);
 
                     closeModal();
                     renderProducts();
 
-                    // Kullanýcýya bilgi ver - SLUG DUPLICATE için farklý mesaj
+                    // KullanÄ±cÄ±ya bilgi ver - SLUG DUPLICATE iÃ§in farklÄ± mesaj
                     let msg;
                     if (isSlugDuplicateError) {
-                        msg = `Bu isimde bir ürün zaten sunucuda mevcut. Ürün YEREL OLARAK kaydedildi ancak sunucuya aktarýlamadý.\n\nÇözüm: Ürünü düzenleyip farklý bir isim verin veya mevcut ürünü güncelleyin.`;
-                    } else if (error.message.includes('zaman aþýmý')) {
-                        msg = 'Sunucu 90 saniye içinde yanýt vermedi (Render uyuyor olabilir).';
+                        msg = `Bu isimde bir Ã¼rÃ¼n zaten sunucuda mevcut. ÃœrÃ¼n YEREL OLARAK kaydedildi ancak sunucuya aktarÄ±lamadÄ±.\n\nÃ‡Ã¶zÃ¼m: ÃœrÃ¼nÃ¼ dÃ¼zenleyip farklÄ± bir isim verin veya mevcut Ã¼rÃ¼nÃ¼ gÃ¼ncelleyin.`;
+                    } else if (error.message.includes('zaman aÅŸÄ±mÄ±')) {
+                        msg = 'Sunucu 90 saniye iÃ§inde yanÄ±t vermedi (Render uyuyor olabilir).';
                     } else {
-                        msg = 'Ýnternet baðlantýsý veya sunucu hatasý.';
+                        msg = 'Ä°nternet baÄŸlantÄ±sÄ± veya sunucu hatasÄ±.';
                     }
 
-                    alert(`?? SUNUCUYA KAYDEDÝLEMEDÝ!\n\nHATA DETAYI: ${error.message}\n\nDurum: ${msg}\n\nÜrün bu tarayýcýya (localStorage) kaydedildi. Sayfa yenilendiðinde görünecektir.`);
+                    alert(`?? SUNUCUYA KAYDEDÄ°LEMEDÄ°!\n\nHATA DETAYI: ${error.message}\n\nDurum: ${msg}\n\nÃœrÃ¼n bu tarayÄ±cÄ±ya (localStorage) kaydedildi. Sayfa yenilendiÄŸinde gÃ¶rÃ¼necektir.`);
                 } finally {
-                    // Her durumda loading state'i kaldýr
+                    // Her durumda loading state'i kaldÄ±r
                     const tbody = document.getElementById('productsTableBody');
                     if (tbody && tbody.innerHTML.includes('spinner')) renderProducts();
                 }
             } catch (outerError) {
-                // En dýþtaki hata yakalayýcý - HER DURUMDA MODAL KAPANSIN
+                // En dÄ±ÅŸtaki hata yakalayÄ±cÄ± - HER DURUMDA MODAL KAPANSIN
                 console.error('? saveProduct HATA:', outerError);
-                alert('Beklenmeyen bir hata oluþtu: ' + outerError.message);
+                alert('Beklenmeyen bir hata oluÅŸtu: ' + outerError.message);
                 forceCloseModal();
             }
         }
 
 
-        // Get category name from slug - Backend Enum Deðerleriyle Birebir Eþleþmeli
+        // Get category name from slug - Backend Enum DeÄŸerleriyle Birebir EÅŸleÅŸmeli
         function getCategoryName(slug) {
             const categoryMap = {
-                'akulu-aletler': 'Akülü Aletler',
-                'jeneratorler': 'Jeneratörler',
+                'akulu-aletler': 'AkÃ¼lÃ¼ Aletler',
+                'jeneratorler': 'JeneratÃ¶rler',
                 'hobi-aletleri': 'Hobi Aletleri',
                 'aksesuarlar': 'Aksesuarlar',
                 'elektrikli-el-aletleri': 'Elektrikli El Aletleri',
-                'olcme-ve-kontrol-aletleri': 'Ölçme Ve Kontrol Aletleri',
+                'olcme-ve-kontrol-aletleri': 'Ã–lÃ§me Ve Kontrol Aletleri',
                 'el-aletleri': 'El Aletleri',
-                'asindirici-kesici': 'Aþýndýrýcý ve Kesici Uçlar',
-                'yapi-kimyasallari': 'Yapýþtýrýcý, Dolgu ve Kimyasallar',
-                'kaynak-malzemeleri': 'Kaynak Malzemeleri',
-                'hirdavat-el-aletleri': 'Hýrdavat ve El Aletleri',
-                'is-guvenligi-ve-calisma-ekipmanlari': 'Ýþ Güvenliði ve Çalýþma Ekipmanlarý',
-                'bahce-aletleri': 'Bahçe Aletleri'
+                'asindirici-kesici': 'AÅŸÄ±ndÄ±rÄ±cÄ± ve Kesici UÃ§lar',
+                'yapi-kimyasallari': 'YapÄ±ÅŸtÄ±rÄ±cÄ±, Dolgu ve Kimyasallar',
+                'kaynak-malzemeleri': 'Kaynak Malzemeleri ve AksesuarlarÄ±',
+                'hirdavat-el-aletleri': 'HÄ±rdavat ve El Aletleri',
+                'is-guvenligi-ve-calisma-ekipmanlari': 'Ä°ÅŸ GÃ¼venliÄŸi ve Ã‡alÄ±ÅŸma EkipmanlarÄ±',
+                'bahce-aletleri': 'BahÃ§e Aletleri'
             };
             return categoryMap[slug] || slug;
         }
@@ -3073,7 +3073,7 @@
         document.getElementById('categoryFilter')?.addEventListener('change', filterProducts);
         document.getElementById('stockFilter')?.addEventListener('change', filterProducts);
 
-        // Enter tuþu ile arama
+        // Enter tuÅŸu ile arama
         document.getElementById('searchInput')?.addEventListener('keydown', function (e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -3082,17 +3082,17 @@
         });
 
         function filterProducts() {
-            renderProducts(); // renderProducts zaten filtre deðerlerini okuyor (v2.1)
+            renderProducts(); // renderProducts zaten filtre deÄŸerlerini okuyor (v2.1)
         }
 
-        // Marka vitrini seçildiðinde marka ve kategoriyi otomatik doldur
+        // Marka vitrini seÃ§ildiÄŸinde marka ve kategoriyi otomatik doldur
         function autoFillBrandAndCategory(val) {
             if (!val) return;
 
             const brandSelect = document.getElementById('productBrand');
             const categorySelect = document.getElementById('productCategory');
 
-            // Deðerleri eþleþtir
+            // DeÄŸerleri eÅŸleÅŸtir
             const mapping = {
                 'beta': { brand: 'Beta', category: 'el-aletleri' },
                 'bosch': { brand: 'Bosch', category: 'elektrikli-el-aletleri' },
@@ -3104,7 +3104,7 @@
 
             const target = mapping[val];
             if (target) {
-                // Markayý seç
+                // MarkayÄ± seÃ§
                 for (let i = 0; i < brandSelect.options.length; i++) {
                     if (brandSelect.options[i].value.toLowerCase() === target.brand.toLowerCase()) {
                         brandSelect.selectedIndex = i;
@@ -3112,13 +3112,13 @@
                     }
                 }
 
-                // Kategoriyi seç
+                // Kategoriyi seÃ§
                 categorySelect.value = target.category;
 
                 // Alt kategorileri de tetikle
                 updateSubCategories(target.category);
 
-                // Kullanýcýya görsel geri bildirim ver
+                // KullanÄ±cÄ±ya gÃ¶rsel geri bildirim ver
                 brandSelect.style.borderColor = '#22c55e';
                 categorySelect.style.borderColor = '#22c55e';
                 setTimeout(() => {
@@ -3137,7 +3137,7 @@
             await Promise.all([
                 loadBrandsDropdown(),
                 loadCategoriesDropdown(),
-                renderCategoryCheckboxes() // Checkboxlarý dinamik oluþtur
+                renderCategoryCheckboxes() // CheckboxlarÄ± dinamik oluÅŸtur
             ]);
             loadProducts();
         }
@@ -3178,7 +3178,7 @@
                 if (checked) selectedCategory = checked.value;
             }
 
-            subCategoryObj.innerHTML = '<option value="">Alt Kategori Seçin</option>';
+            subCategoryObj.innerHTML = '<option value="">Alt Kategori SeÃ§in</option>';
 
             const categories = (typeof UnifiedCategories !== 'undefined' && UnifiedCategories.data)
                 ? UnifiedCategories.data
@@ -3209,31 +3209,31 @@
             }
         }
 
-        // --- ESKI CUSTOM DROPDOWN KODLARI KALDIRILDI (Artýk standart select kullanýlýyor) ---
+        // --- ESKI CUSTOM DROPDOWN KODLARI KALDIRILDI (ArtÄ±k standart select kullanÄ±lÄ±yor) ---
 
-        // Kategori checkbox deðiþtiðinde alt kategorileri güncelle
+        // Kategori checkbox deÄŸiÅŸtiÄŸinde alt kategorileri gÃ¼ncelle
         function handleCategoryChange() {
             const checkedCategories = Array.from(document.querySelectorAll('input[name="productCategories"]:checked'));
 
             if (checkedCategories.length > 0) {
-                // Ýlk seçili kategoriye göre alt kategorileri yükle
+                // Ä°lk seÃ§ili kategoriye gÃ¶re alt kategorileri yÃ¼kle
                 const firstCategory = checkedCategories[0].value;
 
-                // Gizli kategori select'ini güncelle (updateSubCategories için)
+                // Gizli kategori select'ini gÃ¼ncelle (updateSubCategories iÃ§in)
                 const categorySelect = document.getElementById('productCategory');
                 if (categorySelect) {
                     categorySelect.value = firstCategory;
                 }
 
-                // Alt kategorileri yükle
+                // Alt kategorileri yÃ¼kle
                 updateSubCategories(firstCategory);
 
-                console.log('?? Kategori deðiþti:', firstCategory);
+                console.log('?? Kategori deÄŸiÅŸti:', firstCategory);
             } else {
-                // Hiç kategori seçili deðilse alt kategoriyi temizle
+                // HiÃ§ kategori seÃ§ili deÄŸilse alt kategoriyi temizle
                 const subCategoryObj = document.getElementById('productSubCategory');
                 if (subCategoryObj) {
-                    subCategoryObj.innerHTML = '<option value="">Önce Üst Kategori Seçiniz</option>';
+                    subCategoryObj.innerHTML = '<option value="">Ã–nce Ãœst Kategori SeÃ§iniz</option>';
                 }
             }
         }
@@ -3244,12 +3244,12 @@
             const modal = document.getElementById('priceIncreaseModal');
             const brandSelect = document.getElementById('zamBrandSelect');
 
-            // Markalarý yükle
+            // MarkalarÄ± yÃ¼kle
             const brands = [...new Set(products.filter(p => p.brand).map(p => p.brand))].sort();
-            brandSelect.innerHTML = '<option value="">-- Marka Seçin --</option>';
+            brandSelect.innerHTML = '<option value="">-- Marka SeÃ§in --</option>';
             brands.forEach(brand => {
                 const count = products.filter(p => p.brand === brand).length;
-                brandSelect.innerHTML += `<option value="${brand}">${brand} (${count} ürün)</option>`;
+                brandSelect.innerHTML += `<option value="${brand}">${brand} (${count} Ã¼rÃ¼n)</option>`;
             });
 
             // Reset fields
@@ -3258,7 +3258,7 @@
 
             modal.classList.add('active');
 
-            // Önizleme için event listener
+            // Ã–nizleme iÃ§in event listener
             document.getElementById('zamBrandSelect').addEventListener('change', updateZamPreview);
             document.getElementById('zamPercentage').addEventListener('input', updateZamPreview);
         }
@@ -3275,10 +3275,10 @@
                 const brandProducts = products.filter(p => p.brand === brand);
                 const count = brandProducts.length;
 
-                // Hesaplama Mantýðý
+                // Hesaplama MantÄ±ÄŸÄ±
                 const isDiscount = type === 'discount';
                 const multiplier = isDiscount ? (1 - percentage / 100) : (1 + percentage / 100);
-                const actionText = isDiscount ? 'ÝNDÝRÝM' : 'ZAM';
+                const actionText = isDiscount ? 'Ä°NDÄ°RÄ°M' : 'ZAM';
 
                 if (brandProducts.length > 0) {
                     const sample = brandProducts[0];
@@ -3286,10 +3286,10 @@
                     const newPrice = oldPrice * multiplier;
 
                     previewText.innerHTML = `
-                        <strong>${brand}</strong> markasýnýn <strong>${count}</strong> ürününe <strong>%${percentage} ${actionText}</strong> uygulanacak.<br>
+                        <strong>${brand}</strong> markasÄ±nÄ±n <strong>${count}</strong> Ã¼rÃ¼nÃ¼ne <strong>%${percentage} ${actionText}</strong> uygulanacak.<br>
                         <span style="color: #6b7280; font-size: 13px;">
-                            Örnek: ${sample.name.substring(0, 40)}...<br>
-                            Eski: ?${oldPrice.toLocaleString('tr-TR')} › Yeni: ?${newPrice.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}
+                            Ã–rnek: ${sample.name.substring(0, 40)}...<br>
+                            Eski: ?${oldPrice.toLocaleString('tr-TR')} â€º Yeni: ?${newPrice.toLocaleString('tr-TR', { maximumFractionDigits: 2 })}
                         </span>
                     `;
                     previewDiv.style.display = 'block';
@@ -3309,28 +3309,28 @@
             const type = document.getElementById('priceChangeType').value;
 
             if (!brand) {
-                alert('Lütfen bir marka seçin.');
+                alert('LÃ¼tfen bir marka seÃ§in.');
                 return;
             }
 
             if (isNaN(percentage) || percentage <= 0) {
-                alert('Lütfen geçerli bir yüzde girin (0\'dan büyük).');
+                alert('LÃ¼tfen geÃ§erli bir yÃ¼zde girin (0\'dan bÃ¼yÃ¼k).');
                 return;
             }
 
             const brandProducts = products.filter(p => p.brand === brand);
 
             if (brandProducts.length === 0) {
-                alert('Bu markaya ait ürün bulunamadý.');
+                alert('Bu markaya ait Ã¼rÃ¼n bulunamadÄ±.');
                 return;
             }
 
             const isDiscount = type === 'discount';
-            const actionText = isDiscount ? 'ÝNDÝRÝM' : 'ZAM';
+            const actionText = isDiscount ? 'Ä°NDÄ°RÄ°M' : 'ZAM';
             const multiplier = isDiscount ? (1 - percentage / 100) : (1 + percentage / 100);
 
             const confirm = window.confirm(
-                `${brand} markasýnýn ${brandProducts.length} ürününe %${percentage} ${actionText} uygulanacak.\n\nDevam etmek istiyor musunuz?`
+                `${brand} markasÄ±nÄ±n ${brandProducts.length} Ã¼rÃ¼nÃ¼ne %${percentage} ${actionText} uygulanacak.\n\nDevam etmek istiyor musunuz?`
             );
 
             if (!confirm) return;
@@ -3338,30 +3338,30 @@
             let successCount = 0;
             let failCount = 0;
 
-            // Kullanýcýya iþlem baþladýðýný belirtelim
-            document.getElementById('zamPreviewText').textContent = "Ýþlem yapýlýyor, lütfen bekleyiniz...";
+            // KullanÄ±cÄ±ya iÅŸlem baÅŸladÄ±ÄŸÄ±nÄ± belirtelim
+            document.getElementById('zamPreviewText').textContent = "Ä°ÅŸlem yapÄ±lÄ±yor, lÃ¼tfen bekleyiniz...";
 
             for (const product of brandProducts) {
                 try {
                     const oldPrice = parseFloat(product.price) || 0;
                     const newPrice = Math.round(oldPrice * multiplier * 100) / 100;
 
-                    // Ürünü güncelle
-                    // Eðer indirim yapýlýyorsa, eski fiyatý salePrice olarak saklamak mantýklý olabilir mi? 
-                    // Kullanýcý isteðinde belirtilmedi ama genellikle indirimde: price -> newPrice, salePrice -> newPrice
-                    // Eðer "Zam" ise sadece price artar.
-                    // Þimdilik sadece ana fiyatý deðiþtiriyoruz, salePrice mantýðý karýþýk olabilir.
+                    // ÃœrÃ¼nÃ¼ gÃ¼ncelle
+                    // EÄŸer indirim yapÄ±lÄ±yorsa, eski fiyatÄ± salePrice olarak saklamak mantÄ±klÄ± olabilir mi? 
+                    // KullanÄ±cÄ± isteÄŸinde belirtilmedi ama genellikle indirimde: price -> newPrice, salePrice -> newPrice
+                    // EÄŸer "Zam" ise sadece price artar.
+                    // Åžimdilik sadece ana fiyatÄ± deÄŸiÅŸtiriyoruz, salePrice mantÄ±ÄŸÄ± karÄ±ÅŸÄ±k olabilir.
 
                     const updatedProduct = { ...product, price: newPrice };
 
-                    // Eðer indirim yapýldýysa ve ürünün bir indirimli fiyatý (salePrice) varsa, onu da güncellemek gerekebilir
-                    // Basit tutalým: Ana fiyatý deðiþtir.
+                    // EÄŸer indirim yapÄ±ldÄ±ysa ve Ã¼rÃ¼nÃ¼n bir indirimli fiyatÄ± (salePrice) varsa, onu da gÃ¼ncellemek gerekebilir
+                    // Basit tutalÄ±m: Ana fiyatÄ± deÄŸiÅŸtir.
 
-                    // API'ye gönder
+                    // API'ye gÃ¶nder
                     const response = await ADMIN_API.updateProduct(product._id || product.id, updatedProduct);
 
                     if (response.success) {
-                        // Yereli güncelle
+                        // Yereli gÃ¼ncelle
                         const index = products.findIndex(p => (p._id || p.id) === (product._id || product.id));
                         if (index !== -1) {
                             products[index].price = newPrice;
@@ -3371,24 +3371,24 @@
                         failCount++;
                     }
                 } catch (error) {
-                    console.error('Fiyat deðiþimi hatasý:', error);
+                    console.error('Fiyat deÄŸiÅŸimi hatasÄ±:', error);
                     failCount++;
                 }
             }
 
-            // LocalStorage güncelle (güvenli)
+            // LocalStorage gÃ¼ncelle (gÃ¼venli)
             saveProductsToLocalStorage(products);
 
-            // Sonuç
+            // SonuÃ§
             closePriceIncreaseModal();
             renderProducts();
 
-            alert(`? ${actionText} uygulandý!\n\nBaþarýlý: ${successCount} ürün\nBaþarýsýz: ${failCount} ürün`);
+            alert(`? ${actionText} uygulandÄ±!\n\nBaÅŸarÄ±lÄ±: ${successCount} Ã¼rÃ¼n\nBaÅŸarÄ±sÄ±z: ${failCount} Ã¼rÃ¼n`);
         }
 
-        // ==================== ÇÖP KUTUSU (TRASH BIN) FONKSÝYONLARI ====================
+        // ==================== Ã‡Ã–P KUTUSU (TRASH BIN) FONKSÄ°YONLARI ====================
 
-        // Çöp kutusu sayýsýný güncelle
+        // Ã‡Ã¶p kutusu sayÄ±sÄ±nÄ± gÃ¼ncelle
         function updateTrashCount() {
             const trash = ADMIN_API.getTrashProducts();
             const countEl = document.getElementById('trashCount');
@@ -3397,40 +3397,40 @@
             }
         }
 
-        // Sayfa yüklendiðinde çöp kutusu sayýsýný güncelle
+        // Sayfa yÃ¼klendiÄŸinde Ã§Ã¶p kutusu sayÄ±sÄ±nÄ± gÃ¼ncelle
         window.addEventListener('load', function () {
             setTimeout(updateTrashCount, 1000);
         });
 
-        // Çöp kutusu modalýný aç
+        // Ã‡Ã¶p kutusu modalÄ±nÄ± aÃ§
         function openTrashModal() {
             const modal = document.getElementById('trashModal');
             modal.classList.add('active');
             renderTrashProducts();
         }
 
-        // Çöp kutusu modalýný kapat
+        // Ã‡Ã¶p kutusu modalÄ±nÄ± kapat
         function closeTrashModal() {
             const modal = document.getElementById('trashModal');
             modal.classList.remove('active');
         }
 
-        // Çöp kutusundaki ürünleri listele
+        // Ã‡Ã¶p kutusundaki Ã¼rÃ¼nleri listele
         function renderTrashProducts() {
             const trash = ADMIN_API.getTrashProducts();
             const container = document.getElementById('trashProductsList');
             const countEl = document.getElementById('trashModalCount');
 
-            // Sayýyý güncelle
-            countEl.textContent = `${trash.length} ürün`;
+            // SayÄ±yÄ± gÃ¼ncelle
+            countEl.textContent = `${trash.length} Ã¼rÃ¼n`;
             document.getElementById('trashCount').textContent = trash.length;
 
             if (trash.length === 0) {
                 container.innerHTML = `
                     <div class="empty-trash">
                         <i class="fa-solid fa-trash-can"></i>
-                        <p>Çöp kutusu boþ</p>
-                        <p style="font-size: 13px; margin-top: 8px; color: #6b7280;">Sildiðiniz ürünler burada görünecek</p>
+                        <p>Ã‡Ã¶p kutusu boÅŸ</p>
+                        <p style="font-size: 13px; margin-top: 8px; color: #6b7280;">SildiÄŸiniz Ã¼rÃ¼nler burada gÃ¶rÃ¼necek</p>
                     </div>
                 `;
                 return;
@@ -3438,7 +3438,7 @@
 
             container.innerHTML = trash.map(product => {
                 const productId = product._id || product.id;
-                const image = product.mainImage || `https://placehold.co/60x60/dc2626/fff?text=${(product.brand || 'Ü').charAt(0)}`;
+                const image = product.mainImage || `https://placehold.co/60x60/dc2626/fff?text=${(product.brand || 'Ãœ').charAt(0)}`;
                 const deletedDate = product.deletedAt ? new Date(product.deletedAt).toLocaleString('tr-TR') : 'Bilinmiyor';
 
                 return `
@@ -3456,10 +3456,10 @@
                             <i class="fa-regular fa-clock"></i> ${deletedDate}
                         </div>
                         <div class="trash-item-actions">
-                            <button class="trash-btn restore-btn" onclick="restoreProduct('${productId}')" title="Geri Yükle">
-                                <i class="fa-solid fa-rotate-left"></i> Geri Yükle
+                            <button class="trash-btn restore-btn" onclick="restoreProduct('${productId}')" title="Geri YÃ¼kle">
+                                <i class="fa-solid fa-rotate-left"></i> Geri YÃ¼kle
                             </button>
-                            <button class="trash-btn delete-btn" onclick="permanentDelete('${productId}')" title="Kalýcý Sil">
+                            <button class="trash-btn delete-btn" onclick="permanentDelete('${productId}')" title="KalÄ±cÄ± Sil">
                                 <i class="fa-solid fa-trash"></i>
                             </button>
                         </div>
@@ -3468,32 +3468,32 @@
             }).join('');
         }
 
-        // Ürünü geri yükle
+        // ÃœrÃ¼nÃ¼ geri yÃ¼kle
         async function restoreProduct(productId) {
-            if (!confirm('Bu ürünü geri yüklemek istediðinizden emin misiniz?')) return;
+            if (!confirm('Bu Ã¼rÃ¼nÃ¼ geri yÃ¼klemek istediÄŸinizden emin misiniz?')) return;
 
             try {
                 const result = await ADMIN_API.restoreFromTrash(productId);
 
                 if (result.success) {
-                    alert(result.message || '? Ürün baþarýyla geri yüklendi!');
+                    alert(result.message || '? ÃœrÃ¼n baÅŸarÄ±yla geri yÃ¼klendi!');
                     renderTrashProducts();
                     updateTrashCount();
 
-                    // Ürün listesini yenile
+                    // ÃœrÃ¼n listesini yenile
                     await loadProducts();
                 } else {
-                    alert('? Geri yükleme baþarýsýz: ' + (result.error || 'Bilinmeyen hata'));
+                    alert('? Geri yÃ¼kleme baÅŸarÄ±sÄ±z: ' + (result.error || 'Bilinmeyen hata'));
                 }
             } catch (error) {
-                console.error('Geri yükleme hatasý:', error);
-                alert('? Geri yükleme sýrasýnda bir hata oluþtu.');
+                console.error('Geri yÃ¼kleme hatasÄ±:', error);
+                alert('? Geri yÃ¼kleme sÄ±rasÄ±nda bir hata oluÅŸtu.');
             }
         }
 
-        // Kalýcý olarak sil
+        // KalÄ±cÄ± olarak sil
         function permanentDelete(productId) {
-            if (!confirm('?? DÝKKAT!\n\nBu ürün kalýcý olarak silinecek ve bir daha geri getirilemez.\n\nDevam etmek istiyor musunuz?')) return;
+            if (!confirm('?? DÄ°KKAT!\n\nBu Ã¼rÃ¼n kalÄ±cÄ± olarak silinecek ve bir daha geri getirilemez.\n\nDevam etmek istiyor musunuz?')) return;
 
             const result = ADMIN_API.permanentlyDeleteFromTrash(productId);
 
@@ -3501,33 +3501,33 @@
                 renderTrashProducts();
                 updateTrashCount();
             } else {
-                alert('? Silme baþarýsýz: ' + (result.error || 'Bilinmeyen hata'));
+                alert('? Silme baÅŸarÄ±sÄ±z: ' + (result.error || 'Bilinmeyen hata'));
             }
         }
 
-        // Çöp kutusunu tamamen boþalt
+        // Ã‡Ã¶p kutusunu tamamen boÅŸalt
         function emptyAllTrash() {
             const trash = ADMIN_API.getTrashProducts();
 
             if (trash.length === 0) {
-                alert('Çöp kutusu zaten boþ.');
+                alert('Ã‡Ã¶p kutusu zaten boÅŸ.');
                 return;
             }
 
-            if (!confirm(`?? DÝKKAT!\n\nÇöp kutusundaki ${trash.length} ürün kalýcý olarak silinecek ve bir daha geri getirilemez.\n\nDevam etmek istiyor musunuz?`)) return;
+            if (!confirm(`?? DÄ°KKAT!\n\nÃ‡Ã¶p kutusundaki ${trash.length} Ã¼rÃ¼n kalÄ±cÄ± olarak silinecek ve bir daha geri getirilemez.\n\nDevam etmek istiyor musunuz?`)) return;
 
             const result = ADMIN_API.emptyTrash();
 
             if (result.success) {
                 renderTrashProducts();
                 updateTrashCount();
-                alert('? Çöp kutusu boþaltýldý.');
+                alert('? Ã‡Ã¶p kutusu boÅŸaltÄ±ldÄ±.');
             } else {
-                alert('? Ýþlem baþarýsýz.');
+                alert('? Ä°ÅŸlem baÅŸarÄ±sÄ±z.');
             }
         }
 
-        // Alt kategori ve grup yönetimi
+        // Alt kategori ve grup yÃ¶netimi
         function openSubcategoryManager() {
             document.getElementById('subcategoryMgmtModal').classList.add('active');
             loadMgmtMainCategories();
@@ -3539,7 +3539,7 @@
 
         function loadMgmtMainCategories() {
             const select = document.getElementById('mgmtMainCategory');
-            select.innerHTML = '<option value="">-- Üst Kategori Seçin --</option>';
+            select.innerHTML = '<option value="">-- Ãœst Kategori SeÃ§in --</option>';
 
             const categories = (typeof UnifiedCategories !== 'undefined' && UnifiedCategories.data)
                 ? UnifiedCategories.data
@@ -3572,7 +3572,7 @@
                     option.value = group.name;
                     subsDatalist.appendChild(option);
 
-                    // Grup items'larý da datalist'e ekle
+                    // Grup items'larÄ± da datalist'e ekle
                     if (group.items && Array.isArray(group.items)) {
                         group.items.forEach(item => {
                             const itemOption = document.createElement('option');
@@ -3586,20 +3586,20 @@
 
         async function processSubcategoryAction(action) {
             const categorySlug = document.getElementById('mgmtMainCategory').value;
-            const subCategoryName = document.getElementById('mgmtSubName').value.trim(); // Alt Kategori Ýsmi
-            const groupNamesRaw = document.getElementById('mgmtGroupName').value.trim(); // Grup Ýsimleri (virgülle ayrýlmýþ)
+            const subCategoryName = document.getElementById('mgmtSubName').value.trim(); // Alt Kategori Ä°smi
+            const groupNamesRaw = document.getElementById('mgmtGroupName').value.trim(); // Grup Ä°simleri (virgÃ¼lle ayrÄ±lmÄ±ÅŸ)
 
-            if (!categorySlug) return alert('Lütfen bir üst kategori seçin!');
-            if (!subCategoryName) return alert('Lütfen bir alt kategori ismi girin!');
+            if (!categorySlug) return alert('LÃ¼tfen bir Ã¼st kategori seÃ§in!');
+            if (!subCategoryName) return alert('LÃ¼tfen bir alt kategori ismi girin!');
 
-            // Birden fazla grup ekleme desteði
+            // Birden fazla grup ekleme desteÄŸi
             const groupNames = groupNamesRaw ? groupNamesRaw.split(',').map(g => g.trim()).filter(g => g) : [];
 
             let confirmMsg;
             if (action === 'add') {
-                confirmMsg = `"${subCategoryName}" alt kategorisini ${groupNames.length > 0 ? `ve içindeki ${groupNames.length} grubu` : ''} eklemek istediðinize emin misiniz?`;
+                confirmMsg = `"${subCategoryName}" alt kategorisini ${groupNames.length > 0 ? `ve iÃ§indeki ${groupNames.length} grubu` : ''} eklemek istediÄŸinize emin misiniz?`;
             } else {
-                confirmMsg = `"${subCategoryName}" alt kategorisinden ${groupNames.length > 0 ? `"${groupNames.join(', ')}" gruplarýný` : 'tamamýný'} silmek istediðinize emin misiniz?`;
+                confirmMsg = `"${subCategoryName}" alt kategorisinden ${groupNames.length > 0 ? `"${groupNames.join(', ')}" gruplarÄ±nÄ±` : 'tamamÄ±nÄ±'} silmek istediÄŸinize emin misiniz?`;
             }
 
             if (!confirm(confirmMsg)) return;
@@ -3608,9 +3608,9 @@
                 const btn = document.querySelector(`.modal-body button[onclick*="${action}"]`);
                 const originalHTML = btn.innerHTML;
                 btn.disabled = true;
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ýþleniyor...';
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ä°ÅŸleniyor...';
 
-                // 1. ADIM: YEREL OLARAK GÜNCELLE (LocalStorage) - BU SAYEDE ANINDA SÝTEYE YANSIYOR
+                // 1. ADIM: YEREL OLARAK GÃœNCELLE (LocalStorage) - BU SAYEDE ANINDA SÄ°TEYE YANSIYOR
                 let customCategories = JSON.parse(localStorage.getItem('galatacarsi_custom_categories') || '{}');
 
                 // Mevcut kategoriyi al (Baseline veya custom)
@@ -3643,9 +3643,9 @@
 
                 customCategories[categorySlug].subcategories = targetSubcats;
                 localStorage.setItem('galatacarsi_custom_categories', JSON.stringify(customCategories));
-                console.log('? Yerel kategori verileri güncellendi');
+                console.log('? Yerel kategori verileri gÃ¼ncellendi');
 
-                // 2. ADIM: SUNUCUYA GÖNDER (Kalýcý kayýt için)
+                // 2. ADIM: SUNUCUYA GÃ–NDER (KalÄ±cÄ± kayÄ±t iÃ§in)
                 const response = await ADMIN_API.syncSubcategories({
                     action,
                     categorySlug,
@@ -3654,11 +3654,11 @@
                 });
 
                 if (response.success) {
-                    alert(`? Baþarýlý: ${response.message || 'Ýþlem tamamlandý.'}\n\nDeðiþiklikler anýnda tüm sayfalarýna yansýdý!`);
+                    alert(`? BaÅŸarÄ±lÄ±: ${response.message || 'Ä°ÅŸlem tamamlandÄ±.'}\n\nDeÄŸiÅŸiklikler anÄ±nda tÃ¼m sayfalarÄ±na yansÄ±dÄ±!`);
                 } else {
-                    // Sunucu hatasý olsa bile yerel kayýt çalýþtýðý için kullanýcýya bilgi ver
-                    console.warn('Sunucu senkronizasyonu baþarýsýz, ama yerel deðiþiklik yapýldý:', response.message);
-                    alert(`? Yerel Deðiþiklik Yapýldý!\n\nNot: Sunucu baðlantýsý kurulamadý ama bu tarayýcýda deðiþiklikleri görebilirsiniz.`);
+                    // Sunucu hatasÄ± olsa bile yerel kayÄ±t Ã§alÄ±ÅŸtÄ±ÄŸÄ± iÃ§in kullanÄ±cÄ±ya bilgi ver
+                    console.warn('Sunucu senkronizasyonu baÅŸarÄ±sÄ±z, ama yerel deÄŸiÅŸiklik yapÄ±ldÄ±:', response.message);
+                    alert(`? Yerel DeÄŸiÅŸiklik YapÄ±ldÄ±!\n\nNot: Sunucu baÄŸlantÄ±sÄ± kurulamadÄ± ama bu tarayÄ±cÄ±da deÄŸiÅŸiklikleri gÃ¶rebilirsiniz.`);
                 }
 
                 // UI Yenile
@@ -3670,7 +3670,7 @@
                 btn.innerHTML = originalHTML;
             } catch (error) {
                 console.error('Subcategory action error:', error);
-                alert(`? Bir hata oluþtu ama yerel veriler güncellenmiþ olabilir.`);
+                alert(`? Bir hata oluÅŸtu ama yerel veriler gÃ¼ncellenmiÅŸ olabilir.`);
                 btn.disabled = false;
                 btn.innerHTML = 'Hata';
             }
@@ -3678,7 +3678,9 @@
     </script>
 
 
-    <!-- AI Asistaný JS Kaldýrýldý -->
+    <!-- AI AsistanÄ± JS KaldÄ±rÄ±ldÄ± -->
 </body>
 
 </html>
+
+

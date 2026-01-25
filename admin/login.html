@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -10,14 +10,14 @@
 
     <!-- Standardized Favicons (Auto-Injected) -->
 
-    <!-- Bakým Modu Sistemi (En Tepede) -->
+    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // Bakým sayfasý ise kontrol etme
+            // BakÄ±m sayfasÄ± ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -39,16 +39,16 @@
                 return;
             }
 
-            // Eðer bakýmda deðilse veya yetkiliyse sayfayý göster
+            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('?? Bakým Modu: Eriþim onaylandý.');
+            console.log('?? BakÄ±m Modu: EriÅŸim onaylandÄ±.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Giriþi - Galata Çarþý</title>
+    <title>Admin GiriÅŸi - Galata Ã‡arÅŸÄ±</title>
     
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
@@ -220,8 +220,8 @@
 <body>
     <div class="login-container">
         <div class="login-header">
-            <div class="logo">Galata Çarþý</div>
-            <p>Admin Paneli Giriþi</p>
+            <div class="logo">Galata Ã‡arÅŸÄ±</div>
+            <p>Admin Paneli GiriÅŸi</p>
         </div>
 
         <div class="error-message" id="errorMessage"></div>
@@ -236,21 +236,21 @@
             </div>
 
             <div class="form-group">
-                <label>Þifre</label>
+                <label>Åžifre</label>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-lock"></i>
-                    <input type="password" id="password" placeholder="••••••••" required>
+                    <input type="password" id="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" required>
                 </div>
             </div>
 
             <button type="submit" class="btn-login" id="loginBtn">
-                <span class="btn-text">Giriþ Yap</span>
+                <span class="btn-text">GiriÅŸ Yap</span>
                 <div class="spinner"></div>
             </button>
         </form>
 
         <div class="back-link">
-            <a href="../index.html"><i class="fa-solid fa-arrow-left"></i> Ana Sayfaya Dön</a>
+            <a href="../index.html"><i class="fa-solid fa-arrow-left"></i> Ana Sayfaya DÃ¶n</a>
         </div>
     </div>
 
@@ -281,12 +281,12 @@
                     // Redirect to dashboard
                     window.location.href = 'dashboard.html';
                 } else {
-                    errorDiv.textContent = result.message || 'Giriþ baþarýsýz. E-posta veya þifre hatalý.';
+                    errorDiv.textContent = result.message || 'GiriÅŸ baÅŸarÄ±sÄ±z. E-posta veya ÅŸifre hatalÄ±.';
                     errorDiv.classList.add('show');
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                errorDiv.textContent = 'Sunucu baðlantýsý kurulamadý. Lütfen daha sonra tekrar deneyin.';
+                errorDiv.textContent = 'Sunucu baÄŸlantÄ±sÄ± kurulamadÄ±. LÃ¼tfen daha sonra tekrar deneyin.';
                 errorDiv.classList.add('show');
             } finally {
                 btn.classList.remove('loading');
@@ -297,3 +297,4 @@
 </body>
 
 </html>
+
