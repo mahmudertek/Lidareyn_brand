@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -10,14 +10,14 @@
 
     <!-- Standardized Favicons (Auto-Injected) -->
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakým Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
 
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakým sayfasý ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -39,21 +39,21 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eðer bakýmda deðilse veya yetkiliyse sayfayý göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ðŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakým Modu: Eriþim onaylandý.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayarlar - Galata Ã‡arÅŸÄ± Admin</title>
+    <title>Ayarlar - Galata Çarþý Admin</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný Kaldýrýldý -->
     <style>
         .settings-container {
             display: grid;
@@ -338,7 +338,7 @@
                     <div class="admin-profile">
                         <div class="admin-info">
                             <span class="admin-name">Admin User</span>
-                            <span class="admin-role">SÃ¼per YÃ¶netici</span>
+                            <span class="admin-role">Süper Yönetici</span>
                         </div>
                         <div class="admin-avatar">A</div>
                     </div>
@@ -355,7 +355,7 @@
                         </div>
                         <div class="settings-nav-item" onclick="showSection('payment')">
                             <i class="fa-solid fa-credit-card"></i>
-                            <span>Ã–deme</span>
+                            <span>Ödeme</span>
                         </div>
                         <div class="settings-nav-item" onclick="showSection('shipping')">
                             <i class="fa-solid fa-truck"></i>
@@ -375,7 +375,7 @@
                         </div>
                         <div class="settings-nav-item" onclick="showSection('security')">
                             <i class="fa-solid fa-shield-halved"></i>
-                            <span>GÃ¼venlik</span>
+                            <span>Güvenlik</span>
                         </div>
                     </nav>
 
@@ -384,12 +384,12 @@
                         <!-- General Settings -->
                         <div id="general" class="settings-section active">
                             <h2>Genel Ayarlar</h2>
-                            <p>MaÄŸaza bilgilerinizi ve temel ayarlarÄ± yÃ¶netin.</p>
+                            <p>Maðaza bilgilerinizi ve temel ayarlarý yönetin.</p>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>MaÄŸaza AdÄ±</label>
-                                    <input type="text" value="Galata Ã‡arÅŸÄ±" id="storeName">
+                                    <label>Maðaza Adý</label>
+                                    <input type="text" value="Galata Çarþý" id="storeName">
                                 </div>
                                 <div class="form-group">
                                     <label>E-posta Adresi</label>
@@ -410,26 +410,26 @@
 
                             <div class="form-group">
                                 <label>Adres</label>
-                                <textarea rows="3" id="storeAddress">Galata, Ä°stanbul, TÃ¼rkiye</textarea>
+                                <textarea rows="3" id="storeAddress">Galata, Ýstanbul, Türkiye</textarea>
                             </div>
 
                             <div class="form-group">
                                 <label>Tema Rengi</label>
                                 <div class="color-picker">
                                     <input type="color" value="#6366f1" id="themeColor">
-                                    <span>MaÄŸazanÄ±zÄ±n ana tema rengi</span>
+                                    <span>Maðazanýzýn ana tema rengi</span>
                                 </div>
                             </div>
 
                             <hr class="section-divider">
 
-                            <h3 style="margin-bottom: 16px;">Site AyarlarÄ±</h3>
+                            <h3 style="margin-bottom: 16px;">Site Ayarlarý</h3>
 
                             <div class="toggle-row" style="background: #dbeafe; border: 1px solid #93c5fd;">
                                 <div class="toggle-info">
-                                    <h4>BakÄ±m Modu</h4>
-                                    <p>BakÄ±m modu artÄ±k <strong>maintenance-config.json</strong> dosyasÄ± ile
-                                        yÃ¶netiliyor. VS Code'dan dosyayÄ± dÃ¼zenleyip push edin.</p>
+                                    <h4>Bakým Modu</h4>
+                                    <p>Bakým modu artýk <strong>maintenance-config.json</strong> dosyasý ile
+                                        yönetiliyor. VS Code'dan dosyayý düzenleyip push edin.</p>
                                 </div>
                                 <a href="https://github.com" target="_blank"
                                     style="padding: 8px 16px; background: #3b82f6; color: white; border-radius: 8px; text-decoration: none; font-weight: 500;">
@@ -440,8 +440,8 @@
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>Yeni Ãœyelik</h4>
-                                    <p>Yeni kullanÄ±cÄ± kayÄ±tlarÄ±na izin ver</p>
+                                    <h4>Yeni Üyelik</h4>
+                                    <p>Yeni kullanýcý kayýtlarýna izin ver</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="allowRegistration" checked>
@@ -456,8 +456,8 @@
 
                         <!-- Payment Settings -->
                         <div id="payment" class="settings-section">
-                            <h2>Ã–deme AyarlarÄ±</h2>
-                            <p>Ã–deme yÃ¶ntemlerini ve entegrasyonlarÄ± yÃ¶netin.</p>
+                            <h2>Ödeme Ayarlarý</h2>
+                            <p>Ödeme yöntemlerini ve entegrasyonlarý yönetin.</p>
 
                             <h3 style="margin-bottom: 16px;">Sipay Entegrasyonu</h3>
 
@@ -469,7 +469,7 @@
                             <div class="form-group">
                                 <label>API Key</label>
                                 <div class="api-key-display">
-                                    <input type="password" placeholder="API AnahtarÄ±" id="sipayApiKey">
+                                    <input type="password" placeholder="API Anahtarý" id="sipayApiKey">
                                     <button onclick="toggleApiKey('sipayApiKey')">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
@@ -479,7 +479,7 @@
                             <div class="form-group">
                                 <label>Secret Key</label>
                                 <div class="api-key-display">
-                                    <input type="password" placeholder="Secret AnahtarÄ±" id="sipaySecretKey">
+                                    <input type="password" placeholder="Secret Anahtarý" id="sipaySecretKey">
                                     <button onclick="toggleApiKey('sipaySecretKey')">
                                         <i class="fa-solid fa-eye"></i>
                                     </button>
@@ -489,7 +489,7 @@
                             <div class="toggle-row">
                                 <div class="toggle-info">
                                     <h4>Test Modu</h4>
-                                    <p>GerÃ§ek Ã¶deme almadan test yapÄ±n</p>
+                                    <p>Gerçek ödeme almadan test yapýn</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" id="sipayTestMode" checked>
@@ -499,12 +499,12 @@
 
                             <hr class="section-divider">
 
-                            <h3 style="margin-bottom: 16px;">Ã–deme YÃ¶ntemleri</h3>
+                            <h3 style="margin-bottom: 16px;">Ödeme Yöntemleri</h3>
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>Kredi KartÄ±</h4>
-                                    <p>Kredi/Banka kartÄ± ile Ã¶deme</p>
+                                    <h4>Kredi Kartý</h4>
+                                    <p>Kredi/Banka kartý ile ödeme</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -515,7 +515,7 @@
                             <div class="toggle-row">
                                 <div class="toggle-info">
                                     <h4>Havale/EFT</h4>
-                                    <p>Banka havalesi ile Ã¶deme</p>
+                                    <p>Banka havalesi ile ödeme</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -525,8 +525,8 @@
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>KapÄ±da Ã–deme</h4>
-                                    <p>Teslimat sÄ±rasÄ±nda Ã¶deme</p>
+                                    <h4>Kapýda Ödeme</h4>
+                                    <p>Teslimat sýrasýnda ödeme</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -541,27 +541,27 @@
 
                         <!-- Shipping Settings -->
                         <div id="shipping" class="settings-section">
-                            <h2>Kargo AyarlarÄ±</h2>
-                            <p>Kargo firmalarÄ±nÄ± ve teslimat seÃ§eneklerini yÃ¶netin.</p>
+                            <h2>Kargo Ayarlarý</h2>
+                            <p>Kargo firmalarýný ve teslimat seçeneklerini yönetin.</p>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>VarsayÄ±lan Kargo FirmasÄ±</label>
+                                    <label>Varsayýlan Kargo Firmasý</label>
                                     <select id="defaultCarrier">
-                                        <option value="yurtici">YurtiÃ§i Kargo</option>
+                                        <option value="yurtici">Yurtiçi Kargo</option>
                                         <option value="mng">MNG Kargo</option>
                                         <option value="aras">Aras Kargo</option>
                                         <option value="ptt">PTT Kargo</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Ãœcretsiz Kargo Limiti (â‚º)</label>
+                                    <label>Ücretsiz Kargo Limiti (?)</label>
                                     <input type="number" value="500" id="freeShippingLimit">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label>Sabit Kargo Ãœcreti (â‚º)</label>
+                                <label>Sabit Kargo Ücreti (?)</label>
                                 <input type="number" value="29.90" id="flatShippingRate">
                             </div>
 
@@ -570,8 +570,8 @@
                             <h3 style="margin-bottom: 16px;">Kargo API Bilgileri</h3>
 
                             <div class="form-group">
-                                <label>YurtiÃ§i Kargo API Key</label>
-                                <input type="text" placeholder="API AnahtarÄ±" id="yurticiApiKey">
+                                <label>Yurtiçi Kargo API Key</label>
+                                <input type="text" placeholder="API Anahtarý" id="yurticiApiKey">
                             </div>
 
                             <button class="btn-save" onclick="saveShippingSettings()">
@@ -581,15 +581,15 @@
 
                         <!-- Notifications Settings -->
                         <div id="notifications" class="settings-section">
-                            <h2>Bildirim AyarlarÄ±</h2>
-                            <p>E-posta ve SMS bildirimlerini yÃ¶netin.</p>
+                            <h2>Bildirim Ayarlarý</h2>
+                            <p>E-posta ve SMS bildirimlerini yönetin.</p>
 
                             <h3 style="margin-bottom: 16px;">E-posta Bildirimleri</h3>
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>Yeni SipariÅŸ</h4>
-                                    <p>Yeni sipariÅŸ geldiÄŸinde bildirim al</p>
+                                    <h4>Yeni Sipariþ</h4>
+                                    <p>Yeni sipariþ geldiðinde bildirim al</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -599,8 +599,8 @@
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>DÃ¼ÅŸÃ¼k Stok UyarÄ±sÄ±</h4>
-                                    <p>ÃœrÃ¼n stoÄŸu azaldÄ±ÄŸÄ±nda bildirim al</p>
+                                    <h4>Düþük Stok Uyarýsý</h4>
+                                    <p>Ürün stoðu azaldýðýnda bildirim al</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -610,8 +610,8 @@
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>Yeni MÃ¼ÅŸteri</h4>
-                                    <p>Yeni Ã¼yelik olduÄŸunda bildirim al</p>
+                                    <h4>Yeni Müþteri</h4>
+                                    <p>Yeni üyelik olduðunda bildirim al</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -621,7 +621,7 @@
 
                             <hr class="section-divider">
 
-                            <h3 style="margin-bottom: 16px;">SMTP AyarlarÄ±</h3>
+                            <h3 style="margin-bottom: 16px;">SMTP Ayarlarý</h3>
 
                             <div class="form-row">
                                 <div class="form-group">
@@ -636,12 +636,12 @@
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>KullanÄ±cÄ± AdÄ±</label>
+                                    <label>Kullanýcý Adý</label>
                                     <input type="text" placeholder="user@example.com" id="smtpUser">
                                 </div>
                                 <div class="form-group">
-                                    <label>Åžifre</label>
-                                    <input type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" id="smtpPass">
+                                    <label>Þifre</label>
+                                    <input type="password" placeholder="••••••••" id="smtpPass">
                                 </div>
                             </div>
 
@@ -652,24 +652,24 @@
 
                         <!-- SEO Settings -->
                         <div id="seo" class="settings-section">
-                            <h2>SEO AyarlarÄ±</h2>
-                            <p>Arama motoru optimizasyonu iÃ§in meta bilgilerini dÃ¼zenleyin.</p>
+                            <h2>SEO Ayarlarý</h2>
+                            <p>Arama motoru optimizasyonu için meta bilgilerini düzenleyin.</p>
 
                             <div class="form-group">
-                                <label>Site BaÅŸlÄ±ÄŸÄ±</label>
-                                <input type="text" value="Galata Ã‡arÅŸÄ± - Profesyonel HÄ±rdavat & El Aletleri"
+                                <label>Site Baþlýðý</label>
+                                <input type="text" value="Galata Çarþý - Profesyonel Hýrdavat & El Aletleri"
                                     id="seoTitle">
                             </div>
 
                             <div class="form-group">
-                                <label>Meta AÃ§Ä±klama</label>
+                                <label>Meta Açýklama</label>
                                 <textarea rows="3"
-                                    id="seoDescription">Bosch, Makita, Beta, Knipex ve daha fazla marka ile profesyonel el aletleri ve hÄ±rdavat Ã¼rÃ¼nleri. Ãœcretsiz kargo ve gÃ¼venli alÄ±ÅŸveriÅŸ.</textarea>
+                                    id="seoDescription">Bosch, Makita, Beta, Knipex ve daha fazla marka ile profesyonel el aletleri ve hýrdavat ürünleri. Ücretsiz kargo ve güvenli alýþveriþ.</textarea>
                             </div>
 
                             <div class="form-group">
                                 <label>Anahtar Kelimeler</label>
-                                <input type="text" value="hÄ±rdavat, el aletleri, bosch, makita, matkap, taÅŸlama"
+                                <input type="text" value="hýrdavat, el aletleri, bosch, makita, matkap, taþlama"
                                     id="seoKeywords">
                             </div>
 
@@ -706,8 +706,8 @@
 
                         <!-- Analytics Settings -->
                         <div id="analytics" class="settings-section">
-                            <h2>Analitik AyarlarÄ±</h2>
-                            <p>Google Analytics ve diÄŸer izleme araÃ§larÄ±nÄ± yapÄ±landÄ±rÄ±n.</p>
+                            <h2>Analitik Ayarlarý</h2>
+                            <p>Google Analytics ve diðer izleme araçlarýný yapýlandýrýn.</p>
 
                             <div class="form-group">
                                 <label>Google Analytics 4 - Measurement ID</label>
@@ -729,7 +729,7 @@
                             <div class="toggle-row">
                                 <div class="toggle-info">
                                     <h4>E-ticaret Takibi</h4>
-                                    <p>SatÄ±ÅŸ ve dÃ¶nÃ¼ÅŸÃ¼m verilerini izle</p>
+                                    <p>Satýþ ve dönüþüm verilerini izle</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -739,7 +739,7 @@
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>Sayfa GÃ¶rÃ¼ntÃ¼leme</h4>
+                                    <h4>Sayfa Görüntüleme</h4>
                                     <p>Her sayfa ziyaretini kaydet</p>
                                 </div>
                                 <label class="toggle-switch">
@@ -755,39 +755,39 @@
 
                         <!-- Security Settings -->
                         <div id="security" class="settings-section">
-                            <h2>GÃ¼venlik AyarlarÄ±</h2>
-                            <p>Hesap gÃ¼venliÄŸi ve eriÅŸim kontrollerini yÃ¶netin.</p>
+                            <h2>Güvenlik Ayarlarý</h2>
+                            <p>Hesap güvenliði ve eriþim kontrollerini yönetin.</p>
 
-                            <h3 style="margin-bottom: 16px;">Åžifre DeÄŸiÅŸtir</h3>
+                            <h3 style="margin-bottom: 16px;">Þifre Deðiþtir</h3>
 
                             <div class="form-group">
-                                <label>Mevcut Åžifre</label>
-                                <input type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" id="currentPassword">
+                                <label>Mevcut Þifre</label>
+                                <input type="password" placeholder="••••••••" id="currentPassword">
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Yeni Åžifre</label>
-                                    <input type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" id="newPassword">
+                                    <label>Yeni Þifre</label>
+                                    <input type="password" placeholder="••••••••" id="newPassword">
                                 </div>
                                 <div class="form-group">
-                                    <label>Yeni Åžifre (Tekrar)</label>
-                                    <input type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" id="confirmPassword">
+                                    <label>Yeni Þifre (Tekrar)</label>
+                                    <input type="password" placeholder="••••••••" id="confirmPassword">
                                 </div>
                             </div>
 
                             <button class="btn-save" onclick="changePassword()">
-                                <i class="fa-solid fa-key"></i> Åžifreyi DeÄŸiÅŸtir
+                                <i class="fa-solid fa-key"></i> Þifreyi Deðiþtir
                             </button>
 
                             <hr class="section-divider">
 
-                            <h3 style="margin-bottom: 16px;">GÃ¼venlik SeÃ§enekleri</h3>
+                            <h3 style="margin-bottom: 16px;">Güvenlik Seçenekleri</h3>
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>Ä°ki FaktÃ¶rlÃ¼ DoÄŸrulama</h4>
-                                    <p>GiriÅŸ iÃ§in ek gÃ¼venlik katmanÄ±</p>
+                                    <h4>Ýki Faktörlü Doðrulama</h4>
+                                    <p>Giriþ için ek güvenlik katmaný</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox">
@@ -797,8 +797,8 @@
 
                             <div class="toggle-row">
                                 <div class="toggle-info">
-                                    <h4>Oturum Zaman AÅŸÄ±mÄ±</h4>
-                                    <p>30 dakika hareketsizlik sonrasÄ± Ã§Ä±kÄ±ÅŸ yap</p>
+                                    <h4>Oturum Zaman Aþýmý</h4>
+                                    <p>30 dakika hareketsizlik sonrasý çýkýþ yap</p>
                                 </div>
                                 <label class="toggle-switch">
                                     <input type="checkbox" checked>
@@ -807,10 +807,10 @@
                             </div>
 
                             <div class="danger-zone">
-                                <h3><i class="fa-solid fa-triangle-exclamation"></i> Tehlikeli BÃ¶lge</h3>
-                                <p>Bu iÅŸlemler geri alÄ±namaz. Dikkatli olun.</p>
+                                <h3><i class="fa-solid fa-triangle-exclamation"></i> Tehlikeli Bölge</h3>
+                                <p>Bu iþlemler geri alýnamaz. Dikkatli olun.</p>
                                 <button class="btn-danger" onclick="clearAllData()">
-                                    <i class="fa-solid fa-trash"></i> TÃ¼m Verileri Sil
+                                    <i class="fa-solid fa-trash"></i> Tüm Verileri Sil
                                 </button>
                             </div>
                         </div>
@@ -862,7 +862,7 @@
                 const maintenanceRes = await ADMIN_API.updateMaintenanceMode(maintenanceMode);
 
                 if (!maintenanceRes.success) {
-                    throw new Error(maintenanceRes.message || 'BakÄ±m modu gÃ¼ncellenemedi');
+                    throw new Error(maintenanceRes.message || 'Bakým modu güncellenemedi');
                 }
 
                 // Notify other tabs/windows
@@ -871,7 +871,7 @@
                     bc.postMessage({ type: 'maintenance_updated', isMaintenanceMode: maintenanceMode });
                 } catch (e) { console.log('BroadcastChannel error', e); }
 
-                alert('Genel ayarlar baÅŸarÄ±yla kaydedildi!');
+                alert('Genel ayarlar baþarýyla kaydedildi!');
             } catch (error) {
                 console.error('Save settings error:', error);
                 alert('Hata: ' + error.message);
@@ -882,19 +882,19 @@
         }
 
         function savePaymentSettings() {
-            alert('Ã–deme ayarlarÄ± kaydedildi!');
+            alert('Ödeme ayarlarý kaydedildi!');
         }
 
         function saveShippingSettings() {
-            alert('Kargo ayarlarÄ± kaydedildi!');
+            alert('Kargo ayarlarý kaydedildi!');
         }
 
         function saveNotificationSettings() {
-            alert('Bildirim ayarlarÄ± kaydedildi!');
+            alert('Bildirim ayarlarý kaydedildi!');
         }
 
         function saveSeoSettings() {
-            alert('SEO ayarlarÄ± kaydedildi!');
+            alert('SEO ayarlarý kaydedildi!');
         }
 
         function saveAnalyticsSettings() {
@@ -902,7 +902,7 @@
             if (ga4Id) {
                 localStorage.setItem('ga4Id', ga4Id);
             }
-            alert('Analitik ayarlarÄ± kaydedildi!');
+            alert('Analitik ayarlarý kaydedildi!');
         }
 
         function changePassword() {
@@ -911,27 +911,27 @@
             const confirm = document.getElementById('confirmPassword').value;
 
             if (!current || !newPass || !confirm) {
-                alert('LÃ¼tfen tÃ¼m alanlarÄ± doldurun.');
+                alert('Lütfen tüm alanlarý doldurun.');
                 return;
             }
 
             if (newPass !== confirm) {
-                alert('Yeni ÅŸifreler eÅŸleÅŸmiyor.');
+                alert('Yeni þifreler eþleþmiyor.');
                 return;
             }
 
             if (newPass.length < 6) {
-                alert('Åžifre en az 6 karakter olmalÄ±dÄ±r.');
+                alert('Þifre en az 6 karakter olmalýdýr.');
                 return;
             }
 
-            alert('Åžifre baÅŸarÄ±yla deÄŸiÅŸtirildi!');
+            alert('Þifre baþarýyla deðiþtirildi!');
         }
 
         function clearAllData() {
-            if (confirm('TÃœM VERÄ°LERÄ° SÄ°LMEK Ä°STEDÄ°ÄžÄ°NÄ°ZDEN EMÄ°N MÄ°SÄ°Z?\n\nBu iÅŸlem geri alÄ±namaz!')) {
-                if (confirm('Son kez onaylayÄ±n: TÃ¼m veriler silinecek!')) {
-                    alert('Bu iÅŸlem iÃ§in backend desteÄŸi gereklidir.');
+            if (confirm('TÜM VERÝLERÝ SÝLMEK ÝSTEDÝÐÝNÝZDEN EMÝN MÝSÝZ?\n\nBu iþlem geri alýnamaz!')) {
+                if (confirm('Son kez onaylayýn: Tüm veriler silinecek!')) {
+                    alert('Bu iþlem için backend desteði gereklidir.');
                 }
             }
         }
@@ -964,7 +964,7 @@
             const bc = new BroadcastChannel('admin_settings_channel');
             bc.onmessage = (event) => {
                 if (event.data && event.data.type === 'maintenance_updated') {
-                    console.log('ðŸ“¡ [Ayarlar] Senkronizasyon mesajÄ± alÄ±ndÄ±:', event.data);
+                    console.log('?? [Ayarlar] Senkronizasyon mesajý alýndý:', event.data);
                     const checkbox = document.getElementById('maintenanceMode');
                     if (checkbox) {
                         checkbox.checked = event.data.isMaintenanceMode;
@@ -976,8 +976,8 @@
         }
     </script>
 
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± JS KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný JS Kaldýrýldý -->
 </body>
 
 </html>

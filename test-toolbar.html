@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -25,7 +25,7 @@
             margin-bottom: 30px;
         }
 
-        /* GELÄ°ÅžMÄ°Åž ARAMA BAÅžLIÄžI */
+        /* GELÝÞMÝÞ ARAMA BAÞLIÐI */
         .advanced-search-header {
             padding: 20px;
             border-bottom: 2px solid #e5e7eb;
@@ -127,19 +127,19 @@
 
 <body>
     <div class="test-container">
-        <h1>ðŸ§ª Arama SayfasÄ± Toolbar Test</h1>
+        <h1>?? Arama Sayfasý Toolbar Test</h1>
 
         <div class="info-box">
-            <strong>âœ… Bu sayfa Ã§alÄ±ÅŸÄ±yorsa, arama.html'de de Ã§alÄ±ÅŸmalÄ±!</strong><br>
-            EÄŸer bu sayfada gÃ¶rÃ¼nÃ¼yorsa ama arama.html'de gÃ¶rÃ¼nmÃ¼yorsa, arama.html dosyasÄ±nda baÅŸka bir CSS Ã§akÄ±ÅŸmasÄ±
+            <strong>? Bu sayfa çalýþýyorsa, arama.html'de de çalýþmalý!</strong><br>
+            Eðer bu sayfada görünüyorsa ama arama.html'de görünmüyorsa, arama.html dosyasýnda baþka bir CSS çakýþmasý
             var demektir.
         </div>
 
-        <!-- GELÄ°ÅžMÄ°Åž ARAMA BAÅžLIÄžI -->
+        <!-- GELÝÞMÝÞ ARAMA BAÞLIÐI -->
         <div class="advanced-search-header">
             <h2>
                 <i class="fa-solid fa-sliders"></i>
-                GELÄ°ÅžMÄ°Åž ARAMA SEÃ‡ENEKLERÄ°
+                GELÝÞMÝÞ ARAMA SEÇENEKLERÝ
             </h2>
         </div>
 
@@ -148,38 +148,38 @@
             <!-- Arama Kutusu -->
             <div class="toolbar-search">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" placeholder="Sayfa, alt veya Ã¼st kategori, marka veya Ã¼rÃ¼n arayÄ±n">
+                <input type="text" placeholder="Sayfa, alt veya üst kategori, marka veya ürün arayýn">
             </div>
 
-            <!-- SÄ±ralama ButonlarÄ± -->
+            <!-- Sýralama Butonlarý -->
             <div class="sort-buttons">
                 <button class="sort-btn">
                     <i class="fa-solid fa-arrow-down-short-wide"></i>
-                    <span>DÃ¼ÅŸÃ¼k â†’ YÃ¼ksek</span>
+                    <span>Düþük › Yüksek</span>
                 </button>
                 <button class="sort-btn active">
                     <i class="fa-solid fa-arrow-up-wide-short"></i>
-                    <span>YÃ¼ksek â†’ DÃ¼ÅŸÃ¼k</span>
+                    <span>Yüksek › Düþük</span>
                 </button>
             </div>
         </div>
 
         <div class="info-box" style="background: #fef3c7; border-left-color: #f59e0b;">
-            <strong>ðŸ“‹ Kontrol Listesi:</strong><br>
-            âœ“ BaÅŸlÄ±k gÃ¶rÃ¼nÃ¼yor mu? "GELÄ°ÅžMÄ°Åž ARAMA SEÃ‡ENEKLERÄ°"<br>
-            âœ“ Arama kutusu gÃ¶rÃ¼nÃ¼yor mu? (Sol tarafta)<br>
-            âœ“ 2 sÄ±ralama butonu gÃ¶rÃ¼nÃ¼yor mu? (SaÄŸ tarafta)<br>
-            âœ“ Butonlar Ã¼zerine gelince renk deÄŸiÅŸiyor mu?
+            <strong>?? Kontrol Listesi:</strong><br>
+            ? Baþlýk görünüyor mu? "GELÝÞMÝÞ ARAMA SEÇENEKLERÝ"<br>
+            ? Arama kutusu görünüyor mu? (Sol tarafta)<br>
+            ? 2 sýralama butonu görünüyor mu? (Sað tarafta)<br>
+            ? Butonlar üzerine gelince renk deðiþiyor mu?
         </div>
     </div>
 
     <script>
-        // Buton tÄ±klama testi
+        // Buton týklama testi
         document.querySelectorAll('.sort-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
-                console.log('Buton tÄ±klandÄ±:', this.textContent.trim());
+                console.log('Buton týklandý:', this.textContent.trim());
             });
         });
 

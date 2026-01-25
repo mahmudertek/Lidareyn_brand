@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -11,14 +11,14 @@
     <!-- Standardized Favicons (Auto-Injected) -->
 
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakım sayfası ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -40,10 +40,10 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ğŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakım Modu: Erişim onaylandı.');
         })();
     </script>
 
@@ -51,7 +51,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ã–deme Sonucu - Galata Ã‡arÅŸÄ±</title>
+    <title>Ödeme Sonucu - Galata Çarşı</title>
     
     
     
@@ -254,11 +254,11 @@
 </head>
 
 <body>
-    <!-- GeliÅŸtirme AÅŸamasÄ± Bildirimi -->
+    <!-- Geliştirme Aşaması Bildirimi -->
     <div class="development-notice">
         <div class="notice-content">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Sitemiz geliÅŸme aÅŸamasÄ±ndadÄ±r. SipariÅŸleriniz iÃ§in <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaÅŸabilirsiniz.</span>
+            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
         </div>
     </div>
 
@@ -266,8 +266,8 @@
         <!-- Loading State -->
         <div id="loading-state">
             <div class="loading-spinner"></div>
-            <h1 style="margin-top: 1.5rem;">Ã–deme Kontrol Ediliyor...</h1>
-            <p>LÃ¼tfen bekleyiniz</p>
+            <h1 style="margin-top: 1.5rem;">Ödeme Kontrol Ediliyor...</h1>
+            <p>Lütfen bekleyiniz</p>
         </div>
 
         <!-- Success State -->
@@ -275,17 +275,17 @@
             <div class="result-icon-wrapper success">
                 <i class="fas fa-check result-icon success"></i>
             </div>
-            <h1>Ã–deme BaÅŸarÄ±lÄ±!</h1>
-            <p>SipariÅŸiniz baÅŸarÄ±yla oluÅŸturuldu. SipariÅŸ detaylarÄ±nÄ±z e-posta adresinize gÃ¶nderildi.</p>
+            <h1>Ödeme Başarılı!</h1>
+            <p>Siparişiniz başarıyla oluşturuldu. Sipariş detaylarınız e-posta adresinize gönderildi.</p>
 
             <div class="order-info">
-                <div class="label">SipariÅŸ NumarasÄ±</div>
+                <div class="label">Sipariş Numarası</div>
                 <div class="value" id="order-number">-</div>
             </div>
 
             <div class="btn-container">
-                <a href="profil.html?tab=orders" class="btn-primary">SipariÅŸlerimi GÃ¶r</a>
-                <a href="index.html" class="btn-secondary">AlÄ±ÅŸveriÅŸe Devam</a>
+                <a href="profil.html?tab=orders" class="btn-primary">Siparişlerimi Gör</a>
+                <a href="index.html" class="btn-secondary">Alışverişe Devam</a>
             </div>
         </div>
 
@@ -294,16 +294,16 @@
             <div class="result-icon-wrapper error">
                 <i class="fas fa-times result-icon error"></i>
             </div>
-            <h1>Ã–deme BaÅŸarÄ±sÄ±z</h1>
-            <p>Ã–deme iÅŸlemi sÄ±rasÄ±nda bir sorun oluÅŸtu.</p>
+            <h1>Ödeme Başarısız</h1>
+            <p>Ödeme işlemi sırasında bir sorun oluştu.</p>
 
             <div class="error-message" id="error-message">
-                LÃ¼tfen kart bilgilerinizi kontrol edip tekrar deneyiniz.
+                Lütfen kart bilgilerinizi kontrol edip tekrar deneyiniz.
             </div>
 
             <div class="btn-container">
                 <a href="odeme.html" class="btn-primary">Tekrar Dene</a>
-                <a href="sepet.html" class="btn-secondary">Sepete DÃ¶n</a>
+                <a href="sepet.html" class="btn-secondary">Sepete Dön</a>
             </div>
         </div>
 
@@ -312,16 +312,16 @@
             <div class="result-icon-wrapper pending">
                 <i class="fas fa-clock result-icon pending"></i>
             </div>
-            <h1>Ã–deme Beklemede</h1>
-            <p>Ã–demeniz iÅŸleniyor. SipariÅŸiniz onaylandÄ±ÄŸÄ±nda size bilgi verilecektir.</p>
+            <h1>Ödeme Beklemede</h1>
+            <p>Ödemeniz işleniyor. Siparişiniz onaylandığında size bilgi verilecektir.</p>
 
             <div class="order-info">
-                <div class="label">SipariÅŸ NumarasÄ±</div>
+                <div class="label">Sipariş Numarası</div>
                 <div class="value" id="pending-order-number">-</div>
             </div>
 
             <div class="btn-container">
-                <a href="index.html" class="btn-primary">Ana Sayfaya DÃ¶n</a>
+                <a href="index.html" class="btn-primary">Ana Sayfaya Dön</a>
             </div>
         </div>
     </div>
@@ -339,7 +339,7 @@
                 hideLoading();
 
                 if (status === 'error') {
-                    showError(decodeURIComponent(message || 'Bilinmeyen bir hata oluÅŸtu'));
+                    showError(decodeURIComponent(message || 'Bilinmeyen bir hata oluştu'));
                 } else if (status === 'pending') {
                     showPending(orderNumber);
                 } else if (orderNumber || paymentId) {

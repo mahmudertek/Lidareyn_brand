@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -60,8 +60,8 @@
 
 <body>
     <div class="container">
-        <h1>ğŸ” LocalStorage ÃœrÃ¼n Verisi KontrolÃ¼</h1>
-        <p>Bu sayfa localStorage'da kayÄ±tlÄ± Ã¼rÃ¼n verilerini gÃ¶sterir.</p>
+        <h1>?? LocalStorage Ürün Verisi Kontrolü</h1>
+        <p>Bu sayfa localStorage'da kayıtlı ürün verilerini gösterir.</p>
 
         <div id="results"></div>
     </div>
@@ -83,23 +83,23 @@
                 try {
                     const parsed = JSON.parse(data);
                     if (Array.isArray(parsed)) {
-                        html += `<span class="count">âœ… ${parsed.length} Ã¼rÃ¼n bulundu!</span>`;
+                        html += `<span class="count">? ${parsed.length} ürün bulundu!</span>`;
                         html += `<div class="data">`;
-                        html += `Ä°lk 3 Ã¼rÃ¼n:<br>`;
+                        html += `İlk 3 ürün:<br>`;
                         parsed.slice(0, 3).forEach((p, i) => {
-                            html += `${i + 1}. ${p.name || 'Ä°simsiz'} - ${p.brand || 'Markas yok'}<br>`;
+                            html += `${i + 1}. ${p.name || 'İsimsiz'} - ${p.brand || 'Markas yok'}<br>`;
                             html += `   Resim: ${p.mainImage || p.image || 'YOK'}<br>`;
                         });
                         html += `</div>`;
                         foundAny = true;
                     } else {
-                        html += `<span class="empty">âŒ Veri array deÄŸil</span>`;
+                        html += `<span class="empty">? Veri array değil</span>`;
                     }
                 } catch (e) {
-                    html += `<span class="empty">âŒ JSON parse hatasÄ±: ${e.message}</span>`;
+                    html += `<span class="empty">? JSON parse hatası: ${e.message}</span>`;
                 }
             } else {
-                html += `<span class="empty">âŒ Veri yok</span>`;
+                html += `<span class="empty">? Veri yok</span>`;
             }
 
             html += `</div>`;
@@ -107,11 +107,11 @@
 
         if (!foundAny) {
             html += `<div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 20px; border: 2px solid #ffc107;">`;
-            html += `<strong>âš ï¸ HÄ°Ã‡BÄ°R ANAHTARDA ÃœRÃœN VERÄ°SÄ° BULUNAMADI!</strong><br><br>`;
+            html += `<strong>?? HİÇBİR ANAHTARDA ÜRÜN VERİSİ BULUNAMADI!</strong><br><br>`;
             html += `Bu durumda:<br>`;
-            html += `1. Admin panelinden (admin/products.html) en az bir Ã¼rÃ¼n ekleyin.<br>`;
-            html += `2. "Kaydet" butonuna basÄ±n.<br>`;
-            html += `3. Bu sayfayÄ± yenileyin ve veriyi kontrol edin.<br>`;
+            html += `1. Admin panelinden (admin/products.html) en az bir ürün ekleyin.<br>`;
+            html += `2. "Kaydet" butonuna basın.<br>`;
+            html += `3. Bu sayfayı yenileyin ve veriyi kontrol edin.<br>`;
             html += `</div>`;
         }
 

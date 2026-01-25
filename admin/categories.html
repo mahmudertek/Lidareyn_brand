@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -10,14 +10,14 @@
 
     <!-- Standardized Favicons (Auto-Injected) -->
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakým Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
 
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakým sayfasý ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -39,21 +39,21 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eðer bakýmda deðilse veya yetkiliyse sayfayý göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ðŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakým Modu: Eriþim onaylandý.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kategori YÃ¶netimi - Galata Ã‡arÅŸÄ± Admin</title>
+    <title>Kategori Yönetimi - Galata Çarþý Admin</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný Kaldýrýldý -->
     <style>
         .categories-header {
             display: flex;
@@ -285,12 +285,12 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="topbar">
-                <div class="page-title">Kategori YÃ¶netimi</div>
+                <div class="page-title">Kategori Yönetimi</div>
                 <div class="topbar-right">
                     <div class="admin-profile">
                         <div class="admin-info">
                             <span class="admin-name">Admin User</span>
-                            <span class="admin-role">SÃ¼per YÃ¶netici</span>
+                            <span class="admin-role">Süper Yönetici</span>
                         </div>
                         <div class="admin-avatar">A</div>
                     </div>
@@ -317,14 +317,14 @@
     <div class="modal-overlay" id="categoryModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 class="modal-title">Kategori DÃ¼zenle</h2>
+                <h2 class="modal-title">Kategori Düzenle</h2>
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="categoryForm">
                     <input type="hidden" id="categoryId">
                     <div class="form-group">
-                        <label>Kategori AdÄ±</label>
+                        <label>Kategori Adý</label>
                         <input type="text" id="categoryName" required>
                     </div>
                     <div class="form-group">
@@ -332,17 +332,17 @@
                         <input type="text" id="categorySlug">
                     </div>
                     <div class="form-group">
-                        <label>AÃ§Ä±klama</label>
+                        <label>Açýklama</label>
                         <textarea id="categoryDescription" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label>Ä°kon (Font Awesome)</label>
+                        <label>Ýkon (Font Awesome)</label>
                         <input type="text" id="categoryIcon" placeholder="fa-solid fa-bolt">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal()">Ä°ptal</button>
+                <button class="btn-cancel" onclick="closeModal()">Ýptal</button>
                 <button class="btn-save" onclick="saveCategory()">Kaydet</button>
             </div>
         </div>
@@ -365,7 +365,7 @@
                 if (response.success && response.data) {
                     allCategories = response.data;
                     renderCategories();
-                    console.log('âœ… Kategoriler yÃ¼klendi:', allCategories.length);
+                    console.log('? Kategoriler yüklendi:', allCategories.length);
                 }
             } catch (error) {
                 console.error('Load categories error:', error);
@@ -375,7 +375,7 @@
         function renderCategories() {
             const grid = document.getElementById('categoriesGrid');
             if (allCategories.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #6b7280;">HenÃ¼z kategori bulunmuyor.</div>';
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #6b7280;">Henüz kategori bulunmuyor.</div>';
                 return;
             }
 
@@ -390,7 +390,7 @@
                         <div class="category-stats">
                             <div class="category-stat">
                                 <div class="category-stat-value">${cat.productCount || 0}</div>
-                                <div class="category-stat-label">ÃœrÃ¼n</div>
+                                <div class="category-stat-label">Ürün</div>
                             </div>
                             <div class="category-stat">
                                 <div class="category-stat-value">${cat.brandCount || 0}</div>
@@ -400,11 +400,11 @@
                         <div class="category-actions">
                             <button class="category-action-btn btn-view" onclick="viewCategory('${cat.slug}')">
                                 <i class="fa-solid fa-eye"></i>
-                                GÃ¶rÃ¼ntÃ¼le
+                                Görüntüle
                             </button>
                             <button class="category-action-btn btn-edit" onclick="editCategory('${cat._id}')">
                                 <i class="fa-solid fa-pen"></i>
-                                DÃ¼zenle
+                                Düzenle
                             </button>
                             <button class="category-action-btn btn-delete" onclick="deleteCategory('${cat._id}')" style="background: #fee2e2; color: #dc2626;">
                                 <i class="fa-solid fa-trash"></i>
@@ -429,7 +429,7 @@
                 document.getElementById('categoryIcon').value = cat.icon || '';
                 document.getElementById('categoryDescription').value = cat.description || '';
 
-                document.querySelector('.modal-title').textContent = 'Kategoriyi DÃ¼zenle';
+                document.querySelector('.modal-title').textContent = 'Kategoriyi Düzenle';
                 document.getElementById('categoryModal').classList.add('active');
             }
         }
@@ -456,7 +456,7 @@
             };
 
             if (!data.name) {
-                alert('LÃ¼tfen kategori adÄ±nÄ± girin');
+                alert('Lütfen kategori adýný girin');
                 return;
             }
 
@@ -471,7 +471,7 @@
                 }
 
                 if (response.success) {
-                    alert(id ? 'Kategori gÃ¼ncellendi!' : 'Kategori oluÅŸturuldu!');
+                    alert(id ? 'Kategori güncellendi!' : 'Kategori oluþturuldu!');
                     closeModal();
                     loadCategories();
                 } else {
@@ -479,12 +479,12 @@
                 }
             } catch (error) {
                 console.error('Save category error:', error);
-                alert('Bir hata oluÅŸtu');
+                alert('Bir hata oluþtu');
             }
         }
 
         async function deleteCategory(id) {
-            if (confirm('Bu kategoriyi silmek istediÄŸinize emin misiniz?')) {
+            if (confirm('Bu kategoriyi silmek istediðinize emin misiniz?')) {
                 try {
                     const response = await ADMIN_API.deleteCategory(id);
                     if (response.success) {
@@ -495,7 +495,7 @@
                     }
                 } catch (error) {
                     console.error('Delete category error:', error);
-                    alert('Bir hata oluÅŸtu');
+                    alert('Bir hata oluþtu');
                 }
             }
         }
@@ -507,8 +507,8 @@
         loadCategories();
     </script>
 
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± JS KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný JS Kaldýrýldý -->
 </body>
 
 </html>

@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <!-- Standardized Favicons (Relative) -->
@@ -10,14 +10,14 @@
     <!-- Standardized Favicons (Auto-Injected) -->
 
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakım sayfası ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -39,10 +39,10 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ğŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakım Modu: Erişim onaylandı.');
         })();
     </script>
 

@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -11,14 +11,14 @@
     <!-- Standardized Favicons (Auto-Injected) -->
 
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakım sayfası ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -40,16 +40,16 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ğŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakım Modu: Erişim onaylandı.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BakÄ±m Ã‡alÄ±ÅŸmasÄ± - Galata Ã‡arÅŸÄ±</title>
+    <title>Bakım Çalışması - Galata Çarşı</title>
     
     
     
@@ -345,16 +345,16 @@
     </div>
 
     <div class="maintenance-container">
-        <span class="logo">ğŸª Galata Ã‡arÅŸÄ±</span>
+        <span class="logo">?? Galata Çarşı</span>
 
         <div class="maintenance-icon">
             <i class="fa-solid fa-wrench"></i>
         </div>
 
-        <h1 class="maintenance-title">BakÄ±m Ã‡alÄ±ÅŸmasÄ±</h1>
+        <h1 class="maintenance-title">Bakım Çalışması</h1>
         <p class="maintenance-subtitle">
-            Sitemiz ÅŸu anda bakÄ±m Ã§alÄ±ÅŸmasÄ± nedeniyle geÃ§ici olarak kapalÄ±dÄ±r.
-            En kÄ±sa sÃ¼rede sizlerle tekrar burada olmayÄ± dÃ¶rt gÃ¶zle bekliyoruz!
+            Sitemiz şu anda bakım çalışması nedeniyle geçici olarak kapalıdır.
+            En kısa sürede sizlerle tekrar burada olmayı dört gözle bekliyoruz!
         </p>
 
         <div class="countdown">
@@ -373,17 +373,17 @@
         </div>
 
         <div class="maintenance-info">
-            <p><i class="fa-solid fa-circle-info"></i> Sistemimizi sizin iÃ§in daha iyi hale getirmek adÄ±na gÃ¼ncelleme
-                yapÄ±yoruz.</p>
+            <p><i class="fa-solid fa-circle-info"></i> Sistemimizi sizin için daha iyi hale getirmek adına güncelleme
+                yapıyoruz.</p>
         </div>
 
         <div class="contact-info">
-            <p>Acil durumlar iÃ§in: <a href="mailto:mail@galatacarsi.com">mail@galatacarsi.com</a></p>
+            <p>Acil durumlar için: <a href="mailto:mail@galatacarsi.com">mail@galatacarsi.com</a></p>
         </div>
     </div>
 
     <script>
-        // Countdown timer (Ã¶rnek: 2 saat 30 dakika)
+        // Countdown timer (örnek: 2 saat 30 dakika)
         let totalSeconds = 2 * 60 * 60 + 30 * 60;
 
         function updateCountdown() {
@@ -398,7 +398,7 @@
             if (totalSeconds > 0) {
                 totalSeconds--;
             } else {
-                // BakÄ±m bitti, sayfayÄ± yenile
+                // Bakım bitti, sayfayı yenile
                 location.reload();
             }
         }

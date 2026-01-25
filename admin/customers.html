@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -10,14 +10,14 @@
 
     <!-- Standardized Favicons (Auto-Injected) -->
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakým Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
 
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakým sayfasý ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -39,21 +39,21 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eðer bakýmda deðilse veya yetkiliyse sayfayý göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ðŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakým Modu: Eriþim onaylandý.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MÃ¼ÅŸteriler - Galata Ã‡arÅŸÄ± Admin</title>
+    <title>Müþteriler - Galata Çarþý Admin</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný Kaldýrýldý -->
     <style>
         .customers-header {
             display: flex;
@@ -215,12 +215,12 @@
         <!-- Main Content -->
         <main class="main-content">
             <header class="topbar">
-                <div class="page-title">MÃ¼ÅŸteri YÃ¶netimi</div>
+                <div class="page-title">Müþteri Yönetimi</div>
                 <div class="topbar-right">
                     <div class="admin-profile">
                         <div class="admin-info">
                             <span class="admin-name">Admin User</span>
-                            <span class="admin-role">SÃ¼per YÃ¶netici</span>
+                            <span class="admin-role">Süper Yönetici</span>
                         </div>
                         <div class="admin-avatar">A</div>
                     </div>
@@ -231,11 +231,11 @@
                 <!-- Stats -->
                 <div class="stats-row">
                     <div class="stat-box">
-                        <h3>Toplam MÃ¼ÅŸteri</h3>
+                        <h3>Toplam Müþteri</h3>
                         <div class="value" id="totalCustomers">0</div>
                     </div>
                     <div class="stat-box">
-                        <h3>Aktif MÃ¼ÅŸteriler</h3>
+                        <h3>Aktif Müþteriler</h3>
                         <div class="value" id="activeCustomers">0</div>
                     </div>
                     <div class="stat-box">
@@ -243,16 +243,16 @@
                         <div class="value" id="newCustomers">0</div>
                     </div>
                     <div class="stat-box">
-                        <h3>Toplam SipariÅŸ</h3>
+                        <h3>Toplam Sipariþ</h3>
                         <div class="value" id="totalOrders">0</div>
                     </div>
                 </div>
 
                 <!-- Header -->
                 <div class="customers-header">
-                    <h2 style="margin: 0; color: #1f2937;">MÃ¼ÅŸteri Listesi</h2>
+                    <h2 style="margin: 0; color: #1f2937;">Müþteri Listesi</h2>
                     <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="MÃ¼ÅŸteri ara...">
+                        <input type="text" id="searchInput" placeholder="Müþteri ara...">
                         <button class="btn-action btn-view" onclick="loadCustomers()">
                             <i class="fa-solid fa-refresh"></i> Yenile
                         </button>
@@ -263,12 +263,12 @@
                 <table class="customers-table">
                     <thead>
                         <tr>
-                            <th>MÃ¼ÅŸteri</th>
+                            <th>Müþteri</th>
                             <th>Telefon</th>
-                            <th>KayÄ±t Tarihi</th>
-                            <th>SipariÅŸ SayÄ±sÄ±</th>
+                            <th>Kayýt Tarihi</th>
+                            <th>Sipariþ Sayýsý</th>
                             <th>Durum</th>
-                            <th>Ä°ÅŸlemler</th>
+                            <th>Ýþlemler</th>
                         </tr>
                     </thead>
                     <tbody id="customersTable">
@@ -276,7 +276,7 @@
                             <td colspan="6">
                                 <div class="empty-state">
                                     <i class="fa-solid fa-spinner fa-spin"></i>
-                                    <p>YÃ¼kleniyor...</p>
+                                    <p>Yükleniyor...</p>
                                 </div>
                             </td>
                         </tr>
@@ -335,7 +335,7 @@
                             <div class="customer-info">
                                 <div class="customer-avatar">${initial}</div>
                                 <div>
-                                    <div class="customer-name">${customer.name || 'Ä°simsiz'}</div>
+                                    <div class="customer-name">${customer.name || 'Ýsimsiz'}</div>
                                     <div class="customer-email">${customer.email}</div>
                                 </div>
                             </div>
@@ -379,7 +379,7 @@
                     <td colspan="6">
                         <div class="empty-state">
                             <i class="fa-solid fa-users"></i>
-                            <p>HenÃ¼z mÃ¼ÅŸteri kaydÄ± bulunmuyor</p>
+                            <p>Henüz müþteri kaydý bulunmuyor</p>
                         </div>
                     </td>
                 </tr>
@@ -388,7 +388,7 @@
 
         // View customer details
         function viewCustomer(id) {
-            alert('MÃ¼ÅŸteri detay sayfasÄ± henÃ¼z geliÅŸtirilmedi.\nMÃ¼ÅŸteri ID: ' + id);
+            alert('Müþteri detay sayfasý henüz geliþtirilmedi.\nMüþteri ID: ' + id);
         }
 
         // Search
@@ -408,8 +408,8 @@
         loadCustomers();
     </script>
 
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± JS KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný JS Kaldýrýldý -->
 </body>
 
 </html>

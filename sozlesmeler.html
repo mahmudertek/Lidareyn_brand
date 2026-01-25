@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -11,14 +11,14 @@
     <!-- Standardized Favicons (Auto-Injected) -->
 
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakım sayfası ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -40,10 +40,10 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ğŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakım Modu: Erişim onaylandı.');
         })();
     </script>
 
@@ -51,7 +51,7 @@
 
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; url=mesafeli-satis-sozlesmesi.html">
-    <title>YÃ¶nlendiriliyor...</title>
+    <title>Yönlendiriliyor...</title>
     
     
     
@@ -61,15 +61,15 @@
 </head>
 
 <body>
-    <!-- GeliÅŸtirme AÅŸamasÄ± Bildirimi -->
+    <!-- Geliştirme Aşaması Bildirimi -->
     <div class="development-notice">
         <div class="notice-content">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Sitemiz geliÅŸme aÅŸamasÄ±ndadÄ±r. SipariÅŸleriniz iÃ§in <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaÅŸabilirsiniz.</span>
+            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
         </div>
     </div>
 
-    <p>Sayfa taÅŸÄ±ndÄ±. <a href="mesafeli-satis-sozlesmesi.html">Buraya tÄ±klayÄ±nÄ±z.</a></p>
+    <p>Sayfa taşındı. <a href="mesafeli-satis-sozlesmesi.html">Buraya tıklayınız.</a></p>
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>
 </body>

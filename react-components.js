@@ -217,7 +217,7 @@
                     image: 'gorseller/category_yapi_kimyasallari.png'
                 },
                 {
-                    title: 'Kaynak Malzemeleri',
+                    title: 'Kaynak Malzemeleri ve Aksesuarları',
                     description: 'Profesyonel kaynak makineleri, elektrotlar ve koruyucu ekipmanlar.',
                     slug: 'kaynak-malzemeleri',
                     image: 'gorseller/category_kaynak.png'

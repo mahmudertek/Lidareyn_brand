@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -11,14 +11,14 @@
     <!-- Standardized Favicons (Auto-Injected) -->
 
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakım sayfası ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -40,17 +40,17 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ğŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakım Modu: Erişim onaylandı.');
         })();
     </script>
 
     
 
     <meta charset="UTF-8">
-    <title>Bebek GÃ¶rsel Test</title>
+    <title>Bebek Görsel Test</title>
     
     
     
@@ -106,8 +106,8 @@
 </head>
 
 <body>
-    <h1>Bebek & Ã‡ocuk GÃ¶rsel Test</h1>
-    <p>AÅŸaÄŸÄ±daki gÃ¶rsellerin hangisi gÃ¶rÃ¼nÃ¼yor kontrol edin:</p>
+    <h1>Bebek & Çocuk Görsel Test</h1>
+    <p>Aşağıdaki görsellerin hangisi görünüyor kontrol edin:</p>
 
     <div class="test-container">
         <div class="test-card" id="card1">
@@ -149,10 +149,10 @@
         </div>
     </div>
 
-    <h2 style="margin-top: 30px;">SonuÃ§ AÃ§Ä±klamasÄ±:</h2>
+    <h2 style="margin-top: 30px;">Sonuç Açıklaması:</h2>
     <ul>
-        <li><span style="color: green;">YeÅŸil kenarlÄ±k</span> = GÃ¶rsel baÅŸarÄ±yla yÃ¼klendi</li>
-        <li><span style="color: red;">KÄ±rmÄ±zÄ± kenarlÄ±k</span> = GÃ¶rsel yÃ¼klenemedi</li>
+        <li><span style="color: green;">Yeşil kenarlık</span> = Görsel başarıyla yüklendi</li>
+        <li><span style="color: red;">Kırmızı kenarlık</span> = Görsel yüklenemedi</li>
     </ul>
     <script src="cookie-consent.js"></script>
     <script src="mobile-menu.js"></script>

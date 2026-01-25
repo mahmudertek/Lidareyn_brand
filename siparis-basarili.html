@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -11,14 +11,14 @@
     <!-- Standardized Favicons (Auto-Injected) -->
 
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakım sayfası ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -40,10 +40,10 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ğŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakım Modu: Erişim onaylandı.');
         })();
     </script>
 
@@ -51,7 +51,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SipariÅŸiniz AlÄ±ndÄ± - Galata Ã‡arÅŸÄ±</title>
+    <title>Siparişiniz Alındı - Galata Çarşı</title>
     
     
     
@@ -179,11 +179,11 @@
 </head>
 
 <body>
-    <!-- GeliÅŸtirme AÅŸamasÄ± Bildirimi -->
+    <!-- Geliştirme Aşaması Bildirimi -->
     <div class="development-notice">
         <div class="notice-content">
             <i class="fa-solid fa-circle-info"></i>
-            <span>Sitemiz geliÅŸme aÅŸamasÄ±ndadÄ±r. SipariÅŸleriniz iÃ§in <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaÅŸabilirsiniz.</span>
+            <span>Sitemiz gelişme aşamasındadır. Siparişleriniz için <a href="mailto:mail@galatacarsi.com">mail</a> veya <a href="https://wa.me/905550501374" target="_blank">WhatsApp</a> yoluyla ulaşabilirsiniz.</span>
         </div>
     </div>
 
@@ -192,14 +192,14 @@
         <div class="success-icon-wrapper">
             <i class="fas fa-check success-icon"></i>
         </div>
-        <h1>TeÅŸekkÃ¼rler!</h1>
-        <p>SipariÅŸiniz baÅŸarÄ±yla alÄ±ndÄ±. <br>SipariÅŸ detaylarÄ±nÄ±z e-posta adresinize gÃ¶nderildi.</p>
+        <h1>Teşekkürler!</h1>
+        <p>Siparişiniz başarıyla alındı. <br>Sipariş detaylarınız e-posta adresinize gönderildi.</p>
 
         <div class="order-number">
-            SipariÅŸ No: <span id="order-id">#TR-829301</span>
+            Sipariş No: <span id="order-id">#TR-829301</span>
         </div>
 
-        <a href="index.html" class="btn-home">AlÄ±ÅŸveriÅŸe Devam Et</a>
+        <a href="index.html" class="btn-home">Alışverişe Devam Et</a>
     </div>
 
     <script>

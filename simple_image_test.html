@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -11,14 +11,14 @@
     <!-- Standardized Favicons (Auto-Injected) -->
 
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakım Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
         
     </style>
     <script src="bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakım sayfası ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -40,17 +40,17 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eğer bakımda değilse veya yetkiliyse sayfayı göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ğŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakım Modu: Erişim onaylandı.');
         })();
     </script>
 
     
 
     <meta charset="UTF-8">
-    <title>Basit GÃ¶rsel Test</title>
+    <title>Basit Görsel Test</title>
     
     
     
@@ -60,8 +60,8 @@
 </head>
 
 <body style="background: #000; color: #fff; padding: 20px;">
-    <h1>Basit GÃ¶rsel Test</h1>
-    <p>AÅŸaÄŸÄ±da gÃ¶rseller gÃ¶rÃ¼nÃ¼yor mu?</p>
+    <h1>Basit Görsel Test</h1>
+    <p>Aşağıda görseller görünüyor mu?</p>
 
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
         <div>
@@ -96,10 +96,10 @@
         images.forEach(src => {
             const img = new Image();
             img.onload = () => {
-                results.innerHTML += `<p style="color: green;">âœ“ ${src} - BAÅARILI (${img.width}x${img.height})</p>`;
+                results.innerHTML += `<p style="color: green;">? ${src} - BAŞARILI (${img.width}x${img.height})</p>`;
             };
             img.onerror = () => {
-                results.innerHTML += `<p style="color: red;">âœ— ${src} - BAÅARISIZ</p>`;
+                results.innerHTML += `<p style="color: red;">? ${src} - BAŞARISIZ</p>`;
             };
             img.src = src;
         });

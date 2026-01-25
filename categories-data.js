@@ -103,7 +103,7 @@ const categoriesData = {
     },
 
     'kaynak-malzemeleri': {
-        title: 'Kaynak Malzemeleri',
+        title: 'Kaynak Malzemeleri ve Aksesuarları',
         description: 'Profesyonel kaynak makineleri, elektrotlar ve koruyucu ekipmanlar.',
         icon: 'fa-fire-burner',
         image: 'gorseller/category_kaynak.png',

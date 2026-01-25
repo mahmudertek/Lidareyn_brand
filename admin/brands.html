@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 
 <head>
@@ -10,14 +10,14 @@
 
     <!-- Standardized Favicons (Auto-Injected) -->
 
-    <!-- BakÄ±m Modu Sistemi (En Tepede) -->
+    <!-- Bakým Modu Sistemi (En Tepede) -->
     <style id="bakim-blocking-style">
 
     </style>
     <script src="../bakim-ayari.js?v=1766778190"></script>
     <script>
         (function () {
-            // BakÄ±m sayfasÄ± ise kontrol etme
+            // Bakým sayfasý ise kontrol etme
             if (window.location.pathname.includes('bakimda.html')) return;
 
             const isAuthorized = localStorage.getItem('admin_session') ||
@@ -39,21 +39,21 @@
                 return;
             }
 
-            // EÄŸer bakÄ±mda deÄŸilse veya yetkiliyse sayfayÄ± gÃ¶ster
+            // Eðer bakýmda deðilse veya yetkiliyse sayfayý göster
             const style = document.getElementById('bakim-blocking-style');
             if (style) style.remove();
-            console.log('ðŸ”§ BakÄ±m Modu: EriÅŸim onaylandÄ±.');
+            console.log('?? Bakým Modu: Eriþim onaylandý.');
         })();
     </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marka YÃ¶netimi - Galata Ã‡arÅŸÄ± Admin</title>
+    <title>Marka Yönetimi - Galata Çarþý Admin</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="admin.css">
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný Kaldýrýldý -->
     <style>
         /* Brand Management Styles */
         .brands-header {
@@ -435,7 +435,7 @@
             <!-- Topbar -->
             <header class="topbar">
                 <div class="page-title">
-                    Marka YÃ¶netimi
+                    Marka Yönetimi
                     <span id="topBrandCount" style="color: #6b7280; font-size: 0.8em; margin-left: 10px;">(0)</span>
                 </div>
 
@@ -447,7 +447,7 @@
                     <div class="admin-profile">
                         <div class="admin-info">
                             <span class="admin-name">Admin User</span>
-                            <span class="admin-role">SÃ¼per YÃ¶netici</span>
+                            <span class="admin-role">Süper Yönetici</span>
                         </div>
                         <div class="admin-avatar">A</div>
                     </div>
@@ -460,14 +460,14 @@
                 <!-- Header -->
                 <div class="brands-header">
                     <h2 style="margin: 0; color: #1f2937;">
-                        TÃ¼m Markalar
+                        Tüm Markalar
                         <span id="brandTotalCount"
                             style="font-size: 14px; background: #e5e7eb; color: #4b5563; padding: 4px 10px; border-radius: 20px; vertical-align: middle; margin-left: 8px;">0</span>
                     </h2>
                     <div style="display:flex; gap:10px;">
                         <button class="add-brand-btn" style="background: #10b981;" onclick="syncHomepageBrands()">
                             <i class="fa-solid fa-rotate"></i>
-                            Ana Sayfadan Ã‡ek
+                            Ana Sayfadan Çek
                         </button>
                         <button class="add-brand-btn" onclick="openAddBrandModal()">
                             <i class="fa-solid fa-plus"></i>
@@ -489,7 +489,7 @@
     <div class="modal-overlay" id="brandProductsModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="brandProductsTitle">Marka ÃœrÃ¼nleri</h2>
+                <h2 id="brandProductsTitle">Marka Ürünleri</h2>
                 <button class="modal-close" onclick="closeBrandProductsModal()">&times;</button>
             </div>
             <div class="modal-body">
@@ -498,7 +498,7 @@
                 </div>
                 <button class="add-product-to-brand" onclick="addProductToBrand()">
                     <i class="fa-solid fa-plus"></i>
-                    Bu Markaya ÃœrÃ¼n Ekle
+                    Bu Markaya Ürün Ekle
                 </button>
             </div>
         </div>
@@ -517,19 +517,19 @@
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Marka AdÄ± *</label>
-                            <input type="text" id="brandName" required placeholder="Marka adÄ±nÄ± girin">
+                            <label>Marka Adý *</label>
+                            <input type="text" id="brandName" required placeholder="Marka adýný girin">
                         </div>
                         <div class="form-group">
                             <label>Marka Slug</label>
-                            <input type="text" id="brandSlug" placeholder="Ã–rn: bosch">
+                            <input type="text" id="brandSlug" placeholder="Örn: bosch">
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>MenÅŸei Ãœlke</label>
-                            <input type="text" id="brandCountry" placeholder="Ã–rn: Almanya">
+                            <label>Menþei Ülke</label>
+                            <input type="text" id="brandCountry" placeholder="Örn: Almanya">
                         </div>
                         <div class="form-group">
                             <label>Tema Rengi</label>
@@ -538,12 +538,12 @@
                     </div>
 
                     <div class="form-group full-width">
-                        <label>Marka AÃ§Ä±klamasÄ±</label>
-                        <textarea id="brandDescription" placeholder="Marka hakkÄ±nda aÃ§Ä±klama..." rows="3"></textarea>
+                        <label>Marka Açýklamasý</label>
+                        <textarea id="brandDescription" placeholder="Marka hakkýnda açýklama..." rows="3"></textarea>
                     </div>
 
                     <div class="form-group full-width">
-                        <label>GÃ¶rÃ¼nÃ¼rlÃ¼k AyarlarÄ±</label>
+                        <label>Görünürlük Ayarlarý</label>
                         <div class="checkbox-group">
                             <label class="checkbox-item">
                                 <input type="checkbox" id="brandActive" checked>
@@ -551,22 +551,22 @@
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" id="brandFeatured">
-                                <span>Ã–ne Ã‡Ä±kan Marka</span>
+                                <span>Öne Çýkan Marka</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" id="brandHomepage">
-                                <span>Anasayfada GÃ¶ster</span>
+                                <span>Anasayfada Göster</span>
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" id="brandDistributor">
-                                <span>DistribÃ¼tÃ¶r Marka</span>
+                                <span>Distribütör Marka</span>
                             </label>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeBrandModal()">Ä°ptal</button>
+                <button class="btn-cancel" onclick="closeBrandModal()">Ýptal</button>
                 <button class="btn-save" onclick="saveBrand()">Kaydet</button>
             </div>
         </div>
@@ -588,7 +588,7 @@
         // Load brands from API
         async function loadBrands() {
             const grid = document.getElementById('brandsGrid');
-            grid.innerHTML = '<p style="text-align: center; padding: 40px; color: #6b7280;"><i class="fa-solid fa-spinner fa-spin"></i> Markalar yÃ¼kleniyor...</p>';
+            grid.innerHTML = '<p style="text-align: center; padding: 40px; color: #6b7280;"><i class="fa-solid fa-spinner fa-spin"></i> Markalar yükleniyor...</p>';
 
             try {
                 const response = await ADMIN_API.getBrands({ limit: 1000 });
@@ -607,7 +607,7 @@
         // Show demo data if API fails
         function showDemoData() {
             brands = [
-                { _id: '1', name: 'Beta', slug: 'beta', country: 'Ä°talya', themeColor: '#E30613', isFeatured: true, isDistributor: false, productCount: 45, logo: '../gorseller/beta_official_logo.png' },
+                { _id: '1', name: 'Beta', slug: 'beta', country: 'Ýtalya', themeColor: '#E30613', isFeatured: true, isDistributor: false, productCount: 45, logo: '../gorseller/beta_official_logo.png' },
                 { _id: '2', name: 'Bosch', slug: 'bosch', country: 'Almanya', themeColor: '#005691', isFeatured: true, isDistributor: false, productCount: 78, logo: '../gorseller/bosch_official_logo.png' },
                 { _id: '3', name: 'Makita', slug: 'makita', country: 'Japonya', themeColor: '#00A0B0', isFeatured: true, isDistributor: false, productCount: 62, logo: '../gorseller/makita_official_logo.png' },
                 { _id: '4', name: 'Knipex', slug: 'knipex', country: 'Almanya', themeColor: '#E31E24', isFeatured: true, isDistributor: false, productCount: 34, logo: '../gorseller/knipex_official_logo.png' },
@@ -615,7 +615,7 @@
                 { _id: '6', name: 'BLACK+DECKER', slug: 'black-decker', country: 'ABD', themeColor: '#FF6600', isFeatured: false, isDistributor: true, productCount: 42, logo: '../gorseller/blackdecker_official_logo.png' }
             ];
             renderBrands();
-            console.warn('API baÄŸlantÄ±sÄ± kurulamadÄ±, demo veriler gÃ¶steriliyor');
+            console.warn('API baðlantýsý kurulamadý, demo veriler gösteriliyor');
         }
 
         // Render brands grid
@@ -629,10 +629,10 @@
                 grid.innerHTML = `
                     <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: #6b7280;">
                         <i class="fa-solid fa-tags" style="font-size: 48px; margin-bottom: 16px;"></i>
-                        <p style="margin: 16px 0;">HenÃ¼z marka eklenmemiÅŸ</p>
+                        <p style="margin: 16px 0;">Henüz marka eklenmemiþ</p>
                         <button class="add-brand-btn" onclick="seedBrands()" style="margin-top: 16px;">
                             <i class="fa-solid fa-database"></i>
-                            20 MarkayÄ± HÄ±zla Ekle
+                            20 Markayý Hýzla Ekle
                         </button>
                     </div>
                 `;
@@ -648,8 +648,8 @@
                 const color = brand.themeColor || brand.color || '#6366f1';
                 const country = brand.country || '';
 
-                if (featured) tags.push('<span class="brand-tag featured">Ã–ne Ã‡Ä±kan</span>');
-                if (distributor) tags.push('<span class="brand-tag active">DistribÃ¼tÃ¶r</span>');
+                if (featured) tags.push('<span class="brand-tag featured">Öne Çýkan</span>');
+                if (distributor) tags.push('<span class="brand-tag active">Distribütör</span>');
 
                 const brandId = brand._id || brand.id;
                 const logo = brand.logo || `https://placehold.co/160x100/${color.replace('#', '')}/fff?text=${brand.name}`;
@@ -664,7 +664,7 @@
                             <div class="brand-stats">
                                 <div class="brand-stat">
                                     <div class="brand-stat-value">${brand.productCount || 0}</div>
-                                    <div class="brand-stat-label">ÃœrÃ¼n</div>
+                                    <div class="brand-stat-label">Ürün</div>
                                 </div>
                             </div>
                             <div class="brand-tags">
@@ -674,11 +674,11 @@
                             <div class="brand-actions">
                                 <button class="brand-action-btn btn-products" onclick="viewBrandProducts('${brandId}')">
                                     <i class="fa-solid fa-box"></i>
-                                    ÃœrÃ¼nler
+                                    Ürünler
                                 </button>
                                 <button class="brand-action-btn btn-edit" onclick="editBrand('${brandId}')">
                                     <i class="fa-solid fa-pen"></i>
-                                    DÃ¼zenle
+                                    Düzenle
                                 </button>
                             </div>
                         </div>
@@ -687,14 +687,14 @@
             });
         }
 
-        // Ana Sayfadaki MarkalarÄ± Senkronize Et
+        // Ana Sayfadaki Markalarý Senkronize Et
         async function syncHomepageBrands() {
-            if (!confirm('Ana sayfada bulunan standart markalarÄ± (Beta, Bosch, Makita, vb.) listenize eklemek istiyor musunuz? \n(Zaten ekli olanlar tekrar eklenmez)')) {
+            if (!confirm('Ana sayfada bulunan standart markalarý (Beta, Bosch, Makita, vb.) listenize eklemek istiyor musunuz? \n(Zaten ekli olanlar tekrar eklenmez)')) {
                 return;
             }
 
             const standardBrands = [
-                { name: 'Beta', country: 'Ä°talya', color: '#E30613' },
+                { name: 'Beta', country: 'Ýtalya', color: '#E30613' },
                 { name: 'Bosch', country: 'Almanya', color: '#005691' },
                 { name: 'Makita', country: 'Japonya', color: '#00A0B0' },
                 { name: 'Knipex', country: 'Almanya', color: '#E31E24' },
@@ -704,18 +704,18 @@
                 { name: 'Stanley', country: 'ABD', color: '#FFD700' },
                 { name: 'Einhell', country: 'Almanya', color: '#D41E45' },
                 { name: 'Metabo', country: 'Almanya', color: '#2C5E4F' },
-                { name: 'Ä°zeltaÅŸ', country: 'TÃ¼rkiye', color: '#E30613' },
+                { name: 'Ýzeltaþ', country: 'Türkiye', color: '#E30613' },
                 { name: 'Gedore', country: 'Almanya', color: '#004A99' },
                 { name: 'WD-40', country: 'ABD', color: '#F8E800' },
-                { name: 'Fisco', country: 'Ä°ngiltere', color: '#E30613' },
+                { name: 'Fisco', country: 'Ýngiltere', color: '#E30613' },
                 { name: 'Proxxon', country: 'Almanya', color: '#006532' },
-                { name: 'Kama', country: 'TÃ¼rkiye', color: '#333333' },
-                { name: 'Karbosan', country: 'TÃ¼rkiye', color: '#004A99' },
-                { name: 'Kristal', country: 'TÃ¼rkiye', color: '#E30613' },
+                { name: 'Kama', country: 'Türkiye', color: '#333333' },
+                { name: 'Karbosan', country: 'Türkiye', color: '#004A99' },
+                { name: 'Kristal', country: 'Türkiye', color: '#E30613' },
                 { name: 'Osaka', country: 'Japonya', color: '#333333' },
                 { name: 'Gison', country: 'Tayvan', color: '#0066CC' },
-                { name: 'Baymax', country: 'TÃ¼rkiye', color: '#333333' },
-                { name: 'Beybi', country: 'TÃ¼rkiye', color: '#E30613' }
+                { name: 'Baymax', country: 'Türkiye', color: '#333333' },
+                { name: 'Beybi', country: 'Türkiye', color: '#E30613' }
             ];
 
             const grid = document.getElementById('brandsGrid');
@@ -725,12 +725,12 @@
             let addedCount = 0;
 
             try {
-                // MevcutlarÄ± al
+                // Mevcutlarý al
                 const currentResponse = await ADMIN_API.getBrands({ limit: 1000 });
                 const currentBrands = currentResponse.success ? currentResponse.data : [];
 
                 for (const std of standardBrands) {
-                    // Ä°sim kontrolÃ¼ (Case insensitive)
+                    // Ýsim kontrolü (Case insensitive)
                     const exists = currentBrands.some(b => b.name.toLowerCase() === std.name.toLowerCase());
                     if (!exists) {
                         await ADMIN_API.createBrand(std);
@@ -739,11 +739,11 @@
                 }
 
                 await loadBrands();
-                alert(`Ä°ÅŸlem tamamlandÄ±! ${addedCount} yeni marka eklendi.`);
+                alert(`Ýþlem tamamlandý! ${addedCount} yeni marka eklendi.`);
 
             } catch (error) {
                 console.error('Sync error:', error);
-                alert('Senkronizasyon sÄ±rasÄ±nda hata oluÅŸtu.');
+                alert('Senkronizasyon sýrasýnda hata oluþtu.');
                 grid.innerHTML = originalContent;
             }
         }
@@ -759,10 +759,10 @@
             currentBrandId = brandId;
             const brand = brands.find(b => (b._id || b.id) === brandId);
             if (brand) {
-                document.getElementById('brandProductsTitle').textContent = `${brand.name} ÃœrÃ¼nleri`;
+                document.getElementById('brandProductsTitle').textContent = `${brand.name} Ürünleri`;
 
                 const list = document.getElementById('brandProductsList');
-                list.innerHTML = '<p style="text-align: center; padding: 20px; color: #6b7280;"><i class="fa-solid fa-spinner fa-spin"></i> YÃ¼kleniyor...</p>';
+                list.innerHTML = '<p style="text-align: center; padding: 20px; color: #6b7280;"><i class="fa-solid fa-spinner fa-spin"></i> Yükleniyor...</p>';
 
                 document.getElementById('brandProductsModal').classList.add('active');
 
@@ -774,15 +774,15 @@
                                 <img src="${product.mainImage || 'https://placehold.co/50x50/6366f1/fff?text=P'}" class="product-item-image" alt="${product.name}">
                                 <div class="product-item-info">
                                     <div class="product-item-name">${product.name}</div>
-                                    <div class="product-item-price">â‚º${(product.price || 0).toLocaleString()}</div>
+                                    <div class="product-item-price">?${(product.price || 0).toLocaleString()}</div>
                                 </div>
                             </div>
                         `).join('');
                     } else {
-                        list.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px;">Bu markaya henÃ¼z Ã¼rÃ¼n eklenmemiÅŸ.</p>';
+                        list.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px;">Bu markaya henüz ürün eklenmemiþ.</p>';
                     }
                 } catch (error) {
-                    list.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px;">ÃœrÃ¼nler yÃ¼klenemedi.</p>';
+                    list.innerHTML = '<p style="text-align: center; color: #6b7280; padding: 40px;">Ürünler yüklenemedi.</p>';
                 }
             }
         }
@@ -812,7 +812,7 @@
         function editBrand(brandId) {
             const brand = brands.find(b => (b._id || b.id) === brandId);
             if (brand) {
-                document.getElementById('brandModalTitle').textContent = 'Marka DÃ¼zenle';
+                document.getElementById('brandModalTitle').textContent = 'Marka Düzenle';
                 document.getElementById('brandId').value = brandId;
                 document.getElementById('brandName').value = brand.name || '';
                 document.getElementById('brandSlug').value = brand.slug || '';
@@ -840,7 +840,7 @@
             const isDistributor = document.getElementById('brandDistributor').checked;
 
             if (!name) {
-                alert('LÃ¼tfen marka adÄ±nÄ± girin.');
+                alert('Lütfen marka adýný girin.');
                 return;
             }
 
@@ -864,9 +864,9 @@
                 if (response.success) {
                     closeBrandModal();
                     await loadBrands();
-                    alert('Marka baÅŸarÄ±yla kaydedildi!');
+                    alert('Marka baþarýyla kaydedildi!');
                 } else {
-                    alert(response.message || 'Kaydetme iÅŸlemi baÅŸarÄ±sÄ±z');
+                    alert(response.message || 'Kaydetme iþlemi baþarýsýz');
                 }
             } catch (error) {
                 console.error('Save error:', error);
@@ -889,8 +889,8 @@
         loadBrands();
     </script>
 
-    <!-- AI AsistanÄ± -->
-    <!-- AI AsistanÄ± JS KaldÄ±rÄ±ldÄ± -->
+    <!-- AI Asistaný -->
+    <!-- AI Asistaný JS Kaldýrýldý -->
 </body>
 
 </html>
