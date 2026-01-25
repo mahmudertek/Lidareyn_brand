@@ -1207,7 +1207,10 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeModal()">İptal</button>
-                <button class="btn-save" onclick="saveAndClose()">Kaydet</button>
+                <button class="btn-save" onclick="saveAndClose()"
+                    style="background: linear-gradient(135deg, #10b981, #059669);">
+                    <i class="fa-solid fa-save" style="margin-right: 8px;"></i>Kaydet ve Kapat
+                </button>
             </div>
         </div>
     </div>
@@ -1826,15 +1829,19 @@
 
         // Base64 görselleri koruyarak localStorage'a kaydet (Kota dostu yeteneklerle)
         // ARTIK IndexedDB'ye de kaydediyor (50MB+ depolama!)
+        // ÖNEMLİ: localStorage kotası sınırlı olduğu için ana veri IndexedDB'de tutulur
         function saveProductsToLocalStorage(productList) {
             if (!productList || !Array.isArray(productList)) return false;
 
-            // IndexedDB'ye kaydet (Asenkron, arka planda)
+            // IndexedDB'ye kaydet (Asenkron, arka planda) - ANA DEPOLAMA
             if (typeof GalataDB !== 'undefined') {
                 GalataDB.saveProducts(productList).catch(err => {
                     console.warn('IndexedDB kayıt hatası (devam ediliyor):', err);
                 });
             }
+
+            // NOT: localStorage'ı SİLMİYORUZ - IndexedDB başarısız olursa yedek olarak kalır
+            // Eski kod siliyordu ama bu veri kaybına neden oluyordu
 
             try {
                 // KRİTİK: Önce local_ prefix'li ürünleri ayrı güvenli listeye kaydet
@@ -1873,306 +1880,119 @@
                 }
 
                 // EĞER VERİ ÇOK BÜYÜKSE (4MB+): Akıllı temizlik yap
-                console.warn('⚠️ Veri çok büyük, akıllı temizlik uygulanıyor...');
+                console.warn('⚠️ Veri çok büyük (4MB+), localStorage kotasını korumak için resimler ayıklanıyor...');
 
                 const lightProducts = productList.map(p => {
                     const isLocal = (p._id || p.id || '').toString().startsWith('local_');
 
-                    // Yerel ürünlerin veya URL olan görsellerin resmini koru
-                    // Sadece sunucuda olan ve base64 olan görselleri temizle
-                    const hasDataImage = (p.mainImage && p.mainImage.startsWith('data:')) ||
-                        (p.image && p.image.startsWith('data:'));
+                    // Resim bir base64 verisi mi?
+                    const hasBase64Image = (p.mainImage && p.mainImage.startsWith('data:image'));
 
-                    if (isLocal || !hasDataImage) {
-                        return p; // Olduğu gibi bırak
+                    // Eğer ürün sunucuda kayıtlıysa ve resmi base64 ise, localStorage versiyonunda resmi temizle
+                    // (Resim zaten IndexedDB'de ve sunucuda güvenle duruyor)
+                    if (!isLocal && hasBase64Image) {
+                        const { mainImage, image, ...lightProduct } = p;
+                        return {
+                            ...lightProduct,
+                            mainImage: `https://placehold.co/100x100?text=${encodeURIComponent(p.brand || 'Ü')}`, // Hafif placeholder
+                            _imageStoredInDB: true
+                        };
                     }
-
-                    // Sunucudaki ürün ve base64 resim -> Temizle
-                    const { mainImage, image, ...rest } = p;
-                    return { ...rest, mainImage: null, image: null };
+                    return p;
                 });
 
-                localStorage.setItem('galatacarsi_products', JSON.stringify(lightProducts));
-                console.log('✅ localStorage güncellendi (Temizlenmiş Veri):', lightProducts.length, 'ürün');
+                const lightJson = JSON.stringify(lightProducts);
+                localStorage.setItem('galatacarsi_products', lightJson);
+                console.log('✅ localStorage "Hafifletilmiş" verilerle güncellendi:', lightProducts.length, 'ürün');
                 return true;
             } catch (e) {
-                console.error('localStorage kayıt hatası:', e);
-                if (e.name === 'QuotaExceededError') {
-                    // Kota dolduysa sadece en son eklenen 50 ürünü resimsiz tutmayı dene
-                    // AMA local_ ürünleri mutlaka dahil et!
-                    const localProducts = productList.filter(p => (p._id || p.id || '').toString().startsWith('local_'));
-                    const apiProducts = productList.filter(p => !(p._id || p.id || '').toString().startsWith('local_')).slice(0, 50 - localProducts.length);
-
-                    const minimalProducts = [...localProducts, ...apiProducts].map(p => {
-                        const isLocal = (p._id || p.id || '').toString().startsWith('local_');
-                        if (isLocal) return p; // Yerel ürünleri olduğu gibi tut
-                        const { mainImage, image, ...rest } = p;
-                        return { ...rest, mainImage: null, image: null };
-                    });
-                    try {
-                        localStorage.setItem('galatacarsi_products', JSON.stringify(minimalProducts));
-                        console.warn('⚠️ Kota aşımı! Yerel ürünler + son API ürünleri kaydedildi.');
-                    } catch (e2) {
-                        // En kötü durumda sadece pending listesi kalacak (bu her zaman güvende)
-                        console.error('❌ localStorage tamamen dolu! Pending listesi güvende.');
-                    }
-                }
+                console.error('💾 Kritik Kayıt Hatası:', e);
+                // En son çare: Sadece yerel (yeni eklenen) ürünleri kurtar
+                try {
+                    const locals = productList.filter(p => (p._id || p.id || '').toString().startsWith('local_'));
+                    localStorage.setItem('galatacarsi_pending_products', JSON.stringify(locals));
+                } catch (e2) { }
+                return false;
                 return false;
             }
         }
 
-        // Load products from API or localStorage
+        // Ürünleri API veya Önbellekten (IndexedDB) yükle
         async function loadProducts() {
-            // Kritik API Kontrolü
-            if (typeof ADMIN_API === 'undefined') {
-                console.error('ADMIN_API is missing!');
-                showError('Sistem Hatası: API bağlantısı kurulamadı. Lütfen internet bağlantınızı kontrol edin ve sayfayı yenileyin (Ctrl+F5).');
-                return;
-            }
+            if (typeof ADMIN_API === 'undefined') return;
 
             isLoading = true;
             showLoading();
 
             try {
-                // Timeout için basit yaklaşım: Promise.race
-                const timeoutPromise = new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error('İstek zaman aşımına uğradı (Timeout)')), 20000)
-                );
+                // 1. ÖNCE INDEXEDDB'DEN (HIZLI ÖNİZLEME)
+                if (typeof GalataDB !== 'undefined') {
+                    const cachedProducts = await GalataDB.getProducts();
+                    if (cachedProducts && cachedProducts.length > 0) {
+                        products = cachedProducts;
+                        renderProducts();
+                        console.log('⚡ IndexedDB önbelleği yüklendi:', products.length);
+                    }
+                }
 
-                const apiPromise = ADMIN_API.getProducts({ limit: 100 });
-                const response = await Promise.race([apiPromise, timeoutPromise]);
+                // 2. ARKA PLANDA API'DEN GÜNCEL VERİYİ ÇEK
+                const response = await ADMIN_API.getProducts({ limit: 300 });
 
                 if (response.success && response.data) {
+                    console.log('✅ API verisi geldi:', response.data.length);
                     products = response.data;
 
-                    // KRİTİK: Önce pending (güvenli) listesini merge et - bu asla üzerine yazılmaz
-                    const pendingProducts = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
-                    if (pendingProducts.length > 0) {
-                        console.log('🔒 Pending ürünler merge ediliyor (güvenli liste):', pendingProducts.length);
-                        pendingProducts.forEach(pp => {
-                            const ppId = (pp._id || pp.id || '').toString();
-                            const ppName = (pp.name || '').trim().toLowerCase();
-
-                            // API'de bu ürün var mı kontrol et
-                            let existsInApi = products.find(p =>
-                                (p._id || p.id) === ppId ||
-                                ((p.name || '').trim().toLowerCase() === ppName &&
-                                    (p.brand || '').trim().toLowerCase() === (pp.brand || '').trim().toLowerCase())
-                            );
-
-                            if (!existsInApi) {
-                                console.log('➕ Pending ürün listeye ekleniyor:', pp.name);
-                                products.push(pp);
+                    // Pending listesini harmanla
+                    const pending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
+                    if (pending.length > 0) {
+                        pending.forEach(p => {
+                            if (!products.find(ap => (ap._id || ap.id) === (p._id || p.id))) {
+                                products.unshift(p);
                             }
                         });
                     }
 
-                    // Sonra normal yerel listeyi de merge et (GÜÇLENDİRİLMİŞ MERGE)
-                    const localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
-                    if (localProducts.length > 0) {
-                        console.log('🔀 Yerel ürünler merge ediliyor:', localProducts.length);
-                        localProducts.forEach(lp => {
-                            const lpId = (lp._id || lp.id || '').toString();
-                            const lpName = (lp.name || '').trim().toLowerCase();
-
-                            // ÖNCE ID BAZLI EŞLEŞME
-                            let existingProduct = products.find(p =>
-                                (p._id || p.id) === (lp._id || lp.id)
-                            );
-
-                            // SONRA İSİM BAZLI EŞLEŞME (Aynı isim + aynı marka)
-                            if (!existingProduct && lpName) {
-                                existingProduct = products.find(p =>
-                                    (p.name || '').trim().toLowerCase() === lpName &&
-                                    (p.brand || '').trim().toLowerCase() === (lp.brand || '').trim().toLowerCase()
-                                );
-                            }
-
-                            // YEREL ÜRÜN API'DE YOK - EKLE
-                            if (!existingProduct) {
-                                // local_ prefix'li ürünler henüz API'ye kaydedilmemiş demek
-                                // Bunları mutlaka listeye ekle
-                                if (lpId.startsWith('local_') || lpId.startsWith('restored_')) {
-                                    console.log('➕ Yerel ürün listeye ekleniyor:', lp.name);
-                                    products.push(lp);
-                                } else {
-                                    // Backend ID'si olan ama API'de olmayan ürün - yine de ekle
-                                    console.log('➕ Backend ürünü (cache) listeye ekleniyor:', lp.name);
-                                    products.push(lp);
-                                }
-                            } else {
-                                // API'de var - eksik alanları Local'den tamamla (Merge)
-                                if ((existingProduct.salePrice === undefined || existingProduct.salePrice === null) && lp.salePrice) {
-                                    existingProduct.salePrice = lp.salePrice;
-                                }
-                                if (!existingProduct.barcode && lp.barcode) {
-                                    existingProduct.barcode = lp.barcode;
-                                }
-                                if ((existingProduct.stock === undefined || existingProduct.stock === null) && lp.stock) {
-                                    existingProduct.stock = lp.stock;
-                                }
-                                // Unit merging - Local değer varsa ve API'den farklı ise Local'i al
-                                if (lp.unit && lp.unit !== 'adet' && existingProduct.unit !== lp.unit) {
-                                    existingProduct.unit = lp.unit;
-                                }
-                            }
-                        });
+                    // IndexedDB'yi güncelle (Ana Depo)
+                    if (typeof GalataDB !== 'undefined') {
+                        await GalataDB.saveProducts(products);
                     }
                     renderProducts();
-                    console.log('✅ Ürünler yüklendi:', products.length);
-
-                    // KRİTİK: Merge edilmiş listeyi localStorage'a kaydet
-                    // Böylece yerel ürünler bir sonraki refresh'te korunur
-                    saveProductsToLocalStorage(products);
-                    console.log('💾 Merge edilmiş liste localStorage\'a kaydedildi');
-
-                    // NOT: syncLocalProducts geçici olarak devre dışı - veri kaybına neden oluyordu
-                    // Ürünler manuel olarak sunucuya kaydedilmeli
-                    // await syncLocalProducts();
-                } else {
-                    console.warn('API yanıtı başarısız:', response);
-                    throw new Error(response.error || 'Sunucudan veri alınamadı');
                 }
             } catch (error) {
-                console.error('Load products error:', error);
-
-                // Önce IndexedDB'den dene (50MB+ depolama)
-                let localProducts = [];
-                try {
-                    if (typeof GalataDB !== 'undefined') {
-                        localProducts = await GalataDB.getProducts();
-                        console.log('📦 IndexedDB\'den yüklendi:', localProducts.length);
-                    }
-                } catch (dbErr) {
-                    console.warn('IndexedDB okunamadı, localStorage deneniyor...');
-                }
-
-                // IndexedDB boşsa localStorage'a bak
-                if (localProducts.length === 0) {
-                    localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
-                }
-
-                if (localProducts.length > 0) {
-                    products = localProducts;
-                    renderProducts();
-
-                    // Bildirim ekle
-                    const existingBadge = document.getElementById('offline-badge');
-                    if (!existingBadge) {
-                        const errorBadge = document.createElement('div');
-                        errorBadge.id = 'offline-badge';
-                        errorBadge.style.cssText = "background:#fee2e2; color:#b91c1c; padding:10px; margin-bottom:15px; border-radius:8px; border:1px solid #fca5a5; font-size:14px; text-align:center;";
-                        errorBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation"></i> Sunucuya erişilemiyor. Yerel (cache) veriler gösteriliyor.`;
-                        document.querySelector('.products-header')?.insertAdjacentElement('afterend', errorBadge);
-                    }
-                } else {
-                    showError(`
-                        <strong style="font-size:16px; color:#dc2626">Sunucu Bağlantısı Kurulamadı</strong><br><br>
-                        Olası Nedenler:<br>
-                        • Sunucu uyku modunda olabilir (Lütfen 1-2 dakika bekleyin).<br>
-                        • İnternet bağlantınız kopuk olabilir.<br>
-                        • API servisi geçici olarak kullanım dışı.<br><br>
-                        <button onclick="location.reload()" style="padding:10px 20px; background:#2563eb; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600;">
-                            <i class="fa-solid fa-rotate-right"></i> Sayfayı Yenile
-                        </button>
-                    `);
-                }
+                console.warn('⚠️ API Hatası veya Zaman Aşımı, önbellek kullanılıyor.');
             } finally {
                 isLoading = false;
             }
         }
 
-        // Yerel ürünleri sunucuya senkronize et
-        // Yerel ürünleri sunucuya senkronize et (GÜVENLİ MOD - Veri Kaybı Yok)
+        // Yerel ürünleri sunucuya senkronize et (GÜVENLİ MOD)
         async function syncLocalProducts() {
-            let localProducts = JSON.parse(localStorage.getItem('galatacarsi_products') || '[]');
-            if (localProducts.length === 0) return;
+            const pending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
+            if (pending.length === 0) return;
 
-            console.log('🔄 Yerel ürünler senkronize ediliyor (Güvenli Mod)...', localProducts.length);
-            let syncedCount = 0;
-            let updatedLocalProducts = []; // Senkronize edilemeyenler burada kalacak
-
-            for (const localProd of localProducts) {
+            console.log('🔄 Senkronizasyon deneniyor...', pending.length);
+            for (const localProd of pending) {
                 try {
-                    // 1. Kontrol: Bu ürün zaten sunucuda var mı? (İsim veya SKU kontrolü)
-                    const existingProduct = products.find(p =>
-                        (p.name && localProd.name && p.name.trim() === localProd.name.trim()) ||
-                        (p.sku && localProd.sku && p.sku.trim() === localProd.sku.trim() && p.sku.trim() !== '')
-                    );
-
-                    let shouldSkip = false;
-
-                    if (existingProduct) {
-                        // KRİTİK KONTROL: Formdaki HER ŞEY birebir aynıysa ancak silinsin.
-
-                        const isMatch = (
-                            (existingProduct.name || '').trim() === (localProd.name || '').trim() &&
-                            (existingProduct.sku || '').trim() === (localProd.sku || '').trim() &&
-                            (existingProduct.brand || '').trim() === (localProd.brand || '').trim() &&
-                            // Kuruş hassasiyeti
-                            Math.abs(parseFloat(existingProduct.price || 0) - parseFloat(localProd.price || 0)) < 0.01 &&
-                            parseInt(existingProduct.stock || 0) === parseInt(localProd.stock || 0) &&
-                            (existingProduct.description || '').trim() === (localProd.description || '').trim() &&
-                            (existingProduct.unit || 'adet') === (localProd.unit || 'adet') &&
-                            // Kategoriler
-                            (existingProduct.categorySlug || existingProduct.category || '') === (localProd.categorySlug || localProd.category || '') &&
-                            (existingProduct.subCategory || '') === (localProd.subCategory || '') &&
-                            // Etiketler
-                            !!existingProduct.isActive === !!localProd.isActive &&
-                            !!existingProduct.isPopular === !!localProd.isPopular &&
-                            !!existingProduct.isNew === !!localProd.isNew &&
-                            !!existingProduct.isBestSeller === !!localProd.isBestSeller &&
-                            !!existingProduct.isFeatured === !!localProd.isFeatured &&
-                            (existingProduct.brandShowcase || '') === (localProd.brandShowcase || '')
-                        );
-
-                        if (isMatch) {
-                            console.log('🛑 %100 TAM EŞLEŞME (Güvenli):', localProd.name);
-                            console.log('   -> Tüm alanlar sunucudakiyle birebir aynı. Yerel kopya güvenle temizleniyor.');
-                            shouldSkip = true; // Ürünü API'ye gönderme, yerelden sil
-                        } else {
-                            console.warn('⚠️ BENZER AMA FARKLI (Kopyalanacak):', localProd.name);
-                            console.warn('   -> En az bir özellik farklı. Yeni ürün olarak ekleniyor.');
-                            // shouldSkip = false; // Devam et ve ekle
-                        }
-                    }
-
-                    if (shouldSkip) {
-                        syncedCount++;
-                        continue;
-                    }
-
-                    // 2. Sunucuya gönder
-                    // ID'sini sil ki sunucu yeni ID versin
                     const { _id, id, ...productToSend } = localProd;
-
                     const response = await ADMIN_API.createProduct(productToSend);
                     if (response.success) {
-                        syncedCount++;
-                        console.log('✅ Sunucuya başarıyla yüklendi:', localProd.name);
-                    } else {
-                        console.error('❌ Yükleme başarısız:', localProd.name, response.error);
-                        updatedLocalProducts.push(localProd);
+                        // Başarılıysa pending'den çıkar
+                        const updatedPending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]')
+                            .filter(p => (p._id || p.id) !== (localProd._id || localProd.id));
+                        localStorage.setItem('galatacarsi_pending_products', JSON.stringify(updatedPending));
                     }
                 } catch (err) {
-                    console.error('Senkronizasyon hatası:', localProd.name, err);
-                    updatedLocalProducts.push(localProd);
+                    console.error('Senkronizasyon hatası:', err);
                 }
-            }
-
-            // LocalStorage'ı güncelle
-            if (syncedCount > 0) {
-                localStorage.setItem('galatacarsi_products', JSON.stringify(updatedLocalProducts));
-                console.log(`🎉 İşlem tamamlandı: ${syncedCount} ürün işlendi.`);
             }
         }
 
         // Initialize
         window.onload = async () => {
-            await checkApiStatus(); // İlk durum kontrolü
+            if (typeof checkApiStatus === 'function') await checkApiStatus();
             await loadProducts();
-            await loadCategories();
-            await loadBrandsDropdown();
+            if (typeof loadCategoriesDropdown === 'function') await loadCategoriesDropdown();
+            if (typeof loadBrandsDropdown === 'function') await loadBrandsDropdown();
         };
 
         // Show loading state
@@ -2683,15 +2503,15 @@
 
             container.innerHTML = minimizedPanels.map(panel => `
                 <div class="minimized-panel-card" data-id="${panel.minimizedId}">
-                    <div class="card-info" onclick="restoreMinimizedPanel('${panel.minimizedId}')">
+                    <div class="card-info" onclick="event.stopPropagation(); restoreMinimizedPanel('${panel.minimizedId}')">
                         <i class="fa-solid fa-${panel.isNewProduct ? 'plus' : 'pen'}"></i>
                         <span>${panel.productName || 'Ürün Düzenleme'}</span>
                     </div>
-                    <div class="card-actions">
-                        <button class="restore-btn" onclick="restoreMinimizedPanel('${panel.minimizedId}')" title="Geri Aç">
+                    <div class="card-actions" onclick="event.stopPropagation()">
+                        <button class="restore-btn" onclick="event.stopPropagation(); restoreMinimizedPanel('${panel.minimizedId}')" title="Geri Aç">
                             <i class="fa-solid fa-window-maximize"></i>
                         </button>
-                        <button class="close-btn" onclick="removeMinimizedPanel('${panel.minimizedId}')" title="Kapat">
+                        <button class="close-btn" onclick="event.stopPropagation(); removeMinimizedPanel('${panel.minimizedId}')" title="Kapat">
                             <i class="fa-solid fa-times"></i>
                         </button>
                     </div>
@@ -3069,21 +2889,81 @@
                     // Hata veya Timeout -> Yerel Kayıt (Offline Mode)
                     console.warn('⚠️ Sunucu hatası, yerel kayıt yapılıyor:', error.message);
 
+                    // SLUG DUPLICATE HATASINI ÖZEL OLARAK YAKALA
+                    const isSlugDuplicateError = error.message.includes('slug zaten') ||
+                        error.message.includes('slug already') ||
+                        error.message.includes('duplicate') ||
+                        error.message.includes('E11000');
+
+                    if (isSlugDuplicateError && !id) {
+                        // Bu bir yeni ürün ekleme ve slug duplicate hatası
+                        const userChoice = confirm(
+                            `⚠️ AYNI İSİMDE ÜRÜN ZATEN VAR!\n\n` +
+                            `"${productData.name}" isimli bir ürün sunucuda zaten mevcut.\n\n` +
+                            `SEÇENEKLER:\n` +
+                            `• [TAMAM] = Ürün adına tarih/saat ekleyerek benzersiz bir isimle kaydet\n` +
+                            `• [İPTAL] = Formu açık bırak, manuel olarak adı değiştir`
+                        );
+
+                        if (userChoice) {
+                            // Otomatik benzersiz isim oluştur
+                            const timestamp = new Date().toLocaleString('tr-TR', {
+                                day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit'
+                            }).replace(/[\/\s:]/g, '-');
+                            productData.name = `${productData.name} (${timestamp})`;
+
+                            // Yeniden API'ye göndermeyi dene
+                            try {
+                                const retryResponse = await ADMIN_API.createProduct(productData);
+                                if (retryResponse.success) {
+                                    products.push(retryResponse.data || productData);
+                                    saveProductsToLocalStorage(products);
+                                    closeModal();
+                                    renderProducts();
+                                    alert(`✅ Ürün "${productData.name}" olarak başarıyla kaydedildi!`);
+                                    return; // Başarılı, fonksiyondan çık
+                                }
+                            } catch (retryError) {
+                                console.error('Retry de başarısız:', retryError);
+                            }
+                        } else {
+                            // Kullanıcı iptal etti, formu açık bırak
+                            return; // Modal kapanmadan fonksiyondan çık
+                        }
+                    }
+
+                    // Normal hata akışı devam eder
                     if (id) {
                         const index = products.findIndex(p => (p._id || p.id) === id);
                         if (index !== -1) {
-                            // Mevcut ürünü güncelle - DİKKAT: productData'daki boş alanların eskisini ezmesini engellemek için merge ediyoruz
-                            // Ama formdan gelen boş string gerçekten boş olsun istenmiş olabilir, o yüzden productData öncelikli.
                             products[index] = { ...products[index], ...productData, _updatedLocal: true };
                         }
                     } else {
-                        // Yeni ürün ekle (Geçici ID ile)
-                        products.push({
-                            _id: 'local_' + Date.now(),
-                            id: 'local_' + Date.now(),
+                        // Yeni ürün ekle - SLUG DUPLICATE durumunda farklı ID kullan
+                        const uniqueId = isSlugDuplicateError
+                            ? 'dup_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5)
+                            : 'local_' + Date.now();
+
+                        const newProduct = {
+                            _id: uniqueId,
+                            id: uniqueId,
                             ...productData,
-                            _newLocal: true
-                        });
+                            _newLocal: true,
+                            _duplicateSlugError: isSlugDuplicateError,
+                            createdAt: new Date().toISOString()
+                        };
+
+                        products.push(newProduct);
+
+                        // Pending listesine de ayrıca kaydet (garantili koruma)
+                        try {
+                            const pendingProducts = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
+                            pendingProducts.unshift(newProduct);
+                            localStorage.setItem('galatacarsi_pending_products', JSON.stringify(pendingProducts));
+                            console.log('🔒 Ürün pending listesine kaydedildi (garantili)');
+                        } catch (e) {
+                            console.error('Pending kayıt hatası:', e);
+                        }
                     }
 
                     // localStorage güncelle (güvenli)
@@ -3092,12 +2972,17 @@
                     closeModal();
                     renderProducts();
 
-                    // Kullanıcıya bilgi ver
-                    const msg = error.message.includes('zaman aşımı')
-                        ? 'Sunucu 90 saniye içinde yanıt vermedi (Render uyuyor olabilir).'
-                        : 'İnternet bağlantısı veya sunucu hatası.';
+                    // Kullanıcıya bilgi ver - SLUG DUPLICATE için farklı mesaj
+                    let msg;
+                    if (isSlugDuplicateError) {
+                        msg = `Bu isimde bir ürün zaten sunucuda mevcut. Ürün YEREL OLARAK kaydedildi ancak sunucuya aktarılamadı.\n\nÇözüm: Ürünü düzenleyip farklı bir isim verin veya mevcut ürünü güncelleyin.`;
+                    } else if (error.message.includes('zaman aşımı')) {
+                        msg = 'Sunucu 90 saniye içinde yanıt vermedi (Render uyuyor olabilir).';
+                    } else {
+                        msg = 'İnternet bağlantısı veya sunucu hatası.';
+                    }
 
-                    alert(`⚠️ SUNUCUYA KAYDEDİLEMEDİ!\n\nHATA DETAYI: ${error.message}\n\nDurum: ${msg}\n\nÜrün ŞİMDİLİK bu tarayıcıya (localStorage) kaydedildi. \n\nLÜTFEN DİKKAT: Bilgisayarınızı kapatmadan veya tarayıcıyı temizlemeden önce internetinizin düzeldiğinden ve sunucunun (Render) çalıştığından emin olup tekrar deneyin.`);
+                    alert(`⚠️ SUNUCUYA KAYDEDİLEMEDİ!\n\nHATA DETAYI: ${error.message}\n\nDurum: ${msg}\n\nÜrün bu tarayıcıya (localStorage) kaydedildi. Sayfa yenilendiğinde görünecektir.`);
                 } finally {
                     // Her durumda loading state'i kaldır
                     const tbody = document.getElementById('productsTableBody');
