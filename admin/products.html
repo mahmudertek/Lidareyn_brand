@@ -2187,9 +2187,9 @@
                         <td>
                              <div style="display:flex; flex-direction:column; font-weight:600;">
                                  ${product.salePrice
-                        ? `<span style="text-decoration:line-through; color:#9ca3af; font-size:12px;">?${product.price?.toLocaleString()}</span>
-                                         <span style="color:#e11d48;">?${parseFloat(product.salePrice).toLocaleString()}</span>`
-                        : `<span>?${product.price?.toLocaleString() || '0'}</span>`
+                        ? `<span style="text-decoration:line-through; color:#9ca3af; font-size:12px;">₺${product.price?.toLocaleString()}</span>
+                                         <span style="color:#e11d48;">₺${parseFloat(product.salePrice).toLocaleString()}</span>`
+                        : `<span>₺${product.price?.toLocaleString() || '0'}</span>`
                     }
                              </div>
                         </td>
@@ -3682,5 +3682,3 @@
 </body>
 
 </html>
-
-
