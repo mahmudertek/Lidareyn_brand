@@ -188,6 +188,20 @@ window.API = {
 
                 const merged = { ...existingFromApi, ...lp };
 
+                // FİYAT KORUMASI: Eğer local veride fiyat yoksa veya geçersizse, API'deki fiyatı koru
+                const apiPrice = parseFloat(existingFromApi.price);
+                const localPrice = parseFloat(lp.price);
+                const apiSalePrice = parseFloat(existingFromApi.salePrice);
+                const localSalePrice = parseFloat(lp.salePrice);
+
+                // API'den gelen fiyat geçerliyse ve local'deki geçersizse, API değerini kullan
+                if (!isNaN(apiPrice) && apiPrice > 0 && (isNaN(localPrice) || localPrice === 0)) {
+                    merged.price = existingFromApi.price;
+                }
+                if (!isNaN(apiSalePrice) && apiSalePrice > 0 && (isNaN(localSalePrice) || localSalePrice === 0)) {
+                    merged.salePrice = existingFromApi.salePrice;
+                }
+
                 if (isApiReal) {
                     if (isLocalPlaceholder) {
                         merged.mainImage = apiImage;

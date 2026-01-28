@@ -45,15 +45,20 @@ async function initProductCarousel() {
                 // Use centralized image helper
                 const imageUrl = window.API.fixImageUrl(product.mainImage || product.image || (product.images && product.images[0]));
 
-                const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
-                const displayPrice = hasSalePrice ? product.salePrice : product.price;
-                const oldPrice = hasSalePrice ? product.price : null;
+                // Fiyat değerlerini güvenli şekilde al
+                const rawSalePrice = parseFloat(product.salePrice);
+                const rawPrice = parseFloat(product.price);
+                
+                // NaN kontrolü ile fiyat belirleme
+                const hasSalePrice = !isNaN(rawSalePrice) && rawSalePrice > 0;
+                const displayPrice = hasSalePrice ? rawSalePrice : (isNaN(rawPrice) ? 0 : rawPrice);
+                const oldPrice = hasSalePrice && !isNaN(rawPrice) && rawPrice > 0 ? rawPrice : null;
 
                 return {
                     id: product._id || product.id,
                     name: product.name,
-                    price: `₺${displayPrice ? parseFloat(displayPrice).toLocaleString('tr-TR') : '0'}`,
-                    oldPrice: oldPrice ? `₺${parseFloat(oldPrice).toLocaleString('tr-TR')}` : null,
+                    price: displayPrice > 0 ? `₺${displayPrice.toLocaleString('tr-TR')}` : 'Fiyat Yok',
+                    oldPrice: oldPrice ? `₺${oldPrice.toLocaleString('tr-TR')}` : null,
                     image: imageUrl,
                     badge: (product.isNew || (product.tags && product.tags.includes('new'))) ? 'Yeni' : '',
                     link: `urun-detay.html?id=${product._id || product.id}`
@@ -90,15 +95,26 @@ async function initProductCarousel() {
 
                 if (featuredProducts.length > 0) {
                     console.log('✅ Fallback success, products found:', featuredProducts.length);
-                    products = featuredProducts.map(product => ({
-                        id: product._id || product.id,
-                        name: product.name,
-                        price: `₺${(product.salePrice || product.price || 0).toLocaleString('tr-TR')}`,
-                        oldPrice: product.salePrice ? `₺${(product.price || 0).toLocaleString('tr-TR')}` : null,
-                        image: product.mainImage || product.image || 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun',
-                        badge: product.isNew ? 'Yeni' : '',
-                        link: `urun-detay.html?id=${product._id || product.id}`
-                    }));
+                    products = featuredProducts.map(product => {
+                        // Fiyat değerlerini güvenli şekilde al
+                        const rawSalePrice = parseFloat(product.salePrice);
+                        const rawPrice = parseFloat(product.price);
+                        
+                        // NaN kontrolü ile fiyat belirleme
+                        const hasSalePrice = !isNaN(rawSalePrice) && rawSalePrice > 0;
+                        const displayPrice = hasSalePrice ? rawSalePrice : (isNaN(rawPrice) ? 0 : rawPrice);
+                        const oldPrice = hasSalePrice && !isNaN(rawPrice) && rawPrice > 0 ? rawPrice : null;
+                        
+                        return {
+                            id: product._id || product.id,
+                            name: product.name,
+                            price: displayPrice > 0 ? `₺${displayPrice.toLocaleString('tr-TR')}` : 'Fiyat Yok',
+                            oldPrice: oldPrice ? `₺${oldPrice.toLocaleString('tr-TR')}` : null,
+                            image: product.mainImage || product.image || 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun',
+                            badge: product.isNew ? 'Yeni' : '',
+                            link: `urun-detay.html?id=${product._id || product.id}`
+                        };
+                    });
                 }
             }
         } catch (e) {
