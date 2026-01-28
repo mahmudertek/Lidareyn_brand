@@ -1,5 +1,6 @@
 // Web Site API Client
 // Bu dosya web sitesinin backend API ile iletişimini sağlar
+// IndexedDB kullanarak büyük veri setlerini cache'ler
 
 window.API = {
     baseUrl: window.ENV ? window.ENV.API_URL : ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
@@ -7,20 +8,68 @@ window.API = {
         : 'https://galatacarsi-backend-api.onrender.com/api'),
 
     fixImageUrl: function (url) {
-        if (!url) return 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun';
+        // Boş, undefined, null veya "null" string kontrolü
+        if (!url || url === 'null' || url === 'undefined' || url.trim() === '') {
+            return 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun';
+        }
+
+        // String'e çevir (number vs için)
+        url = String(url);
 
         // Normalize slashes
         url = url.replace(/\\/g, '/');
 
-        // If it's already an absolute URL or base64, return it
-        if (url.startsWith('http') || url.startsWith('data:')) return url;
+        // Base64 görseller - direkt dön (en öncelikli)
+        if (url.startsWith('data:')) {
+            return url;
+        }
 
+        // Tam URL (http/https) - direkt dön
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            return url;
+        }
+
+        // Yerel klasörler (gorseller/, assets/) - Absolute path olarak dön (her dizinden çalışması için)
+        if (url.startsWith('gorseller/') || url.startsWith('/gorseller/') ||
+            url.startsWith('assets/') || url.startsWith('/assets/')) {
+            return url.startsWith('/') ? url : '/' + url;
+        }
+
+        // API yolları (uploads/, products/ vs.) - backend URL'sine ekle
         const backendBase = 'https://galatacarsi-backend-api.onrender.com';
 
-        // Ensure path starts with a single slash
+        // Başında / yoksa ekle
         const path = url.startsWith('/') ? url : '/' + url;
 
         return backendBase + path;
+    },
+
+    // ============ IndexedDB Helper Functions ============
+    _openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('GalataCarsiDB', 1);
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve(request.result);
+            request.onupgradeneeded = (event) => {
+                const db = event.target.result;
+                if (!db.objectStoreNames.contains('products_cache')) {
+                    db.createObjectStore('products_cache', { keyPath: 'key' });
+                }
+            };
+        });
+    },
+
+    async _getFromIndexedDB(key) {
+        try {
+            const db = await this._openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction('products_cache', 'readonly');
+                const store = tx.objectStore('products_cache');
+                const request = store.get(key);
+                request.onsuccess = () => resolve(request.result?.value || null);
+                request.onerror = () => reject(request.error);
+            });
+        } catch (e) { return null; }
     },
 
     // --- PRODUCTS ---
@@ -45,8 +94,8 @@ window.API = {
             console.warn('Backend API error, defaulting to local merge:', error.message);
         }
 
-        // 2. LocalStorage'dan Çek (Filtrelenmiş olarak gelir)
-        const localRes = this.getProductsFromLocalStorage(params);
+        // 2. Local Cache'den Çek
+        const localRes = await this.getProductsFromLocalCache(params);
         const localData = localRes.data || [];
 
         // 3. BİRLEŞTİR (GÖRSEL KORUMALI MERGE)
@@ -58,7 +107,7 @@ window.API = {
             if (id) mergedMap.set(id.toString(), p);
         });
 
-        // LocalStorage verisini akıllı birleştir
+        // LocalStorage/IndexedDB verisini akıllı birleştir
         localData.forEach(lp => {
             const id = lp._id || lp.id;
             if (!id) return;
@@ -66,11 +115,9 @@ window.API = {
             const existingFromApi = mergedMap.get(id.toString());
 
             if (existingFromApi) {
-                // GÖRSEL KONTROLÜ: API görseli gerçek mi, Yerel görsel boş mu?
                 const localImage = lp.mainImage || lp.image;
                 const apiImage = existingFromApi.mainImage || existingFromApi.image;
 
-                // API görseli varsa ve yerel görsel placeholder ise API'yi KORU
                 const isLocalPlaceholder = !localImage ||
                     localImage === '' ||
                     localImage === 'null' ||
@@ -78,7 +125,6 @@ window.API = {
                     localImage.includes('placeholder') ||
                     (typeof localImage === 'string' && localImage.length < 500 && localImage.startsWith('data:'));
 
-                // API görseli geçerli mi? (URL veya Base64)
                 const isApiReal = apiImage &&
                     typeof apiImage === 'string' &&
                     apiImage.length > 5 &&
@@ -87,25 +133,25 @@ window.API = {
 
                 const merged = { ...existingFromApi, ...lp };
 
-                // API GÖRSELİNİ ÖNCELİKLENDİR:
-                // Yerel görsel placeholder ise VEYA 
-                // Yerel görsel bozuk bir "path" ise (örn: /uploads... ama aslında API'den gelmeliydi) 
-                // ama API görseli sağlamsa -> API görselini kullan.
                 if (isApiReal) {
-                    // Eğer yerel görsel yoksa veya placeholder ise -> Kesinlikle API
                     if (isLocalPlaceholder) {
                         merged.mainImage = apiImage;
                         merged.image = apiImage;
-                        if (lp.images && lp.images[0]) merged.images = [apiImage, ...lp.images.slice(1)];
                     }
-                    // Eğer yerelde de bir şey var ama o bir URL ise (Base64 değilse), 
-                    // muhtemelen eski bir cache'dir, API'yi tercih et.
                     else if (!localImage.startsWith('data:')) {
                         merged.mainImage = apiImage;
                         merged.image = apiImage;
                     }
+                    else {
+                        merged.mainImage = localImage;
+                        merged.image = localImage;
+                    }
+                } else {
+                    if (localImage && !isLocalPlaceholder) {
+                        merged.mainImage = localImage;
+                        merged.image = localImage;
+                    }
                 }
-
                 mergedMap.set(id.toString(), merged);
             } else {
                 mergedMap.set(id.toString(), lp);
@@ -114,12 +160,10 @@ window.API = {
 
         let finalProducts = Array.from(mergedMap.values());
 
-        // 4. Yeniden Sırala (Merge sırayı bozabilir)
         if (params.sort === '-createdAt') {
             finalProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         }
 
-        // 5. Limit Uygula
         if (params.limit) {
             finalProducts = finalProducts.slice(0, parseInt(params.limit));
         }
@@ -127,90 +171,62 @@ window.API = {
         return { success: true, data: finalProducts };
     },
 
-    // LocalStorage'dan ürün çekme (fallback)
-    getProductsFromLocalStorage(params = {}) {
+    async getProductsFromLocalCache(params = {}) {
         try {
-            // Tüm olası anahtarları kontrol et
-            const keys = ['galatacarsi_products', 'galata_products', 'products', 'admin_products'];
-            let stored = null;
-            for (const key of keys) {
-                stored = localStorage.getItem(key);
-                if (stored) break;
+            let allProducts = [];
+            const seenIds = new Set();
+
+            // 1. IndexedDB
+            const idbProducts = await this._getFromIndexedDB('products');
+            if (idbProducts && Array.isArray(idbProducts)) {
+                idbProducts.forEach(p => {
+                    const id = p._id || p.id;
+                    if (id) {
+                        seenIds.add(id.toString());
+                        allProducts.push(p);
+                    }
+                });
             }
 
-            if (!stored) {
-                return { success: false, data: [] };
-            }
+            // 2. LocalStorage Fallback/Migration
+            const keys = ['galatacarsi_products', 'galatat_products', 'products', 'admin_products', 'galata_products_cache'];
+            keys.forEach(key => {
+                try {
+                    const stored = localStorage.getItem(key);
+                    if (stored) {
+                        const parsed = JSON.parse(stored);
+                        if (Array.isArray(parsed)) {
+                            parsed.forEach(p => {
+                                const id = p._id || p.id;
+                                if (id && !seenIds.has(id.toString())) {
+                                    seenIds.add(id.toString());
+                                    allProducts.push(p);
+                                }
+                            });
+                        }
+                    }
+                } catch (e) { }
+            });
 
-            let products = JSON.parse(stored);
+            let products = allProducts;
 
-            // Filtrele
-            // 1. Yeni Ürünler (isNew)
+            // Filtreler
             if (params.isNew === 'true' || params.isNew === true || params.isNew === 1) {
-                products = products.filter(p => {
-                    const isNewProp = p.isNew === true || p.isNew === 'true' || p.isNew === 1 || p.isNew === '1';
-                    const hasNewTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
-                        t && typeof t === 'string' && (t.toLowerCase() === 'new' || t.toLowerCase() === 'yeni')
-                    );
-                    return isNewProp || hasNewTag;
-                });
+                products = products.filter(p => p.isNew || (p.tags && p.tags.includes('yeni')));
             }
-
-            // 2. Popüler Ürünler (isPopular)
             if (params.isPopular === 'true' || params.isPopular === true || params.isPopular === 1) {
-                products = products.filter(p => {
-                    if (p.isPopular === false || p.isPopular === 'false') return false;
-                    const isPopProp = p.isPopular === true || p.isPopular === 'true' || p.isPopular === 1 || p.isPopular === '1';
-                    const hasPopTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
-                        t && typeof t === 'string' && (t.toLowerCase() === 'popular' || t.toLowerCase() === 'popüler' || t.toLowerCase() === 'populer')
-                    );
-                    return isPopProp || hasPopTag;
-                });
+                products = products.filter(p => p.isPopular || (p.tags && p.tags.includes('popüler')));
             }
 
-            // 3. Öne Çıkanlar (isFeatured)
-            if (params.isFeatured === 'true' || params.isFeatured === true || params.isFeatured === 1) {
-                products = products.filter(p => {
-                    const isFeatProp = p.isFeatured === true || p.isFeatured === 'true' || p.isFeatured === 1 || p.isFeatured === '1';
-                    const hasFeatTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
-                        t && typeof t === 'string' && (
-                            t.toLowerCase() === 'featured' ||
-                            t.toLowerCase() === 'öne çıkan' ||
-                            t.toLowerCase() === 'onecikan' ||
-                            t.toLowerCase() === 'one cikan' ||
-                            t.toLowerCase() === 'one-cikan' ||
-                            t.toLowerCase() === 'fırsat' ||
-                            t.toLowerCase() === 'firsat'
-                        )
-                    );
-                    return isFeatProp || hasFeatTag;
-                });
-            }
-
-            // 4. Çok Satanlar (isBestSeller)
-            if (params.isBestSeller === 'true' || params.isBestSeller === true || params.isBestSeller === 1) {
-                products = products.filter(p => {
-                    const isBestProp = p.isBestSeller === true || p.isBestSeller === 'true' || p.isBestSeller === 1 || p.isBestSeller === '1';
-                    const hasBestTag = p.tags && Array.isArray(p.tags) && p.tags.some(t =>
-                        t && typeof t === 'string' && (t.toLowerCase() === 'bestseller' || t.toLowerCase() === 'çok satan' || t.toLowerCase() === 'cok satan' || t.toLowerCase() === 'coksatan')
-                    );
-                    return isBestProp || hasBestTag;
-                });
-            }
-
-            // Sırala
             if (params.sort === '-createdAt') {
                 products.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
             }
-
-            // Limit
             if (params.limit) {
                 products = products.slice(0, parseInt(params.limit));
             }
 
             return { success: true, data: products };
         } catch (e) {
-            console.error('LocalStorage parse error:', e);
             return { success: false, data: [] };
         }
     },
@@ -220,85 +236,64 @@ window.API = {
             const response = await fetch(`${this.baseUrl}/products/slug/${slug}`);
             return await response.json();
         } catch (error) {
-            console.error('Get product error:', error);
             return { success: false, data: null };
         }
     },
 
     async getProductById(id) {
+        let apiProduct = null;
         try {
             const response = await fetch(`${this.baseUrl}/products/${id}`);
             if (response.ok) {
-                return await response.json();
+                const result = await response.json();
+                if (result.success && result.data) apiProduct = result.data;
             }
-            // Sunucuda bulunamazsa veya hata verirse LocalStorage'dan dene
-            const keys = ['galatacarsi_products', 'galata_products', 'products', 'admin_products'];
-            for (const key of keys) {
-                const stored = localStorage.getItem(key);
-                if (stored) {
-                    const products = JSON.parse(stored);
-                    const product = products.find(p => p._id === id || p.id === id);
-                    if (product) {
-                        return { success: true, data: product, fromLocal: true };
-                    }
-                }
+        } catch (error) { }
+
+        // Local Fallback
+        const localCache = await this.getProductsFromLocalCache({});
+        const localProduct = localCache.data.find(p => (p._id || p.id) === id);
+
+        if (apiProduct && localProduct) {
+            const resolved = { ...apiProduct, ...localProduct };
+            const localImage = localProduct.mainImage || localProduct.image;
+            const apiImage = apiProduct.mainImage || apiProduct.image;
+
+            if (apiImage && (!localImage || !localImage.startsWith('data:'))) {
+                resolved.mainImage = apiImage;
+                resolved.image = apiImage;
             }
-            return { success: false, data: null };
-        } catch (error) {
-            console.error('Get product by ID error:', error);
-            // Catch durumunda da LocalStorage'a bak
-            const keys = ['galatacarsi_products', 'galata_products', 'products'];
-            for (const key of keys) {
-                const stored = localStorage.getItem(key);
-                if (stored) {
-                    try {
-                        const products = JSON.parse(stored);
-                        const product = products.find(p => p._id === id || p.id === id);
-                        if (product) return { success: true, data: product, fromLocal: true };
-                    } catch (e) { }
-                }
-            }
-            return { success: false, data: null };
+            return { success: true, data: resolved, fromLocal: true };
+        } else if (apiProduct) {
+            return { success: true, data: apiProduct };
+        } else if (localProduct) {
+            return { success: true, data: localProduct, fromLocal: true };
         }
+
+        return { success: false, data: null };
     },
 
-    // --- CATEGORIES ---
     async getCategories() {
         try {
             const response = await fetch(`${this.baseUrl}/categories?active=true`);
             return await response.json();
         } catch (error) {
-            console.error('Get categories error:', error);
             return { success: false, data: [] };
         }
     },
 
-    // --- BRANDS ---
     async getBrands() {
         try {
             const response = await fetch(`${this.baseUrl}/brands?active=true`);
             const result = await response.json();
-            if (result.success && result.data) {
-                return result;
-            }
-        } catch (error) {
-            console.error('Get brands error:', error);
-        }
+            if (result.success) return result;
+        } catch (error) { }
 
-        // Fallback to localStorage
         try {
             const local = localStorage.getItem('galata_brands');
-            if (local) {
-                const brands = JSON.parse(local);
-                return { success: true, data: brands, fromLocal: true };
-            }
-        } catch (e) {
-            console.error('Brands localStorage error:', e);
-        }
+            if (local) return { success: true, data: JSON.parse(local), fromLocal: true };
+        } catch (e) { }
 
         return { success: false, data: [] };
     }
 };
-
-// Global erişim için
-window.API = API;

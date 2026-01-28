@@ -57,7 +57,7 @@
             const title = document.getElementById('product-title');
             if (title && title.textContent.includes('yükleniyor')) {
                 title.textContent = 'HATA OLUŞTU: ' + msg;
-                title.style.color = 'red';
+                title.style.color = '#1f2937';
             }
         };
     </script>
@@ -702,6 +702,7 @@
     <script src="products-data.js?v=999"></script>
     <script src="config.js?v=999"></script>
     <script src="auth.js?v=999"></script>
+    <script src="api-client.js?v=999"></script>
     <script src="script.js?v=999"></script>
     <script>
         // API URL - config.js'den alınır veya varsayılan kullanılır
@@ -732,20 +733,14 @@
 
             try {
                 // API'den ürün çek
-                const response = await fetch(`${PRODUCT_API}/products/${productId}`);
+                const result = await window.API.getProductById(productId);
 
-                if (!response.ok) {
-                    throw new Error('API yanıt vermedi');
-                }
-
-                const data = await response.json();
-
-                if (data.success && data.data) {
-                    const p = data.data;
+                if (result.success && result.data) {
+                    const p = result.data;
 
                     // Başlık ve Fiyat
                     if (titleEl) titleEl.textContent = p.name || 'İsimsiz Ürün';
-                    if (priceEl) priceEl.textContent = p.price ? `?${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Fiyat Yok';
+                    if (priceEl) priceEl.textContent = p.price ? `₺${parseFloat(p.price).toLocaleString('tr-TR')}` : 'Fiyat Yok';
                     if (breadName) breadName.textContent = p.name || '';
 
                     // Marka
@@ -838,7 +833,7 @@
                     if (!titleEl.textContent || titleEl.textContent === 'Yükleniyor...') {
                         titleEl.textContent = 'Ürün Yüklenirken Hata Oluştu';
                     }
-                    titleEl.style.color = 'red';
+                    titleEl.style.color = '#1f2937'; // Was red
                 }
                 // Diğer alanları temizleme ki kısmi veri görünsün
                 // if (priceEl) priceEl.textContent = '';

@@ -701,7 +701,7 @@
                     id: product._id || product.id,
                     name: product.name,
                     price: (product.salePrice && parseFloat(product.salePrice) > 0) ? product.salePrice : product.price,
-                    image: fixImageUrl(product.mainImage || product.image || (product.images && product.images[0])),
+                    image: window.API.fixImageUrl(product.mainImage || product.image || (product.images && product.images[0])),
                     variant: 'Standart'
                 });
             }
@@ -719,7 +719,7 @@
                     id: product._id || product.id,
                     name: product.name,
                     price: (product.salePrice && parseFloat(product.salePrice) > 0) ? product.salePrice : product.price,
-                    image: fixImageUrl(product.mainImage || product.image || (product.images && product.images[0])),
+                    image: window.API.fixImageUrl(product.mainImage || product.image || (product.images && product.images[0])),
                     variant: 'Standart'
                 });
             }

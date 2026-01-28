@@ -193,7 +193,7 @@
                     image: 'gorseller/category_aksesuarlar.png'
                 },
                 {
-                    title: 'Elektrikli El Aletleri',
+                    title: 'Elektrikli El Aletleri ve Aksesuarları',
                     description: 'Profesyonel kullanım için yüksek performanslı elektrikli el aletleri.',
                     slug: 'elektrikli-el-aletleri',
                     image: 'gorseller/category_elektrikli_el_aletleri.png'

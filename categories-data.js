@@ -53,7 +53,7 @@ const categoriesData = {
     },
 
     'elektrikli-el-aletleri': {
-        title: 'Elektrikli El Aletleri',
+        title: 'Elektrikli El Aletleri ve Aksesuarları',
         description: 'Profesyonel elektrikli el aletleri ve makineler.',
         icon: 'fa-plug',
         image: 'gorseller/category_elektrikli.png',

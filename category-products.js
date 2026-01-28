@@ -25,6 +25,28 @@
         return params.get('subcategory') || params.get('alt') || null;
     }
 
+    // IndexedDB Helpers
+    function _openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open('GalataCarsiDB', 1);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async function _getFromIndexedDB(key) {
+        try {
+            const db = await _openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction('products_cache', 'readonly');
+                const store = tx.objectStore('products_cache');
+                const request = store.get(key);
+                request.onsuccess = () => resolve(request.result?.value || null);
+                request.onerror = () => reject(request.error);
+            });
+        } catch (e) { return null; }
+    }
+
     // Ürünleri yükle
     async function loadProducts() {
         let allProducts = [];
@@ -38,10 +60,19 @@
                 console.log('✅ Kategori ürünleri API\'den yüklendi:', allProducts.length);
             }
         } catch (err) {
-            console.warn('⚠️ API bağlantısı başarısız, localStorage deneniyor...');
+            console.warn('⚠️ API bağlantısı başarısız, local cache deneniyor...');
         }
 
-        // 2. localStorage fallback
+        // 2. IndexedDB (Yeni Cache)
+        if (allProducts.length === 0) {
+            const idbData = await _getFromIndexedDB('products');
+            if (idbData && Array.isArray(idbData)) {
+                allProducts = idbData;
+                console.log('✅ Kategori ürünleri IndexedDB\'den yüklendi:', allProducts.length);
+            }
+        }
+
+        // 3. localStorage fallback (Eski Cache)
         if (allProducts.length === 0) {
             try {
                 const localData = localStorage.getItem('galatacarsi_products');
@@ -54,7 +85,7 @@
             }
         }
 
-        // 3. products-data.js global fonksiyon
+        // 4. products-data.js global fonksiyon
         if (allProducts.length === 0 && typeof window.getAllProductsSync === 'function') {
             allProducts = window.getAllProductsSync() || [];
             console.log('✅ Kategori ürünleri products-data.js\'den yüklendi:', allProducts.length);
@@ -149,27 +180,27 @@
     function createProductCard(product) {
         const id = product._id || product.id;
 
-        // 🖼️ Gelişmiş Görsel Çekme Mantığı (yeni-gelenler.html ile aynı)
-        let rawImage = product.mainImage || product.image || (product.images && product.images[0]) || '';
-        let finalImgPath = rawImage;
-
-        if (!finalImgPath || finalImgPath.length < 5) {
-            finalImgPath = 'https://placehold.co/400x400/f5f5f5/999?text=Resim+Yok';
-        } else if (finalImgPath.startsWith('data:') || finalImgPath.startsWith('http')) {
-            // Base64 veya Harici Link - Olduğu gibi bırak
-        } else {
-            // Yerel yol - Klasör derinliğini ayarla
-            let cleanPath = finalImgPath.replace(/\\/g, '/').replace(/^\/+/, '');
-            const isSubDir = window.location.pathname.includes('/kategoriler/');
-
-            if (isSubDir) {
-                // Kategori sayfası alt klasörde, bir üst dizine çıkmalı
-                finalImgPath = cleanPath.startsWith('gorseller/') ? '../' + cleanPath : '../gorseller/' + cleanPath;
-            } else {
-                // Ana dizin (populer, yeni-gelenler vb)
-                finalImgPath = cleanPath.startsWith('gorseller/') ? cleanPath : 'gorseller/' + cleanPath;
+        // 🖼️ Gelişmiş Görsel Çekme Mantığı
+        function fixPath(url) {
+            if (!url || url === 'null' || url === 'undefined' || url.trim() === '') {
+                return 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun';
             }
+            url = String(url).replace(/\\/g, '/');
+            if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) {
+                return url;
+            }
+            // Yerel klasörler - Absolute path (/) ile dön
+            if (url.startsWith('gorseller/') || url.startsWith('/gorseller/') ||
+                url.startsWith('assets/') || url.startsWith('/assets/')) {
+                return url.startsWith('/') ? url : '/' + url;
+            }
+            // API yolları
+            const backendBase = 'https://galatacarsi-backend-api.onrender.com';
+            const path = url.startsWith('/') ? url : '/' + url;
+            return backendBase + path;
         }
+
+        let finalImgPath = fixPath(product.mainImage || product.image || (product.images && product.images[0]));
 
         const name = product.name || 'Ürün';
         const brand = product.brand || '';

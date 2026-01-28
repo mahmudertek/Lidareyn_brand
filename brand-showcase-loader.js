@@ -28,6 +28,25 @@ const startShowcaseLoader = async () => {
 
     console.log('🚀 Brand Showcase Loader v4.1 Başlatıldı...');
 
+    // IndexedDB Helper
+    async function _getFromIndexedDB(key) {
+        return new Promise((resolve) => {
+            try {
+                const request = indexedDB.open('GalataCarsiDB', 1);
+                request.onsuccess = () => {
+                    const db = request.result;
+                    if (!db.objectStoreNames.contains('products_cache')) return resolve(null);
+                    const tx = db.transaction('products_cache', 'readonly');
+                    const store = tx.objectStore('products_cache');
+                    const getReq = store.get(key);
+                    getReq.onsuccess = () => resolve(getReq.result?.value || null);
+                    getReq.onerror = () => resolve(null);
+                };
+                request.onerror = () => resolve(null);
+            } catch (e) { resolve(null); }
+        });
+    }
+
     async function loadAllPossibleProducts() {
         let allPotentialProducts = [];
         const idMap = new Map();
@@ -49,7 +68,19 @@ const startShowcaseLoader = async () => {
             console.warn('⚠️ API bağlantısı başarısız, fallbacklara bakılıyor.');
         }
 
-        // 2. LocalStorage Fallbackleri (Tüm olası anahtarlar)
+        // 2. IndexedDB Fallback (ÖNEMLİ)
+        if (idMap.size === 0) {
+            const idbData = await _getFromIndexedDB('products');
+            if (idbData && Array.isArray(idbData)) {
+                idbData.forEach(p => {
+                    const id = String(p._id || p.id || '');
+                    if (id) idMap.set(id, p);
+                });
+                console.log(`📦 IndexedDB üzerinden ${idbData.length} ürün yüklendi.`);
+            }
+        }
+
+        // 3. LocalStorage Fallbackleri
         const storageKeys = ['galatacarsi_products', 'galata_products_cache', 'products', 'admin_products', 'galata_products'];
         storageKeys.forEach(key => {
             try {
@@ -57,50 +88,16 @@ const startShowcaseLoader = async () => {
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     if (Array.isArray(parsed)) {
-                        let count = 0;
                         parsed.forEach(p => {
                             const id = String(p._id || p.id || '');
-                            if (id) {
-                                if (idMap.has(id)) {
-                                    // GÖRSEL KORUMALI MERGE
-                                    const existingFromApi = idMap.get(id);
-                                    const merged = { ...existingFromApi, ...p };
-
-                                    // LocalStorage'da görsel yoksa API'den gelen görseli koru
-                                    const localImage = p.mainImage || p.image;
-                                    const apiImage = existingFromApi.mainImage || existingFromApi.image;
-
-                                    const isLocalImageEmpty = !localImage ||
-                                        localImage.includes('placehold') ||
-                                        localImage === 'null' ||
-                                        localImage === '';
-
-                                    if (isLocalImageEmpty && apiImage) {
-                                        merged.mainImage = apiImage;
-                                        merged.image = apiImage;
-                                    }
-
-                                    idMap.set(id, merged);
-                                } else {
-                                    idMap.set(id, p);
-                                }
-                                count++;
+                            if (id && !idMap.has(id)) {
+                                idMap.set(id, p);
                             }
                         });
-                        if (count > 0) console.log(`📂 LocalStorage (${key}) üzerinden ${count} ürün havuzu güncellendi.`);
                     }
                 }
             } catch (e) { }
         });
-
-        // 3. window.galataProductsData Kontrolü (products-data.js'den gelebilir)
-        if (window.galataProductsData && Array.isArray(window.galataProductsData)) {
-            window.galataProductsData.forEach(p => {
-                const id = String(p._id || p.id || '');
-                if (id && !idMap.has(id)) idMap.set(id, p);
-            });
-            console.log(`🧩 global galataProductsData üzerinden havuz kontrol edildi.`);
-        }
 
         return Array.from(idMap.values());
     }
@@ -215,13 +212,21 @@ const startShowcaseLoader = async () => {
                 card.className = 'madeniyat-product-card';
                 card.style.cursor = 'pointer';
 
-                // Fix Image Source for Local File System (file://)
-                const fixImageSrc = (src) => {
-                    if (!src || src === '' || src === 'null' || src === 'undefined') return null;
-                    if (src.startsWith('data:')) return src;
-                    if (src.startsWith('http')) return src;
-                    if (src.startsWith('/')) return '.' + src;
-                    return src;
+                // Fix Image Source
+                const fixImageSrc = (url) => {
+                    if (window.API && window.API.fixImageUrl) return window.API.fixImageUrl(url);
+
+                    if (!url || url === 'null' || url === 'undefined' || url.trim() === '') {
+                        return 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun';
+                    }
+                    url = String(url).replace(/\\/g, '/');
+                    if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) return url;
+
+                    if (url.startsWith('gorseller/') || url.startsWith('/gorseller/')) {
+                        return url.startsWith('/') ? url : '/' + url;
+                    }
+                    const backendBase = 'https://galatacarsi-backend-api.onrender.com';
+                    return backendBase + (url.startsWith('/') ? url : '/' + url);
                 };
 
                 const rawImage = product.mainImage || product.image || (product.images && product.images[0]);

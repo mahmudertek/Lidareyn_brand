@@ -9,7 +9,7 @@
 
     // Kategori eşleştirmeleri - hangi kategori hangi sayfaya yönlendirilecek
     const categoryPages = {
-        'Elektrikli El Aletleri': 'elektrikli-el-aletleri.html',
+        'Elektrikli El Aletleri ve Aksesuarları': 'elektrikli-el-aletleri.html',
         'Ölçme & Kontrol Aletleri': 'olcme-ve-kontrol-aletleri.html',
         'El Aletleri': 'el-aletleri.html',
         'Hırdavat ve El Aletleri': 'hirdavat-el-aletleri.html',
