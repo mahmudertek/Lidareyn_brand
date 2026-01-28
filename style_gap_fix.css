@@ -1,0 +1,35 @@
+/* Fix gap between All Brands and Popular Brands - Small gap version */
+.future-content {
+    margin-bottom: 15px !important;
+    padding-bottom: 0 !important;
+}
+
+.popular-section {
+    margin-top: 10px !important;
+    padding-top: 0 !important;
+}
+
+.future-content h2 {
+    margin-bottom: 10px !important;
+    padding-bottom: 0 !important;
+}
+
+/* Force balanced gap on Mobile */
+@media (max-width: 768px) {
+    .popular-section {
+        margin-top: 5px !important;
+    }
+
+    .future-content {
+        margin-top: 5px !important;
+        padding-top: 15px !important;
+        margin-bottom: 10px !important;
+    }
+}
+
+/* Force balanced gap on Desktop */
+@media (min-width: 769px) {
+    .popular-section {
+        margin-top: 5px !important;
+    }
+}

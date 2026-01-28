@@ -42,12 +42,8 @@ async function initProductCarousel() {
             }
 
             products = rawProducts.map(product => {
-                // Try multiple image sources
-                let imageUrl = product.mainImage || product.image || (product.images && product.images[0]) || null;
-                if (!imageUrl || imageUrl.includes('placehold.co')) {
-                    // Placeholder ise ama brand varsa marka logosu bazlı placeholder yapabiliriz
-                    imageUrl = product.mainImage || product.image || 'https://placehold.co/400x400/f3f4f6/6366f1?text=' + encodeURIComponent(product.name || 'Lidareyn');
-                }
+                // Use centralized image helper
+                const imageUrl = window.API.fixImageUrl(product.mainImage || product.image || (product.images && product.images[0]));
 
                 const hasSalePrice = product.salePrice && parseFloat(product.salePrice) > 0;
                 const displayPrice = hasSalePrice ? product.salePrice : product.price;

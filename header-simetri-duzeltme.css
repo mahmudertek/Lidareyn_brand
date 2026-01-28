@@ -171,32 +171,40 @@
 
     /* --- NAVİGASYON ŞERİDİ (Header Altı Yatay Menü) --- */
     .main-nav {
-        position: absolute !important;
-        top: 100% !important;
+        display: block !important;
+        position: fixed !important;
+        top: 76px !important;
+        /* Notice(40) + Header(36) = 76px */
         left: 0 !important;
         width: 100% !important;
+        height: 40px !important;
+        /* Slightly taller for better touch */
         background-color: #ffffff !important;
-        border-top: 1px solid #f0f0f0 !important;
-        border-bottom: 1px solid #f0f0f0 !important;
-        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05) !important;
-        padding: 0 !important;
-        z-index: 15 !important;
-        display: block !important;
-        height: 36px !important;
+        border-bottom: 2px solid #f0f0f0 !important;
+        z-index: 1001 !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        white-space: nowrap !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 0 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    .main-nav::-webkit-scrollbar {
+        display: none !important;
     }
 
     .nav-menu {
         display: flex !important;
         flex-direction: row !important;
-        /* YATAY */
         align-items: center !important;
-        justify-content: space-evenly !important;
-        /* Eşit dağılım */
-        width: 100% !important;
+        justify-content: flex-start !important;
+        /* Start aligned with padding */
+        width: max-content !important;
         height: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
-        gap: 0 !important;
+        gap: 15px !important;
     }
 
     /* "Tüm Kategoriler"i menüden normalde gizle, ama menü aktifken görünür kıl (mega menü için) */
@@ -238,16 +246,33 @@
     }
 
     .nav-menu>li>a {
-        font-size: 12px !important;
-        font-weight: 600 !important;
-        color: #333 !important;
+        font-size: 11px !important;
+        font-weight: 700 !important;
+        color: #555 !important;
         text-transform: uppercase !important;
         white-space: nowrap !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        width: 100% !important;
         height: 100% !important;
+        padding: 0 5px !important;
+        position: relative !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    .nav-menu>li>a.active,
+    .nav-menu>li>a:active {
+        color: #8b7bd8 !important;
+    }
+
+    .nav-menu>li>a.active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #8b7bd8;
     }
 }
 

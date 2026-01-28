@@ -358,28 +358,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Image Selection Logic
                 let rawImage = product.mainImage || product.image || (product.images && product.images[0]);
 
-                // Fix Image Source for Local File System (file://)
-                // Converts '/gorseller/...' to './gorseller/...' etc.
-                const fixImageSrc = (src) => {
-                    if (!src || src === '' || src === 'null' || src === 'undefined') return null;
-                    if (src.startsWith('data:')) return src; // Base64 is fine
-                    if (src.startsWith('http')) return src;  // External URL is fine
-
-                    // Remove leading slash if present to make it relative
-                    if (src.startsWith('/')) {
-                        return '.' + src;
-                    }
-                    return src;
-                };
-
-                // Get image with fallback chain
-                let productImage = fixImageSrc(rawImage);
-
-                // If no valid image, show a branded placeholder instead of hiding
-                if (!productImage) {
-                    const brandInitial = (product.brand || 'G').charAt(0).toUpperCase();
-                    productImage = `https://placehold.co/300x300/f8f9fa/667eea?text=${brandInitial}`;
-                }
+                // Get image with fallback chain using centralized API helper
+                let productImage = window.API.fixImageUrl(rawImage);
 
                 // Debug log (GÖRSEL SORUNU TEŞHİS İÇİN AKTİF)
                 console.log('🖼️ Image Debug:', product.name?.substring(0, 30), '| raw:', rawImage?.substring(0, 50), '| final:', productImage?.substring(0, 50));

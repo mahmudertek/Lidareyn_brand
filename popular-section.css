@@ -3,7 +3,7 @@
    ============================================ */
 
 .popular-section {
-    padding: 40px 0;
+    padding: 0 0 40px 0;
     background: #ffffff;
 }
 
@@ -86,18 +86,35 @@
 /* Responsive Design */
 
 @media (max-width: 768px) {
+    .popular-section {
+        padding: 0 !important;
+        margin-top: -1px !important;
+        margin-bottom: 20px !important;
+    }
+
+    .popular-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 10px !important;
+        box-sizing: border-box !important;
+    }
+
     .popular-column {
-        padding: 30px 25px;
+        padding: 15px 10px !important;
+        border-radius: 12px !important;
+        /* Full width seamless look */
+        box-shadow: none !important;
     }
 
     .popular-title {
-        font-size: 1.5rem;
-        margin-bottom: 20px;
+        font-size: 1.4rem;
+        margin-bottom: 15px;
     }
 
     .popular-list {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: 8px;
     }
 
     .popular-list a {
@@ -105,15 +122,8 @@
     }
 }
 
+/* Remove 480px override that was restoring the gap */
 @media (max-width: 480px) {
-    .popular-section {
-        padding: 40px 15px;
-    }
-
-    .popular-column {
-        padding: 25px 20px;
-    }
-
     .popular-title {
         font-size: 1.3rem;
     }

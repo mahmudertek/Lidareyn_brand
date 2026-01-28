@@ -7,7 +7,7 @@
 .categories-section {
     width: 80% !important;
     max-width: 1500px !important;
-    margin: 40px auto !important;
+    margin: 40px auto 20px auto !important;
     padding: 0 !important;
 }
 
@@ -23,7 +23,7 @@
 .product-carousel-container {
     width: 80% !important;
     max-width: 1500px !important;
-    margin: 40px auto !important;
+    margin: 20px auto !important;
     padding: 0 !important;
     display: block;
 }
@@ -32,7 +32,8 @@
 .future-content {
     width: 80% !important;
     max-width: 1500px !important;
-    margin: 40px auto !important;
+    margin: 40px auto 40px auto !important;
+    /* Increased bottom margin from 10px to 40px */
     padding: 0 !important;
     background: transparent !important;
 }
@@ -41,7 +42,8 @@
 .popular-container {
     width: 80% !important;
     max-width: 1500px !important;
-    margin: 40px auto !important;
+    margin: 20px auto 40px auto !important;
+    /* Increased top margin from 5px to 20px */
     padding: 0 !important;
 }
 
@@ -80,26 +82,26 @@
 @media (max-width: 992px) {
 
     .categories-section,
-    .product-carousel-container,
-    .future-content,
+    .product-carousel-container {
+        width: 100% !important;
+        margin: 10px 0 !important;
+    }
+
+    .future-content {
+        width: 100% !important;
+        margin: 10px 0 45px 0 !important;
+        /* Increased bottom margin on mobile */
+    }
+
     .popular-container {
-        width: 95% !important;
+        width: 100% !important;
+        margin: 25px 0 40px 0 !important;
+        /* Increased top margin on mobile */
+        padding: 0 10px !important;
+        box-sizing: border-box !important;
     }
 
     .categories-grid {
         grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 576px) {
-    .categories-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .product-carousel-container,
-    .future-content,
-    .popular-container {
-        width: 95% !important;
-        margin: 20px auto !important;
     }
 }

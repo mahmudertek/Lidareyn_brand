@@ -11,6 +11,8 @@
         overflow-y: auto;
         scroll-behavior: auto;
         -webkit-overflow-scrolling: touch;
+        background-color: #fff !important;
+        /* Fix for black columns */
     }
 
     body {
@@ -21,10 +23,18 @@
     /* Minimal container padding to push items to edges */
     .container,
     .header-container {
-        padding-left: 5px !important;
-        padding-right: 5px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+        width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+    }
+
+    .site-intro-banner {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 10px 0 !important;
+        border-radius: 0 !important;
     }
 
     /* Prevent overflow on all major sections */
@@ -228,7 +238,15 @@
         overflow-x: auto;
         overflow-y: hidden;
         white-space: nowrap;
-        padding: 0;
+        padding: 0 10px;
+        /* Indent tabs slightly */
+        scrollbar-width: none;
+        /* Hide scrollbar Firefox */
+    }
+
+    .main-nav::-webkit-scrollbar {
+        display: none;
+        /* Hide scrollbar Chrome/Safari */
     }
 
     .nav-menu {
@@ -282,7 +300,11 @@
     .grid-container,
     .products-grid {
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 8px !important;
+        gap: 10px !important;
+        width: 100% !important;
+        padding: 0 10px !important;
+        /* Added side padding to prevent touching edges */
+        box-sizing: border-box !important;
     }
 
     /* --- MOBILE MEGA MENU (ACCORDION) --- */
@@ -422,6 +444,9 @@
     /* Disable body scroll when menu is open */
     body.mobile-menu-active {
         overflow: hidden !important;
+        position: fixed !important;
+        /* Lock body position */
+        width: 100% !important;
     }
 
     /* Ensure existing menu item left structure works */
@@ -470,10 +495,44 @@
         /* Remove any gradients */
     }
 
-    /* Add simple separator only if absolutely needed, user unwanted it so keeping clean */
     body.mobile-menu-active .mega-menu-list>li {
-        border-bottom: 1px solid transparent !important;
-        /* Ensure transparent if computed style defaults */
+        border-bottom: 1px solid #f0f0f0 !important;
+    }
+
+    /* Style for the new mobile drawer links (Yeni Gelenler, etc.) */
+    .mobile-only-nav-item {
+        display: block !important;
+        width: 100% !important;
+        background: #fff !important;
+        position: relative !important;
+        z-index: 2001 !important;
+        /* Ensure it stays above everything */
+    }
+
+    .mobile-only-nav-item a {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding: 18px 20px !important;
+        width: 100% !important;
+        background: #fff !important;
+        color: #333 !important;
+        font-size: 15px !important;
+        /* Slightly larger */
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        border-bottom: 1px solid #eee !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+    }
+
+    .mobile-only-nav-item a:after {
+        content: '\f054';
+        /* fa-chevron-right */
+        font-family: 'Font Awesome 6 Free';
+        font-weight: 900;
+        font-size: 12px;
+        color: #ccc;
     }
 
     /* --- CATEGORY CARDS (Main Page) - 50/50 Layout on Mobile --- */
@@ -582,20 +641,43 @@
         display: none !important;
     }
 
-    /* 3. Tüm Markalar Title Resizing */
-    .future-content h2 {
+    /* 3. Tüm Markalar Title Resizing & Section Reset */
+    .future-content {
+        margin: 0 auto !important;
+        padding: 0 !important;
+        /* No side padding to allow container to fill width */
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-bottom: 0 !important;
+        /* Remove gap to section below */
+    }
+
+    .popular-section {
+        width: 100% !important;
+        margin-top: -10px !important;
+        padding-top: 0 !important;
+        background: #fff !important;
+    }
+
+    .future-content h2,
+    .future-content .page-main-title {
         font-size: 18px !important;
         /* Match other titles */
-        margin-top: 10px !important;
-        margin-bottom: 10px !important;
+        margin-top: 5px !important;
+        /* Reduced from 10px */
+        margin-bottom: 0 !important;
+        padding-bottom: 0 !important;
+        /* Eliminated bottom margin */
         line-height: 1.2;
     }
 }
 
 /* Mobile Page Main Title */
 .page-main-title {
-    font-size: 1.5rem !important;
-    margin: 15px 0 10px !important;
+    font-size: 1.2rem !important;
+    /* Slightly smaller */
+    margin: 5px 0 !important;
+    /* Reduced from 15px 0 10px */
     letter-spacing: 1px !important;
 }
 
@@ -2186,6 +2268,27 @@ body:has(.mobile-search-overlay.active) .development-notice {
         overflow-y: auto !important;
         z-index: 10000001 !important;
         border: none !important;
+    }
+
+    /* --- Ensure interactions aren't blocked --- */
+    .main-content,
+    .product-carousel-container,
+    .product-carousel-card {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+    }
+
+    /* Restore deleted card actions styles for better interaction */
+    .card-actions {
+        display: flex !important;
+        gap: 8px !important;
+        margin-top: 10px !important;
+    }
+
+    /* Fix potential search overlay blocking issue */
+    .mobile-search-overlay:not(.active) {
+        display: none !important;
+        pointer-events: none !important;
     }
 
     /* Overlay aktifken header'ı transparan yap */

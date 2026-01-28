@@ -5,7 +5,7 @@
 
     // Wait for dependencies
     function waitForDependencies(callback) {
-        if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined') {
+        if (typeof React !== 'undefined' && typeof ReactDOM !== 'undefined' && typeof window.API !== 'undefined' && typeof window.API.fixImageUrl === 'function') {
             callback();
         } else {
             setTimeout(function () { waitForDependencies(callback); }, 50);
@@ -42,6 +42,8 @@
                 return price;
             };
 
+            var image = window.API.fixImageUrl(product.mainImage || product.image || (product.images && product.images[0]));
+
             return React.createElement('a', {
                 href: 'urun-detay.html?id=' + product.id,
                 className: 'product-card'
@@ -63,17 +65,20 @@
                     )
                 ),
                 React.createElement('img', {
-                    src: product.image,
+                    src: image,
                     alt: product.name,
                     className: 'product-image',
                     loading: 'lazy',
-                    style: { opacity: 1, visibility: 'visible', display: 'block', width: '100%', height: '100%', objectFit: 'contain' }
+                    onError: function (e) {
+                        e.target.onerror = null;
+                        e.target.src = 'https://placehold.co/400x400/f3f4f6/6366f1?text=Hata';
+                    }
                 }),
                 React.createElement('div', { className: 'product-info' },
                     React.createElement('div', { className: 'product-name' }, product.name),
                     React.createElement('div', { className: 'product-price-container', style: { display: 'flex', alignItems: 'center', gap: '8px' } },
                         React.createElement('div', { className: 'product-price' }, formatPrice(product.price)),
-                        product.oldPrice ? React.createElement('div', { className: 'product-old-price', style: { textDecoration: 'line-through', color: '#999', fontSize: '0.85rem' } }, formatPrice(product.oldPrice)) : null
+                        product.oldPrice ? React.createElement('div', { className: 'product-old-price' }, formatPrice(product.oldPrice)) : null
                     )
                 )
             );

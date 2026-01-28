@@ -776,6 +776,9 @@
 @media (max-width: 768px) {
     .madeniyat-hero {
         margin: 20px 0 40px;
+        padding: 0 !important;
+        background: #fff !important;
+        box-sizing: border-box;
     }
 
     .madeniyat-hero-left {

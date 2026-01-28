@@ -1,4 +1,4 @@
-/* ============================================
+﻿/* ============================================
    MODERN PREMIUM E-COMMERCE HEADER - 2025
    ============================================ */
 
@@ -28,7 +28,7 @@
     line-height: 1;
 }
 
-/* Header ve Body Ayarlamaları - Bildirim Çubuğu İçin */
+/* Header ve Body AyarlamalarÄ± - Bildirim Ã‡ubuÄŸu Ä°Ã§in */
 body {
     padding-top: 58px !important;
     /* 22px notice + 36px header */
@@ -41,9 +41,9 @@ header {
     left: 0 !important;
     width: 100% !important;
     z-index: 100000 !important;
-    /* Z-Index artırıldı */
+    /* Z-Index artÄ±rÄ±ldÄ± */
     background: #fff !important;
-    /* Bildirim çubuğunun hemen altı */
+    /* Bildirim Ã§ubuÄŸunun hemen altÄ± */
 }
 
 /* Ensure dropdowns are not clipped */
@@ -53,7 +53,7 @@ header {
     overflow: visible !important;
 }
 
-/* Sepet sayacını varsayılan olarak gizle (CSS ile zorla) */
+/* Sepet sayacÄ±nÄ± varsayÄ±lan olarak gizle (CSS ile zorla) */
 .cart-count {
     display: none !important;
 }
@@ -69,9 +69,9 @@ header {
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
-    /* Satır atlat */
+    /* SatÄ±r atlat */
     white-space: normal !important;
-    /* 2 satıra izin ver */
+    /* 2 satÄ±ra izin ver */
     overflow: hidden;
     text-overflow: ellipsis;
 }
@@ -110,7 +110,7 @@ header {
         display: none !important;
     }
 
-    /* Mobilde header pozisyonu - 40px notice yüksekliği için */
+    /* Mobilde header pozisyonu - 40px notice yÃ¼ksekliÄŸi iÃ§in */
     .main-header,
     header {
         top: 40px !important;
@@ -330,7 +330,7 @@ body {
     display: flex;
     align-items: center;
     gap: 5px;
-    /* Boşluk minimuma indirildi */
+    /* BoÅŸluk minimuma indirildi */
     flex-shrink: 0;
     margin-left: auto;
     white-space: nowrap;
@@ -342,14 +342,14 @@ body {
     display: none !important;
 }
 
-/* İkon yanındaki yazılar */
+/* Ä°kon yanÄ±ndaki yazÄ±lar */
 .icon-label {
     display: inline-block;
     font-size: 11px;
-    /* Font biraz küçültüldü */
+    /* Font biraz kÃ¼Ã§Ã¼ltÃ¼ldÃ¼ */
     font-weight: 600;
     margin-left: 3px;
-    /* İkonla yazı arası minimize edildi */
+    /* Ä°konla yazÄ± arasÄ± minimize edildi */
     color: var(--text-primary);
     white-space: nowrap;
     transition: all 0.2s;
@@ -359,7 +359,7 @@ body {
     position: relative;
     height: 24px;
     padding: 0 4px;
-    /* Buton içi boşluk azaltıldı */
+    /* Buton iÃ§i boÅŸluk azaltÄ±ldÄ± */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -407,12 +407,12 @@ body {
     position: relative;
     margin-right: 15px;
     justify-content: flex-end;
-    /* Sağa yaslı */
+    /* SaÄŸa yaslÄ± */
 }
 
 .search-input {
     width: 0;
-    /* Başlangıçta kapalı */
+    /* BaÅŸlangÄ±Ã§ta kapalÄ± */
     opacity: 0;
     visibility: hidden;
     height: 24px;
@@ -423,21 +423,21 @@ body {
     background: #ffffff;
     color: #333;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    /* Yumuşak geçiş */
+    /* YumuÅŸak geÃ§iÅŸ */
     position: absolute;
     right: 36px;
-    /* Butonun solundan başlasın */
+    /* Butonun solundan baÅŸlasÄ±n */
     z-index: 10;
 }
 
-/* Aktif olduğunda açılacak stil */
+/* Aktif olduÄŸunda aÃ§Ä±lacak stil */
 .search-container.active .search-input {
     width: 250px;
-    /* İstenen uzunluk */
+    /* Ä°stenen uzunluk */
     opacity: 1;
     visibility: visible;
     padding: 0 12px 0 16px;
-    /* Sağda ve solda boşluk */
+    /* SaÄŸda ve solda boÅŸluk */
     border-color: #e0e0e0;
     right: 36px;
 }
@@ -445,7 +445,7 @@ body {
 .search-btn {
     position: relative;
     z-index: 20;
-    /* Inputun üzerinde kalsın */
+    /* Inputun Ã¼zerinde kalsÄ±n */
     background: transparent;
     border: none;
     cursor: pointer;
@@ -464,7 +464,7 @@ body {
 
 .search-container.active .search-btn {
     background: transparent;
-    /* Açıkken arka plan olmasın */
+    /* AÃ§Ä±kken arka plan olmasÄ±n */
 }
 
 .search-input:focus {
@@ -1269,7 +1269,7 @@ body {
 
 /* Subcategories Section */
 .subcategories-section {
-    padding: 80px 20px;
+    padding: 0;
     background: #ffffff;
 }
 
@@ -1339,7 +1339,7 @@ body {
 }
 
 .subcategory-items li::before {
-    content: '�';
+    content: 'ï¿½';
     position: absolute;
     left: 0;
     color: var(--accent-purple);
@@ -1367,7 +1367,7 @@ body {
 
 /* Category Cards Grid (Homepage) */
 .categories-section {
-    padding: 80px 20px;
+    padding: 0;
     background: transparent;
 }
 
@@ -1686,7 +1686,7 @@ body {
     overflow: hidden;
     position: relative;
     background: #f5f5f5;
-    margin: 10% auto;
+    margin: 0 auto;
     border-radius: 0;
 }
 
@@ -1752,7 +1752,7 @@ body {
     ============================================ */
 
 .brands-section {
-    padding: 80px 20px;
+    padding: 0;
     background: white;
 }
 
@@ -1904,10 +1904,16 @@ body {
 .future-content {
     width: 80%;
     max-width: 1500px;
-    margin: 10% auto;
-    padding: 80px 20px;
-    background: #fafafa;
+    margin: 0 auto;
+    padding: 0;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+    background: transparent !important;
     border-radius: 0;
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible;
+    /* Changed to visible to not clip h2 shadow if any */
 }
 
 .content-placeholder {
@@ -2627,7 +2633,7 @@ img[loading="lazy"].loaded {
 .cookie-banner {
     position: fixed;
     bottom: -200px;
-    /* Başlangıçta gizli */
+    /* BaÅŸlangÄ±Ã§ta gizli */
     left: 0;
     width: 100%;
     background-color: #1a1a1a !important;
@@ -2882,7 +2888,8 @@ img[loading="lazy"].loaded {
         font-size: 16px;
     }
 }
-/* Ana Sayfa - S�ralama Butonlar� Hover */
+
+/* Ana Sayfa - Sıralama Butonları Hover */
 .sort-btn-compact:hover {
     border-color: #8b7bd8 !important;
     color: #8b7bd8 !important;
@@ -2949,14 +2956,16 @@ img[loading="lazy"].loaded {
     color: #4b5563;
     cursor: pointer;
     transition: all 0.2s;
-    white-space: nowrap; /* Metin ta�mas�n */
+    white-space: nowrap;
+    /* Metin taşmasın */
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .responsive-search-row {
         flex-direction: column;
-        align-items: stretch; /* Tam geni�lik */
+        align-items: stretch;
+        /* Tam genişlik */
     }
 
     .responsive-search-input-container {
@@ -2972,23 +2981,26 @@ img[loading="lazy"].loaded {
     }
 
     .sort-btn-compact {
-        flex: 1; /* Butonlar e�it geni�likte yay�ls�n */
+        flex: 1;
+        /* Butonlar eşit genişlikte yayılsın */
         justify-content: center;
     }
 }
 
-/* Mobile Advanced Search Fix - K�kten ��z�m */
+/* Mobile Advanced Search Fix - Kökten Çözüm */
 @media (max-width: 768px) {
-    /* Genel Container Ta�mas�n� �nle */
+
+    /* Genel Container Taşmasını Önle */
     .advanced-search-panel {
         padding: 15px !important;
         width: 100% !important;
         box-sizing: border-box !important;
-        overflow: hidden !important; /* Ta�may� gizle */
+        overflow: hidden !important;
+        /* Taşmayı gizle */
     }
 
-    /* Sat�r Yap�s� */
-    .search-option-row, 
+    /* Satır Yapısı */
+    .search-option-row,
     .search-option-row.full-width {
         flex-direction: column !important;
         align-items: stretch !important;
@@ -3001,18 +3013,21 @@ img[loading="lazy"].loaded {
     /* Input Wrapper (Input + Button) */
     .search-input-wrapper {
         display: flex !important;
-        flex-direction: column !important; /* Alt alta diz */
+        flex-direction: column !important;
+        /* Alt alta diz */
         width: 100% !important;
         gap: 8px !important;
-        border: none !important; /* Wrapper border'�n� kald�r */
+        border: none !important;
+        /* Wrapper border'ını kaldır */
         padding: 0 !important;
         background: transparent !important;
     }
 
-    /* Input Eleman� */
+    /* Input Elemanı */
     .search-input-wrapper input {
         width: 100% !important;
-        box-sizing: border-box !important; /* Padding dahil hesapla */
+        box-sizing: border-box !important;
+        /* Padding dahil hesapla */
         border: 2px solid #e5e7eb !important;
         border-radius: 8px !important;
         padding: 12px !important;
@@ -3020,10 +3035,11 @@ img[loading="lazy"].loaded {
     }
 
     /* Ara Butonu */
-    .search-btn-inline, 
+    .search-btn-inline,
     .search-input-wrapper button {
         width: 100% !important;
-        position: static !important; /* Absolute'u iptal et */
+        position: static !important;
+        /* Absolute'u iptal et */
         transform: none !important;
         border-radius: 8px !important;
         margin-left: 0 !important;
@@ -3036,19 +3052,23 @@ img[loading="lazy"].loaded {
     /* Label */
     .search-option-label {
         width: 100% !important;
-        white-space: normal !important; /* Uzun metinler alt sat�ra ge�sin */
+        white-space: normal !important;
+        /* Uzun metinler alt satıra geçsin */
         font-size: 13px !important;
         line-height: 1.4 !important;
     }
-    
-    /* Geli�mi� Arama Ba�l��� */
+
+    /* Gelişmiş Arama Başlığı */
     .advanced-search-title {
         font-size: 18px !important;
         text-align: center !important;
     }
 
-    /* Marka arama sat�r� */
+    /* Marka arama satırı */
     .search-option-row .search-input-wrapper {
         max-width: none !important;
     }
 }
+
+
+/* Layout adjustments moved to unified-layout.css */

@@ -55,7 +55,7 @@ async function fetchProductsFromAPI() {
                         oldPrice: salePrice ? `₺${parseFloat(price).toLocaleString('tr-TR')}` : null,
                         priceRaw: price,
                         salePrice: salePrice,
-                        image: product.mainImage || product.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün',
+                        image: (window.API && window.API.fixImageUrl) ? window.API.fixImageUrl(product.mainImage || product.image) : (product.mainImage || product.image || 'https://placehold.co/300x300/f0f0f0/999?text=Ürün'),
                         images: product.images || [],
                         brand: product.brand,
                         category: product.category,

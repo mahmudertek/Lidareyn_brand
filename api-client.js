@@ -1,10 +1,27 @@
 // Web Site API Client
 // Bu dosya web sitesinin backend API ile iletişimini sağlar
 
-const API = {
+window.API = {
     baseUrl: window.ENV ? window.ENV.API_URL : ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api'),
+
+    fixImageUrl: function (url) {
+        if (!url) return 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun';
+
+        // Normalize slashes
+        url = url.replace(/\\/g, '/');
+
+        // If it's already an absolute URL or base64, return it
+        if (url.startsWith('http') || url.startsWith('data:')) return url;
+
+        const backendBase = 'https://galatacarsi-backend-api.onrender.com';
+
+        // Ensure path starts with a single slash
+        const path = url.startsWith('/') ? url : '/' + url;
+
+        return backendBase + path;
+    },
 
     // --- PRODUCTS ---
     async getProducts(params = {}) {
@@ -59,19 +76,34 @@ const API = {
                     localImage === 'null' ||
                     localImage.includes('placehold.co') ||
                     localImage.includes('placeholder') ||
-                    (typeof localImage === 'string' && localImage.length < 500 && localImage.startsWith('data:')); // Çok kısa base64'ler genelde icon/placeholderdır
+                    (typeof localImage === 'string' && localImage.length < 500 && localImage.startsWith('data:'));
 
-                const isApiReal = apiImage && apiImage.length > 500; // Gerçek fotoğraflar genelde büyüktür
+                // API görseli geçerli mi? (URL veya Base64)
+                const isApiReal = apiImage &&
+                    typeof apiImage === 'string' &&
+                    apiImage.length > 5 &&
+                    !apiImage.includes('placehold.co') &&
+                    !apiImage.includes('placeholder');
 
                 const merged = { ...existingFromApi, ...lp };
 
-                if (isApiReal && isLocalPlaceholder) {
-                    merged.mainImage = apiImage;
-                    merged.image = apiImage;
-                    if (lp.images && lp.images[0]) merged.images = [apiImage, ...lp.images.slice(1)];
-                } else if (apiImage && !localImage) {
-                    merged.mainImage = apiImage;
-                    merged.image = apiImage;
+                // API GÖRSELİNİ ÖNCELİKLENDİR:
+                // Yerel görsel placeholder ise VEYA 
+                // Yerel görsel bozuk bir "path" ise (örn: /uploads... ama aslında API'den gelmeliydi) 
+                // ama API görseli sağlamsa -> API görselini kullan.
+                if (isApiReal) {
+                    // Eğer yerel görsel yoksa veya placeholder ise -> Kesinlikle API
+                    if (isLocalPlaceholder) {
+                        merged.mainImage = apiImage;
+                        merged.image = apiImage;
+                        if (lp.images && lp.images[0]) merged.images = [apiImage, ...lp.images.slice(1)];
+                    }
+                    // Eğer yerelde de bir şey var ama o bir URL ise (Base64 değilse), 
+                    // muhtemelen eski bir cache'dir, API'yi tercih et.
+                    else if (!localImage.startsWith('data:')) {
+                        merged.mainImage = apiImage;
+                        merged.image = apiImage;
+                    }
                 }
 
                 mergedMap.set(id.toString(), merged);

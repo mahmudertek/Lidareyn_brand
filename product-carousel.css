@@ -100,7 +100,6 @@
     background-color: #fff;
     position: relative;
     padding: 12px;
-    /* Daha az boşluk - daha büyük görsel */
     box-sizing: border-box;
     display: flex;
     align-items: center;
@@ -114,13 +113,11 @@
     height: auto;
     object-fit: contain;
     transform: scale(0.95);
-    /* Dengeli boyut - ne çok küçük ne çok büyük */
     transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .product-carousel-card:hover .product-carousel-image img {
     transform: scale(1);
-    /* Hover'da hafif büyütme */
 }
 
 /* Product Badge */
@@ -237,74 +234,121 @@
 
 @media (max-width: 768px) {
     .product-carousel-container {
-        width: 95%;
-        height: auto;
-        padding: 15px 40px 50px;
-        border-radius: 16px;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        height: auto !important;
+        padding: 0 5px 35px !important;
+        /* Artırılmış alt boşluk (noktalar için) */
+        border-radius: 0 !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        margin: 5px 0 !important;
+        overflow: hidden !important;
+        overflow-x: hidden !important;
+        position: relative !important;
     }
 
     .product-carousel-grid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 260px 260px 260px;
-        /* Fixed equal height for all rows */
-        gap: 10px;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        grid-template-rows: auto !important;
+        gap: 6px !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        overflow: hidden !important;
     }
 
     .carousel-nav-arrow {
-        width: 36px;
-        height: 36px;
-    }
-
-    .carousel-nav-arrow i {
-        font-size: 14px;
+        width: 32px !important;
+        height: 32px !important;
+        background: rgba(255, 255, 255, 0.9) !important;
     }
 
     .carousel-nav-arrow.prev {
-        left: 4px;
+        left: 2px !important;
     }
 
     .carousel-nav-arrow.next {
-        right: 4px;
+        right: 2px !important;
     }
 
     .product-carousel-card {
-        border-radius: 10px;
+        border-radius: 10px !important;
+        border: 1px solid #f0f0f0 !important;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        background: #fff !important;
+    }
+
+    .product-carousel-image {
+        width: 100% !important;
+        height: 130px !important;
+        /* "Zoom out" effect: fixed smaller height */
+        aspect-ratio: unset !important;
+        background: #fff !important;
+        padding: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    .product-carousel-image img {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+        transform: scale(0.85) !important;
+        /* Image zoom out */
     }
 
     .product-carousel-name {
-        font-size: 11px;
-        -webkit-line-clamp: 2;
-        line-clamp: 2;
-        margin-bottom: 2px;
+        font-size: 9.5px !important;
+        margin-bottom: 2px !important;
+        height: 2.8em !important;
+        /* Slightly tighter name area */
+        overflow: hidden !important;
+        line-height: 1.3 !important;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        color: #1a1a1a !important;
     }
 
     .product-carousel-price {
-        font-size: 12px;
-        margin-top: auto;
+        font-size: 11px !important;
+        margin-top: 2px !important;
+        font-weight: 700 !important;
+        color: #8b7bd8 !important;
     }
 
     .product-carousel-info {
-        padding: 8px 10px;
+        padding: 4px 8px !important;
+        background: #fff !important;
+        min-height: 55px;
+        /* Compact info area */
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: flex-start !important;
+    }
+
+    .carousel-page-indicator {
+        bottom: 8px !important;
+        /* Move dots lower out of the card area */
     }
 }
 
-@media (max-width: 480px) {
-    .product-carousel-container {
-        padding: 10px 25px 40px;
-    }
-
-    .product-carousel-grid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: 240px 240px 240px;
-        /* Fixed equal height for all rows */
-        gap: 8px;
-    }
-
-    .product-carousel-name {
-        font-size: 11px;
-    }
-
-    .product-carousel-price {
-        font-size: 13px;
-    }
+/* Force price visibility area */
+.product-carousel-price-area {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top: auto;
 }

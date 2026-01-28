@@ -155,11 +155,16 @@
 
 @media (max-width: 768px) {
     .flowing-menu-container {
-        width: 94%;
-        max-width: 94%;
-        height: 80px;
-        /* Mobilde de küçültüldü: 330px -> 80px */
+        width: calc(100% - 20px) !important;
+        /* Matches popular-container padding */
+        max-width: 1500px !important;
+        height: 85px !important;
+        /* Increased thickness */
+        margin: 0 auto !important;
+        /* Centered */
+        padding: 0 !important;
         border-radius: 12px !important;
+        /* Slightly rounded to match common box styling */
     }
 
     .flowing-menu-column {
@@ -175,7 +180,7 @@
     .flowing-menu-list-column {
         flex-direction: row;
         align-items: center;
-        gap: 25px;
+        gap: 15px;
         /* Mobilde markalar arası boşluk */
     }
 
