@@ -6,54 +6,73 @@ window.API = {
     baseUrl: window.ENV ? window.ENV.API_URL : ((window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
         ? 'http://localhost:5000/api'
         : 'https://galatacarsi-backend-api.onrender.com/api'),
-
+    /**
+     * URL'yi temizler ve tam yol haline getirir
+     * @param {string} url - İşlenecek URL veya yol
+     * @returns {string} - Tamamlanmış URL
+     */
     fixImageUrl: function (url) {
-        // Boş, undefined, null veya "null" string kontrolü
-        if (!url || url === 'null' || url === 'undefined' || url.trim() === '') {
+        if (!url || String(url) === 'null' || String(url) === 'undefined' || String(url).trim() === '') {
             return 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun';
         }
 
-        // String'e çevir (number vs için)
-        url = String(url);
+        // URL normalize
+        url = String(url).replace(/\\/g, '/');
 
-        // Normalize slashes
-        url = url.replace(/\\/g, '/');
-
-        // Base64 görseller - direkt dön (en öncelikli)
-        if (url.startsWith('data:')) {
+        // Protokol koruması (Zaten tam URL ise veya Base64 ise dokunma)
+        if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://') || url.startsWith('file:')) {
             return url;
         }
 
-        // Tam URL (http/https) - direkt dön
-        if (url.startsWith('http://') || url.startsWith('https://')) {
-            return url;
+        // Yerel klasörler (gorseller/, assets/)
+        if (url.includes('gorseller/') || url.includes('assets/')) {
+            let cleanPath = url;
+            if (url.includes('gorseller/')) {
+                cleanPath = url.substring(url.lastIndexOf('gorseller/'));
+            } else if (url.includes('assets/')) {
+                cleanPath = url.substring(url.lastIndexOf('assets/'));
+            }
+
+            // Sayfa konumuna göre (kategoriler/, markalar/ vb.) yolun başına ../ ekle
+            const isSubPage = window.location.pathname.includes('/kategoriler/') ||
+                window.location.pathname.includes('/markalar/') ||
+                window.location.pathname.includes('/admin/');
+
+            if (isSubPage) {
+                return '../' + cleanPath;
+            }
+
+            // Browser root-relative (/) file:// protokolünde çalışmaz (disk köküne gider).
+            // Bu yüzden yerel dosya sisteminde daima relative döneriz.
+            if (window.location.protocol === 'file:') {
+                return cleanPath;
+            }
+
+            // Web sunucusunda ise kök dizinden başlaması garanti ( / )
+            return '/' + cleanPath;
         }
 
-        // Yerel klasörler (gorseller/, assets/) - Absolute path olarak dön (her dizinden çalışması için)
-        if (url.startsWith('gorseller/') || url.startsWith('/gorseller/') ||
-            url.startsWith('assets/') || url.startsWith('/assets/')) {
-            return url.startsWith('/') ? url : '/' + url;
-        }
-
-        // API yolları (uploads/, products/ vs.) - backend URL'sine ekle
+        // API yolları (uploads/, products/ vb.) - Backend URL'sine ekle
         const backendBase = 'https://galatacarsi-backend-api.onrender.com';
-
-        // Başında / yoksa ekle
         const path = url.startsWith('/') ? url : '/' + url;
-
         return backendBase + path;
     },
 
-    // ============ IndexedDB Helper Functions ============
+    // ============ IndexedDB Helper Functions (Ana Depo) ============
     _openDB() {
         return new Promise((resolve, reject) => {
-            const request = indexedDB.open('GalataCarsiDB', 1);
+            const request = indexedDB.open('GalataCarsiDB', 2); // Versiyon 2
             request.onerror = () => reject(request.error);
             request.onsuccess = () => resolve(request.result);
             request.onupgradeneeded = (event) => {
                 const db = event.target.result;
+                // Ürün önbelleği
                 if (!db.objectStoreNames.contains('products_cache')) {
                     db.createObjectStore('products_cache', { keyPath: 'key' });
+                }
+                // Genel veri deposu
+                if (!db.objectStoreNames.contains('data_store')) {
+                    db.createObjectStore('data_store', { keyPath: 'key' });
                 }
             };
         });
@@ -71,6 +90,42 @@ window.API = {
             });
         } catch (e) { return null; }
     },
+
+    async _saveToIndexedDB(key, value) {
+        try {
+            const db = await this._openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction('products_cache', 'readwrite');
+                const store = tx.objectStore('products_cache');
+                const request = store.put({ key: key, value: value, timestamp: Date.now() });
+                request.onsuccess = () => {
+                    console.log(`✅ IndexedDB'ye kaydedildi: ${key}`);
+                    resolve(true);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        } catch (e) {
+            console.warn('IndexedDB kayıt hatası:', e);
+            return false;
+        }
+    },
+
+    async _clearIndexedDB() {
+        try {
+            const db = await this._openDB();
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction('products_cache', 'readwrite');
+                const store = tx.objectStore('products_cache');
+                const request = store.clear();
+                request.onsuccess = () => {
+                    console.log('🧹 IndexedDB temizlendi');
+                    resolve(true);
+                };
+                request.onerror = () => reject(request.error);
+            });
+        } catch (e) { return false; }
+    },
+
 
     // --- PRODUCTS ---
     async getProducts(params = {}) {
@@ -160,6 +215,16 @@ window.API = {
 
         let finalProducts = Array.from(mergedMap.values());
 
+        // 4. API'den veri geldiyse IndexedDB'ye kaydet (localStorage yerine!)
+        if (apiData.length > 0) {
+            try {
+                await this._saveToIndexedDB('products', apiData);
+                console.log(`💾 ${apiData.length} ürün IndexedDB'ye kaydedildi`);
+            } catch (e) {
+                console.warn('IndexedDB kayıt hatası:', e);
+            }
+        }
+
         if (params.sort === '-createdAt') {
             finalProducts.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         }
@@ -176,9 +241,10 @@ window.API = {
             let allProducts = [];
             const seenIds = new Set();
 
-            // 1. IndexedDB
+            // 1. IndexedDB (Ana Depo - Öncelikli)
             const idbProducts = await this._getFromIndexedDB('products');
-            if (idbProducts && Array.isArray(idbProducts)) {
+            if (idbProducts && Array.isArray(idbProducts) && idbProducts.length > 0) {
+                console.log(`📦 IndexedDB'den ${idbProducts.length} ürün yüklendi`);
                 idbProducts.forEach(p => {
                     const id = p._id || p.id;
                     if (id) {
@@ -188,25 +254,63 @@ window.API = {
                 });
             }
 
-            // 2. LocalStorage Fallback/Migration
-            const keys = ['galatacarsi_products', 'galatat_products', 'products', 'admin_products', 'galata_products_cache'];
-            keys.forEach(key => {
-                try {
-                    const stored = localStorage.getItem(key);
-                    if (stored) {
-                        const parsed = JSON.parse(stored);
-                        if (Array.isArray(parsed)) {
-                            parsed.forEach(p => {
-                                const id = p._id || p.id;
-                                if (id && !seenIds.has(id.toString())) {
-                                    seenIds.add(id.toString());
-                                    allProducts.push(p);
-                                }
-                            });
+            // 2. LocalStorage sadece IndexedDB boşsa veya çok az veri varsa okunur
+            // Ayrıca localStorage'daki verileri IndexedDB'ye taşır (migration)
+            if (allProducts.length < 5) {
+                const keys = ['galatacarsi_products', 'galatat_products', 'products', 'admin_products', 'galata_products_cache'];
+                let migratedProducts = [];
+
+                keys.forEach(key => {
+                    try {
+                        const stored = localStorage.getItem(key);
+                        if (stored) {
+                            // Eğer veri çok büyükse (1MB+), IndexedDB'ye taşı ve localStorage'dan sil
+                            if (stored.length > 1000000) {
+                                console.log(`🔄 ${key} IndexedDB'ye taşınıyor (${(stored.length / 1024).toFixed(0)}KB)...`);
+                                try {
+                                    const parsed = JSON.parse(stored);
+                                    if (Array.isArray(parsed)) {
+                                        migratedProducts = migratedProducts.concat(parsed);
+                                    }
+                                    localStorage.removeItem(key);
+                                    console.log(`✅ ${key} localStorage'dan silindi`);
+                                } catch (e) { }
+                                return;
+                            }
+
+                            const parsed = JSON.parse(stored);
+                            if (Array.isArray(parsed)) {
+                                parsed.forEach(p => {
+                                    const id = p._id || p.id;
+                                    if (id && !seenIds.has(id.toString())) {
+                                        seenIds.add(id.toString());
+                                        allProducts.push(p);
+                                    }
+                                });
+                            }
                         }
+                    } catch (e) {
+                        // QuotaExceededError veya parse hatası - temizle ve devam et
+                        console.warn(`⚠️ ${key} okunamadı, temizleniyor...`);
+                        try { localStorage.removeItem(key); } catch (cleanErr) { }
                     }
-                } catch (e) { }
-            });
+                });
+
+                // Taşınan verileri IndexedDB'ye kaydet
+                if (migratedProducts.length > 0) {
+                    try {
+                        await this._saveToIndexedDB('products', migratedProducts);
+                        console.log(`🔄 ${migratedProducts.length} ürün IndexedDB'ye taşındı`);
+                        migratedProducts.forEach(p => {
+                            const id = p._id || p.id;
+                            if (id && !seenIds.has(id.toString())) {
+                                seenIds.add(id.toString());
+                                allProducts.push(p);
+                            }
+                        });
+                    } catch (e) { }
+                }
+            }
 
             let products = allProducts;
 

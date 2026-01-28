@@ -181,26 +181,9 @@
         const id = product._id || product.id;
 
         // 🖼️ Gelişmiş Görsel Çekme Mantığı
-        function fixPath(url) {
-            if (!url || url === 'null' || url === 'undefined' || url.trim() === '') {
-                return 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun';
-            }
-            url = String(url).replace(/\\/g, '/');
-            if (url.startsWith('data:') || url.startsWith('http://') || url.startsWith('https://')) {
-                return url;
-            }
-            // Yerel klasörler - Absolute path (/) ile dön
-            if (url.startsWith('gorseller/') || url.startsWith('/gorseller/') ||
-                url.startsWith('assets/') || url.startsWith('/assets/')) {
-                return url.startsWith('/') ? url : '/' + url;
-            }
-            // API yolları
-            const backendBase = 'https://galatacarsi-backend-api.onrender.com';
-            const path = url.startsWith('/') ? url : '/' + url;
-            return backendBase + path;
-        }
-
-        let finalImgPath = fixPath(product.mainImage || product.image || (product.images && product.images[0]));
+        let finalImgPath = (window.API && window.API.fixImageUrl)
+            ? window.API.fixImageUrl(product.mainImage || product.image || (product.images && product.images[0]))
+            : (product.mainImage || product.image || 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun');
 
         const name = product.name || 'Ürün';
         const brand = product.brand || '';

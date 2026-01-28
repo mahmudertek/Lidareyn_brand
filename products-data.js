@@ -11,7 +11,7 @@ let loadingPromise = null;
 
 // ============ IndexedDB Helper Functions ============
 const DB_NAME = 'GalataCarsiDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2; // api-client.js ile aynı versiyon
 const STORE_NAME = 'products_cache';
 
 function openDB() {
@@ -23,6 +23,10 @@ function openDB() {
             const db = event.target.result;
             if (!db.objectStoreNames.contains(STORE_NAME)) {
                 db.createObjectStore(STORE_NAME, { keyPath: 'key' });
+            }
+            // api-client.js ile uyumluluk
+            if (!db.objectStoreNames.contains('data_store')) {
+                db.createObjectStore('data_store', { keyPath: 'key' });
             }
         };
     });

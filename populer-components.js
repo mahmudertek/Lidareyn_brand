@@ -42,7 +42,29 @@
                 return price;
             };
 
-            var image = window.API.fixImageUrl(product.mainImage || product.image || (product.images && product.images[0]));
+            var rawImage = product.mainImage || product.image || (product.images && product.images[0]);
+            var image = 'https://placehold.co/400x400/f3f4f6/6366f1?text=Urun'; // Default
+
+            // Debug ve güvenli görsel işleme
+            if (rawImage) {
+                try {
+                    image = window.API.fixImageUrl(rawImage);
+                    // Görsel türünü logla (sadece ilk ürün için)
+                    if (product.id === products[0]?.id) {
+                        console.log('🖼️ İlk ürün görseli:', {
+                            rawType: typeof rawImage,
+                            rawStart: rawImage.substring(0, 50),
+                            fixedStart: image.substring(0, 50),
+                            isBase64: rawImage.startsWith('data:'),
+                            length: rawImage.length
+                        });
+                    }
+                } catch (e) {
+                    console.warn('Görsel işleme hatası:', e);
+                }
+            } else {
+                console.warn('⚠️ Ürün görseli yok:', product.name);
+            }
 
             return React.createElement('a', {
                 href: 'urun-detay.html?id=' + product.id,
@@ -69,7 +91,12 @@
                     alt: product.name,
                     className: 'product-image',
                     loading: 'lazy',
+                    style: { minHeight: '200px', background: '#f5f5f5' },
+                    onLoad: function (e) {
+                        e.target.style.opacity = '1';
+                    },
                     onError: function (e) {
+                        console.warn('❌ Görsel yüklenemedi:', product.name, image.substring(0, 50));
                         e.target.onerror = null;
                         e.target.src = 'https://placehold.co/400x400/f3f4f6/6366f1?text=Hata';
                     }

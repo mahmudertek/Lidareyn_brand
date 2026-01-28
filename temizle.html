@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LocalStorage Temizleme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stats {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        #log {
+            background: #1e1e1e;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🧹 LocalStorage Temizleme Aracı</h1>
+
+        <div class="info">
+            <strong>⚠️ Uyarı:</strong> LocalStorage kota aşımı genellikle büyük Base64 görsellerinin depolanmasından
+            kaynaklanır.
+            Bu araç ile eski verileri temizleyebilirsiniz.
+        </div>
+
+        <div class="stats" id="stats">Yükleniyor...</div>
+
+        <button class="btn-warning" onclick="cleanProducts()">🗑️ Ürün Önbelleğini Temizle</button>
+        <button class="btn-danger" onclick="clearAll()">⚠️ Tüm LocalStorage'ı Temizle</button>
+        <button class="btn-primary" onclick="refreshStats()">🔄 Yenile</button>
+        <button class="btn-primary" onclick="window.location.href='index.html'">🏠 Ana Sayfa</button>
+
+        <h3>Log:</h3>
+        <div id="log"></div>
+    </div>
+
+    <script>
+        const logEl = document.getElementById('log');
+        const statsEl = document.getElementById('stats');
+
+        function log(msg) {
+            logEl.innerHTML += msg + '\n';
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function getStorageSize() {
+            let total = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    total += (localStorage[key].length + key.length) * 2;
+                }
+            }
+            return total;
+        }
+
+        function refreshStats() {
+            const size = getStorageSize();
+            const sizeKB = (size / 1024).toFixed(1);
+            const sizeMB = (size / (1024 * 1024)).toFixed(2);
+            const keyCount = Object.keys(localStorage).length;
+
+            let html = `📊 Toplam Boyut: ${sizeKB} KB (${sizeMB} MB)\n`;
+            html += `📌 Anahtar Sayısı: ${keyCount}\n\n`;
+            html += `Detaylar:\n`;
+
+            const sortedKeys = Object.keys(localStorage).sort((a, b) => {
+                return (localStorage[b]?.length || 0) - (localStorage[a]?.length || 0);
+            });
+
+            sortedKeys.slice(0, 10).forEach(key => {
+                const value = localStorage[key];
+                const keySize = ((value.length + key.length) * 2 / 1024).toFixed(1);
+                html += `  ${key}: ${keySize} KB\n`;
+            });
+
+            if (sortedKeys.length > 10) {
+                html += `  ... ve ${sortedKeys.length - 10} anahtar daha`;
+            }
+
+            statsEl.textContent = html;
+        }
+
+        function cleanProducts() {
+            const productKeys = ['galatacarsi_products', 'galata_products', 'products', 'admin_products', 'galata_products_cache'];
+            let cleaned = 0;
+
+            productKeys.forEach(key => {
+                if (localStorage.getItem(key)) {
+                    const size = ((localStorage[key].length * 2) / 1024).toFixed(1);
+                    localStorage.removeItem(key);
+                    log(`✅ Temizlendi: ${key} (${size} KB)`);
+                    cleaned++;
+                }
+            });
+
+            if (cleaned === 0) {
+                log('ℹ️ Temizlenecek ürün önbelleği bulunamadı.');
+            } else {
+                log(`\n🎉 ${cleaned} anahtar temizlendi!`);
+            }
+
+            refreshStats();
+        }
+
+        function clearAll() {
+            if (confirm('Tüm localStorage verileri silinecek. Emin misiniz?')) {
+                const count = Object.keys(localStorage).length;
+                localStorage.clear();
+                log(`⚠️ Tüm localStorage temizlendi! (${count} anahtar silindi)`);
+                refreshStats();
+            }
+        }
+
+        // Sayfa yüklendiğinde
+        refreshStats();
+        log('🚀 Temizleme aracı hazır.');
+    </script>
+</body>
+
+</html>

@@ -522,7 +522,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         </div>
                         ${results.products.map(prod => {
                     const productId = prod._id || prod.id;
-                    const image = prod.mainImage || prod.image || 'https://placehold.co/60x60/6366f1/fff?text=' + (prod.brand || 'G').charAt(0);
+                    const rawImage = prod.mainImage || prod.image || (prod.images && prod.images[0]);
+                    const image = window.API.fixImageUrl(rawImage);
                     const price = prod.salePrice || prod.price || 0;
                     const hasDiscount = prod.salePrice && prod.price && parseFloat(prod.salePrice) < parseFloat(prod.price);
 

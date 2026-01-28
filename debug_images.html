@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Image Debug</title>
+    <script src="api-client.js"></script>
+</head>
+
+<body>
+    <h1>API Image Check</h1>
+    <div id="logs"
+        style="font-family: monospace; background: #eee; padding: 10px; border: 1px solid #ccc; max-height: 300px; overflow: auto;">
+    </div>
+    <div id="gallery" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+
+    <script>
+        const logEl = document.getElementById('logs');
+        function log(msg) {
+            console.log(msg);
+            logEl.innerHTML += msg + '<br>';
+        }
+
+        async function test() {
+            log('Starting test...');
+            if (!window.API) {
+                log('Error: window.API not found');
+                return;
+            }
+            log('API URL: ' + window.API.baseUrl);
+
+            try {
+                const res = await window.API.getProducts({ limit: 5 });
+                log('Fetched ' + (res.data ? res.data.length : 0) + ' products');
+
+                if (res.success && res.data) {
+                    res.data.forEach(p => {
+                        const raw = p.mainImage || p.image;
+                        const fixed = window.API.fixImageUrl(raw);
+
+                        log('Product: ' + p.name);
+                        log('Raw type: ' + (typeof raw));
+                        log('Fixed preview: ' + fixed.substring(0, 50) + '...');
+
+                        const container = document.createElement('div');
+                        container.style.border = '1px solid #000';
+                        container.style.padding = '5px';
+
+                        const img = document.createElement('img');
+                        img.src = fixed;
+                        img.style.width = '100px';
+                        img.onload = () => log('SUCCESS: Image loaded for ' + p.name);
+                        img.onerror = () => log('ERROR: Image failed for ' + p.name);
+
+                        const label = document.createElement('p');
+                        label.textContent = p.name;
+
+                        container.appendChild(img);
+                        container.appendChild(label);
+                        document.getElementById('gallery').appendChild(container);
+                    });
+                }
+            } catch (e) {
+                log('Global error: ' + e.message);
+            }
+        }
+        test();
+    </script>
+</body>
+
+</html>
