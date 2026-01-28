@@ -2,17 +2,18 @@
 // Bu dosya ürünleri backend'den çeker ve frontend'de kullanılır
 // IndexedDB kullanarak büyük veri setlerini cache'ler (localStorage kotasını aşmamak için)
 
-const API_BASE_URL = 'https://galatacarsi-backend-api.onrender.com/api';
+// API URL - api-client.js ile paylaşımlı (çakışmayı önlemek için var kullan)
+var API_BASE_URL = window.API?.baseUrl || 'https://galatacarsi-backend-api.onrender.com/api';
 
-// Ürünleri cache'de tutacak dizi
-let galataProductsData = [];
-let productsLoaded = false;
-let loadingPromise = null;
+// Ürünleri cache'de tutacak dizi (var ile çakışma önlenir)
+var galataProductsData = galataProductsData || [];
+var productsLoaded = productsLoaded || false;
+var loadingPromise = loadingPromise || null;
 
 // ============ IndexedDB Helper Functions ============
-const DB_NAME = 'GalataCarsiDB';
-const DB_VERSION = 2; // api-client.js ile aynı versiyon
-const STORE_NAME = 'products_cache';
+var DB_NAME = 'GalataCarsiDB';
+var DB_VERSION = 2; // api-client.js ile aynı versiyon
+var STORE_NAME = 'products_cache';
 
 function openDB() {
     return new Promise((resolve, reject) => {
