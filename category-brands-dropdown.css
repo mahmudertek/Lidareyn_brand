@@ -312,6 +312,32 @@
     outline: none;
     transition: border-color 0.2s, background 0.2s;
     min-width: 140px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .category-filter-bar {
+        padding: 8px 10px;
+        gap: 10px;
+    }
+
+    .category-filter-bar .sort-select {
+        min-width: 110px;
+        max-width: 150px;
+        width: auto;
+        font-size: 10px;
+        padding: 5px 8px;
+        flex-shrink: 1;
+        /* Allow shrinking if needed */
+        direction: rtl;
+        /* Anchors dropdown to the right */
+    }
+
+    .category-filter-bar .sort-select option {
+        direction: ltr;
+        /* Keeps text inside options left-to-right */
+    }
 }
 
 .category-filter-bar .sort-select:hover {

@@ -1,0 +1,100 @@
+﻿        </div>
+    </div>
+
+                                    
+                                    <!-- Mobile: Category Accordion Navigation -->
+    <div class="container">
+        <!-- 1. Alt Kategoriler Accordion -->
+        <div class="category-accordion">
+            <button class="accordion-main-trigger">
+                Alt Kategoriler
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="accordion-content">
+                
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        AkÃ¼lÃ¼ Matkap & Vidalama
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">AkÃ¼lÃ¼ Matkap</a>
+                        <a href="#" class="accordion-child-item">AkÃ¼lÃ¼ Vidalama</a>
+                        <a href="#" class="accordion-child-item">AkÃ¼lÃ¼ Darbeli Matkap</a>
+                    </div>
+                </div>
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        AkÃ¼lÃ¼ Kesme & TaÅŸlama
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">AkÃ¼lÃ¼ AvuÃ§ TaÅŸlama</a>
+                        <a href="#" class="accordion-child-item">AkÃ¼lÃ¼ Testere</a>
+                        <a href="#" class="accordion-child-item">AkÃ¼lÃ¼ Dekupaj</a>
+                    </div>
+                </div>
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        Batarya & Åarj CihazlarÄ±
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <a href="#" class="accordion-child-item">Lityum Batarya</a>
+                        <a href="#" class="accordion-child-item">HÄ±zlÄ± Åarj CihazÄ±</a>
+                        <a href="#" class="accordion-child-item">Ã‡oklu Åarj Ä°stasyonu</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Markalar Accordion -->
+        <div class="brands-dropdown-wrapper">
+            <button class="brands-dropdown-trigger">
+                Bu Kategorideki TÃ¼m Markalar
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+            <div class="brands-dropdown-content">
+                <div class="brands-search-container">
+                    <input type="text" class="brands-search-input" placeholder="Marka ara...">
+                </div>
+                <div class="brands-grid">
+                    <!-- Markalar Dinamik Olarak YÃ¼klenecek -->
+                </div>
+                <div class="brands-pagination">
+                    <button class="pagination-arrow pagination-prev" disabled>
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                    <div class="pagination-dots"></div>
+                    <button class="pagination-arrow pagination-next">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Filtre SeÃ§enekleri Bar -->
+        <div class="category-filter-bar">
+            <div class="product-count">YÃ¼kleniyor...</div>
+            <select class="sort-select">
+                <option value="default">SÄ±ralama SeÃ§iniz</option>
+                <option value="price-low">Fiyat: DÃ¼ÅŸÃ¼kten YÃ¼kseÄŸe</option>
+                <option value="price-high">Fiyat: YÃ¼ksekten DÃ¼ÅŸÃ¼ÄŸe</option>
+                <option value="newest">En Yeniler</option>
+            </select>
+        </div>
+    </div>
+
+<section class="category-products-section" style="padding: 20px 0;">
+        <div class="container">
+            <div class="products-grid">
+                <!-- ÃœrÃ¼nler Admin Panelinden YÃ¼klenecektir -->
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Sidebar Overlay -->
+    <footer class="main-footer">
+        <div class="footer-container">

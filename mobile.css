@@ -43,6 +43,7 @@
     .category-products-section,
     .subcategory-chips-section,
     .brands-dropdown-wrapper,
+    .category-filter-bar,
     .footer-container {
         max-width: 100% !important;
         box-sizing: border-box !important;

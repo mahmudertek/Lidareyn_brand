@@ -134,28 +134,65 @@
             if (!cat || !cat.subcategories) return;
 
             let html = '';
-            cat.subcategories.forEach(group => {
-                html += `
-                    <div class="accordion-parent">
-                        <button class="accordion-parent-trigger">
-                            ${group.name}
-                            <i class="fa-solid fa-chevron-down"></i>
-                        </button>
-                        <div class="accordion-children">
-                `;
 
+            // 1. Alt Kategoriler Akordiyonu
+            html += `
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger active">
+                        Alt Kategoriler
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children open">
+            `;
+
+            cat.subcategories.forEach(group => {
                 if (group.items && Array.isArray(group.items)) {
                     group.items.forEach(item => {
                         const encodedSub = encodeURIComponent(item);
                         html += `<a href="${slug}.html?subcategory=${encodedSub}" class="accordion-child-item">${item}</a>`;
                     });
                 }
+            });
 
-                html += `
+            html += `
+                    </div>
+                </div>
+            `;
+
+            // 2. Markalar Akordiyonu
+            html += `
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        Bu Kategorideki Tüm Markalar
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <div class="brand-filter-search" style="padding: 10px;">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" class="brand-search-input" placeholder="Marka ara..." style="width: 100%; border: none; padding: 5px; outline: none; border-bottom: 1px solid #eee;">
+                        </div>
+                        <div class="brand-list" style="max-height: 200px; overflow-y: auto; padding: 0 10px;">
+                            <!-- Markalar dynamic-loader.js tarafından doldurulacak -->
+                             <div class="loading-spinner" style="font-size: 12px; color: #999; padding: 10px; text-align: center;">Yükleniyor...</div>
                         </div>
                     </div>
-                `;
-            });
+                </div>
+            `;
+
+            // 3. Ürün Grupları Akordiyonu
+            html += `
+                <div class="accordion-parent">
+                    <button class="accordion-parent-trigger">
+                        Ürün Grupları
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="accordion-children">
+                        <div class="group-list" style="padding: 10px; font-size: 13px; color: #666;">
+                            Bu kategoriye ait ürün grupları listeleniyor...
+                        </div>
+                    </div>
+                </div>
+            `;
 
             accordionContent.innerHTML = html;
 
