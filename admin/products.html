@@ -674,7 +674,7 @@
         <aside class="sidebar"></aside>
 
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content">j
             <!-- Topbar -->
             <header class="topbar">
                 <div class="page-title" style="color:#8b7bd8 !important; font-weight:bold;">Ürün Yönetimi v2.0 (DEBUG)
@@ -1919,49 +1919,94 @@
             }
         }
 
-        // Ürünleri API veya Önbellekten (IndexedDB) yükle
+        // Ürünleri API veya Önbellekten (IndexedDB/localStorage) yükle
         async function loadProducts() {
             if (typeof ADMIN_API === 'undefined') return;
 
             isLoading = true;
             showLoading();
 
+            let hasLocalData = false;
+
             try {
                 // 1. ÖNCE INDEXEDDB'DEN (HIZLI ÖNİZLEME)
-                if (typeof GalataDB !== 'undefined') {
-                    const cachedProducts = await GalataDB.getProducts();
-                    if (cachedProducts && cachedProducts.length > 0) {
-                        products = cachedProducts;
-                        renderProducts();
-                        console.log('? IndexedDB önbelleği yüklendi:', products.length);
+                try {
+                    if (typeof GalataDB !== 'undefined') {
+                        const cachedProducts = await GalataDB.getProducts();
+                        if (cachedProducts && cachedProducts.length > 0) {
+                            products = cachedProducts;
+                            renderProducts();
+                            hasLocalData = true;
+                            console.log('✅ IndexedDB önbelleği yüklendi:', products.length);
+                        }
+                    }
+                } catch (dbError) {
+                    console.warn('⚠️ IndexedDB hatası, localStorage deneniyor:', dbError.message);
+                    // IndexedDB başarısız olursa localStorage'dan dene
+                    try {
+                        const localData = localStorage.getItem('galatacarsi_products');
+                        if (localData) {
+                            const localProducts = JSON.parse(localData);
+                            if (localProducts && localProducts.length > 0) {
+                                products = localProducts;
+                                renderProducts();
+                                hasLocalData = true;
+                                console.log('✅ localStorage önbelleği yüklendi:', products.length);
+                            }
+                        }
+                    } catch (lsError) {
+                        console.warn('⚠️ localStorage da okunamadı:', lsError.message);
                     }
                 }
 
                 // 2. ARKA PLANDA API'DEN GÜNCEL VERİYİ ÇEK
-                const response = await ADMIN_API.getProducts({ limit: 300 });
+                try {
+                    const response = await ADMIN_API.getProducts({ limit: 300 });
 
-                if (response.success && response.data) {
-                    console.log('? API verisi geldi:', response.data.length);
-                    products = response.data;
+                    if (response.success && response.data) {
+                        console.log('✅ API verisi geldi:', response.data.length);
+                        products = response.data;
 
-                    // Pending listesini harmanla
-                    const pending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
-                    if (pending.length > 0) {
-                        pending.forEach(p => {
-                            if (!products.find(ap => (ap._id || ap.id) === (p._id || p.id))) {
-                                products.unshift(p);
+                        // Pending listesini harmanla
+                        const pending = JSON.parse(localStorage.getItem('galatacarsi_pending_products') || '[]');
+                        if (pending.length > 0) {
+                            pending.forEach(p => {
+                                if (!products.find(ap => (ap._id || ap.id) === (p._id || p.id))) {
+                                    products.unshift(p);
+                                }
+                            });
+                        }
+
+                        // IndexedDB'yi güncelle (Ana Depo) - Hata olsa bile devam et
+                        try {
+                            if (typeof GalataDB !== 'undefined') {
+                                await GalataDB.saveProducts(products);
                             }
-                        });
-                    }
+                        } catch (saveError) {
+                            console.warn('⚠️ IndexedDB kayıt hatası (devam ediliyor):', saveError.message);
+                        }
 
-                    // IndexedDB'yi güncelle (Ana Depo)
-                    if (typeof GalataDB !== 'undefined') {
-                        await GalataDB.saveProducts(products);
+                        // localStorage'a da kaydet (backup)
+                        try {
+                            if (products.length < 500) { // Çok büyük değilse
+                                localStorage.setItem('galatacarsi_products', JSON.stringify(products));
+                            }
+                        } catch (e) { /* localStorage doluysa ignore */ }
+
+                        renderProducts();
+                    } else if (!hasLocalData) {
+                        // API başarısız ve yerel veri de yoksa hata göster
+                        showError('Ürünler yüklenemedi. Sunucu yanıt vermiyor.');
                     }
-                    renderProducts();
+                } catch (apiError) {
+                    console.warn('⚠️ API Hatası:', apiError.message);
+                    if (!hasLocalData) {
+                        showError('Sunucu bağlantısı kurulamadı. Lütfen sayfayı yenileyin.');
+                    }
                 }
             } catch (error) {
-                console.warn('?? API Hatası veya Zaman Aşımı, önbellek kullanılıyor.');
+                console.error('❌ loadProducts kritik hata:', error);
+                showError('Beklenmeyen bir hata oluştu: ' + error.message);
             } finally {
                 isLoading = false;
             }

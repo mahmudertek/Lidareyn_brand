@@ -3,7 +3,7 @@
 
 const GalataDB = {
     dbName: 'GalataCarsiDB',
-    dbVersion: 1,
+    dbVersion: 3, // Versiyon 1 -> 3 güncellendi (VersionError düzeltmesi)
     db: null,
 
     // Veritabanını başlat
