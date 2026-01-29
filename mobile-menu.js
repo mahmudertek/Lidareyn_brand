@@ -2,12 +2,14 @@
 document.addEventListener('DOMContentLoaded', function () {
     const mobileCatBtn = document.querySelector('.mobile-categories-btn');
     const body = document.body;
+    const html = document.documentElement; // HTML element için
 
     if (mobileCatBtn) {
         mobileCatBtn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             body.classList.toggle('mobile-menu-active');
+            html.classList.toggle('mobile-menu-active'); // HTML'e de ekle (scroll lock için)
 
             // Toggle icon state if needed (optional)
             const icon = this.querySelector('i');
@@ -67,6 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (!clickedInsideMenu && !clickedBtn) {
                 body.classList.remove('mobile-menu-active');
+                html.classList.remove('mobile-menu-active'); // HTML'den de kaldır
                 const icon = mobileCatBtn.querySelector('i');
                 if (icon) {
                     icon.classList.remove('fa-xmark');

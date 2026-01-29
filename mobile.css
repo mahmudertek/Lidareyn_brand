@@ -333,11 +333,22 @@
         left: 0 !important;
         width: 100% !important;
         height: calc(100vh - 76px) !important;
+        height: calc(100dvh - 76px) !important;
+        /* Dynamic viewport height for mobile browsers */
         background: #fff !important;
         z-index: 2000 !important;
         overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        /* iOS smooth scroll */
+        overscroll-behavior: contain !important;
+        /* Prevent scroll chaining */
+        touch-action: pan-y !important;
+        /* Allow vertical touch scroll */
         box-shadow: none !important;
         padding: 0 !important;
+        padding-bottom: 100px !important;
+        /* Extra space at bottom for easier scrolling */
         opacity: 1 !important;
         visibility: visible !important;
         transform: none !important;
@@ -441,12 +452,24 @@
         padding: 5px 0 !important;
     }
 
-    /* Disable body scroll when menu is open */
+    /* Disable body scroll when menu is open - BUT allow mega-menu to scroll */
     body.mobile-menu-active {
         overflow: hidden !important;
-        position: fixed !important;
-        /* Lock body position */
+        /* position: fixed was causing touch scroll issues - removed */
         width: 100% !important;
+        height: 100% !important;
+        touch-action: none !important;
+        /* Disable touch on body */
+    }
+
+    /* Re-enable touch scroll specifically on mega-menu */
+    body.mobile-menu-active .mega-menu {
+        touch-action: pan-y !important;
+    }
+
+    /* Also ensure html doesn't scroll */
+    html.mobile-menu-active {
+        overflow: hidden !important;
     }
 
     /* Ensure existing menu item left structure works */
