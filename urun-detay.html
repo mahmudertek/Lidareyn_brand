@@ -500,10 +500,6 @@
                         <span class="meta-label"><i class="fa-solid fa-box"></i> Stok Kodu:</span>
                         <span class="meta-value" id="product-stock-code">---</span>
                     </div>
-                    <div class="meta-item">
-                        <span class="meta-label"><i class="fa-solid fa-barcode"></i> Barkod:</span>
-                        <span class="meta-value" id="product-barcode">---</span>
-                    </div>
                 </div>
 
                 <div class="product-price-container">
@@ -754,13 +750,9 @@
                     const catLink = document.getElementById('product-category-link');
                     if (catLink) catLink.textContent = p.category || 'Belirtilmemiş';
 
-                    // Stok & Barkod
+                    // Stok Kodu
                     const stockEl = document.getElementById('product-stock-code');
                     if (stockEl) stockEl.textContent = p.stockCode || p.sku || p.stock_code || '-';
-
-                    const barcodeEl = document.getElementById('product-barcode');
-                    // Sadece gerçek barkodu göster, sahte barkod üretme
-                    if (barcodeEl) barcodeEl.textContent = p.barcode || '-';
 
                     // Açıklama
                     const descEl = document.getElementById('desc-text');

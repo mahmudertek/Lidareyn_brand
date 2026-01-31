@@ -19,6 +19,7 @@
     <script src="../categories-data.js?v=1767181000"></script>
     <script src="../categories-sync.js?v=1767181000"></script>
     <script src="admin-api.js?v=1767579001"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
     <script src="../products-data.js?v=1767181000"></script>
     <script src="indexed-db-storage.js?v=1"></script>
     <script>
@@ -781,6 +782,200 @@
                             <i class="fa-solid fa-plus"></i>
                             Yeni Ürün Ekle
                         </button>
+                        <button class="add-product-btn" style="background: #10b981; opacity: 0.9;"
+                            onclick="openExcelModal()">
+                            <i class="fa-solid fa-file-excel"></i>
+                            Excel ile Ürün Yükle
+                        </button>
+                    </div>
+                </div>
+
+                <!-- EXCEL IMPORT MODAL (GELİŞMİŞ) -->
+                <div class="modal-overlay" id="excelModal">
+                    <div class="modal" style="max-width: 900px; width: 95%;">
+                        <div class="modal-header" style="background: linear-gradient(135deg, #10b981, #059669);">
+                            <h3 style="color: white; display: flex; align-items: center; gap: 10px;">
+                                <i class="fa-solid fa-file-excel"></i>
+                                Excel Entegrasyonu
+                            </h3>
+                            <button class="modal-close" onclick="closeExcelModal()"
+                                style="color: white; opacity: 0.8;">&times;</button>
+                        </div>
+                        <div class="modal-body" style="padding: 24px; max-height: 70vh; overflow-y: auto;">
+
+                            <!-- Tab Navigation -->
+                            <div
+                                style="display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px;">
+                                <button onclick="switchExcelTab('import')" id="tabImport" class="excel-tab active"
+                                    style="padding: 10px 20px; border: none; background: #10b981; color: white; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer;">
+                                    <i class="fa-solid fa-upload"></i> İçe Aktar
+                                </button>
+                                <button onclick="switchExcelTab('export')" id="tabExport" class="excel-tab"
+                                    style="padding: 10px 20px; border: none; background: #f1f5f9; color: #64748b; border-radius: 8px 8px 0 0; font-weight: 600; cursor: pointer;">
+                                    <i class="fa-solid fa-download"></i> Dışa Aktar
+                                </button>
+                            </div>
+
+                            <!-- IMPORT TAB -->
+                            <div id="importTab">
+                                <div
+                                    style="background: #f0fdf4; border: 1px dashed #22c55e; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                                    <p style="font-size: 13px; color: #166534; margin: 0;">
+                                        <strong>📋 Desteklenen Sütunlar:</strong> StokKodu, UrunAdi, Marka, Fiyat,
+                                        IndirimliFiyat, Stok, Olcu, Kategori, AltKategori, Aciklama, Birim,
+                                        GorselURL<br>
+                                        <strong>💡 İpucu:</strong> "GorselURL" sütununa görsel linki yazarsanız otomatik
+                                        çekilir!
+                                    </p>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 20px;">
+                                    <label
+                                        style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">
+                                        Excel Dosyası Seçin (.xlsx, .xls)
+                                    </label>
+                                    <input type="file" id="excelFile" accept=".xlsx, .xls"
+                                        onchange="previewExcelFile(this)"
+                                        style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                                </div>
+
+                                <!-- Önizleme Tablosu -->
+                                <div id="excelPreviewSection" style="display: none; margin-bottom: 20px;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                        <label style="font-weight: 600; font-size: 14px;">📊 Veri Önizleme <span
+                                                id="previewCount"
+                                                style="color: #64748b; font-weight: 400;"></span></label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <span id="duplicateWarning"
+                                                style="display: none; color: #ea580c; font-size: 12px;">
+                                                <i class="fa-solid fa-triangle-exclamation"></i> <span
+                                                    id="duplicateCount">0</span> adet SKU mevcut!
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div
+                                        style="max-height: 200px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
+                                        <table id="previewTable"
+                                            style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                                            <thead style="background: #f8fafc; position: sticky; top: 0;">
+                                                <tr id="previewHeader"></tr>
+                                            </thead>
+                                            <tbody id="previewBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Duplicate Handling -->
+                                <div class="form-group"
+                                    style="margin-bottom: 20px; background: #fef3c7; padding: 12px; border-radius: 8px;">
+                                    <label
+                                        style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block; color: #92400e;">
+                                        ⚠️ Aynı SKU ile ürün varsa ne yapılsın?
+                                    </label>
+                                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                            <input type="radio" name="duplicateAction" value="skip" checked> Atla (Ekle)
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                            <input type="radio" name="duplicateAction" value="update"> Güncelle
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                            <input type="radio" name="duplicateAction" value="duplicate"> Yine de Ekle
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Ortak Görsel -->
+                                <div class="form-group" style="margin-bottom: 20px;">
+                                    <label
+                                        style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">
+                                        Set İçin Ortak Görsel (Opsiyonel)
+                                    </label>
+                                    <div id="excelImagePreview"
+                                        style="display: none; margin-bottom: 10px; text-align: center;">
+                                        <img id="excelPreviewImg" src=""
+                                            style="max-width: 100px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                                    </div>
+                                    <input type="file" id="excelCommonImage" accept="image/*"
+                                        onchange="handleExcelCommonImage(this)"
+                                        style="width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                                    <small style="color: #64748b; font-size: 11px;">GorselURL sütunu boş olan ürünler
+                                        için bu görsel kullanılır.</small>
+                                </div>
+
+                                <!-- Progress -->
+                                <div id="importProgress" style="display: none; margin-bottom: 20px;">
+                                    <div
+                                        style="height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden;">
+                                        <div id="progressBar"
+                                            style="width: 0%; height: 100%; background: #10b981; transition: width 0.3s;">
+                                        </div>
+                                    </div>
+                                    <p id="progressText"
+                                        style="font-size: 12px; color: #64748b; margin-top: 5px; text-align: center;">
+                                        Hazırlanıyor...</p>
+                                </div>
+
+                                <!-- Hata Raporu -->
+                                <div id="errorReportSection"
+                                    style="display: none; margin-bottom: 20px; background: #fef2f2; padding: 12px; border-radius: 8px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <span style="color: #991b1b; font-weight: 600;"><i
+                                                class="fa-solid fa-circle-exclamation"></i> <span
+                                                id="errorCount">0</span> ürün başarısız oldu</span>
+                                        <button onclick="downloadErrorReport()"
+                                            style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">
+                                            <i class="fa-solid fa-download"></i> Hata Raporu İndir
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Buttons -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                    <button onclick="downloadExcelTemplate()"
+                                        style="background: #f8fafc; color: #475569; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        <i class="fa-solid fa-file-arrow-down"></i> Şablonu İndir
+                                    </button>
+                                    <button onclick="processExcelImport()" id="importBtn"
+                                        style="background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        <i class="fa-solid fa-rocket"></i> Yüklemeyi Başlat
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- EXPORT TAB -->
+                            <div id="exportTab" style="display: none;">
+                                <div
+                                    style="background: #eff6ff; border: 1px dashed #3b82f6; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                                    <p style="font-size: 13px; color: #1e40af; margin: 0;">
+                                        <strong>📥 Dışa Aktar:</strong> Sistemdeki tüm ürünleri Excel formatında
+                                        indirebilirsiniz. Bu dosyayı düzenleyip tekrar içe aktarabilirsiniz.
+                                    </p>
+                                </div>
+
+                                <div class="form-group" style="margin-bottom: 20px;">
+                                    <label
+                                        style="font-weight: 600; font-size: 14px; margin-bottom: 8px; display: block;">Hangi
+                                        Ürünler?</label>
+                                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                            <input type="radio" name="exportScope" value="all" checked> Tüm Ürünler
+                                        </label>
+                                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                                            <input type="radio" name="exportScope" value="filtered"> Filtrelenmiş
+                                            Ürünler
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <button onclick="exportProductsToExcel()"
+                                    style="width: 100%; background: #3b82f6; color: white; padding: 14px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 15px;">
+                                    <i class="fa-solid fa-file-excel"></i> Ürünleri Excel Olarak İndir
+                                </button>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
 
@@ -3719,6 +3914,311 @@
                 btn.disabled = false;
                 btn.innerHTML = 'Hata';
             }
+        }
+
+        // ==================== EXCEL IMPORT FONKSİYONLARI ====================
+        let excelUploadedImage = '';
+
+        function openExcelModal() {
+            document.getElementById('excelModal').classList.add('active');
+            resetExcelModal();
+        }
+
+        function closeExcelModal() {
+            document.getElementById('excelModal').classList.remove('active');
+        }
+
+        function resetExcelModal() {
+            document.getElementById('excelFile').value = '';
+            document.getElementById('excelCommonImage').value = '';
+            document.getElementById('excelImagePreview').style.display = 'none';
+            document.getElementById('excelPreviewImg').src = '';
+            excelUploadedImage = '';
+            document.getElementById('importProgress').style.display = 'none';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = 'Hazırlanıyor...';
+            document.getElementById('importBtn').disabled = false;
+        }
+
+        function handleExcelCommonImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            compressImage(file, 800, 0.7).then(base64 => {
+                excelUploadedImage = base64;
+                document.getElementById('excelPreviewImg').src = base64;
+                document.getElementById('excelImagePreview').style.display = 'block';
+            });
+        }
+
+        function downloadExcelTemplate() {
+            const data = [
+                ["StokKodu", "UrunAdi", "Marka", "Fiyat", "IndirimliFiyat", "Stok", "Olcu", "Kategori", "AltKategori", "Aciklama", "Birim", "GorselURL"],
+                ["SKU001", "Örnek Ürün Seti", "Lidareyn", 150, 120, 100, "S", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", ""],
+                ["SKU002", "Örnek Ürün Seti", "Lidareyn", 160, 130, 100, "M", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", ""],
+                ["SKU003", "Örnek Ürün Seti", "Lidareyn", 170, 140, 100, "L", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", "https://example.com/resim.jpg"]
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            // Sütun genişliklerini ayarla
+            ws['!cols'] = [
+                { wch: 12 }, { wch: 25 }, { wch: 15 }, { wch: 10 }, { wch: 12 },
+                { wch: 8 }, { wch: 8 }, { wch: 15 }, { wch: 15 }, { wch: 30 }, { wch: 8 }, { wch: 40 }
+            ];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Urunler");
+            XLSX.writeFile(wb, "Lidareyn_Urun_Yukleme_Sablonu.xlsx");
+        }
+
+        // Tab değiştirme
+        function switchExcelTab(tab) {
+            document.getElementById('importTab').style.display = tab === 'import' ? 'block' : 'none';
+            document.getElementById('exportTab').style.display = tab === 'export' ? 'block' : 'none';
+
+            document.getElementById('tabImport').style.background = tab === 'import' ? '#10b981' : '#f1f5f9';
+            document.getElementById('tabImport').style.color = tab === 'import' ? 'white' : '#64748b';
+            document.getElementById('tabExport').style.background = tab === 'export' ? '#3b82f6' : '#f1f5f9';
+            document.getElementById('tabExport').style.color = tab === 'export' ? 'white' : '#64748b';
+        }
+
+        // Excel önizleme için global veri
+        let excelPreviewData = [];
+        let importErrors = [];
+
+        // Excel dosyası seçildiğinde önizleme göster
+        function previewExcelFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array' });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                excelPreviewData = XLSX.utils.sheet_to_json(worksheet);
+
+                if (excelPreviewData.length === 0) {
+                    alert('Excel dosyası boş!');
+                    return;
+                }
+
+                // Önizleme bölümünü göster
+                document.getElementById('excelPreviewSection').style.display = 'block';
+                document.getElementById('previewCount').textContent = `(${excelPreviewData.length} satır)`;
+
+                // Tablo başlıklarını oluştur
+                const headers = Object.keys(excelPreviewData[0]);
+                const headerRow = document.getElementById('previewHeader');
+                headerRow.innerHTML = headers.map(h => `<th style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; font-weight: 600;">${h}</th>`).join('');
+
+                // İlk 10 satırı göster
+                const previewRows = excelPreviewData.slice(0, 10);
+                const tbody = document.getElementById('previewBody');
+                tbody.innerHTML = previewRows.map((row, idx) => {
+                    return `<tr style="background: ${idx % 2 === 0 ? '#fff' : '#f8fafc'}">
+                        ${headers.map(h => `<td style="padding: 6px 10px; border-bottom: 1px solid #f1f5f9;">${row[h] || '-'}</td>`).join('')}
+                    </tr>`;
+                }).join('');
+
+                // Duplicate kontrolü
+                checkDuplicates();
+            };
+            reader.readAsArrayBuffer(file);
+        }
+
+        // SKU duplicate kontrolü
+        function checkDuplicates() {
+            const existingSkus = products.map(p => (p.sku || '').toLowerCase());
+            const newSkus = excelPreviewData.map(row => (row.StokKodu || row.SKU || '').toLowerCase());
+
+            let duplicateCount = 0;
+            newSkus.forEach(sku => {
+                if (sku && existingSkus.includes(sku)) duplicateCount++;
+            });
+
+            if (duplicateCount > 0) {
+                document.getElementById('duplicateWarning').style.display = 'inline';
+                document.getElementById('duplicateCount').textContent = duplicateCount;
+            } else {
+                document.getElementById('duplicateWarning').style.display = 'none';
+            }
+        }
+
+        async function processExcelImport() {
+            if (excelPreviewData.length === 0) {
+                alert('Lütfen önce bir Excel dosyası seçin!');
+                return;
+            }
+
+            const duplicateAction = document.querySelector('input[name="duplicateAction"]:checked').value;
+
+            document.getElementById('importBtn').disabled = true;
+            document.getElementById('importProgress').style.display = 'block';
+            document.getElementById('errorReportSection').style.display = 'none';
+            importErrors = [];
+
+            let successCount = 0;
+            let failCount = 0;
+            let skipCount = 0;
+            const total = excelPreviewData.length;
+            const existingSkus = products.map(p => ({ sku: (p.sku || '').toLowerCase(), id: p._id || p.id }));
+
+            for (let i = 0; i < total; i++) {
+                const row = excelPreviewData[i];
+                const sku = (row.StokKodu || row.SKU || '').toLowerCase();
+
+                // Duplicate kontrolü
+                const existingProduct = existingSkus.find(p => p.sku === sku);
+                if (existingProduct && duplicateAction === 'skip') {
+                    skipCount++;
+                    const percent = Math.round(((i + 1) / total) * 100);
+                    document.getElementById('progressBar').style.width = percent + '%';
+                    document.getElementById('progressText').textContent = `${i + 1} / ${total} (${skipCount} atlandı)`;
+                    continue;
+                }
+
+                // Ürün verisini oluştur
+                const productData = {
+                    sku: row.StokKodu || row.SKU || ('EX-' + Date.now() + i),
+                    name: (row.UrunAdi || row.Name || '').trim(),
+                    brand: (row.Marka || row.Brand || 'Lidareyn').trim(),
+                    price: parseFloat(row.Fiyat || row.Price) || 0,
+                    salePrice: row.IndirimliFiyat || row.SalePrice ? parseFloat(row.IndirimliFiyat || row.SalePrice) : null,
+                    stock: parseInt(row.Stok || row.Stock) || 0,
+                    category: (row.Kategori || row.Category || 'Genel').trim(),
+                    subCategory: (row.AltKategori || row.SubCategory || '').trim(),
+                    description: (row.Aciklama || row.Description || '').trim(),
+                    unit: (row.Birim || row.Unit || 'adet').trim(),
+                    isActive: true,
+                    mainImage: row.GorselURL || row.ImageURL || excelUploadedImage || `https://placehold.co/400x400/6366f1/fff?text=${(row.Marka || 'L').charAt(0)}`
+                };
+
+                // Ölçü bilgisini isme ekle
+                const measure = row.Olcu || row.Measure || row.Size;
+                if (measure && !productData.name.includes(measure)) {
+                    productData.name += ` - ${measure}`;
+                }
+
+                if (!productData.name || !productData.brand) {
+                    failCount++;
+                    importErrors.push({ row: i + 2, sku: productData.sku, error: 'Ürün adı veya marka eksik' });
+                    continue;
+                }
+
+                try {
+                    let response;
+                    if (existingProduct && duplicateAction === 'update') {
+                        // Güncelle
+                        response = await ADMIN_API.updateProduct(existingProduct.id, productData);
+                    } else {
+                        // Yeni ekle
+                        response = await ADMIN_API.createProduct(productData);
+                    }
+
+                    if (response.success) {
+                        successCount++;
+                    } else {
+                        failCount++;
+                        importErrors.push({ row: i + 2, sku: productData.sku, error: response.error || 'Bilinmeyen hata' });
+                    }
+                } catch (err) {
+                    console.error('Import hatası (Row ' + i + '):', err);
+                    failCount++;
+                    importErrors.push({ row: i + 2, sku: productData.sku, error: err.message });
+                }
+
+                // Progress güncelle
+                const percent = Math.round(((i + 1) / total) * 100);
+                document.getElementById('progressBar').style.width = percent + '%';
+                document.getElementById('progressText').textContent = `${i + 1} / ${total} (✅ ${successCount} | ❌ ${failCount} | ⏭️ ${skipCount})`;
+            }
+
+            // Hata raporu göster
+            if (importErrors.length > 0) {
+                document.getElementById('errorReportSection').style.display = 'block';
+                document.getElementById('errorCount').textContent = importErrors.length;
+            }
+
+            document.getElementById('importBtn').disabled = false;
+            alert(`İşlem tamamlandı!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam: ${total}`);
+
+            // Ürün listesini yenile
+            await loadProducts();
+        }
+
+        // Hata raporu indir
+        function downloadErrorReport() {
+            if (importErrors.length === 0) {
+                alert('Hata bulunamadı!');
+                return;
+            }
+
+            const data = [
+                ["Satır No", "SKU", "Hata Mesajı"],
+                ...importErrors.map(e => [e.row, e.sku, e.error])
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Hatalar");
+            XLSX.writeFile(wb, "Import_Hata_Raporu.xlsx");
+        }
+
+        // Ürünleri Excel'e aktar
+        function exportProductsToExcel() {
+            const exportScope = document.querySelector('input[name="exportScope"]:checked').value;
+
+            let dataToExport = products;
+            if (exportScope === 'filtered') {
+                // Şu an filtrelenmiş ürünleri al (renderProducts'taki filtreleme mantığı)
+                const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+                const brand = document.getElementById('brandFilter')?.value || '';
+                const category = document.getElementById('categoryFilter')?.value || '';
+
+                dataToExport = products.filter(p => {
+                    const matchSearch = !search || (p.name || '').toLowerCase().includes(search) || (p.sku || '').toLowerCase().includes(search);
+                    const matchBrand = !brand || p.brand === brand;
+                    const matchCategory = !category || p.categorySlug === category || p.category === category;
+                    return matchSearch && matchBrand && matchCategory;
+                });
+            }
+
+            if (dataToExport.length === 0) {
+                alert('Dışa aktarılacak ürün bulunamadı!');
+                return;
+            }
+
+            const excelData = [
+                ["StokKodu", "UrunAdi", "Marka", "Fiyat", "IndirimliFiyat", "Stok", "Kategori", "AltKategori", "Aciklama", "Birim", "GorselURL", "Aktif"],
+                ...dataToExport.map(p => [
+                    p.sku || '',
+                    p.name || '',
+                    p.brand || '',
+                    p.price || 0,
+                    p.salePrice || '',
+                    p.stock || 0,
+                    p.category || '',
+                    p.subCategory || '',
+                    p.description || '',
+                    p.unit || 'adet',
+                    p.mainImage || '',
+                    p.isActive !== false ? 'Evet' : 'Hayır'
+                ])
+            ];
+
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            ws['!cols'] = [
+                { wch: 12 }, { wch: 30 }, { wch: 15 }, { wch: 10 }, { wch: 12 },
+                { wch: 8 }, { wch: 20 }, { wch: 20 }, { wch: 40 }, { wch: 8 }, { wch: 50 }, { wch: 8 }
+            ];
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Urunler");
+
+            const fileName = `Lidareyn_Urunler_${new Date().toISOString().split('T')[0]}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+
+            alert(`✅ ${dataToExport.length} ürün başarıyla dışa aktarıldı!`);
         }
     </script>
 
