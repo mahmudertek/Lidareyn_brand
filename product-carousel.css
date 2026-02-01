@@ -286,6 +286,12 @@
         display: flex !important;
         flex-direction: column !important;
         background: #fff !important;
+        /* Sabit yükseklik - tüm kartların aynı boyutta olmasını sağlar */
+        height: 200px !important;
+        min-height: 200px !important;
+        max-height: 200px !important;
+        flex-shrink: 0 !important;
+        flex-grow: 0 !important;
     }
 
     .product-carousel-image {
