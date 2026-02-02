@@ -712,43 +712,53 @@
                     </div>
                 </div>
                 <script>
-                    (function checkAPIStatus() {
+                    async function checkAPIStatus() {
                         const panel = document.getElementById('api-debug-panel');
                         const icon = document.getElementById('api-status-icon');
                         const text = document.getElementById('api-status-text');
 
+                        if (!panel || !icon || !text) return;
+
                         // 1. ADMIN_API var mı?
                         if (typeof ADMIN_API === 'undefined') {
-                            icon.textContent = '?';
+                            icon.textContent = '❌';
                             panel.style.background = '#dc2626';
                             text.innerHTML = '<strong>HATA:</strong> admin-api.js yüklenemedi! Sayfa bozuk. Lütfen Ctrl+F5 ile yenileyin.';
                             return;
                         }
 
                         // 2. Sunucuya bağlan
-                        text.textContent = 'Sunucuya bağlanılıyor...';
+                        text.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Sunucuya bağlanılıyor...';
+                        panel.style.background = '#1e293b';
 
-                        fetch(ADMIN_API.baseUrl + '/products?limit=1', {
-                            method: 'GET',
-                            headers: { 'Content-Type': 'application/json' }
-                        })
-                            .then(res => {
-                                if (res.ok) {
-                                    icon.textContent = '?';
-                                    panel.style.background = '#16a34a';
-                                    text.innerHTML = '<strong>SUNUCU BAĞLANTISI BAŞARILI!</strong> Ürünler yükleniyor...';
-                                    // 3 saniye sonra paneli gizle
-                                    setTimeout(() => { panel.style.display = 'none'; }, 3000);
-                                } else {
-                                    throw new Error('HTTP ' + res.status);
-                                }
-                            })
-                            .catch(err => {
-                                icon.textContent = '??';
-                                panel.style.background = '#ea580c';
-                                text.innerHTML = '<strong>SUNUCU YANITLAMIYOR!</strong> (' + err.message + ')<br>Sunucu uyku modunda olabilir. 1-2 dk bekleyip yenileyin veya yerel veriler gösterilecek.';
+                        try {
+                            const res = await fetch(ADMIN_API.baseUrl + '/products?limit=1', {
+                                method: 'GET',
+                                headers: { 'Content-Type': 'application/json' }
                             });
-                    })();
+
+                            if (res.ok) {
+                                icon.textContent = '✅';
+                                panel.style.background = '#16a34a';
+                                text.innerHTML = '<strong>SUNUCU BAĞLANTISI BAŞARILI!</strong> Ürünler yüklendi.';
+                                // 3 saniye sonra paneli gizle
+                                setTimeout(() => { panel.style.display = 'none'; }, 3000);
+                            } else {
+                                throw new Error('HTTP ' + res.status);
+                            }
+                        } catch (err) {
+                            icon.textContent = '⚠️';
+                            panel.style.background = '#ea580c';
+                            text.innerHTML = `<strong>SUNUCU YANITLAMIYOR!</strong> (${err.message})<br>
+                                Sunucu uyku modunda olabilir (Render Free Tier). 1 dk bekleyip tekrar deneyin.<br>
+                                <button onclick="checkAPIStatus()" style="margin-top: 8px; background: #fff; color: #ea580c; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold;">
+                                    <i class="fa-solid fa-rotate"></i> Tekrar Dene
+                                </button>`;
+                        }
+                    }
+
+                    // İlk açılışta çalıştır
+                    document.addEventListener('DOMContentLoaded', checkAPIStatus);
                 </script>
 
                 <!-- Header -->
@@ -3953,17 +3963,18 @@
 
         function downloadExcelTemplate() {
             const data = [
-                ["StokKodu", "UrunAdi", "Marka", "Fiyat", "IndirimliFiyat", "Stok", "Olcu", "Kategori", "AltKategori", "Aciklama", "Birim", "GorselURL"],
-                ["SKU001", "Örnek Ürün Seti", "Lidareyn", 150, 120, 100, "S", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", ""],
-                ["SKU002", "Örnek Ürün Seti", "Lidareyn", 160, 130, 100, "M", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", ""],
-                ["SKU003", "Örnek Ürün Seti", "Lidareyn", 170, 140, 100, "L", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", "https://example.com/resim.jpg"]
+                ["StokKodu", "UrunAdi", "Marka", "Fiyat", "IndirimliFiyat", "Stok", "Olcu", "Kategori", "AltKategori", "Aciklama", "Birim", "GorselURL", "Aktif", "PopulerMi", "YeniMi", "OneCikan", "CokSatan", "MarkaVitrini"],
+                ["SKU001", "Örnek Ürün Seti", "Lidareyn", 150, 120, 100, "S", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", "", "Evet", "Hayır", "Evet", "Hayır", "Hayır", ""],
+                ["SKU002", "Örnek Ürün Seti", "Lidareyn", 160, 130, 100, "M", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", "", "Evet", "Evet", "Hayır", "Hayır", "Hayır", "beta"],
+                ["SKU003", "Örnek Ürün Seti", "Lidareyn", 170, 140, 100, "L", "Hırdavat", "El Aletleri", "Harika bir ürün", "adet", "https://example.com/resim.jpg", "Evet", "Hayır", "Hayır", "Evet", "Evet", "bosch"]
             ];
 
             const ws = XLSX.utils.aoa_to_sheet(data);
             // Sütun genişliklerini ayarla
             ws['!cols'] = [
                 { wch: 12 }, { wch: 25 }, { wch: 15 }, { wch: 10 }, { wch: 12 },
-                { wch: 8 }, { wch: 8 }, { wch: 15 }, { wch: 15 }, { wch: 30 }, { wch: 8 }, { wch: 40 }
+                { wch: 8 }, { wch: 8 }, { wch: 15 }, { wch: 15 }, { wch: 30 }, { wch: 8 }, { wch: 40 },
+                { wch: 8 }, { wch: 10 }, { wch: 8 }, { wch: 10 }, { wch: 10 }, { wch: 15 }
             ];
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Urunler");
@@ -4079,6 +4090,13 @@
                 }
 
                 // Ürün verisini oluştur
+                // Evet/Hayır değerlerini boolean'a çevir
+                const parseYesNo = (val) => {
+                    if (val === undefined || val === null || val === '') return false;
+                    const v = String(val).toLowerCase().trim();
+                    return v === 'evet' || v === 'yes' || v === '1' || v === 'true' || v === 'e';
+                };
+
                 const productData = {
                     sku: row.StokKodu || row.SKU || ('EX-' + Date.now() + i),
                     name: (row.UrunAdi || row.Name || '').trim(),
@@ -4090,8 +4108,14 @@
                     subCategory: (row.AltKategori || row.SubCategory || '').trim(),
                     description: (row.Aciklama || row.Description || '').trim(),
                     unit: (row.Birim || row.Unit || 'adet').trim(),
-                    isActive: true,
-                    mainImage: row.GorselURL || row.ImageURL || excelUploadedImage || `https://placehold.co/400x400/6366f1/fff?text=${(row.Marka || 'L').charAt(0)}`
+                    mainImage: row.GorselURL || row.ImageURL || excelUploadedImage || `https://placehold.co/400x400/6366f1/fff?text=${(row.Marka || 'L').charAt(0)}`,
+                    // Yerleştirme etiketleri
+                    isActive: row.Aktif !== undefined ? parseYesNo(row.Aktif) : true,
+                    isPopular: parseYesNo(row.PopulerMi),
+                    isNew: parseYesNo(row.YeniMi),
+                    isFeatured: parseYesNo(row.OneCikan),
+                    isBestSeller: parseYesNo(row.CokSatan),
+                    brandShowcase: (row.MarkaVitrini || '').toString().toLowerCase().trim() || null
                 };
 
                 // Ölçü bilgisini isme ekle
@@ -4154,9 +4178,14 @@
                 return;
             }
 
+            const safeLimit = (val) => {
+                if (typeof val !== 'string') return val;
+                return val.length > 32000 ? val.substring(0, 32000) + '...' : val;
+            };
+
             const data = [
                 ["Satır No", "SKU", "Hata Mesajı"],
-                ...importErrors.map(e => [e.row, e.sku, e.error])
+                ...importErrors.map(e => [e.row, safeLimit(e.sku), safeLimit(e.error)])
             ];
 
             const ws = XLSX.utils.aoa_to_sheet(data);
@@ -4189,28 +4218,47 @@
                 return;
             }
 
+            // Excel hücre limiti (32767 karakter) kontrolü için yardımcı fonksiyon
+            const safeCell = (val) => {
+                if (typeof val !== 'string') return val;
+                if (val.length > 32700) {
+                    // Eğer base64 ise ve çok uzunsa, sadece tipi gösterelim yoksa Excel çöker
+                    if (val.startsWith('data:image')) {
+                        return '[Görsel Verisi (Çok Büyük)]';
+                    }
+                    return val.substring(0, 32700) + '... (Limit Aşıldı)';
+                }
+                return val;
+            };
+
             const excelData = [
-                ["StokKodu", "UrunAdi", "Marka", "Fiyat", "IndirimliFiyat", "Stok", "Kategori", "AltKategori", "Aciklama", "Birim", "GorselURL", "Aktif"],
+                ["StokKodu", "UrunAdi", "Marka", "Fiyat", "IndirimliFiyat", "Stok", "Kategori", "AltKategori", "Aciklama", "Birim", "GorselURL", "Aktif", "PopulerMi", "YeniMi", "OneCikan", "CokSatan", "MarkaVitrini"],
                 ...dataToExport.map(p => [
-                    p.sku || '',
-                    p.name || '',
-                    p.brand || '',
+                    safeCell(p.sku || ''),
+                    safeCell(p.name || ''),
+                    safeCell(p.brand || ''),
                     p.price || 0,
                     p.salePrice || '',
                     p.stock || 0,
-                    p.category || '',
-                    p.subCategory || '',
-                    p.description || '',
-                    p.unit || 'adet',
-                    p.mainImage || '',
-                    p.isActive !== false ? 'Evet' : 'Hayır'
+                    safeCell(p.category || ''),
+                    safeCell(p.subCategory || ''),
+                    safeCell(p.description || ''),
+                    safeCell(p.unit || 'adet'),
+                    safeCell(p.mainImage || ''),
+                    p.isActive !== false ? 'Evet' : 'Hayır',
+                    p.isPopular ? 'Evet' : 'Hayır',
+                    p.isNew ? 'Evet' : 'Hayır',
+                    p.isFeatured ? 'Evet' : 'Hayır',
+                    p.isBestSeller ? 'Evet' : 'Hayır',
+                    safeCell(p.brandShowcase || '')
                 ])
             ];
 
             const ws = XLSX.utils.aoa_to_sheet(excelData);
             ws['!cols'] = [
                 { wch: 12 }, { wch: 30 }, { wch: 15 }, { wch: 10 }, { wch: 12 },
-                { wch: 8 }, { wch: 20 }, { wch: 20 }, { wch: 40 }, { wch: 8 }, { wch: 50 }, { wch: 8 }
+                { wch: 8 }, { wch: 20 }, { wch: 20 }, { wch: 40 }, { wch: 8 }, { wch: 50 }, { wch: 8 },
+                { wch: 10 }, { wch: 8 }, { wch: 10 }, { wch: 10 }, { wch: 15 }
             ];
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Urunler");
