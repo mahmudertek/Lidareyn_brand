@@ -4191,9 +4191,23 @@
                     subCategory: (row.AltKategori || row.SubCategory || '').trim(),
                     description: (row.Aciklama || row.Description || '').trim(),
                     unit: (row.Birim || row.Unit || 'adet').trim(),
-                    mainImage: (row.GorselURL && row.GorselURL.length > 5 && !row.GorselURL.includes('gorseller/'))
-                        ? row.GorselURL
-                        : (excelUploadedImage || `https://placehold.co/400x400/6366f1/fff?text=${(row.Marka || 'L').charAt(0)}`),
+                    mainImage: (() => {
+                        let url = row.GorselURL;
+                        if (!url || url.length < 5 || url.includes('placeholder')) return excelUploadedImage || `https://placehold.co/400x400/6366f1/fff?text=${(row.Marka || 'L').charAt(0)}`;
+
+                        // Fix slashes and spaces
+                        url = url.trim().replace(/\\/g, '/');
+
+                        if (url.startsWith('http') || url.startsWith('data:')) return url;
+
+                        // Ensure root-relative path
+                        if (!url.startsWith('/')) {
+                            if (!url.includes('/')) return '/gorseller/' + url;
+                            return '/' + url;
+                        }
+
+                        return url;
+                    })(),
                     // Yerleştirme etiketleri
                     isActive: row.Aktif !== undefined ? parseYesNo(row.Aktif) : true,
                     isPopular: parseYesNo(row.PopulerMi),
@@ -4228,6 +4242,14 @@
                     if (response.success) {
                         successCount++;
                     } else {
+                        // 401 Kontrolü (Oturum Süresi)
+                        if (response.status === 401 || (response.error && (response.error.includes('401') || response.error.includes('Unauthorized') || response.error.includes('yetkisiz')))) {
+                            alert('⚠️ Oturum süreniz dolmuş veya yetkiniz yok.\n\nLütfen sayfayı yenileyip tekrar giriş yapın.');
+                            isImportStopped = true; // Döngüyü durdur
+                            window.location.href = 'login.html'; // Login'e at
+                            break;
+                        }
+
                         failCount++;
                         importErrors.push({ row: i + 2, sku: productData.sku, error: response.error || 'Bilinmeyen hata' });
                     }
@@ -4236,31 +4258,31 @@
                     failCount++;
                     importErrors.push({ row: i + 2, sku: productData.sku, error: err.message });
                 }
-
                 // Progress güncelle
                 const percent = Math.round(((i + 1) / total) * 100);
                 document.getElementById('progressBar').style.width = percent + '%';
                 document.getElementById('progressText').textContent = `${i + 1} / ${total} (✅ ${successCount} | ❌ ${failCount} | ⏭️ ${skipCount})`;
             }
+        }
 
-            // Hata raporu göster
-            if (importErrors.length > 0) {
-                document.getElementById('errorReportSection').style.display = 'block';
-                document.getElementById('errorCount').textContent = importErrors.length;
-            }
+        // Hata raporu göster
+        if (importErrors.length > 0) {
+            document.getElementById('errorReportSection').style.display = 'block';
+            document.getElementById('errorCount').textContent = importErrors.length;
+        }
 
-            document.getElementById('importBtn').disabled = false;
-            document.getElementById('importBtn').style.display = 'flex';
-            document.getElementById('stopImportBtn').style.display = 'none';
+        document.getElementById('importBtn').disabled = false;
+        document.getElementById('importBtn').style.display = 'flex';
+        document.getElementById('stopImportBtn').style.display = 'none';
 
-            if (isImportStopped) {
-                alert(`?? İşlem Durduruldu!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam İşlenen: ${successCount + failCount + skipCount} / ${total}`);
-            } else {
-                alert(`İşlem tamamlandı!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam: ${total}`);
-            }
+        if (isImportStopped) {
+            alert(`?? İşlem Durduruldu!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam İşlenen: ${successCount + failCount + skipCount} / ${total}`);
+        } else {
+            alert(`İşlem tamamlandı!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam: ${total}`);
+        }
 
-            // Ürün listesini yenile
-            await loadProducts();
+        // Ürün listesini yenile
+        await loadProducts();
         }
 
         // Hata raporu indir
