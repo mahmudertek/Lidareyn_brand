@@ -951,6 +951,10 @@
                                         style="background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                                         <i class="fa-solid fa-rocket"></i> Yüklemeyi Başlat
                                     </button>
+                                    <button onclick="stopExcelImport()" id="stopImportBtn"
+                                        style="display: none; background: #ef4444; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px;">
+                                        <i class="fa-solid fa-stop"></i> Yüklemeyi Durdur
+                                    </button>
                                 </div>
                             </div>
 
@@ -3924,6 +3928,8 @@
             document.getElementById('progressBar').style.width = '0%';
             document.getElementById('progressText').textContent = 'Hazırlanıyor...';
             document.getElementById('importBtn').disabled = false;
+            document.getElementById('importBtn').style.display = 'flex';
+            document.getElementById('stopImportBtn').style.display = 'none';
         }
 
         function handleExcelCommonImage(input) {
@@ -4032,6 +4038,20 @@
             }
         }
 
+        // Import durdurma flag'i
+        let isImportStopped = false;
+
+        function stopExcelImport() {
+            if (confirm('Yüklemeyi durdurmak istediğinize emin misiniz?')) {
+                isImportStopped = true;
+                const stopBtn = document.getElementById('stopImportBtn');
+                if (stopBtn) {
+                    stopBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Durduruluyor...';
+                    stopBtn.disabled = true;
+                }
+            }
+        }
+
         async function processExcelImport() {
             if (excelPreviewData.length === 0) {
                 alert('Lütfen önce bir Excel dosyası seçin!');
@@ -4040,7 +4060,14 @@
 
             const duplicateAction = document.querySelector('input[name="duplicateAction"]:checked').value;
 
-            document.getElementById('importBtn').disabled = true;
+            // UI'ı güncelle
+            isImportStopped = false;
+            document.getElementById('importBtn').style.display = 'none';
+            const stopBtn = document.getElementById('stopImportBtn');
+            stopBtn.style.display = 'flex';
+            stopBtn.disabled = false;
+            stopBtn.innerHTML = '<i class="fa-solid fa-stop"></i> Yüklemeyi Durdur';
+
             document.getElementById('importProgress').style.display = 'block';
             document.getElementById('errorReportSection').style.display = 'none';
 
@@ -4125,6 +4152,13 @@
             const existingSkus = products.map(p => ({ sku: (p.sku || '').toLowerCase(), id: p._id || p.id }));
 
             for (let i = 0; i < total; i++) {
+                // Durduruldu mu kontrol et
+                if (isImportStopped) {
+                    document.getElementById('progressText').innerHTML =
+                        `${i} / ${total} (✅ ${successCount} | ❌ ${failCount} | ⏭️ ${skipCount}) <span style="color:#ef4444; font-weight:bold; display:block; margin-top:5px;">?? İŞLEM KULLANICI TARAFINDAN DURDURULDU</span>`;
+                    break;
+                }
+
                 const row = excelPreviewData[i];
                 const sku = (row.StokKodu || row.SKU || '').toLowerCase();
 
@@ -4214,7 +4248,14 @@
             }
 
             document.getElementById('importBtn').disabled = false;
-            alert(`İşlem tamamlandı!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam: ${total}`);
+            document.getElementById('importBtn').style.display = 'flex';
+            document.getElementById('stopImportBtn').style.display = 'none';
+
+            if (isImportStopped) {
+                alert(`?? İşlem Durduruldu!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam İşlenen: ${successCount + failCount + skipCount} / ${total}`);
+            } else {
+                alert(`İşlem tamamlandı!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam: ${total}`);
+            }
 
             // Ürün listesini yenile
             await loadProducts();
