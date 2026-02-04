@@ -2124,7 +2124,6 @@
                     localStorage.setItem('galatacarsi_pending_products', JSON.stringify(locals));
                 } catch (e2) { }
                 return false;
-                return false;
             }
         }
 
@@ -4263,26 +4262,25 @@
                 document.getElementById('progressBar').style.width = percent + '%';
                 document.getElementById('progressText').textContent = `${i + 1} / ${total} (✅ ${successCount} | ❌ ${failCount} | ⏭️ ${skipCount})`;
             }
-        }
 
-        // Hata raporu göster
-        if (importErrors.length > 0) {
-            document.getElementById('errorReportSection').style.display = 'block';
-            document.getElementById('errorCount').textContent = importErrors.length;
-        }
+            // Hata raporu göster
+            if (importErrors.length > 0) {
+                document.getElementById('errorReportSection').style.display = 'block';
+                document.getElementById('errorCount').textContent = importErrors.length;
+            }
 
-        document.getElementById('importBtn').disabled = false;
-        document.getElementById('importBtn').style.display = 'flex';
-        document.getElementById('stopImportBtn').style.display = 'none';
+            document.getElementById('importBtn').disabled = false;
+            document.getElementById('importBtn').style.display = 'flex';
+            document.getElementById('stopImportBtn').style.display = 'none';
 
-        if (isImportStopped) {
-            alert(`?? İşlem Durduruldu!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam İşlenen: ${successCount + failCount + skipCount} / ${total}`);
-        } else {
-            alert(`İşlem tamamlandı!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam: ${total}`);
-        }
+            if (isImportStopped) {
+                alert(`?? İşlem Durduruldu!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam İşlenen: ${successCount + failCount + skipCount} / ${total}`);
+            } else {
+                alert(`İşlem tamamlandı!\n\n✅ Başarılı: ${successCount}\n❌ Başarısız: ${failCount}\n⏭️ Atlanan: ${skipCount}\n\nToplam: ${total}`);
+            }
 
-        // Ürün listesini yenile
-        await loadProducts();
+            // Ürün listesini yenile
+            await loadProducts();
         }
 
         // Hata raporu indir
