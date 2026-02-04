@@ -1,0 +1,25 @@
+{
+  "name": "lidareyn_brand",
+  "version": "1.0.0",
+  "description": "Modern, full-stack e-ticaret platformu\r - **Frontend:** HTML, CSS, JavaScript (Vanilla)\r - **Backend:** Node.js, Express.js\r - **Database:** MongoDB Atlas\r - **Authentication:** JWT + Email Verification",
+  "main": "activate_products.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mahmudertek/Lidareyn_brand.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mahmudertek/Lidareyn_brand/issues"
+  },
+  "homepage": "https://github.com/mahmudertek/Lidareyn_brand#readme",
+  "dependencies": {
+    "pdf-parse": "^2.4.5",
+    "xlsx": "^0.18.5"
+  }
+}

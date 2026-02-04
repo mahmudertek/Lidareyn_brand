@@ -1,0 +1,40 @@
+{
+  "headers": [
+    "StokKodu",
+    "UrunAdi",
+    "Marka",
+    "Fiyat",
+    "IndirimliFiyat",
+    "Stok",
+    "Kategori",
+    "AltKategori",
+    "Aciklama",
+    "Birim",
+    "GorselURL",
+    "Aktif",
+    "PopulerMi",
+    "YeniMi",
+    "OneCikan",
+    "CokSatan",
+    "MarkaVitrini"
+  ],
+  "firstRow": [
+    "ADM-1769590572067",
+    "Elmas kaplı, seramik, mermer, granit delici panç 45mm",
+    "HAINZ KÖLN",
+    816,
+    "",
+    50,
+    "Aşındırıcı ve Kesici Uçlar",
+    "Mermer ve Granit Delici Uçlar",
+    "Elmas kaplı, seramik, mermer, granit delici panç 45mm",
+    "adet",
+    "[Görsel Verisi (Çok Büyük)]",
+    "Evet",
+    "Evet",
+    "Evet",
+    "Evet",
+    "Hayır",
+    ""
+  ]
+}

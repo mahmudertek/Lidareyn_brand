@@ -1,0 +1,190 @@
+131	
+L
+mm
+A1 max
+mm
+
+g 	 	
+210 	55 	500 	1 010660021
+#
+A
+L
+A1
+|* 1066
+L
+A1
+| 1067	*
+L
+mm
+A1 max
+mm 	 	
+285 	76 	1 010670285
+380 	89 	1 010670380
+#
+L
+~
+A
+mm
+L1
+mm 	 	
+280 	60 	53 	1 010770026
+#
+L
+L1
+A
+|* 1077
+L
+~
+A
+mm
+L1
+mm 	 	
+280 	60 	77 	1 010780026
+#
+L1 	L
+A
+|* 1078
+○
+L
+mm
+L1
+mm 	 	
+15° 	160 	22 	3 010800015
+45° 	160 	22 	3 010800045
+#
+L1
+L
+
+|* 1080D
+L
+L1
+
+| 1081	*
+L
+mm
+L1
+mm 	 	
+125 	16 	3 010810130
+#
+L
+mm
+L1
+mm
+
+mm 	 	
+140 	20 	1,6 	5 010820004
+160 	22 	1,6 	5 010820006
+##
+L1
+L
+
+UNI/ISO 5749
+| 1082	*
+L
+mm
+L1
+mm
+
+mm 	 	
+140 	20 	1,6 	5 010820064
+160 	22 	1,6 	5 010820066
+##
+L1
+L
+
+UNI/ISO 5749
+| 1082G	*
+L
+mm
+L1
+mm
+
+mm 	 	
+140 	20 	1,6 	3 010820034
+160 	22 	1,6 	3 010820036
+##
+L1
+L
+
+UNI/ISO 5749
+| 1082BM	*
+L
+mm
+L1
+mm
+
+mm 	 	
+140 	20 	1,6 	3 010820264
+160 	22 	1,6 	3 010820266
+##
+L1
+L
+
+UNI/ISO 5749
+| 1082GBM	*
+L
+mm
+L1
+mm
+
+mm 	 	
+160 	22 	1,6 	5 010840006
+200 	28 	2,0 	3 010840010
+##
+L1
+L
+
+UNI/ISO 5749
+| 1084	*
+L
+mm
+L1
+mm
+
+mm 	 	
+160 	22 	1,6 	5 010840066
+200 	28 	2,0 	3 010840070
+##
+L1
+L
+
+UNI/ISO 5749
+| 1084G	*
+| 1068	*
+1068 	161
+#
+adjustable self-locking pliers,
+90° locking angle
+adjustable self-locking pliers for pipes,
+articulated pipe clamping jaws
+straight wide blade tinsmith’s pliers,
+PVC-coated handles
+curved wide blade tinsmith’s pliers,
+45° PVC-coated handles
+diagonal flush cutting nippers,
+slip-proof double layer PVC coated handles
+For cutting plastic
+semi-flush cutting nippers,
+slip-proof double layer PVC
+coated handles
+• For micro-mechanics and heavy-duty electronics
+diagonal cutting nippers,
+chrome-plated,
+slip-proof double layer PVC coated handles
+diagonal cutting nippers,
+slip-proof double layer PVC coated handles,
+industrial finish
+diagonal cutting nippers,
+bi-material handles
+diagonal cutting nippers,
+bi-material handles,
+industrial finish
+heavy duty diagonal cutting nippers,
+chrome-plated,
+slip-proof double layer PVC coated handles
+heavy duty diagonal cutting nippers,
+slip-proof double layer PVC coated handles,
+industrial finish
+
+-- 131 of 772 --
+

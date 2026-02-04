@@ -3439,21 +3439,13 @@
 
                 if (catData.subcategories && Array.isArray(catData.subcategories)) {
                     catData.subcategories.forEach(group => {
-                        const optgroup = document.createElement('optgroup');
-                        optgroup.label = group.name;
-
-                        if (group.items && Array.isArray(group.items)) {
-                            group.items.forEach(item => {
-                                const option = document.createElement('option');
-                                option.value = item;
-                                option.textContent = item;
-                                if (selectedSub && (selectedSub === item)) {
-                                    option.selected = true;
-                                }
-                                optgroup.appendChild(option);
-                            });
+                        const option = document.createElement('option');
+                        option.value = group.name;
+                        option.textContent = group.name;
+                        if (selectedSub && (selectedSub === group.name)) {
+                            option.selected = true;
                         }
-                        subCategoryObj.appendChild(optgroup);
+                        subCategoryObj.appendChild(option);
                     });
                 }
             }
@@ -3821,15 +3813,6 @@
                     const option = document.createElement('option');
                     option.value = group.name;
                     subsDatalist.appendChild(option);
-
-                    // Grup items'ları da datalist'e ekle
-                    if (group.items && Array.isArray(group.items)) {
-                        group.items.forEach(item => {
-                            const itemOption = document.createElement('option');
-                            itemOption.value = item;
-                            groupDatalist.appendChild(itemOption);
-                        });
-                    }
                 });
             }
         }
@@ -3877,17 +3860,10 @@
                         group = { name: subCategoryName, items: [], icon: 'fa-caret-right' };
                         targetSubcats.push(group);
                     }
-                    groupNames.forEach(name => {
-                        if (!group.items.includes(name)) group.items.push(name);
-                    });
                 } else {
                     const groupIdx = targetSubcats.findIndex(g => g.name === subCategoryName);
                     if (groupIdx !== -1) {
-                        if (groupNames.length === 0) {
-                            targetSubcats.splice(groupIdx, 1);
-                        } else {
-                            targetSubcats[groupIdx].items = targetSubcats[groupIdx].items.filter(item => !groupNames.includes(item));
-                        }
+                        targetSubcats.splice(groupIdx, 1);
                     }
                 }
 

@@ -90,21 +90,12 @@
                 // Alt Kategoriler (Sütunlar)
                 if (cat.subcategories && Array.isArray(cat.subcategories)) {
                     cat.subcategories.forEach(group => {
+                        const encodedSub = encodeURIComponent(group.name);
                         html += `
                             <div class="sub-menu-column">
-                                <h4>${group.name}</h4>
-                                <ul>
-                        `;
-
-                        if (group.items && Array.isArray(group.items)) {
-                            group.items.forEach(item => {
-                                const encodedSub = encodeURIComponent(item);
-                                html += `<li><a href="${href}?subcategory=${encodedSub}">${item}</a></li>`;
-                            });
-                        }
-
-                        html += `
-                                </ul>
+                                <a href="${href}?subcategory=${encodedSub}" class="sub-category-link">
+                                    <h4>${group.name}</h4>
+                                </a>
                             </div>
                         `;
                     });
@@ -146,12 +137,8 @@
             `;
 
             cat.subcategories.forEach(group => {
-                if (group.items && Array.isArray(group.items)) {
-                    group.items.forEach(item => {
-                        const encodedSub = encodeURIComponent(item);
-                        html += `<a href="${slug}.html?subcategory=${encodedSub}" class="accordion-child-item">${item}</a>`;
-                    });
-                }
+                const encodedSub = encodeURIComponent(group.name);
+                html += `<a href="${slug}.html?subcategory=${encodedSub}" class="accordion-child-item">${group.name}</a>`;
             });
 
             html += `
