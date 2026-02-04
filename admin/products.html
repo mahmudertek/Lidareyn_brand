@@ -942,17 +942,17 @@
                                 </div>
 
                                 <!-- Buttons -->
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
                                     <button onclick="downloadExcelTemplate()"
-                                        style="background: #f8fafc; color: #475569; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        style="flex: 1; background: #f8fafc; color: #475569; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                                         <i class="fa-solid fa-file-arrow-down"></i> Şablonu İndir
                                     </button>
                                     <button onclick="processExcelImport()" id="importBtn"
-                                        style="background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                        style="flex: 2; background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;">
                                         <i class="fa-solid fa-rocket"></i> Yüklemeyi Başlat
                                     </button>
                                     <button onclick="stopExcelImport()" id="stopImportBtn"
-                                        style="display: none; background: #ef4444; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px;">
+                                        style="flex: 2; display: none; background: #ef4444; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 8px;">
                                         <i class="fa-solid fa-stop"></i> Yüklemeyi Durdur
                                     </button>
                                 </div>
@@ -4191,7 +4191,9 @@
                     subCategory: (row.AltKategori || row.SubCategory || '').trim(),
                     description: (row.Aciklama || row.Description || '').trim(),
                     unit: (row.Birim || row.Unit || 'adet').trim(),
-                    mainImage: row.GorselURL || row.ImageURL || excelUploadedImage || `https://placehold.co/400x400/6366f1/fff?text=${(row.Marka || 'L').charAt(0)}`,
+                    mainImage: (row.GorselURL && row.GorselURL.length > 5 && !row.GorselURL.includes('gorseller/'))
+                        ? row.GorselURL
+                        : (excelUploadedImage || `https://placehold.co/400x400/6366f1/fff?text=${(row.Marka || 'L').charAt(0)}`),
                     // Yerleştirme etiketleri
                     isActive: row.Aktif !== undefined ? parseYesNo(row.Aktif) : true,
                     isPopular: parseYesNo(row.PopulerMi),
