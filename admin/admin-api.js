@@ -57,6 +57,13 @@ const ADMIN_API = {
                 headers: this.getHeaders(),
                 body: JSON.stringify(productData)
             });
+
+            // If auth failed or server error, throw to trigger local fallback
+            if (!response.ok) {
+                // If it's 401, we might want to warn, but for bulk import, saving locally is safer than losing data
+                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+
             const result = await response.json();
 
             // LocalStorage'a da kaydet (fallback için)
@@ -66,18 +73,19 @@ const ADMIN_API = {
 
             return result;
         } catch (error) {
-            console.error('Create product error:', error);
+            console.error('Create product error (Switching to Local):', error);
 
             // Backend başarısız olursa sadece localStorage'a kaydet
+            // This ensures work is not lost even if auth fails
             const localProduct = {
                 ...productData,
-                _id: 'local_' + Date.now(),
-                id: 'local_' + Date.now(),
+                _id: 'local_' + Date.now() + Math.random().toString(36).substr(2, 5),
+                id: 'local_' + Date.now() + Math.random().toString(36).substr(2, 5),
                 createdAt: new Date().toISOString()
             };
             this.saveProductToLocalStorage(localProduct);
 
-            return { success: true, data: localProduct, savedLocally: true };
+            return { success: true, data: localProduct, savedLocally: true, message: 'Sunucu hatası nedeniyle yerel olarak kaydedildi.' };
         }
     },
 
