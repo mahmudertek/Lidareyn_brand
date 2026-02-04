@@ -48,7 +48,8 @@ const categoriesData = {
         subcategories: [
             { name: 'Testere Uçları', items: [], icon: 'fa-compact-disc' },
             { name: 'Delik Delme', items: [], icon: 'fa-circle-dot' },
-            { name: 'Matkap & Vidalama Uçları', items: [], icon: 'fa-screwdriver' }
+            { name: 'Matkap & Vidalama Uçları', items: [], icon: 'fa-screwdriver' },
+            { name: 'Yedek Parçalar', items: [], icon: 'fa-puzzle-piece' }
         ]
     },
 
@@ -61,7 +62,8 @@ const categoriesData = {
             { name: 'Delme & Vidalama', items: [], icon: 'fa-screwdriver' },
             { name: 'Kesme & Taşlama', items: [], icon: 'fa-compact-disc' },
             { name: 'Yüzey İşleme', items: [], icon: 'fa-brush' },
-            { name: 'Diğer Makineler', items: [], icon: 'fa-toolbox' }
+            { name: 'Diğer Makineler', items: [], icon: 'fa-toolbox' },
+            { name: 'Pnömatik Aletler', items: [], icon: 'fa-wind' }
         ]
     },
 
@@ -86,7 +88,9 @@ const categoriesData = {
         subcategories: [
             { name: 'Delici & Vidalama', items: [], icon: 'fa-screwdriver' },
             { name: 'Kesme & Taşlama', items: [], icon: 'fa-compact-disc' },
-            { name: 'Aşındırma ve Zımpara', items: [], icon: 'fa-note-sticky' }
+            { name: 'Aşındırma ve Zımpara', items: [], icon: 'fa-note-sticky' },
+            { name: 'Diş Açma Takımları', items: [], icon: 'fa-screw' },
+            { name: 'Matkap Uçları', items: [], icon: 'fa-circle-dot' }
         ]
     },
 
@@ -120,10 +124,22 @@ const categoriesData = {
         icon: 'fa-screwdriver-wrench',
         image: 'gorseller/category_hirdavat.png',
         subcategories: [
-            { name: 'Anahtarlar & Vidalama', items: [], icon: 'fa-wrench' },
-            { name: 'Kesme & Şekillendirme', items: [], icon: 'fa-scissors' },
-            { name: 'Vurma & Sabitleme', items: [], icon: 'fa-hammer' },
-            { name: 'Kavrama ve İnce İşçilik Penseleri', items: [], icon: 'fa-hand' }
+            { name: 'Ayarlı Anahtarlar', items: [], icon: 'fa-wrench' },
+            { name: 'Lokma Takımları', items: [], icon: 'fa-circle-dot' },
+            { name: 'Kombine Anahtarlar', items: [], icon: 'fa-wrench' },
+            { name: 'Tornavidalar', items: [], icon: 'fa-screwdriver' },
+            { name: 'Alyan Anahtarlar', items: [], icon: 'fa-key' },
+            { name: 'Penseler', items: [], icon: 'fa-hand' },
+            { name: 'Çekiç ve Keskiler', items: [], icon: 'fa-hammer' },
+            { name: 'Eğe ve Törpüler', items: [], icon: 'fa-file' },
+            { name: 'Testere ve Kesiciler', items: [], icon: 'fa-scissors' },
+            { name: 'İzoleli Aletler', items: [], icon: 'fa-bolt' },
+            { name: 'Boru Aletleri', items: [], icon: 'fa-pipe-section' },
+            { name: 'Tork Anahtarları', items: [], icon: 'fa-gauge' },
+            { name: 'Hidrolik Aletler', items: [], icon: 'fa-oil-can' },
+            { name: 'Otomotiv Aletleri', items: [], icon: 'fa-car' },
+            { name: 'Özel Aletler', items: [], icon: 'fa-toolbox' },
+            { name: 'Takım Setleri', items: [], icon: 'fa-box' }
         ]
     },
 
@@ -136,7 +152,9 @@ const categoriesData = {
             { name: 'Koruyucu Giyim', items: [], icon: 'fa-vest' },
             { name: 'Ayak & Baş Koruma', items: [], icon: 'fa-hard-hat' },
             { name: 'Göz & Kulak Koruma', items: [], icon: 'fa-glasses' },
-            { name: 'Çalışma Ekipmanları', items: [], icon: 'fa-stairs' }
+            { name: 'Çalışma Ekipmanları', items: [], icon: 'fa-stairs' },
+            { name: 'Takım Dolapları', items: [], icon: 'fa-cabinet-filing' },
+            { name: 'Takım Çantaları', items: [], icon: 'fa-briefcase' }
         ]
     },
 

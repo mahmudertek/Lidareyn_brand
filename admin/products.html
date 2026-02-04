@@ -4043,8 +4043,81 @@
             document.getElementById('importBtn').disabled = true;
             document.getElementById('importProgress').style.display = 'block';
             document.getElementById('errorReportSection').style.display = 'none';
-            importErrors = [];
 
+            // === OTOMATİK KATEGORİ OLUŞTURMA ===
+            // Excel'deki benzersiz kategori/alt kategori kombinasyonlarını topla
+            const categoryPairs = new Set();
+            excelPreviewData.forEach(row => {
+                const cat = (row.Kategori || row.Category || '').trim();
+                const subCat = (row.AltKategori || row.SubCategory || '').trim();
+                if (cat && subCat) {
+                    categoryPairs.add(JSON.stringify({ category: cat, subCategory: subCat }));
+                }
+            });
+
+            // Mevcut kategorileri kontrol et ve eksik olanları otomatik oluştur
+            const existingCategories = (typeof UnifiedCategories !== 'undefined' && UnifiedCategories.data)
+                ? UnifiedCategories.data
+                : (typeof categoriesData !== 'undefined' ? categoriesData : {});
+
+            let customCategories = JSON.parse(localStorage.getItem('galatacarsi_custom_categories') || '{}');
+            let newCategoriesCreated = [];
+
+            for (const pairJson of categoryPairs) {
+                const { category, subCategory } = JSON.parse(pairJson);
+
+                // Kategori slug'ını oluştur (Türkçe karakterleri ve boşlukları düzelt)
+                const categorySlug = category
+                    .toLowerCase()
+                    .replace(/ğ/g, 'g').replace(/ü/g, 'u').replace(/ş/g, 's')
+                    .replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ç/g, 'c')
+                    .replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+
+                // Ana kategori var mı kontrol et
+                let targetCategory = existingCategories[categorySlug] || customCategories[categorySlug];
+
+                if (!targetCategory) {
+                    // Yeni ana kategori oluştur
+                    customCategories[categorySlug] = {
+                        title: category,
+                        description: `${category} kategorisindeki ürünler`,
+                        icon: 'fa-folder',
+                        image: '',
+                        subcategories: [{ name: subCategory, items: [], icon: 'fa-caret-right' }]
+                    };
+                    newCategoriesCreated.push(`📁 ${category} > ${subCategory}`);
+                    console.log(`✨ Yeni kategori oluşturuldu: ${category}`);
+                } else {
+                    // Kategori var, alt kategori var mı kontrol et
+                    if (!customCategories[categorySlug]) {
+                        customCategories[categorySlug] = JSON.parse(JSON.stringify(targetCategory));
+                    }
+
+                    const subcats = customCategories[categorySlug].subcategories || [];
+                    const subExists = subcats.some(s => s.name === subCategory);
+
+                    if (!subExists) {
+                        subcats.push({ name: subCategory, items: [], icon: 'fa-caret-right' });
+                        customCategories[categorySlug].subcategories = subcats;
+                        newCategoriesCreated.push(`📂 ${category} > ${subCategory}`);
+                        console.log(`✨ Yeni alt kategori oluşturuldu: ${category} > ${subCategory}`);
+                    }
+                }
+            }
+
+            // Değişiklikleri kaydet
+            if (newCategoriesCreated.length > 0) {
+                localStorage.setItem('galatacarsi_custom_categories', JSON.stringify(customCategories));
+                console.log(`🎉 ${newCategoriesCreated.length} yeni kategori/alt kategori oluşturuldu!`);
+
+                // UnifiedCategories varsa yenile
+                if (typeof UnifiedCategories !== 'undefined') {
+                    await UnifiedCategories.init();
+                }
+            }
+            // === OTOMATİK KATEGORİ OLUŞTURMA SONU ===
+
+            importErrors = [];
             let successCount = 0;
             let failCount = 0;
             let skipCount = 0;
