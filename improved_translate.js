@@ -3,7 +3,7 @@ const XLSX = require('xlsx');
 const fs = require('fs');
 
 // Configuration
-const EXCEL_PATH = 'c:/Users/pc/Desktop/Beta_Katalog_FINAL.xlsx';
+const EXCEL_PATH = 'c:/Users/pc/Desktop/Lidareyn_Urunler_2026-02-02.xlsx';
 const OUTPUT_PATH = 'c:/Users/pc/Desktop/Beta_Katalog_REVİZE_v2.xlsx';
 const PDF_TEXT_PATH = 'c:/Users/pc/Desktop/Lidareyn_brand/pdf_text_output.txt';
 
@@ -172,38 +172,72 @@ function parsePDFText() {
     }
 
     console.log("Parsing PDF text...");
-    const text = fs.readFileSync(PDF_TEXT_PATH, 'utf-8');
-    const lines = text.split('\n');
-    const skuMap = {};
+    try {
+        const text = fs.readFileSync(PDF_TEXT_PATH, 'utf-8');
+        const lines = text.split(/\r?\n/);
+        const skuMap = {};
 
-    // Simple heuristic parser for Price List format: SKU Description Price
-    // Example: 011830001 1183BM/150 HIGH LEVERAGE COMBINATION PLIERS
+        // Headers we are looking for
+        const headerKeywords = ['L', 'L1', 'L2', 'A', 'A1', 'S', 'Ø', 'H', 'B', 'Weight', 'g', 'mm', 'GAS', 'M'];
+        const headerRegex = new RegExp(`\\b(${headerKeywords.join('|')})\\b`, 'g');
 
-    for (const line of lines) {
-        const cleanLine = line.trim();
-        if (!cleanLine) continue;
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
 
-        // Try to match SKU pattern. Beta SKUs often are 8-10 digits or code like 1183BM
-        // Regex for Beta SKU (Code): \b[0-9]{3,5}[A-Z0-9\/]*\b
-        // Let's grab the first "word" as SKU if it looks like a SKU
+            // Look for numeric SKU (8-10 digits)
+            const skuMatch = line.match(/\b00\d{6,8}\b/);
+            if (!skuMatch) continue;
 
-        const parts = cleanLine.split(/\s+/);
-        if (parts.length < 2) continue;
+            const skuVal = skuMatch[0];
+            const parts = line.split(/\s+/);
+            const values = parts.filter(p => /^[\d,.]+(\/[0-9x.]+)?$/.test(p) && p !== skuVal);
 
-        const potentialSku = parts[0];
-        const potentialSku2 = parts[1];
+            // Look back for headers
+            let foundHeaders = [];
+            for (let j = i - 1; j >= Math.max(0, i - 20); j--) {
+                const prevLine = lines[j].trim();
+                const matches = prevLine.match(headerRegex);
+                if (matches) {
+                    foundHeaders = [...matches, ...foundHeaders];
+                }
+                // Stop if we hit a new Art or a very long line that looks like a title
+                if (prevLine.includes('Art.') || prevLine.length > 50) break;
+            }
 
-        // Sometimes PDF text lines are messy.
-        // We look for parts that match our SKUs in Excel.
-        // But for now, let's just store lines indexed by words that look like SKUs
+            // Deduplicate headers
+            foundHeaders = [...new Set(foundHeaders)];
 
-        // Store broad matches
-        if (potentialSku.length > 3) skuMap[potentialSku] = cleanLine;
-        if (potentialSku2 && potentialSku2.length > 3) skuMap[potentialSku2] = cleanLine;
+            let dimensions = '';
+            // Match headers to values. We assume columns are roughly in order.
+            // But we keep it simple: if we have N headers, take the first N values.
+            if (foundHeaders.length > 0 && values.length > 0) {
+                foundHeaders.forEach((h, idx) => {
+                    if (values[idx]) {
+                        dimensions += `${h}:${values[idx]} `;
+                    }
+                });
+            } else if (values.length > 0) {
+                // Fallback: just list values
+                dimensions = values.join(' ');
+            }
+
+            const entry = {
+                text: line,
+                dimensions: dimensions.trim()
+            };
+
+            skuMap[skuVal] = entry;
+            // Also index by stripped version
+            skuMap[skuVal.replace(/^0+/, '')] = entry;
+        }
+
+        console.log(`Indexed ${Object.keys(skuMap).length} entries from PDF.`);
+        return skuMap;
+    } catch (e) {
+        console.error("Error parsing PDF text:", e);
+        return {};
     }
-
-    console.log(`Indexed ${Object.keys(skuMap).length} potential SKU lines from PDF.`);
-    return skuMap;
 }
 
 function guessNameFromSKU(sku) {
@@ -235,74 +269,76 @@ function run() {
         // 1. Remove [Katalog Sayfası: ...]
         aciklama = aciklama.replace(/\[Katalog.*?(?:\]|$)/g, '').trim();
 
-        // 2. Try to get English Name
-        let englishName = '';
+        // 2. Try to get English Name and Dimensions
         let sourceForTranslation = '';
-
-        // Try PDF Map
+        let dimensions = '';
         if (pdfMap[sku]) {
-            // Extract English Description roughly
-            // Assume line is: SKU EnglishDesc Price
-            // Remove SKU and Price (digits/currency)
-            sourceForTranslation = pdfMap[sku]
+            const entry = pdfMap[sku];
+            sourceForTranslation = entry.text
                 .replace(sku, '')
-                .replace(/[0-9.,]+$/, '') // Remove trailing price
+                .replace(/[0-9.,]+$/, '')
                 .trim();
-        } else {
-            // Try to use UrunAdi if it starts with Beta but has other text?
-            // But UrunAdi is currently "Beta 1183BM Profesyonel El Aleti"
-            // If we assume "Profesyonel El Aleti" is GARBAGE, we ignore it.
+            dimensions = entry.dimensions;
         }
 
         // 3. Determine New Name
         let finalName = '';
-
         if (sourceForTranslation) {
-            // Translate the English source
             finalName = translateText(sourceForTranslation);
         } else {
-            // Fallback: Guess from SKU
             const guessed = guessNameFromSKU(sku);
             if (guessed) {
                 finalName = guessed;
             } else {
-                // Fallback 2: Keep generic but clean "Beta" and "Profesyonel"
                 finalName = urunAdi
                     .replace(/^Beta\s+/i, '')
-                    .replace(/Profesyonel El Aleti/i, 'El Aleti') // Make it slightly less annoying
+                    .replace(/Profesyonel El Aleti/i, 'El Aleti')
                     .trim();
-
-                // Use dictionary on existing name?
                 finalName = translateText(finalName);
             }
         }
 
-        // 4. Construct Description
-        // "Beta 1183BM - Yüksek Performanslı Keski"
-        // "Beta markalı yüksek kaliteli..."
+        // Detect Size/Dimensions
+        if (!dimensions) { // If dimensions not found directly by SKU
+            // Try partial match or lookup by name/description if SKU is weird (ADM-...)
+            // But for now, let's look for any SKU mentioned in current aciklama
+            const possibleSkuMatch = aciklama.match(/\b00\d{7,8}\b/);
+            if (possibleSkuMatch && pdfMap[possibleSkuMatch[0]]) {
+                dimensions = pdfMap[possibleSkuMatch[0]].dimensions;
+            }
+        }
 
-        // If we have a specific name (not El Aleti), use it.
+        const sizeRegex = /\b(\d+\s*mm|\d+\s*cm|\d+\s*("|inch)|L=\d+|\d+x\d+|\d+\/\d+)\b/i;
+        let detectedSize = '';
+        const skuMatch = sku.match(sizeRegex);
+        if (skuMatch) detectedSize = skuMatch[0];
+
+        // Final Size Info
+        let sizeInfo = '';
+        if (dimensions) {
+            sizeInfo = ` Ölçüler: ${dimensions}.`;
+        } else if (detectedSize) {
+            sizeInfo = ` Ölçü: ${detectedSize}.`;
+        }
+
         let prettyName = finalName || 'Profesyonel El Aleti';
 
-        // Format: "Beta [SKU] [Name]"
-        item.UrunAdi = `Beta ${sku} ${prettyName}`;
-
-        // Clean up double spaces
+        // Name cleanup
+        item.UrunAdi = `Beta ${sku} ${prettyName}${dimensions ? ' (' + dimensions + ')' : ''}`;
         item.UrunAdi = item.UrunAdi.replace(/\s+/g, ' ').trim();
 
-        // Description
-        // Ensure description doesn't have duplicate info or old tags
-        let newDesc = `Beta markalı ${prettyName} (${sku}). `;
+        // 4. Construct Description (NO SKU in text as requested)
+        let newDesc = `Beta markalı ${prettyName}.${sizeInfo} `;
         if (sourceForTranslation) {
-            newDesc += `Orijinal katalog tanımı: ${translateText(sourceForTranslation)}. `; // Translated full text
+            newDesc += `Orijinal katalog tanımı: ${translateText(sourceForTranslation)}. `;
         }
-        newDesc += `Profesyonel kullanım için tasarlanmıştır.`;
+        newDesc += `Profesyonel endüstriyel kullanım için yüksek standartlarda üretilmiştir. Dayanıklı yapısı ve ergonomik tasarımı ile uzun ömürlü kullanım sağlar.`;
 
-        // Add specific features based on keywords
         if (prettyName.toLowerCase().includes('izole')) newDesc += " 1000V izoleli.";
         if (prettyName.toLowerCase().includes('paslanmaz')) newDesc += " Paslanmaz çelik gövde.";
 
         item.Aciklama = newDesc;
+        item.Olcu = dimensions || detectedSize;
 
         updatedCount++;
         return item;

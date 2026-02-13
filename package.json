@@ -20,7 +20,7 @@
   "homepage": "https://github.com/mahmudertek/Lidareyn_brand#readme",
   "dependencies": {
     "pdf-export-images": "^1.2.0",
-    "pdf-parse": "^2.4.5",
+    "pdf-parse": "^1.1.1",
     "pdf2json": "^4.0.2",
     "xlsx": "^0.18.5"
   }

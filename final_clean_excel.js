@@ -39,18 +39,10 @@ function process() {
 
     console.log(`Original Count: ${items.length}`);
 
-    // 1. FILTER: Has Image
-    const withImages = items.filter(item => {
-        const url = item.GorselURL;
-        return url &&
-            typeof url === 'string' &&
-            url.length > 10 &&
-            !url.includes('placeholder.com') &&
-            !url.includes('placehold.co');
-        // Also check specific missing ones if any
-    });
+    // 1. No Filtering: User wants all products processed
+    const withImages = items;
 
-    console.log(`With Images: ${withImages.length} (Deleted ${items.length - withImages.length})`);
+    console.log(`Processing All Products: ${withImages.length}`);
 
     // 2. RENAME & DESCRIBE
     const processed = withImages.map(item => {
@@ -71,8 +63,16 @@ function process() {
         item.UrunAdi = `Beta ${sku} ${singularName}`;
 
         // NEW DESCRIPTION
-        // "Beta markalı 1183BM Ayarlı Anahtar. Profesyonel..."
-        item.Aciklama = `Beta markalı ${sku} kodlu ${singularName}. Profesyonel endüstriyel kullanım için yüksek standartlarda üretilmiştir. Dayanıklı yapısı ve ergonomik tasarımı ile uzun ömürlü kullanım sağlar.`;
+        // "Beta markalı Ayarlı Anahtar. Ölçü: 250mm. Profesyonel..."
+        let sizeInfo = item.Olcu ? ` Ölçü: ${item.Olcu}.` : '';
+
+        // If Olcu missing, try to detect from SKU again (Double check)
+        if (!sizeInfo) {
+            const sizeMatch = sku.match(/\b(\d+\s*mm|\d+\s*cm|\d+\s*("|inch)|L=\d+|\d+x\d+|\d+\/\d+)\b/i);
+            if (sizeMatch) sizeInfo = ` Ölçü: ${sizeMatch[0]}.`;
+        }
+
+        item.Aciklama = `Beta markalı ${singularName}.${sizeInfo} Profesyonel endüstriyel kullanım için yüksek standartlarda üretilmiştir. Dayanıklı yapısı ve ergonomik tasarımı ile uzun ömürlü kullanım sağlar.`;
 
         // Clean text
         item.UrunAdi = item.UrunAdi.replace(/\s+/g, ' ').trim();
